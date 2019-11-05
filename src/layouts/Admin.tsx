@@ -15,25 +15,28 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { createRef } from "react";
+import { Route, Switch, RouteComponentProps } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
-import AdminFooter from "components/Footers/AdminFooter.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+import AdminNavbar from "../components/Navbars/AdminNavbar";
+import AdminFooter from "../components/Footers/AdminFooter";
+import Sidebar from "../components/Sidebar/Sidebar";
+import Index from '../views/admin/Index';
+import routes from "../routes";
+import NotFound from '../views/NotFound';
 
-import routes from "routes.js";
+type AdminProps = RouteComponentProps & {
+  
+}
 
-class Admin extends React.Component {
-  componentDidUpdate(e) {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
-  }
-  getRoutes = routes => {
-    return routes.map((prop, key) => {
+class Admin extends React.Component<AdminProps, {}> {
+
+  mainContent = createRef<HTMLDivElement>();
+
+  getRoutes = (routes: any) => {
+    return routes.map((prop: any, key: string) => {
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -47,7 +50,7 @@ class Admin extends React.Component {
       }
     });
   };
-  getBrandText = path => {
+  getBrandText = (path: any) => {
     for (let i = 0; i < routes.length; i++) {
       if (
         this.props.location.pathname.indexOf(
@@ -60,23 +63,31 @@ class Admin extends React.Component {
     return "Brand";
   };
   render() {
+
     return (
       <>
         <Sidebar
           {...this.props}
-          routes={routes}
+          routes={routes.filter(item => {
+            return item.layout === '/admin'
+          })}
           logo={{
             innerLink: "/admin/index",
             imgSrc: require("assets/img/brand/argon-react.png"),
             imgAlt: "..."
           }}
         />
-        <div className="main-content" ref="mainContent">
+        <div className="main-content" ref={this.mainContent}>
           <AdminNavbar
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
           />
-          <Switch>{this.getRoutes(routes)}</Switch>
+          <Switch>
+            <Route path="/admin" exact render={() => <Index />} />
+            <Route path="/admin/index" exact render={() => <Index />} />
+            {this.getRoutes(routes)}
+            <Route component={NotFound} />
+          </Switch>
           <Container fluid>
             <AdminFooter />
           </Container>
