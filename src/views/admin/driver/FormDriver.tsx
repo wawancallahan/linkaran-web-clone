@@ -10,6 +10,27 @@ import { Formik, getIn, FormikProps } from 'formik';
 
 import { Driver, FormField } from '../../../types/admin/driver';
 
+import DatePicker from 'react-datepicker';
+
+import "react-datepicker/dist/react-datepicker.css";
+
+import Dropzone from '../../../components/Dropzone/Dropzone';
+
+const onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
+    const file: {
+        lastModified: number,
+        name: string,
+        preview: string,
+        size: number,
+        type: string
+    } = files.length > 0 ? files[0] : null;
+
+    if (file) {
+        FormikProps.setFieldValue(setPreview, file.preview, true);
+        FormikProps.setFieldValue(setValue, file);
+    }
+}
+
 const FormDriver = (props: {
     FormikProps: FormikProps<FormField>
 }) => {
@@ -99,6 +120,19 @@ const FormDriver = (props: {
                 >
                     Tanggal Lahir
                 </label>
+                <div>
+                <DatePicker
+                    selected={FormikProps.values.tanggal_lahir}
+                    onChange={date => FormikProps.setFieldValue('tanggal_lahir', date)}
+                    onBlur={() => FormikProps.setFieldTouched('tanggal_lahir', true)}
+                    dateFormat="yyyy-MM-dd"
+                    className="form-control form-control-alternative"
+                    required
+                    />
+                </div>
+                <div>
+                    {FormikProps.errors.tanggal_lahir && FormikProps.touched.tanggal_lahir ? FormikProps.errors.tanggal_lahir : ''}
+                </div>
             </FormGroup>
 
             <FormGroup>
@@ -108,6 +142,24 @@ const FormDriver = (props: {
                 >
                     Jenis Kelamin
                 </label>
+                <Input
+                className="form-control-alternative"
+                id="input-jenis_kelamin"
+                placeholder="Jenis Kelamin"
+                type="select"
+                name="jenis_kelamin"
+                value={FormikProps.values.jenis_kelamin || ''}
+                onChange={FormikProps.handleChange}
+                onBlur={FormikProps.handleBlur}
+                invalid={ !!(FormikProps.touched.jenis_kelamin && FormikProps.errors.jenis_kelamin) }
+                >
+                    <option value="">Jenis Kelamin</option>
+                    <option value="1">Laki Laki</option>
+                    <option value="0">Perempuan</option>
+                </Input>
+                <div>
+                    {FormikProps.errors.jenis_kelamin && FormikProps.touched.jenis_kelamin ? FormikProps.errors.jenis_kelamin : ''}
+                </div>
             </FormGroup>
 
             <FormGroup>
@@ -142,6 +194,13 @@ const FormDriver = (props: {
                 >
                     Upload KTP
                 </label>
+                <Dropzone onFilesAdded={(files: any[]) => {
+                    onFilesAdded(files, FormikProps, 'ktp_file_preview', 'ktp_file');
+                }} disabled={false} multiple={false} />
+                
+                <div>
+                    {FormikProps.errors.ktp_file_preview && FormikProps.touched.ktp_file_preview ? FormikProps.errors.ktp_file_preview : ''}
+                </div>
             </FormGroup>
 
             <FormGroup>
@@ -176,6 +235,13 @@ const FormDriver = (props: {
                 >
                     Upload SIM
                 </label>
+                <Dropzone onFilesAdded={(files: any[]) => {
+                    onFilesAdded(files, FormikProps, 'sim_file_preview', 'sim_file');
+                }} disabled={false} multiple={false} />
+                
+                <div>
+                    {FormikProps.errors.sim_file_preview && FormikProps.touched.sim_file_preview ? FormikProps.errors.sim_file_preview : ''}
+                </div>
             </FormGroup>
 
             <FormGroup>
@@ -335,6 +401,13 @@ const FormDriver = (props: {
                 >
                     Upload Foto Profil
                 </label>
+                <Dropzone onFilesAdded={(files: any[]) => {
+                    onFilesAdded(files, FormikProps, 'foto_profil_preview', 'foto_profil');
+                }} disabled={false} multiple={false} />
+                
+                <div>
+                    {FormikProps.errors.foto_profil_preview && FormikProps.touched.foto_profil_preview ? FormikProps.errors.foto_profil_preview : ''}
+                </div>
             </FormGroup>
         </>
     )

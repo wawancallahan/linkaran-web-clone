@@ -11,8 +11,10 @@ export type FormField = {
     jenis_kelamin: number | null,
     no_ktp: string,
     ktp_file: File | null,
+    ktp_file_preview: string,
     no_sim: string,
     sim_file: File | null,
+    sim_file_preview: string,
     alamat: string,
     negara: string,
     provinsi: string,
@@ -20,11 +22,18 @@ export type FormField = {
     kecamatan: string,
     kelurahan: string,
     foto_profil: File | null,
-    tipe_kendaraan: number | null,
+    foto_profil_preview: string,
+    tipe_kendaraan: {
+        label: string,
+        value: number
+    },
     no_stnk: string,
     no_polisi: string,
     no_rangka: string,
-    merek: number | null,
+    merek: {
+        label: string,
+        value: number
+    },
     jumlah_seat: number | null,
     warna: string,
     keterangan: string 
