@@ -1,0 +1,28 @@
+@media (min-width: 768px) {
+    .nav-link-child {
+        padding: 0.65rem 1.5rem 0.65rem 2rem !important;
+    }
+}
+
+.nav-link-child {
+    padding: 0.625rem 1rem 0.625rem 2rem !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.nav-link-child.active {
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.SidebarDropdown {
+    cursor: pointer;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: 1rem;
+    font-size: 1rem;
+}
+
+.SidebarDropdown.ActiveDropdown .dropdown-icon {
+    transform: rotate(90deg);
+}

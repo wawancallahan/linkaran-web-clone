@@ -1,0 +1,42 @@
+.Dropzone {
+    height: 200px;
+    width: 200px;
+    background-color: #fff;
+    border: 2px dashed rgb(187, 186, 186);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16px;
+  }
+  
+  .Icon {
+    opacity: 0.3;
+    height: 64px;
+    width: 64px;
+  }
+  
+  .FileInput {
+    display: none;
+  }
+
+  .thumbsContainer {
+    display: block;
+    margin-top: 3rem;
+  }
+  
+  .thumb {
+    margin-bottom: 2rem;
+  }
+  
+  .thumbInner {
+    max-width: 150px;
+    height: auto;
+    max-height: 200px;
+  }
+  
+  .imgPreview {
+    max-width: 150px;
+    height: auto;
+    max-height: 200px;
+  }
