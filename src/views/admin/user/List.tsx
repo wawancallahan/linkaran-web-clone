@@ -31,12 +31,14 @@ import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
     fetchUserAction,
-    deleteUserAction
+    deleteUserAction,
+    setAlertUserShowAction,
+    setAlertUserHideAction
 } from '../../../actions/admin/user';
 import { User } from '../../../types/admin/user';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
-
+import { Alert as IAlert } from '../../../types/alert';
 
 type ListProps = RouteComponentProps & {
 
@@ -92,6 +94,10 @@ class List extends Component<Props, State> {
         this.fetchUserList(page);
     }
 
+    componentWillUnmount() {
+        this.props.setAlertUserHideAction();
+    }
+
     fetchUserList = (page: number) => {
         this.props.fetchUserAction(page);
     }
@@ -100,11 +106,11 @@ class List extends Component<Props, State> {
         this.props.deleteUserAction(id)
             .then( (response: ApiResponseList<User>) => {
                 this.fetchUserList(1);
+
+                this.props.setAlertUserShowAction("Data Berhasil Dihapus", 'success');
             })
             .catch( (response: ApiResponseList<User>) => {
-                console.log(
-                    response.error!.metaData.message
-                );
+                this.props.setAlertUserShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
@@ -122,6 +128,12 @@ class List extends Component<Props, State> {
             ));
         }
 
+        const CAlert = (
+            <Alert color={this.props.userAlert.color} isOpen={this.props.userAlert.visible} toggle={() => this.props.setAlertUserHideAction()} fade={false}>
+                <div>{this.props.userAlert.message}</div>
+            </Alert>
+        );
+
         return (
             <>
                 <HeaderView />
@@ -133,6 +145,7 @@ class List extends Component<Props, State> {
                                 <CardHeader className="border-0">
                                     <Row>
                                         <div className="col">
+                                            {CAlert}
                                         </div>
                                     </Row>
                                     <Row className="align-items-center">
@@ -184,25 +197,31 @@ class List extends Component<Props, State> {
 
 interface LinkStateToProps {
     userList: User[],
-    paginate: Paginator
+    paginate: Paginator,
+    userAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
         userList: state.user.list,
-        paginate: state.user.paginate
+        paginate: state.user.paginate,
+        userAlert: state.user.alert
     }
 }
 
 interface LinkDispatchToProps {
     fetchUserAction: (page: number) => void,
-    deleteUserAction: (id: number) => Promise<ApiResponseList<User>>
+    deleteUserAction: (id: number) => Promise<ApiResponseList<User>>,
+    setAlertUserHideAction: () => void,
+    setAlertUserShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchUserAction: (page: number) => dispatch(fetchUserAction(page)),
-        deleteUserAction: (id: number) => dispatch(deleteUserAction(id))
+        deleteUserAction: (id: number) => dispatch(deleteUserAction(id)),
+        setAlertUserHideAction: () => dispatch(setAlertUserHideAction()),
+        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color))
     }
 }
 

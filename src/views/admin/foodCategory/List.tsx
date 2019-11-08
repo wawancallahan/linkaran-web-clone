@@ -31,12 +31,14 @@ import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
     fetchFoodCategoryAction,
-    deleteFoodCategoryAction
+    deleteFoodCategoryAction,
+    setAlertFoodCategoryHideAction,
+    setAlertFoodCategoryShowAction
 } from '../../../actions/admin/foodCategory';
 import { FoodCategory } from '../../../types/admin/foodCategory';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
-
+import { Alert as IAlert } from '../../../types/alert';
 
 type ListProps = RouteComponentProps & {
 
@@ -90,6 +92,10 @@ class List extends Component<Props, State> {
         this.fetchFoodCategoryList(page);
     }
 
+    componentWillUnmount() {
+        this.props.setAlertFoodCategoryHideAction();
+    }
+
     fetchFoodCategoryList = (page: number) => {
         this.props.fetchFoodCategoryAction(page);
     }
@@ -98,11 +104,11 @@ class List extends Component<Props, State> {
         this.props.deleteFoodCategoryAction(id)
             .then( (response: ApiResponseList<FoodCategory>) => {
                 this.fetchFoodCategoryList(1);
+
+                this.props.setAlertFoodCategoryShowAction("Data Berhasil Dihapus", 'success');
             })
             .catch( (response: ApiResponseList<FoodCategory>) => {
-                console.log(
-                    response.error!.metaData.message
-                );
+                this.props.setAlertFoodCategoryShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
@@ -120,6 +126,12 @@ class List extends Component<Props, State> {
             ));
         }
 
+        const CAlert = (
+            <Alert color={this.props.foodCategoryAlert.color} isOpen={this.props.foodCategoryAlert.visible} toggle={() => this.props.setAlertFoodCategoryHideAction()} fade={false}>
+                <div>{this.props.foodCategoryAlert.message}</div>
+            </Alert>
+        );
+
         return (
             <>
                 <HeaderView />
@@ -131,6 +143,7 @@ class List extends Component<Props, State> {
                                 <CardHeader className="border-0">
                                     <Row>
                                         <div className="col">
+                                            {CAlert}
                                         </div>
                                     </Row>
                                     <Row className="align-items-center">
@@ -180,25 +193,31 @@ class List extends Component<Props, State> {
 
 interface LinkStateToProps {
     foodCategoryList: FoodCategory[],
-    paginate: Paginator
+    paginate: Paginator,
+    foodCategoryAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
         foodCategoryList: state.foodCategory.list,
-        paginate: state.foodCategory.paginate
+        paginate: state.foodCategory.paginate,
+        foodCategoryAlert: state.foodCategory.alert
     }
 }
 
 interface LinkDispatchToProps {
     fetchFoodCategoryAction: (page: number) => void,
-    deleteFoodCategoryAction: (id: number) => Promise<ApiResponseList<FoodCategory>>
+    deleteFoodCategoryAction: (id: number) => Promise<ApiResponseList<FoodCategory>>,
+    setAlertFoodCategoryHideAction: () => void,
+    setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchFoodCategoryAction: (page: number) => dispatch(fetchFoodCategoryAction(page)),
-        deleteFoodCategoryAction: (id: number) => dispatch(deleteFoodCategoryAction(id))
+        deleteFoodCategoryAction: (id: number) => dispatch(deleteFoodCategoryAction(id)),
+        setAlertFoodCategoryHideAction: () => dispatch(setAlertFoodCategoryHideAction()),
+        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
     }
 }
 

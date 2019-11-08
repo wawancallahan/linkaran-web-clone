@@ -13,7 +13,7 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { User, FormField, UserCreate } from '../../../types/admin/user';
-import { createUserAction } from '../../../actions/admin/user';
+import { createUserAction, setAlertUserShowAction } from '../../../actions/admin/user';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 const createSchema = Yup.object().shape({
@@ -57,6 +57,7 @@ class Form extends Component<Props> {
                         .then( (response: ApiResponse<User>) => {
                             const data: ApiResponseSuccess<User> = response.response!;
                             
+                            this.props.setAlertUserShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<User>) => {
@@ -155,12 +156,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createUserAction: (user: UserCreate) => Promise<ApiResponse<User>>
+    createUserAction: (user: UserCreate) => Promise<ApiResponse<User>>,
+    setAlertUserShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createUserAction: (user: UserCreate) => dispatch(createUserAction(user))
+        createUserAction: (user: UserCreate) => dispatch(createUserAction(user)),
+        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color))
     }
 }
 

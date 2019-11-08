@@ -12,7 +12,11 @@ import {
     FetchFoodCategoryErrorActionType,
     FetchFoodCategorySuccessActionType,
     FoodCategoryCreate,
-    FoodCategoryEdit
+    FoodCategoryEdit,
+    AlertFoodCategoryHideActionType,
+    ALERT_FOOD_CATEGORY_HIDE,
+    AlertFoodCategoryShowActionType,
+    ALERT_FOOD_CATEGORY_SHOW
 } from '../../types/admin/foodCategory';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -36,6 +40,20 @@ export const setFetchFoodCategoryErrorAction = (): FetchFoodCategoryErrorActionT
     return {
         type: FETCH_FOOD_CATEGORY_ERROR
     }
+}
+
+export const setAlertFoodCategoryHideAction = (): AlertFoodCategoryHideActionType => {
+    return {
+        type: ALERT_FOOD_CATEGORY_HIDE
+    }
+}
+
+export const setAlertFoodCategoryShowAction = (message: string, color: string): AlertFoodCategoryShowActionType => {
+    return {
+        type: ALERT_FOOD_CATEGORY_SHOW,
+        color: color,
+        message: message
+    };
 }
 
 export const fetchFoodCategoryAction = (page: number) => {

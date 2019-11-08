@@ -8,27 +8,54 @@ import {
     FetchRestaurantSuccessActionType,
     FetchRestaurantErrorActionType,
     SetPaginatorRestaurantActionType,
-    SET_PAGINATOR_RESTAURANT
+    SET_PAGINATOR_RESTAURANT,
+    AlertRestaurantShowActionType,
+    AlertRestaurantHideActionType,
+    ALERT_RESTAURANT_HIDE,
+    ALERT_RESTAURANT_SHOW
 } from '../../types/admin/restaurant';
 
 import { Paginator } from '../../types/paginator';
+import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    isLoaded: boolean,
-    isSuccess: boolean,
     list: Restaurant[],
-    paginate: Paginator
+    paginate: Paginator,
+    alert: Alert
 };
 
 const initialState: initialStateInterface = {
-    isLoaded: false,
-    isSuccess: false,
     list: [],
     paginate: {
         total: 0,
         currentPage: 0,
         itemCount: 0,
         pageCount: 0
+    },
+    alert: {
+        message: '',
+        color: '',
+        visible: false
+    }
+}
+
+const alertHide = (state: initialStateInterface, action: AlertRestaurantHideActionType) => {
+    return {
+        ...state,
+        alert: {
+            ...initialState.alert
+        }
+    }
+}
+
+const alertShow = (state: initialStateInterface, action: AlertRestaurantShowActionType) => {
+    return {
+        ...state,
+        alert: {
+            color: action.color,
+            message: action.message,
+            visible: true
+        }
     }
 }
 
@@ -63,7 +90,9 @@ const reducer = (state = initialState, action: RestaurantActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_RESTAURANT: return setPaginator(state, action);
         case FETCH_RESTAURANT_SUCCESS: return fetchSuccess(state, action);
-        case FETCH_RESTAURANT_ERROR: return fetchError(state, action)
+        case FETCH_RESTAURANT_ERROR: return fetchError(state, action);
+        case ALERT_RESTAURANT_HIDE: return alertHide(state, action);
+        case ALERT_RESTAURANT_SHOW: return alertShow(state, action);
         default:
             return state;
     }

@@ -12,7 +12,11 @@ import {
     FetchUserErrorActionType,
     FetchUserSuccessActionType,
     UserCreate,
-    UserEdit
+    UserEdit,
+    AlertUserHideActionType,
+    ALERT_USER_HIDE,
+    AlertUserShowActionType,
+    ALERT_USER_SHOW
 } from '../../types/admin/user';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -36,6 +40,20 @@ export const setFetchUserErrorAction = (): FetchUserErrorActionType => {
     return {
         type: FETCH_USER_ERROR
     }
+}
+
+export const setAlertUserHideAction = (): AlertUserHideActionType => {
+    return {
+        type: ALERT_USER_HIDE
+    }
+}
+
+export const setAlertUserShowAction = (message: string, color: string): AlertUserShowActionType => {
+    return {
+        type: ALERT_USER_SHOW,
+        color: color,
+        message: message
+    };
 }
 
 export const fetchUserAction = (page: number) => {

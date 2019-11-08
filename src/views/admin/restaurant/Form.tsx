@@ -13,7 +13,7 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { Restaurant, FormField, RestaurantCreate } from '../../../types/admin/restaurant';
-import { createRestaurantAction } from '../../../actions/admin/restaurant';
+import { createRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 import DatePicker from 'react-datepicker';
@@ -66,7 +66,7 @@ class Form extends Component<Props> {
                     this.props.createRestaurantAction(restaurant)
                         .then( (response: ApiResponse<Restaurant>) => {
                             const data: ApiResponseSuccess<Restaurant> = response.response!;
-                            
+                            this.props.setAlertRestaurantShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<Restaurant>) => {
@@ -216,12 +216,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createRestaurantAction: (restaurant: RestaurantCreate) => Promise<ApiResponse<Restaurant>>
+    createRestaurantAction: (restaurant: RestaurantCreate) => Promise<ApiResponse<Restaurant>>,
+    setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createRestaurantAction: (restaurant: RestaurantCreate) => dispatch(createRestaurantAction(restaurant))
+        createRestaurantAction: (restaurant: RestaurantCreate) => dispatch(createRestaurantAction(restaurant)),
+        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
     }
 }
 

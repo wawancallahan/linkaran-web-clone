@@ -3,6 +3,9 @@ import { Paginator } from '../paginator';
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const SET_PAGINATOR_DRIVER = "SET_PAGINATOR_DRIVER";
 
+export const ALERT_DRIVER_SHOW = "ALERT_DRIVER_SHOW";
+export const ALERT_DRIVER_HIDE = "ALERT_DRIVER_HIDE";
+
 export type FormField = {
     nama: string,
     no_telepon: string,
@@ -53,6 +56,18 @@ export interface SetPaginatorDriverActionType {
     paginate: Paginator
 }
 
+export interface AlertDriverHideActionType {
+    type: typeof ALERT_DRIVER_HIDE
+}
+
+export interface AlertDriverShowActionType {
+    type: typeof ALERT_DRIVER_SHOW,
+    message: string,
+    color: string
+}
+
 export type DriverActionTypes =
     | FetchDriverActionType
+    | AlertDriverHideActionType
+    | AlertDriverShowActionType
     | SetPaginatorDriverActionType

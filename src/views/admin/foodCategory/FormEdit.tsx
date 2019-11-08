@@ -13,7 +13,7 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryEdit } from '../../../types/admin/foodCategory';
-import { editFoodCategoryAction } from '../../../actions/admin/foodCategory';
+import { editFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 const createSchema = Yup.object().shape({
@@ -49,7 +49,7 @@ class Form extends Component<Props> {
                     this.props.editFoodCategoryAction(foodCategory, this.props.id)
                         .then( (response: ApiResponse<FoodCategory>) => {
                             const data: ApiResponseSuccess<FoodCategory> = response.response!;
-                            
+                            this.props.setAlertFoodCategoryShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<FoodCategory>) => {
@@ -101,11 +101,13 @@ class Form extends Component<Props> {
 
 type LinkDispatchToProps = {
     editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => Promise<ApiResponse<FoodCategory>>
+    setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => dispatch(editFoodCategoryAction(foodCategory, id))
+        editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => dispatch(editFoodCategoryAction(foodCategory, id)),
+        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
     }
 }
 

@@ -13,7 +13,7 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { FoodCategory, FormField, FoodCategoryCreate } from '../../../types/admin/foodCategory';
-import { createFoodCategoryAction } from '../../../actions/admin/foodCategory';
+import { createFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 const createSchema = Yup.object().shape({
@@ -49,7 +49,7 @@ class Form extends Component<Props> {
                     this.props.createFoodCategoryAction(foodCategory)
                         .then( (response: ApiResponse<FoodCategory>) => {
                             const data: ApiResponseSuccess<FoodCategory> = response.response!;
-                            
+                            this.props.setAlertFoodCategoryShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<FoodCategory>) => {
@@ -101,11 +101,13 @@ class Form extends Component<Props> {
 
 type LinkDispatchToProps = {
     createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => Promise<ApiResponse<FoodCategory>>
+    setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => dispatch(createFoodCategoryAction(foodCategory))
+        createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => dispatch(createFoodCategoryAction(foodCategory)),
+        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
     }
 }
 

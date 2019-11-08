@@ -12,7 +12,11 @@ import {
     FetchRestaurantErrorActionType,
     FetchRestaurantSuccessActionType,
     RestaurantCreate,
-    RestaurantEdit
+    RestaurantEdit,
+    AlertRestaurantHideActionType,
+    ALERT_RESTAURANT_HIDE,
+    AlertRestaurantShowActionType,
+    ALERT_RESTAURANT_SHOW
 } from '../../types/admin/restaurant';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -36,6 +40,20 @@ export const setFetchRestaurantErrorAction = (): FetchRestaurantErrorActionType 
     return {
         type: FETCH_RESTAURANT_ERROR
     }
+}
+
+export const setAlertRestaurantHideAction = (): AlertRestaurantHideActionType => {
+    return {
+        type: ALERT_RESTAURANT_HIDE
+    }
+}
+
+export const setAlertRestaurantShowAction = (message: string, color: string): AlertRestaurantShowActionType => {
+    return {
+        type: ALERT_RESTAURANT_SHOW,
+        color: color,
+        message: message
+    };
 }
 
 export const fetchRestaurantAction = (page: number) => {

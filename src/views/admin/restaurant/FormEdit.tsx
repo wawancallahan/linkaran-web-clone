@@ -13,7 +13,7 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { Restaurant, FormField, RestaurantCreate, RestaurantEdit } from '../../../types/admin/restaurant';
-import { editRestaurantAction } from '../../../actions/admin/restaurant';
+import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 import DatePicker from 'react-datepicker';
@@ -66,7 +66,7 @@ class Form extends Component<Props> {
                     this.props.editRestaurantAction(restaurant, this.props.id)
                         .then( (response: ApiResponse<Restaurant>) => {
                             const data: ApiResponseSuccess<Restaurant> = response.response!;
-                            
+                            this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<Restaurant>) => {
@@ -216,12 +216,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editRestaurantAction: (restaurant: RestaurantEdit, id: number) => Promise<ApiResponse<Restaurant>>
+    editRestaurantAction: (restaurant: RestaurantEdit, id: number) => Promise<ApiResponse<Restaurant>>,
+    setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editRestaurantAction: (restaurant: RestaurantEdit, id: number) => dispatch(editRestaurantAction(restaurant, id))
+        editRestaurantAction: (restaurant: RestaurantEdit, id: number) => dispatch(editRestaurantAction(restaurant, id)),
+        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
     }
 }
 

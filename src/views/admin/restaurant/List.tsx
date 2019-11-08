@@ -31,12 +31,14 @@ import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
     fetchRestaurantAction,
-    deleteRestaurantAction
+    deleteRestaurantAction,
+    setAlertRestaurantHideAction,
+    setAlertRestaurantShowAction
 } from '../../../actions/admin/restaurant';
 import { Restaurant } from '../../../types/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
-
+import { Alert as IAlert } from '../../../types/alert';
 
 type ListProps = RouteComponentProps & {
 
@@ -94,6 +96,10 @@ class List extends Component<Props, State> {
         this.fetchRestaurantList(page);
     }
 
+    componentWillUnmount() {
+        this.props.setAlertRestaurantHideAction();
+    }
+
     fetchRestaurantList = (page: number) => {
         this.props.fetchRestaurantAction(page);
     }
@@ -102,11 +108,11 @@ class List extends Component<Props, State> {
         this.props.deleteRestaurantAction(id)
             .then( (response: ApiResponseList<Restaurant>) => {
                 this.fetchRestaurantList(1);
+
+                this.props.setAlertRestaurantShowAction("Data Berhasil Dihapus", 'success');
             })
             .catch( (response: ApiResponseList<Restaurant>) => {
-                console.log(
-                    response.error!.metaData.message
-                );
+                this.props.setAlertRestaurantShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
@@ -124,6 +130,12 @@ class List extends Component<Props, State> {
             ));
         }
 
+        const CAlert = (
+            <Alert color={this.props.restaurantAlert.color} isOpen={this.props.restaurantAlert.visible} toggle={() => this.props.setAlertRestaurantHideAction()} fade={false}>
+                <div>{this.props.restaurantAlert.message}</div>
+            </Alert>
+        );
+
         return (
             <>
                 <HeaderView />
@@ -135,6 +147,7 @@ class List extends Component<Props, State> {
                                 <CardHeader className="border-0">
                                     <Row>
                                         <div className="col">
+                                            {CAlert}
                                         </div>
                                     </Row>
                                     <Row className="align-items-center">
@@ -188,25 +201,31 @@ class List extends Component<Props, State> {
 
 interface LinkStateToProps {
     restaurantList: Restaurant[],
-    paginate: Paginator
+    paginate: Paginator,
+    restaurantAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
         restaurantList: state.restaurant.list,
-        paginate: state.restaurant.paginate
+        paginate: state.restaurant.paginate,
+        restaurantAlert: state.restaurant.alert
     }
 }
 
 interface LinkDispatchToProps {
     fetchRestaurantAction: (page: number) => void,
-    deleteRestaurantAction: (id: number) => Promise<ApiResponseList<Restaurant>>
+    deleteRestaurantAction: (id: number) => Promise<ApiResponseList<Restaurant>>,
+    setAlertRestaurantHideAction: () => void,
+    setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchRestaurantAction: (page: number) => dispatch(fetchRestaurantAction(page)),
-        deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id))
+        deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id)),
+        setAlertRestaurantHideAction: () => dispatch(setAlertRestaurantHideAction()),
+        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
     }
 }
 
