@@ -40,23 +40,27 @@ export const setFetchRestaurantErrorAction = (): FetchRestaurantErrorActionType 
 
 export const fetchRestaurantAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get('/v1/web/restaurant')
+        axiosService.get(`/v1/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
                 dispatch(setFetchRestaurantSuccessAction(data.result));
 
-                dispatch(setPaginateAction({
-                    activePage: 1,
-                    itemCount: data.result.length,
-                    pageCount: 1
-                }))
+                if (data.metaData.paginate) {
+                    dispatch(setPaginateAction({
+                        total: data.metaData.paginate.total,
+                        currentPage: data.metaData.paginate.currentPage,
+                        itemCount: data.metaData.paginate.itemCount,
+                        pageCount: data.metaData.paginate.pageCount
+                    }))
+                }
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchRestaurantErrorAction());
 
                 dispatch(setPaginateAction({
-                    activePage: 0,
+                    total: 0,
+                    currentPage: 0,
                     itemCount: 0,
                     pageCount: 0
                 }))

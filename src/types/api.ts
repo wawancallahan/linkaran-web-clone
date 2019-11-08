@@ -1,3 +1,4 @@
+import { Paginator } from "./paginator";
 
 export interface MetaData {
     isError: boolean,
@@ -7,6 +8,7 @@ export interface MetaData {
 
 export interface MetaDataSuccess extends MetaData {
     statusMessage: string,
+    paginate?: Paginator
 }
 
 export interface ApiResponseSuccess<T> {

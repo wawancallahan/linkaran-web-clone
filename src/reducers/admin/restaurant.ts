@@ -25,7 +25,8 @@ const initialState: initialStateInterface = {
     isSuccess: false,
     list: [],
     paginate: {
-        activePage: 0,
+        total: 0,
+        currentPage: 0,
         itemCount: 0,
         pageCount: 0
     }

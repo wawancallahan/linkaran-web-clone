@@ -11,7 +11,7 @@ type State =  {
 
 type Props = {
     pageCount: number,
-    activePage: number,
+    currentPage: number,
     itemCount: number,
     itemClicked: (page: number) => void 
 }
@@ -37,11 +37,11 @@ class Pagination extends Component<Props, State> {
 
         let paginationRender = null;
 
-        if (this.props.activePage !== 0 &&
+        if (this.props.currentPage !== 0 &&
             this.props.itemCount !== 0 &&
             this.props.pageCount !== 0) {
             
-                const current_page = this.props.activePage;
+                const current_page = this.props.currentPage;
                 const last_page = this.props.pageCount;
                 const side_page_limit = this.state.sidePageLimit;
 

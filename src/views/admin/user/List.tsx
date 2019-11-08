@@ -169,7 +169,7 @@ class List extends Component<Props, State> {
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
-                                                    activePage={this.props.paginate.activePage}
+                                                    currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
                                                     itemClicked={this.props.fetchUserAction} />
                                 </CardFooter>

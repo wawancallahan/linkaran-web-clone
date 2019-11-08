@@ -1,5 +1,6 @@
 export interface Paginator {
-    activePage: number,
+    currentPage: number,
     pageCount: number,
-    itemCount: number
+    itemCount: number,
+    total: number
 }

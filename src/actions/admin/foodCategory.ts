@@ -40,23 +40,27 @@ export const setFetchFoodCategoryErrorAction = (): FetchFoodCategoryErrorActionT
 
 export const fetchFoodCategoryAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get('/v1/web/food-category')
+        axiosService.get(`/v1/web/food-category?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
                 dispatch(setFetchFoodCategorySuccessAction(data.result));
 
-                dispatch(setPaginateAction({
-                    activePage: 1,
-                    itemCount: data.result.length,
-                    pageCount: 1
-                }))
+                if (data.metaData.paginate) {
+                    dispatch(setPaginateAction({
+                        total: data.metaData.paginate.total,
+                        currentPage: data.metaData.paginate.currentPage,
+                        itemCount: data.metaData.paginate.itemCount,
+                        pageCount: data.metaData.paginate.pageCount
+                    }))
+                }
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchFoodCategoryErrorAction());
 
                 dispatch(setPaginateAction({
-                    activePage: 0,
+                    total: 0,
+                    currentPage: 0,
                     itemCount: 0,
                     pageCount: 0
                 }))
