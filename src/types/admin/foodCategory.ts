@@ -15,21 +15,25 @@ export type FormField = {
 interface FoodCategoryField {
     name: string
 }
-
-export interface FoodCategory extends FoodCategoryField {
+interface FoodCategoryList {
+    name: string
+}
+interface FoodCategoryResult {
     id: number,
     createdAt: string,
     updatedAt: string,
     deletedAt: string,
 }
 
-export interface FoodCategoryCreate extends FoodCategoryField {
+export type FoodCategory = FoodCategoryResult & FoodCategoryList;
 
-}
+export type FoodCategoryCreate = FoodCategoryField;
 
-export interface FoodCategoryEdit extends FoodCategoryField {
+export type FoodCategoryEdit = FoodCategoryField;
 
-}
+export type FoodCategoryCreateResult = FoodCategoryResult;
+
+export type FoodCategoryEditResult = FoodCategoryResult;
 
 export interface FetchFoodCategoryActionType {
     type: typeof FETCH_FOOD_CATEGORY

@@ -30,12 +30,12 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchRestaurantAction,
-    deleteRestaurantAction,
-    setAlertRestaurantHideAction,
-    setAlertRestaurantShowAction
-} from '../../../actions/admin/restaurant';
-import { Restaurant } from '../../../types/admin/restaurant';
+    fetchSubBrandVehicleAction,
+    deleteSubBrandVehicleAction,
+    setAlertSubBrandVehicleHideAction,
+    setAlertSubBrandVehicleShowAction
+} from '../../../actions/admin/subBrandVehicle';
+import { SubBrandVehicle } from '../../../types/admin/subBrandVehicle';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -52,23 +52,20 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Restaurant,
+    item: SubBrandVehicle,
     key: number,
-    deleteRestaurant: (id: number) => void
+    deleteSubBrandVehicle: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
-            <td>{props.item.point}</td>
-            <td>{props.item.rating}</td>
-            <td>{props.item.openTime}</td>
-            <td>{props.item.closeTime}</td>
+            <td>{props.item.brandVehicle.name}</td>
             <td>
-                <Link to={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <Link to={`/admin/sub-brand-vehicle/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
                 </Link>
-                <Button color="danger" size="sm" onClick={() => props.deleteRestaurant(props.item.id)}>
+                <Button color="danger" size="sm" onClick={() => props.deleteSubBrandVehicle(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
             </td>
@@ -93,46 +90,46 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchRestaurantList(page);
+        this.fetchSubBrandVehicleList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertRestaurantHideAction();
+        this.props.setAlertSubBrandVehicleHideAction();
     }
 
-    fetchRestaurantList = (page: number) => {
-        this.props.fetchRestaurantAction(page);
+    fetchSubBrandVehicleList = (page: number) => {
+        this.props.fetchSubBrandVehicleAction(page);
     }
 
-    deleteRestaurant = (id: number) => {
-        this.props.deleteRestaurantAction(id)
-            .then( (response: ApiResponse<Restaurant>) => {
-                this.fetchRestaurantList(1);
+    deleteSubBrandVehicle = (id: number) => {
+        this.props.deleteSubBrandVehicleAction(id)
+            .then( (response: ApiResponse<SubBrandVehicle>) => {
+                this.fetchSubBrandVehicleList(1);
 
-                this.props.setAlertRestaurantShowAction("Data Berhasil Dihapus", 'success');
+                this.props.setAlertSubBrandVehicleShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponse<Restaurant>) => {
-                this.props.setAlertRestaurantShowAction(response.error!.metaData.message, 'danger');
+            .catch( (response: ApiResponse<SubBrandVehicle>) => {
+                this.props.setAlertSubBrandVehicleShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
     render() {
 
-        let restaurantList: any = <TableItemEmpty />;
+        let subBrandVehicleList: any = <TableItemEmpty />;
 
-        if (this.props.restaurantList.length > 0) {
-            restaurantList = this.props.restaurantList.map((item: Restaurant, index: number) => (
+        if (this.props.subBrandVehicleList.length > 0) {
+            subBrandVehicleList = this.props.subBrandVehicleList.map((item: SubBrandVehicle, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
-                           deleteRestaurant={this.deleteRestaurant}
+                           deleteSubBrandVehicle={this.deleteSubBrandVehicle}
                            />
             ));
         }
 
         const CAlert = (
-            <Alert color={this.props.restaurantAlert.color} isOpen={this.props.restaurantAlert.visible} toggle={() => this.props.setAlertRestaurantHideAction()} fade={false}>
-                <div>{this.props.restaurantAlert.message}</div>
+            <Alert color={this.props.subBrandVehicleAlert.color} isOpen={this.props.subBrandVehicleAlert.visible} toggle={() => this.props.setAlertSubBrandVehicleHideAction()} fade={false}>
+                <div>{this.props.subBrandVehicleAlert.message}</div>
             </Alert>
         );
 
@@ -152,15 +149,15 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Restaurant</h3>
+                                            <h3 className="mb-0">Daftar Sub Brand Vehicle</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/restaurant/create">
+                                        <Link to="/admin/sub-brand-vehicle/create">
                                             <Button
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Restaurant
+                                                Tambah Sub Brand Vehicle
                                             </Button>
                                         </Link>
                                         </div>
@@ -172,15 +169,12 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Poin</th>
-                                            <th>Rating</th>
-                                            <th>Jam Buka</th>
-                                            <th>Jam Tutup</th>
+                                            <th>Brand Vehicle</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {restaurantList}
+                                        {subBrandVehicleList}
                                     </tbody>
                                 </Table>
                                 
@@ -188,7 +182,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchRestaurantAction} />
+                                                    itemClicked={this.props.fetchSubBrandVehicleAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -200,37 +194,37 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    restaurantList: Restaurant[],
+    subBrandVehicleList: SubBrandVehicle[],
     paginate: Paginator,
-    restaurantAlert: IAlert
+    subBrandVehicleAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        restaurantList: state.restaurant.list,
-        paginate: state.restaurant.paginate,
-        restaurantAlert: state.restaurant.alert
+        subBrandVehicleList: state.subBrandVehicle.list,
+        paginate: state.subBrandVehicle.paginate,
+        subBrandVehicleAlert: state.subBrandVehicle.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchRestaurantAction: (page: number) => void,
-    deleteRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>,
-    setAlertRestaurantHideAction: () => void,
-    setAlertRestaurantShowAction: (message: string, color: string) => void
+    fetchSubBrandVehicleAction: (page: number) => void,
+    deleteSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicle>>,
+    setAlertSubBrandVehicleHideAction: () => void,
+    setAlertSubBrandVehicleShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchRestaurantAction: (page: number) => dispatch(fetchRestaurantAction(page)),
-        deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id)),
-        setAlertRestaurantHideAction: () => dispatch(setAlertRestaurantHideAction()),
-        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
+        fetchSubBrandVehicleAction: (page: number) => dispatch(fetchSubBrandVehicleAction(page)),
+        deleteSubBrandVehicleAction: (id: number) => dispatch(deleteSubBrandVehicleAction(id)),
+        setAlertSubBrandVehicleHideAction: () => dispatch(setAlertSubBrandVehicleHideAction()),
+        setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color))
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Restaurant")
+                            withTitle(List, "Daftar Sub Brand Vehicle")
                     )
                 );

@@ -20,20 +20,28 @@ interface UserField {
     email: string
 }
 
-export interface User extends UserField {
+interface UserList {
+    name: string
+    phoneNumber: string,
+    email: string
+}
+
+interface UserResult {
     id: number,
     createdAt: string,
     updatedAt: string,
     deletedAt: string,
 }
 
-export interface UserCreate extends UserField {
+export type User = UserResult & UserList;
 
-}
+export type UserCreate = UserField;
 
-export interface UserEdit extends UserField {
+export type UserEdit = UserField;
 
-}
+export type UserCreateResult = UserResult & UserList;
+
+export type UserEditResult = UserResult &  UserList;
 
 export interface FetchUserActionType {
     type: typeof FETCH_USER

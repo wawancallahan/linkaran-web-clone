@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Restaurant, FormField, RestaurantCreate, RestaurantEdit } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantCreate, RestaurantEdit, RestaurantEditResult } from '../../../types/admin/restaurant';
 import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -64,8 +64,8 @@ class Form extends Component<Props> {
                     }
 
                     this.props.editRestaurantAction(restaurant, this.props.id)
-                        .then( (response: ApiResponse<Restaurant>) => {
-                            const data: ApiResponseSuccess<Restaurant> = response.response!;
+                        .then( (response: ApiResponse<RestaurantEditResult>) => {
+                            const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
                             this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
@@ -216,7 +216,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editRestaurantAction: (restaurant: RestaurantEdit, id: number) => Promise<ApiResponse<Restaurant>>,
+    editRestaurantAction: (restaurant: RestaurantEdit, id: number) => Promise<ApiResponse<RestaurantEditResult>>,
     setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 

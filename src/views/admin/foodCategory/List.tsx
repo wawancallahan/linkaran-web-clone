@@ -102,12 +102,12 @@ class List extends Component<Props, State> {
 
     deleteFoodCategory = (id: number) => {
         this.props.deleteFoodCategoryAction(id)
-            .then( (response: ApiResponseList<FoodCategory>) => {
+            .then( (response: ApiResponse<FoodCategory>) => {
                 this.fetchFoodCategoryList(1);
 
                 this.props.setAlertFoodCategoryShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponseList<FoodCategory>) => {
+            .catch( (response: ApiResponse<FoodCategory>) => {
                 this.props.setAlertFoodCategoryShowAction(response.error!.metaData.message, 'danger');
             });
     }
@@ -207,7 +207,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 
 interface LinkDispatchToProps {
     fetchFoodCategoryAction: (page: number) => void,
-    deleteFoodCategoryAction: (id: number) => Promise<ApiResponseList<FoodCategory>>,
+    deleteFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategory>>,
     setAlertFoodCategoryHideAction: () => void,
     setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }

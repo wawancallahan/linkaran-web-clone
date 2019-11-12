@@ -16,7 +16,9 @@ import {
     AlertRestaurantHideActionType,
     ALERT_RESTAURANT_HIDE,
     AlertRestaurantShowActionType,
-    ALERT_RESTAURANT_SHOW
+    ALERT_RESTAURANT_SHOW,
+    RestaurantEditResult,
+    RestaurantCreateResult
 } from '../../types/admin/restaurant';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -86,11 +88,11 @@ export const fetchRestaurantAction = (page: number) => {
     }
 }
 
-export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
+export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post('/v1/web/restaurant', restaurant)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Restaurant> = response.data;
+                const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -192,11 +194,11 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
     }
 }
 
-export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
+export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(`/v1/web/restaurant/${id}`, restaurant)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Restaurant> = response.data;
+                const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -246,11 +248,11 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
 }
 
 
-export const deleteRestaurantAction = (id: number): ThunkResult<Promise<ApiResponseList<Restaurant>>> => {
+export const deleteRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.delete(`/v1/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Restaurant> = response.data;
+                const data: ApiResponseSuccess<Restaurant> = response.data;
 
                 return Promise.resolve({
                     response: data,

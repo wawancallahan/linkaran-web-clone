@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { User, FormField, UserCreate } from '../../../types/admin/user';
+import { User, FormField, UserCreate, UserCreateResult } from '../../../types/admin/user';
 import { createUserAction, setAlertUserShowAction } from '../../../actions/admin/user';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -54,13 +54,13 @@ class Form extends Component<Props> {
                     }
 
                     this.props.createUserAction(user)
-                        .then( (response: ApiResponse<User>) => {
-                            const data: ApiResponseSuccess<User> = response.response!;
+                        .then( (response: ApiResponse<UserCreateResult>) => {
+                            const data: ApiResponseSuccess<UserCreateResult> = response.response!;
                             
                             this.props.setAlertUserShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
                         })
-                        .catch( (error: ApiResponse<User>) => {
+                        .catch( (error: ApiResponse<UserCreateResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
                         });
@@ -156,7 +156,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createUserAction: (user: UserCreate) => Promise<ApiResponse<User>>,
+    createUserAction: (user: UserCreate) => Promise<ApiResponse<UserCreateResult>>,
     setAlertUserShowAction: (message: string, color: string) => void
 }
 

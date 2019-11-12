@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { User, FormField, UserCreate, UserEdit } from '../../../types/admin/user';
+import { User, FormField, UserCreate, UserEdit, UserEditResult } from '../../../types/admin/user';
 import { editUserAction, setAlertUserShowAction } from '../../../actions/admin/user';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -54,12 +54,12 @@ class Form extends Component<Props> {
                     }
 
                     this.props.editUserAction(user, this.props.id)
-                        .then( (response: ApiResponse<User>) => {
-                            const data: ApiResponseSuccess<User> = response.response!;
+                        .then( (response: ApiResponse<UserEditResult>) => {
+                            const data: ApiResponseSuccess<UserEditResult> = response.response!;
                             this.props.setAlertUserShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
-                        .catch( (error: ApiResponse<User>) => {
+                        .catch( (error: ApiResponse<UserEditResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
                         });
@@ -155,7 +155,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editUserAction: (user: UserEdit, id: number) => Promise<ApiResponse<User>>,
+    editUserAction: (user: UserEdit, id: number) => Promise<ApiResponse<UserEditResult>>,
     setAlertUserShowAction: (message: string, color: string) => void
 }
 

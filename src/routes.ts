@@ -21,6 +21,8 @@ import AdminIndex from "./views/admin/Index";
 import AdminUser from './views/admin/user/Index';
 import AdminFoodCategory from './views/admin/foodCategory/Index';
 import AdminRestaurant from './views/admin/restaurant/Index';
+import AdminBrandVehicle from './views/admin/brandVehicle/Index';
+import AdminSubBrandVehicle from './views/admin/subBrandVehicle/Index';
 import AdminDriver from './views/admin/driver/Index';
 
 const routes: any[] = [
@@ -50,6 +52,20 @@ const routes: any[] = [
         name: "Restaurant",
         icon: "ni ni-single-02 text-primary",
         component: AdminRestaurant,
+        layout: "/admin"
+    },
+    {
+        path: "/brand-vehicle",
+        name: "Brand Vehicle",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminBrandVehicle,
+        layout: "/admin"
+    },
+    {
+        path: "/sub-brand-vehicle",
+        name: "Sub Brand Vehicle",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminSubBrandVehicle,
         layout: "/admin"
     },
     {

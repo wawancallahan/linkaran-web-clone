@@ -104,12 +104,12 @@ class List extends Component<Props, State> {
 
     deleteUser = (id: number) => {
         this.props.deleteUserAction(id)
-            .then( (response: ApiResponseList<User>) => {
+            .then( (response: ApiResponse<User>) => {
                 this.fetchUserList(1);
 
                 this.props.setAlertUserShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponseList<User>) => {
+            .catch( (response: ApiResponse<User>) => {
                 this.props.setAlertUserShowAction(response.error!.metaData.message, 'danger');
             });
     }
@@ -211,7 +211,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 
 interface LinkDispatchToProps {
     fetchUserAction: (page: number) => void,
-    deleteUserAction: (id: number) => Promise<ApiResponseList<User>>,
+    deleteUserAction: (id: number) => Promise<ApiResponse<User>>,
     setAlertUserHideAction: () => void,
     setAlertUserShowAction: (message: string, color: string) => void
 }

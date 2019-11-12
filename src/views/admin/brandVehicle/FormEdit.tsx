@@ -12,8 +12,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryEdit, FoodCategoryEditResult } from '../../../types/admin/foodCategory';
-import { editFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
+import { BrandVehicle, FormField, BrandVehicleCreate, BrandVehicleEdit, BrandVehicleEditResult } from '../../../types/admin/brandVehicle';
+import { editBrandVehicleAction, setAlertBrandVehicleShowAction } from '../../../actions/admin/brandVehicle';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
 const createSchema = Yup.object().shape({
@@ -42,17 +42,17 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const foodCategory: FoodCategoryEdit = {
+                    const brandVehicle: BrandVehicleEdit = {
                         name: values.name
                     }
 
-                    this.props.editFoodCategoryAction(foodCategory, this.props.id)
-                        .then( (response: ApiResponse<FoodCategoryEditResult>) => {
-                            const data: ApiResponseSuccess<FoodCategoryEditResult> = response.response!;
-                            this.props.setAlertFoodCategoryShowAction('Data Berhasil Diedit', 'success');
+                    this.props.editBrandVehicleAction(brandVehicle, this.props.id)
+                        .then( (response: ApiResponse<BrandVehicleEditResult>) => {
+                            const data: ApiResponseSuccess<BrandVehicleEditResult> = response.response!;
+                            this.props.setAlertBrandVehicleShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
-                        .catch( (error: ApiResponse<FoodCategoryEditResult>) => {
+                        .catch( (error: ApiResponse<BrandVehicleEditResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
                         });
@@ -100,14 +100,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => Promise<ApiResponse<FoodCategoryEditResult>>
-    setAlertFoodCategoryShowAction: (message: string, color: string) => void
+    editBrandVehicleAction: (brandVehicle: BrandVehicleEdit, id: number) => Promise<ApiResponse<BrandVehicleEditResult>>
+    setAlertBrandVehicleShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => dispatch(editFoodCategoryAction(foodCategory, id)),
-        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
+        editBrandVehicleAction: (brandVehicle: BrandVehicleEdit, id: number) => dispatch(editBrandVehicleAction(brandVehicle, id)),
+        setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color))
     }
 }
 

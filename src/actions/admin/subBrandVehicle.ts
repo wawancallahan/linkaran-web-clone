@@ -3,68 +3,68 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
-    User,
-    SET_PAGINATOR_USER,
-    FETCH_USER_SUCCESS,
-    FETCH_USER_ERROR,
-    SetPaginatorUserActionType,
-    FetchUserActionType,
-    FetchUserErrorActionType,
-    FetchUserSuccessActionType,
-    UserCreate,
-    UserEdit,
-    AlertUserHideActionType,
-    ALERT_USER_HIDE,
-    AlertUserShowActionType,
-    ALERT_USER_SHOW,
-    UserEditResult,
-    UserCreateResult
-} from '../../types/admin/user';
+    SubBrandVehicle,
+    SET_PAGINATOR_SUB_BRAND_VEHICLE,
+    FETCH_SUB_BRAND_VEHICLE_SUCCESS,
+    FETCH_SUB_BRAND_VEHICLE_ERROR,
+    SetPaginatorSubBrandVehicleActionType,
+    FetchSubBrandVehicleActionType,
+    FetchSubBrandVehicleErrorActionType,
+    FetchSubBrandVehicleSuccessActionType,
+    SubBrandVehicleCreate,
+    SubBrandVehicleEdit,
+    AlertSubBrandVehicleHideActionType,
+    ALERT_SUB_BRAND_VEHICLE_HIDE,
+    AlertSubBrandVehicleShowActionType,
+    ALERT_SUB_BRAND_VEHICLE_SHOW,
+    SubBrandVehicleCreateResult,
+    SubBrandVehicleEditResult
+} from '../../types/admin/subBrandVehicle';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorUserActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorSubBrandVehicleActionType => {
     return {
-        type: SET_PAGINATOR_USER,
+        type: SET_PAGINATOR_SUB_BRAND_VEHICLE,
         paginate: paginate
     }
 }
 
-export const setFetchUserSuccessAction = (list: User[]): FetchUserSuccessActionType => {
+export const setFetchSubBrandVehicleSuccessAction = (list: SubBrandVehicle[]): FetchSubBrandVehicleSuccessActionType => {
     return {
-        type: FETCH_USER_SUCCESS,
+        type: FETCH_SUB_BRAND_VEHICLE_SUCCESS,
         list: list
     }
 }
 
-export const setFetchUserErrorAction = (): FetchUserErrorActionType => {
+export const setFetchSubBrandVehicleErrorAction = (): FetchSubBrandVehicleErrorActionType => {
     return {
-        type: FETCH_USER_ERROR
+        type: FETCH_SUB_BRAND_VEHICLE_ERROR
     }
 }
 
-export const setAlertUserHideAction = (): AlertUserHideActionType => {
+export const setAlertSubBrandVehicleHideAction = (): AlertSubBrandVehicleHideActionType => {
     return {
-        type: ALERT_USER_HIDE
+        type: ALERT_SUB_BRAND_VEHICLE_HIDE
     }
 }
 
-export const setAlertUserShowAction = (message: string, color: string): AlertUserShowActionType => {
+export const setAlertSubBrandVehicleShowAction = (message: string, color: string): AlertSubBrandVehicleShowActionType => {
     return {
-        type: ALERT_USER_SHOW,
+        type: ALERT_SUB_BRAND_VEHICLE_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchUserAction = (page: number) => {
+export const fetchSubBrandVehicleAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/user?page=${page}`)
+        axiosService.get(`/v1/web/sub-brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<User> = response.data;
+                const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
 
-                dispatch(setFetchUserSuccessAction(data.result));
+                dispatch(setFetchSubBrandVehicleSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
                     dispatch(setPaginateAction({
@@ -76,7 +76,7 @@ export const fetchUserAction = (page: number) => {
                 }
             })
             .catch( (error: AxiosError) => {
-                dispatch(setFetchUserErrorAction());
+                dispatch(setFetchSubBrandVehicleErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
@@ -88,11 +88,11 @@ export const fetchUserAction = (page: number) => {
     }
 }
 
-export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiResponse<UserCreateResult>>> => {
+export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreate): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/user', user)
+        return axiosService.post('/v1/web/sub-brand-vehicle', subBrandVehicle)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<UserCreateResult> = response.data;
+                const data: ApiResponseSuccess<SubBrandVehicleCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -141,11 +141,11 @@ export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User>>> => {
+export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/user/${id}`)
+        return axiosService.get(`/v1/web/sub-brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<User> = response.data;
+                const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -194,11 +194,11 @@ export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User
     }
 }
 
-export const editUserAction = (user: UserEdit, id: number): ThunkResult<Promise<ApiResponse<UserEditResult>>> => {
+export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/user/${id}`, user)
+        return axiosService.patch(`/v1/web/sub-brand-vehicle/${id}`, subBrandVehicle)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<UserEditResult> = response.data;
+                const data: ApiResponseSuccess<SubBrandVehicleEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -248,11 +248,11 @@ export const editUserAction = (user: UserEdit, id: number): ThunkResult<Promise<
 }
 
 
-export const deleteUserAction = (id: number): ThunkResult<Promise<ApiResponse<User>>> => {
+export const deleteSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/user/${id}`)
+        return axiosService.delete(`/v1/web/sub-brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<User> = response.data;
+                const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
 
                 return Promise.resolve({
                     response: data,

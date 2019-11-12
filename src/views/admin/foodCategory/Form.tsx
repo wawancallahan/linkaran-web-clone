@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { FoodCategory, FormField, FoodCategoryCreate } from '../../../types/admin/foodCategory';
+import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryCreateResult } from '../../../types/admin/foodCategory';
 import { createFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -47,12 +47,12 @@ class Form extends Component<Props> {
                     }
 
                     this.props.createFoodCategoryAction(foodCategory)
-                        .then( (response: ApiResponse<FoodCategory>) => {
-                            const data: ApiResponseSuccess<FoodCategory> = response.response!;
+                        .then( (response: ApiResponse<FoodCategoryCreateResult>) => {
+                            const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.response!;
                             this.props.setAlertFoodCategoryShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
                         })
-                        .catch( (error: ApiResponse<FoodCategory>) => {
+                        .catch( (error: ApiResponse<FoodCategoryCreateResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
                         });
@@ -100,7 +100,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => Promise<ApiResponse<FoodCategory>>
+    createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => Promise<ApiResponse<FoodCategoryCreateResult>>
     setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 

@@ -16,7 +16,9 @@ import {
     AlertFoodCategoryHideActionType,
     ALERT_FOOD_CATEGORY_HIDE,
     AlertFoodCategoryShowActionType,
-    ALERT_FOOD_CATEGORY_SHOW
+    ALERT_FOOD_CATEGORY_SHOW,
+    FoodCategoryEditResult,
+    FoodCategoryCreateResult
 } from '../../types/admin/foodCategory';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -86,11 +88,11 @@ export const fetchFoodCategoryAction = (page: number) => {
     }
 }
 
-export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
+export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post('/v1/web/food-category', foodCategory)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<FoodCategory> = response.data;
+                const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -192,11 +194,11 @@ export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
+export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: number): ThunkResult<Promise<ApiResponse<FoodCategoryEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(`/v1/web/food-category/${id}`, foodCategory)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<FoodCategory> = response.data;
+                const data: ApiResponseSuccess<FoodCategoryEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -246,11 +248,11 @@ export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: numbe
 }
 
 
-export const deleteFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
+export const deleteFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.delete(`/v1/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<FoodCategory> = response.data;
+                const data: ApiResponseSuccess<FoodCategory> = response.data;
 
                 return Promise.resolve({
                     response: data,

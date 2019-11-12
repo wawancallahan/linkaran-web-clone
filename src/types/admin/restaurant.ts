@@ -23,21 +23,29 @@ interface RestaurantField {
     openTime: number,
     closeTime: number
 }
-
-export interface Restaurant extends RestaurantField {
+interface RestaurantList {
+    name: string,
+    point: string,
+    rating: number,
+    openTime: number,
+    closeTime: number
+}
+interface RestaurantResult {
     id: number,
     createdAt: string,
     updatedAt: string,
     deletedAt: string,
 }
 
-export interface RestaurantCreate extends RestaurantField {
+export type Restaurant = RestaurantResult & RestaurantList;
 
-}
+export type RestaurantCreate = RestaurantField;
 
-export interface RestaurantEdit extends RestaurantField {
+export type RestaurantEdit = RestaurantField;
 
-}
+export type RestaurantCreateResult = RestaurantResult;
+
+export type RestaurantEditResult = RestaurantResult;
 
 export interface FetchRestaurantActionType {
     type: typeof FETCH_RESTAURANT
