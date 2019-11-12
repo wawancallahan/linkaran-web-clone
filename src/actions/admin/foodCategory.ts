@@ -88,6 +88,59 @@ export const fetchFoodCategoryAction = (page: number) => {
     }
 }
 
+export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.get(`/v1/web/food-category?page=${page}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<FoodCategory> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
 export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post('/v1/web/food-category', foodCategory)

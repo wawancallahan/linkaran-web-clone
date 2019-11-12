@@ -19,6 +19,7 @@
 import Login from './views/auth/Login';
 import AdminIndex from "./views/admin/Index";
 import AdminUser from './views/admin/user/Index';
+import AdminFood from './views/admin/food/Index';
 import AdminFoodCategory from './views/admin/foodCategory/Index';
 import AdminRestaurant from './views/admin/restaurant/Index';
 import AdminBrandVehicle from './views/admin/brandVehicle/Index';
@@ -45,6 +46,13 @@ const routes: any[] = [
         name: "Food Category",
         icon: "ni ni-single-02 text-primary",
         component: AdminFoodCategory,
+        layout: "/admin"
+    },
+    {
+        path: "/food",
+        name: "Food",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminFood,
         layout: "/admin"
     },
     {

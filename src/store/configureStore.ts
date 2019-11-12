@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import userReducer from '../reducers/admin/user';
+import foodReducer from '../reducers/admin/food';
 import foodCategoryReducer from '../reducers/admin/foodCategory';
 import restaurantReducer from '../reducers/admin/restaurant';
 import driverReducer from '../reducers/admin/driver';
@@ -10,6 +11,7 @@ import subBrandVehicleReducer from '../reducers/admin/subBrandVehicle';
 
 const rootReducer = combineReducers({
     user: userReducer,
+    food: foodReducer,
     foodCategory: foodCategoryReducer,
     driver: driverReducer,
     restaurant: restaurantReducer,
