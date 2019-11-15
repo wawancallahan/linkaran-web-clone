@@ -54,11 +54,26 @@ class Create extends Component<Props, State> {
             sim_file: null,
             sim_file_preview: '',
             alamat: '',
-            negara: '',
-            provinsi: '',
-            kabupaten_kota: '',
-            kecamatan: '',
-            kelurahan: '',
+            negara: {
+                label: '',
+                value: 0
+            },
+            provinsi: {
+                label: '',
+                value: 0
+            },
+            kabupaten_kota: {
+                label: '',
+                value: 0
+            },
+            kecamatan: {
+                label: '',
+                value: 0
+            },
+            kelurahan: {
+                label: '',
+                value: 0
+            },
             foto_profil: null,
             foto_profil_preview: '',
             tipe_kendaraan: {
@@ -74,7 +89,8 @@ class Create extends Component<Props, State> {
             },
             jumlah_seat: null,
             warna: '',
-            keterangan: '' 
+            keterangan: '',
+            rating: null
         },
         alert_visible: false,
         alert_message: ''

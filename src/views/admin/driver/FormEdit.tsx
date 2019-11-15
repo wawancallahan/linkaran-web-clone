@@ -12,11 +12,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Driver, FormField, DriverCreate, DriverCreateResult } from '../../../types/admin/driver';
+import { Driver, FormField, DriverEdit, DriverEditResult } from '../../../types/admin/driver';
 import {
     setAlertDriverShowAction,
     setAlertDriverHideAction,
-    createDriverAction
+    editDriverAction
 } from '../../../actions/admin/driver';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -104,7 +104,8 @@ type FormProps = {
     form: FormField,
     setAlertOpen: (open: boolean) => void,
     setAlertMessage: (message: string) => void,
-    redirectOnSuccess: () => void
+    redirectOnSuccess: () => void,
+    id: number
 }
 
 type Props = LinkDispatchToProps & FormProps;
@@ -126,7 +127,7 @@ class Form extends Component<Props> {
                         tanggal_lahir = `${values.tanggal_lahir.getFullYear()}-${values.tanggal_lahir.getMonth() + 1}-${values.tanggal_lahir.getDate()}`;
                     }
 
-                    const driver: DriverCreate = {
+                    const driver: DriverEdit = {
                         alamat: values.alamat,
                         email: values.email,
                         foto_profil: values.foto_profil,
@@ -168,13 +169,13 @@ class Form extends Component<Props> {
                         warna: values.warna
                     }
 
-                    this.props.createDriverAction(driver)
-                    .then( (response: ApiResponse<DriverCreateResult>) => {
-                        const data: ApiResponseSuccess<DriverCreateResult> = response.response!;
-                        this.props.setAlertDriverShowAction('Data Berhasil Ditambah', 'success');
+                    this.props.editDriverAction(driver, this.props.id)
+                    .then( (response: ApiResponse<DriverEditResult>) => {
+                        const data: ApiResponseSuccess<DriverEditResult> = response.response!;
+                        this.props.setAlertDriverShowAction('Data Berhasil Diedit', 'success');
                         this.props.redirectOnSuccess();
                     })
-                    .catch( (error: ApiResponse<DriverCreateResult>) => {
+                    .catch( (error: ApiResponse<DriverEditResult>) => {
                         this.props.setAlertOpen(true);
                         this.props.setAlertMessage(error.error!.metaData.message);
                     });
@@ -212,13 +213,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createDriverAction: (food: DriverCreate) => Promise<ApiResponse<DriverCreateResult>>
+    editDriverAction: (driver: DriverEdit, id: number) => Promise<ApiResponse<DriverEditResult>>
     setAlertDriverShowAction: (message: string, color: string) => void,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createDriverAction: (food: DriverCreate) => dispatch(createDriverAction(food)),
+        editDriverAction: (driver: DriverEdit, id: number) => dispatch(editDriverAction(driver, id)),
         setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
     }
 }

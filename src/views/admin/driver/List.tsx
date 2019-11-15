@@ -30,11 +30,15 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchDriverFromApiAction
+    fetchDriverApiAction,
+    setAlertDriverHideAction,
+    setAlertDriverShowAction,
+    deleteDriverAction
 } from '../../../actions/admin/driver';
 import { Driver } from '../../../types/admin/driver';
 import { Paginator } from '../../../types/paginator';
-
+import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
+import { Alert as IAlert } from '../../../types/alert';
 
 type ListProps = RouteComponentProps & {
 
@@ -49,14 +53,25 @@ type State = {
 const TableItem = (props: {
     index: number,
     item: Driver,
-    key: number
+    key: number,
+    deleteDriver: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
+            <td>{props.item.user.name}</td>
+            <td>{props.item.user.phoneNumber}</td>
+            <td>{props.item.user.email}</td>
+            <td>{props.item.identityNumber}</td>
+            <td>{props.item.gender}</td>
+            <td>{props.item.dateOfBirth}</td>
             <td>
-                <Button color="warning" size="sm"><i className="fa fa-edit"></i> Edit</Button>
-                <Button color="danger" size="sm"><i className="fa fa-trash"></i> Hapus</Button>
+                <Link to={`/admin/driver/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i> Edit
+                </Link>
+                <Button color="danger" size="sm" onClick={() => props.deleteDriver(props.item.id)}>
+                    <i className="fa fa-trash"></i> Hapus
+                </Button>
             </td>
         </tr>
     )
@@ -82,8 +97,24 @@ class List extends Component<Props, State> {
         this.fetchDriverList(page);
     }
 
+    componentWillUnmount() {
+        this.props.setAlertDriverHideAction();
+    }
+
     fetchDriverList(page: number) {
-        this.props.fetchDriverFromApiAction(page);
+        this.props.fetchDriverApiAction(page);
+    }
+
+    deleteDriver = (id: number) => {
+        this.props.deleteDriverAction(id)
+            .then( (response: ApiResponse<Driver>) => {
+                this.fetchDriverList(1);
+
+                this.props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
+            })
+            .catch( (response: ApiResponse<Driver>) => {
+                this.props.setAlertDriverShowAction(response.error!.metaData.message, 'danger');
+            });
     }
 
     render() {
@@ -95,9 +126,16 @@ class List extends Component<Props, State> {
                 <TableItem key={index}
                            item={item}
                            index={index}
+                           deleteDriver={this.deleteDriver}
                            />
             ));
         }
+
+        const CAlert = (
+            <Alert color={this.props.driverAlert.color} isOpen={this.props.driverAlert.visible} toggle={() => this.props.setAlertDriverHideAction()} fade={false}>
+                <div>{this.props.driverAlert.message}</div>
+            </Alert>
+        );
 
         return (
             <>
@@ -110,6 +148,7 @@ class List extends Component<Props, State> {
                                 <CardHeader className="border-0">
                                     <Row>
                                         <div className="col">
+                                            {CAlert}
                                         </div>
                                     </Row>
                                     <Row className="align-items-center">
@@ -133,6 +172,12 @@ class List extends Component<Props, State> {
                                     <thead className="thead-light">
                                         <tr>
                                             <th>No</th>
+                                            <th>Nama</th>
+                                            <th>No Telepon</th>
+                                            <th>Email</th>
+                                            <th>KTP</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>Tanggal Lahir</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
@@ -145,7 +190,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchDriverFromApiAction} />
+                                                    itemClicked={this.props.fetchDriverApiAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -158,23 +203,31 @@ class List extends Component<Props, State> {
 
 interface LinkStateToProps {
     driverList: Driver[],
-    paginate: Paginator
+    paginate: Paginator,
+    driverAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
         driverList: state.driver.list,
-        paginate: state.driver.paginate
+        paginate: state.driver.paginate,
+        driverAlert: state.driver.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchDriverFromApiAction: (page: number) => void
+    fetchDriverApiAction: (page: number) => void,
+    setAlertDriverHideAction: () => void,
+    setAlertDriverShowAction: (message: string, color: string) => void,
+    deleteDriverAction: (id: number) => Promise<ApiResponse<Driver>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchDriverFromApiAction: (page: number) => dispatch(fetchDriverFromApiAction(page))
+        fetchDriverApiAction: (page: number) => dispatch(fetchDriverApiAction(page)),
+        setAlertDriverHideAction: () => dispatch(setAlertDriverHideAction()),
+        setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
+        deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
     }
 }
 

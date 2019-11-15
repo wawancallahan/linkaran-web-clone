@@ -8,7 +8,11 @@ import {
     AlertDriverShowActionType,
     AlertDriverHideActionType,
     ALERT_DRIVER_HIDE,
-    ALERT_DRIVER_SHOW
+    ALERT_DRIVER_SHOW,
+    FETCH_DRIVER_SUCCESS,
+    FETCH_DRIVER_ERROR,
+    FetchDriverErrorActionType,
+    FetchDriverSuccessActionType
 } from '../../types/admin/driver';
 
 import { Paginator } from '../../types/paginator';
@@ -62,6 +66,25 @@ const fetch = (state: initialStateInterface, action: FetchDriverActionType) => {
     }
 }
 
+
+const fetchSuccess = (state: initialStateInterface, action: FetchDriverSuccessActionType) => {
+    return {
+        ...state,
+        isLoaded: true,
+        isSuccess: true,
+        list: action.list,
+        paginate: {
+            ...initialState.paginate
+        }
+    }
+}
+
+const fetchError = (state: initialStateInterface, action: FetchDriverErrorActionType) => {
+    return {
+        ...initialState
+    }
+}
+
 const setPaginator = (state: initialStateInterface, action: SetPaginatorDriverActionType) => {
     return {
         ...state,
@@ -76,6 +99,8 @@ const reducer = (state = initialState, action: DriverActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_DRIVER: return setPaginator(state, action);
         case FETCH_DRIVER: return fetch(state, action);
+        case FETCH_DRIVER_SUCCESS: return fetchSuccess(state, action);
+        case FETCH_DRIVER_ERROR: return fetchError(state, action);
         case ALERT_DRIVER_HIDE: return alertHide(state, action);
         case ALERT_DRIVER_SHOW: return alertShow(state, action);
         default:

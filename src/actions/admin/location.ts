@@ -1,98 +1,23 @@
-import axiosService from '../../services/axiosService';
-import { Dispatch } from "redux";
-import { Paginator } from '../../types/paginator';
-import { AppState } from "../../store/configureStore";
-import {
-    Restaurant,
-    SET_PAGINATOR_RESTAURANT,
-    FETCH_RESTAURANT_SUCCESS,
-    FETCH_RESTAURANT_ERROR,
-    SetPaginatorRestaurantActionType,
-    FetchRestaurantActionType,
-    FetchRestaurantErrorActionType,
-    FetchRestaurantSuccessActionType,
-    RestaurantCreate,
-    RestaurantEdit,
-    AlertRestaurantHideActionType,
-    ALERT_RESTAURANT_HIDE,
-    AlertRestaurantShowActionType,
-    ALERT_RESTAURANT_SHOW,
-    RestaurantEditResult,
-    RestaurantCreateResult
-} from '../../types/admin/restaurant';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import axiosService from '../../services/axiosService';
+import { Dispatch } from "redux";
+import { AppState } from "../../store/configureStore";
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
-    return {
-        type: SET_PAGINATOR_RESTAURANT,
-        paginate: paginate
-    }
-}
+import {
+    Negara,
+    Provinsi,
+    KabupatenKota,
+    Kecamatan,
+    Kelurahan
+} from '../../types/admin/location';
 
-export const setFetchRestaurantSuccessAction = (list: Restaurant[]): FetchRestaurantSuccessActionType => {
-    return {
-        type: FETCH_RESTAURANT_SUCCESS,
-        list: list
-    }
-}
-
-export const setFetchRestaurantErrorAction = (): FetchRestaurantErrorActionType => {
-    return {
-        type: FETCH_RESTAURANT_ERROR
-    }
-}
-
-export const setAlertRestaurantHideAction = (): AlertRestaurantHideActionType => {
-    return {
-        type: ALERT_RESTAURANT_HIDE
-    }
-}
-
-export const setAlertRestaurantShowAction = (message: string, color: string): AlertRestaurantShowActionType => {
-    return {
-        type: ALERT_RESTAURANT_SHOW,
-        color: color,
-        message: message
-    };
-}
-
-export const fetchRestaurantAction = (page: number) => {
+export const fetchListNegaraAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Negara>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/restaurant?page=${page}`)
+        return axiosService.get(`/v1/web/location/country?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Restaurant> = response.data;
-
-                dispatch(setFetchRestaurantSuccessAction(data.result));
-
-                if (data.metaData.paginate) {
-                    dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
-                    }))
-                }
-            })
-            .catch( (error: AxiosError) => {
-                dispatch(setFetchRestaurantErrorAction());
-
-                dispatch(setPaginateAction({
-                    total: 0,
-                    currentPage: 0,
-                    itemCount: 0,
-                    pageCount: 0
-                }))
-            })
-    }
-}
-
-export const fetchListRestaurantAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Restaurant>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/restaurant?page=${page}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Restaurant> = response.data;
+                const data: ApiResponseSuccessList<Negara> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -141,64 +66,11 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
     }
 }
 
-export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
+export const fetchListProvinsiAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Provinsi>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/restaurant', restaurant)
+        return axiosService.get(`/v1/web/location/province/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
-                
-                return Promise.resolve({
-                    response: data,
-                    error: null
-                });
-            })
-            .catch( (error: AxiosError) => {
-                 if (error.response) {
-                    if (error.response.status == 500) {
-                        const errorResponse: ApiResponseError = {
-                            metaData: {
-                                isError: true,
-                                message: error.message,
-                                statusCode: 500
-                            },
-                            result: null
-                        }
-    
-                        return Promise.reject({
-                            response: null,
-                            error: errorResponse
-                        });
-                    } else {
-                        return Promise.reject({
-                            response: null,
-                            error: error.response.data
-                        });
-                    }
-                } else {
-
-                    const errorResponse: ApiResponseError = {
-                        metaData: {
-                            isError: true,
-                            message: error.message,
-                            statusCode: 500
-                        },
-                        result: null
-                    }
-
-                    return Promise.reject({
-                        response: null,
-                        error: errorResponse
-                    });
-                }
-            })
-    }
-}
-
-export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/restaurant/${id}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Restaurant> = response.data;
+                const data: ApiResponseSuccessList<Provinsi> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -247,12 +119,12 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
     }
 }
 
-export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
+export const fetchListKabupatenKotaAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<KabupatenKota>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/restaurant/${id}`, restaurant)
+        return axiosService.get(`/v1/web/location/district/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
-                
+                const data: ApiResponseSuccessList<KabupatenKota> = response.data;
+
                 return Promise.resolve({
                     response: data,
                     error: null
@@ -300,12 +172,64 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
     }
 }
 
-
-export const deleteRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
+export const fetchListKecamatanAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Kecamatan>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/restaurant/${id}`)
+        return axiosService.get(`/v1/web/location/sub-district/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Restaurant> = response.data;
+                const data: ApiResponseSuccessList<Kecamatan> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const fetchListKelurahanAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Kelurahan>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.get(`/v1/web/location/village/${id}?page=${page}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<Kelurahan> = response.data;
 
                 return Promise.resolve({
                     response: data,

@@ -7,39 +7,111 @@ import {
 } from 'reactstrap';
 
 import { Formik, getIn, FormikProps } from 'formik';
-
 import { Driver, FormField } from '../../../types/admin/driver';
-
 import ReactSelectAsyncPaginate, { AsyncResult } from 'react-select-async-paginate';
+import { connect } from 'react-redux';
+import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../types';
 
-type Props = {
-    FormikProps: FormikProps<FormField>
-}
+import {
+    BrandVehicle
+} from '../../../types/admin/brandVehicle';
+import {
+    fetchListBrandVehicleAction
+} from '../../../actions/admin/brandVehicle';
+
+import {
+    SubBrandVehicle
+} from '../../../types/admin/subBrandVehicle';
+import {
+    fetchListSubBrandVehicleAction
+} from '../../../actions/admin/subBrandVehicle';
+
+type FormKendaraanProps = {
+    FormikProps: FormikProps<FormField>,
+};
+
+type Props = FormKendaraanProps & LinkDispatchToProps;
 
 class FormKendaraan extends Component<Props> {
 
     loadTipeKendaraanHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return {
-            options: [],
-            hasMore: false,
-            additional: {
-                page: options.page + 1,
-            },
-        };
+        return this.props.fetchListBrandVehicleAction(search, options.page)
+            .then((response: ApiResponseList<BrandVehicle>) => {
+
+                const data: ApiResponseSuccessList<BrandVehicle> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        hasMore = data.metaData.paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: BrandVehicle) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
     }
 
     loadMerekHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return {
-            options: [],
-            hasMore: false,
-            additional: {
-                page: options.page + 1,
-            },
-        };
+        return this.props.fetchListSubBrandVehicleAction(search, options.page)
+            .then((response: ApiResponseList<SubBrandVehicle>) => {
+
+                const data: ApiResponseSuccessList<SubBrandVehicle> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        hasMore = data.metaData.paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: SubBrandVehicle) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
     }
 
     render() {
@@ -55,9 +127,9 @@ class FormKendaraan extends Component<Props> {
                     >
                         Tipe Kendaraan
                     </label>
-                    {/* <ReactSelectAsyncPaginate 
+                    <ReactSelectAsyncPaginate 
                         value={FormikProps.values.tipe_kendaraan}
-                        loadOptions={}
+                        loadOptions={this.loadTipeKendaraanHandler}
                         onChange={(option) => FormikProps.setFieldValue('tipe_kendaraan', option)}
                         onBlur={() => FormikProps.setFieldTouched('tipe_kendaraan', true)}
                         additional={{
@@ -65,8 +137,30 @@ class FormKendaraan extends Component<Props> {
                         }}
                         />
                     <div>
-                    { typeof FormikProps.errors.tipe_kendaraan === 'string' ? FormikProps.errors.tipe_kendaraan : '' }
-                    </div> */}
+                        { FormikProps.errors.tipe_kendaraan && FormikProps.touched.tipe_kendaraan ? FormikProps.errors.tipe_kendaraan.value : '' }
+                    </div>
+                </FormGroup>
+
+
+                <FormGroup>
+                    <label
+                    className="form-control-label"
+                    htmlFor="input-merek"
+                    >
+                        Merek
+                    </label>
+                    <ReactSelectAsyncPaginate 
+                        value={FormikProps.values.merek}
+                        loadOptions={this.loadMerekHandler}
+                        onChange={(option) => FormikProps.setFieldValue('merek', option)}
+                        onBlur={() => FormikProps.setFieldTouched('merek', true)}
+                        additional={{
+                            page: 1
+                        }}
+                        />
+                    <div>
+                        { FormikProps.errors.merek && FormikProps.touched.merek ? FormikProps.errors.merek.value : '' }
+                    </div>
                 </FormGroup>
     
                 <FormGroup>
@@ -142,27 +236,6 @@ class FormKendaraan extends Component<Props> {
                     <div>
                         {FormikProps.errors.no_rangka && FormikProps.touched.no_rangka ? FormikProps.errors.no_rangka : ''}
                     </div>
-                </FormGroup>
-    
-                <FormGroup>
-                    <label
-                    className="form-control-label"
-                    htmlFor="input-merek"
-                    >
-                        Merek
-                    </label>
-                    {/* <ReactSelectAsyncPaginate 
-                        value={FormikProps.values.merek}
-                        loadOptions={}
-                        onChange={(option) => FormikProps.setFieldValue('merek', option)}
-                        onBlur={() => FormikProps.setFieldTouched('merek', true)}
-                        additional={{
-                            page: 1
-                        }}
-                        />
-                    <div>
-                    { typeof FormikProps.errors.merek === 'string' ? FormikProps.errors.merek : '' }
-                    </div> */}
                 </FormGroup>
     
                 <FormGroup>
@@ -245,4 +318,17 @@ class FormKendaraan extends Component<Props> {
 
 } 
 
-export default FormKendaraan;
+
+type LinkDispatchToProps = {
+    fetchListBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<BrandVehicle>>
+    fetchListSubBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<SubBrandVehicle>>
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormKendaraanProps): LinkDispatchToProps => {
+    return {
+        fetchListBrandVehicleAction: (search: string, page: number) => dispatch(fetchListBrandVehicleAction(search, page)),
+        fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(FormKendaraan);
