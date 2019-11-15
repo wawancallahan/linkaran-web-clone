@@ -3,69 +3,76 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
-    SubBrandVehicle,
-    SET_PAGINATOR_SUB_BRAND_VEHICLE,
-    FETCH_SUB_BRAND_VEHICLE_SUCCESS,
-    FETCH_SUB_BRAND_VEHICLE_ERROR,
-    SetPaginatorSubBrandVehicleActionType,
-    FetchSubBrandVehicleActionType,
-    FetchSubBrandVehicleErrorActionType,
-    FetchSubBrandVehicleSuccessActionType,
-    SubBrandVehicleCreate,
-    SubBrandVehicleEdit,
-    AlertSubBrandVehicleHideActionType,
-    ALERT_SUB_BRAND_VEHICLE_HIDE,
-    AlertSubBrandVehicleShowActionType,
-    ALERT_SUB_BRAND_VEHICLE_SHOW,
-    SubBrandVehicleCreateResult,
-    SubBrandVehicleEditResult,
-    VehicleType
-} from '../../types/admin/subBrandVehicle';
+    Investor,
+    SET_PAGINATOR_INVESTOR,
+    FETCH_INVESTOR,
+    FETCH_INVESTOR_ERROR,
+    FETCH_INVESTOR_SUCCESS,
+    SetPaginatorInvestorActionType,
+    FetchInvestorActionType,
+    AlertInvestorHideActionType,
+    ALERT_INVESTOR_HIDE,
+    AlertInvestorShowActionType,
+    ALERT_INVESTOR_SHOW,
+    InvestorCreate,
+    InvestorCreateResult,
+    InvestorEdit,
+    InvestorEditResult,
+    FetchInvestorErrorActionType,
+    FetchInvestorSuccessActionType
+} from '../../types/admin/investor';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorSubBrandVehicleActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorInvestorActionType => {
     return {
-        type: SET_PAGINATOR_SUB_BRAND_VEHICLE,
+        type: SET_PAGINATOR_INVESTOR,
         paginate: paginate
     }
 }
 
-export const setFetchSubBrandVehicleSuccessAction = (list: SubBrandVehicle[]): FetchSubBrandVehicleSuccessActionType => {
+export const setFetchInvestorAction = (list: Investor[]): FetchInvestorActionType => {
     return {
-        type: FETCH_SUB_BRAND_VEHICLE_SUCCESS,
+        type: FETCH_INVESTOR,
         list: list
     }
 }
 
-export const setFetchSubBrandVehicleErrorAction = (): FetchSubBrandVehicleErrorActionType => {
+export const setFetchInvestorSuccessAction = (list: Investor[]): FetchInvestorSuccessActionType => {
     return {
-        type: FETCH_SUB_BRAND_VEHICLE_ERROR
+        type: FETCH_INVESTOR_SUCCESS,
+        list: list
     }
 }
 
-export const setAlertSubBrandVehicleHideAction = (): AlertSubBrandVehicleHideActionType => {
+export const setFetchInvestorErrorAction = (): FetchInvestorErrorActionType => {
     return {
-        type: ALERT_SUB_BRAND_VEHICLE_HIDE
+        type: FETCH_INVESTOR_ERROR
     }
 }
 
-export const setAlertSubBrandVehicleShowAction = (message: string, color: string): AlertSubBrandVehicleShowActionType => {
+export const setAlertInvestorHideAction = (): AlertInvestorHideActionType => {
     return {
-        type: ALERT_SUB_BRAND_VEHICLE_SHOW,
+        type: ALERT_INVESTOR_HIDE
+    }
+}
+
+export const setAlertInvestorShowAction = (message: string, color: string): AlertInvestorShowActionType => {
+    return {
+        type: ALERT_INVESTOR_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchSubBrandVehicleAction = (page: number) => {
+export const fetchInvestorApiAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/sub-brand-vehicle?page=${page}`)
+        axiosService.get(`/v1/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccessList<Investor> = response.data;
 
-                dispatch(setFetchSubBrandVehicleSuccessAction(data.result));
+                dispatch(setFetchInvestorSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
                     dispatch(setPaginateAction({
@@ -77,7 +84,7 @@ export const fetchSubBrandVehicleAction = (page: number) => {
                 }
             })
             .catch( (error: AxiosError) => {
-                dispatch(setFetchSubBrandVehicleErrorAction());
+                dispatch(setFetchInvestorErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
@@ -89,118 +96,41 @@ export const fetchSubBrandVehicleAction = (page: number) => {
     }
 }
 
-
-export const fetchListSubBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<SubBrandVehicle>>> => {
+export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Promise<ApiResponse<InvestorCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/sub-brand-vehicle?page=${page}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
+        
+        const data = new FormData();
 
-                return Promise.resolve({
-                    response: data,
-                    error: null
-                });
-            })
-            .catch( (error: AxiosError) => {
-                 if (error.response) {
-                    if (error.response.status == 500) {
-                        const errorResponse: ApiResponseError = {
-                            metaData: {
-                                isError: true,
-                                message: error.message,
-                                statusCode: 500
-                            },
-                            result: null
-                        }
-    
-                        return Promise.reject({
-                            response: null,
-                            error: errorResponse
-                        });
-                    } else {
-                        return Promise.reject({
-                            response: null,
-                            error: error.response.data
-                        });
-                    }
-                } else {
+        data.set('name', investor.nama);
+        data.set('phoneNumber', investor.no_telepon)
+        data.set('email', investor.email)
+        data.set('dateOfBirth', investor.tanggal_lahir)
+        data.set('identityNumber', investor.no_ktp)
+        data.set('gender', investor.jenis_kelamin)
+        data.set('address', investor.alamat)
+        data.set('countryId', investor.negara.id.toString())
+        data.set('provinceId', investor.provinsi.id.toString())
+        data.set('districtId', investor.kabupaten_kota.id.toString())
+        data.set('subDistrictId', investor.kecamatan.id.toString())
+        data.set('villageId', investor.kelurahan.id.toString())
+        data.set('neighboorhoodAssociationNumber', investor.nomor_asosiasi_lingkungan);
+        data.set('citizensAssociationNumber', investor.nomor_asosiasi_warga_negara);
 
-                    const errorResponse: ApiResponseError = {
-                        metaData: {
-                            isError: true,
-                            message: error.message,
-                            statusCode: 500
-                        },
-                        result: null
-                    }
+        if (investor.ktp_file) {
+            data.append('ktpPhoto', investor.ktp_file);
+        }
 
-                    return Promise.reject({
-                        response: null,
-                        error: errorResponse
-                    });
+        if (investor.foto_profil) {
+            data.append('photo', investor.foto_profil);
+        }
+        
+        return axiosService.post('/v1/web/investor-profile', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
                 }
             })
-    }
-}
-
-export const fetchListVehicleTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VehicleType>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/sub-brand-vehicle/list-vehicle-type?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VehicleType> = response.data;
-
-                return Promise.resolve({
-                    response: data,
-                    error: null
-                });
-            })
-            .catch( (error: AxiosError) => {
-                 if (error.response) {
-                    if (error.response.status == 500) {
-                        const errorResponse: ApiResponseError = {
-                            metaData: {
-                                isError: true,
-                                message: error.message,
-                                statusCode: 500
-                            },
-                            result: null
-                        }
-    
-                        return Promise.reject({
-                            response: null,
-                            error: errorResponse
-                        });
-                    } else {
-                        return Promise.reject({
-                            response: null,
-                            error: error.response.data
-                        });
-                    }
-                } else {
-
-                    const errorResponse: ApiResponseError = {
-                        metaData: {
-                            isError: true,
-                            message: error.message,
-                            statusCode: 500
-                        },
-                        result: null
-                    }
-
-                    return Promise.reject({
-                        response: null,
-                        error: errorResponse
-                    });
-                }
-            })
-    }
-}
-
-export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreate): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/sub-brand-vehicle', subBrandVehicle)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<SubBrandVehicleCreateResult> = response.data;
+                const data: ApiResponseSuccess<InvestorCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -249,11 +179,11 @@ export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCrea
     }
 }
 
-export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
+export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/sub-brand-vehicle/${id}`)
+        return axiosService.get(`/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccess<Investor> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -302,11 +232,41 @@ export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiRe
     }
 }
 
-export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleEditResult>>> => {
+export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkResult<Promise<ApiResponse<InvestorEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/sub-brand-vehicle/${id}`, subBrandVehicle)
+         
+        const data = new FormData();
+
+        data.set('name', investor.nama);
+        data.set('phoneNumber', investor.no_telepon)
+        data.set('email', investor.email)
+        data.set('dateOfBirth', investor.tanggal_lahir)
+        data.set('identityNumber', investor.no_ktp)
+        data.set('gender', investor.jenis_kelamin)
+        data.set('address', investor.alamat)
+        data.set('countryId', investor.negara.id.toString())
+        data.set('provinceId', investor.provinsi.id.toString())
+        data.set('districtId', investor.kabupaten_kota.id.toString())
+        data.set('subDistrictId', investor.kecamatan.id.toString())
+        data.set('villageId', investor.kelurahan.id.toString())
+        data.set('neighboorhoodAssociationNumber', investor.nomor_asosiasi_lingkungan);
+        data.set('citizensAssociationNumber', investor.nomor_asosiasi_warga_negara);
+
+        if (investor.ktp_file) {
+            data.append('ktpPhoto', investor.ktp_file);
+        }
+
+        if (investor.foto_profil) {
+            data.append('photo', investor.foto_profil);
+        }
+        
+        return axiosService.patch(`/v1/web/investor-profile/${id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<SubBrandVehicleEditResult> = response.data;
+                const data: ApiResponseSuccess<InvestorEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -356,11 +316,11 @@ export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, 
 }
 
 
-export const deleteSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
+export const deleteInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/sub-brand-vehicle/${id}`)
+        return axiosService.delete(`/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccess<Investor> = response.data;
 
                 return Promise.resolve({
                     response: data,

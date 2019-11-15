@@ -45,6 +45,11 @@ interface SubBrandVehicleResult {
     deletedAt: string,
 }
 
+export type VehicleType = {
+    id: number,
+    name: string
+}
+
 export type SubBrandVehicle = SubBrandVehicleResult & SubBrandVehicleList;
 
 export type SubBrandVehicleCreate = SubBrandVehicleField;

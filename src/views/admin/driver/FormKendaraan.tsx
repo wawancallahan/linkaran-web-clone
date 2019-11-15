@@ -15,17 +15,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 
 import {
-    BrandVehicle
-} from '../../../types/admin/brandVehicle';
-import {
-    fetchListBrandVehicleAction
-} from '../../../actions/admin/brandVehicle';
-
-import {
-    SubBrandVehicle
+    SubBrandVehicle,
+    VehicleType
 } from '../../../types/admin/subBrandVehicle';
 import {
-    fetchListSubBrandVehicleAction
+    fetchListSubBrandVehicleAction,
+    fetchListVehicleTypeAction
 } from '../../../actions/admin/subBrandVehicle';
 
 type FormKendaraanProps = {
@@ -39,10 +34,10 @@ class FormKendaraan extends Component<Props> {
     loadTipeKendaraanHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListBrandVehicleAction(search, options.page)
-            .then((response: ApiResponseList<BrandVehicle>) => {
+        return this.props.fetchListVehicleTypeAction(search, options.page)
+            .then((response: ApiResponseList<VehicleType>) => {
 
-                const data: ApiResponseSuccessList<BrandVehicle> = response.response!;
+                const data: ApiResponseSuccessList<VehicleType> = response.response!;
 
                 let result: {
                     value: number,
@@ -57,7 +52,7 @@ class FormKendaraan extends Component<Props> {
                         hasMore = data.metaData.paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: BrandVehicle) => {
+                    result = data.result.map((item: VehicleType) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -320,13 +315,13 @@ class FormKendaraan extends Component<Props> {
 
 
 type LinkDispatchToProps = {
-    fetchListBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<BrandVehicle>>
+    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleType>>
     fetchListSubBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<SubBrandVehicle>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormKendaraanProps): LinkDispatchToProps => {
     return {
-        fetchListBrandVehicleAction: (search: string, page: number) => dispatch(fetchListBrandVehicleAction(search, page)),
+        fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
         fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
     }
 }

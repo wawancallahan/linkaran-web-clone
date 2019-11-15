@@ -25,6 +25,7 @@ import AdminRestaurant from './views/admin/restaurant/Index';
 import AdminBrandVehicle from './views/admin/brandVehicle/Index';
 import AdminSubBrandVehicle from './views/admin/subBrandVehicle/Index';
 import AdminDriver from './views/admin/driver/Index';
+import AdminInvestor from './views/admin/investor/Index';
 
 const routes: any[] = [
     {
@@ -88,6 +89,13 @@ const routes: any[] = [
         name: "Driver",
         icon: "ni ni-single-02 text-primary",
         component: AdminDriver,
+        layout: "/admin"
+    },
+    {
+        path: "/investor",
+        name: "Investor",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminInvestor,
         layout: "/admin"
     },
 ];

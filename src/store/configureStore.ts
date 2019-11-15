@@ -6,6 +6,7 @@ import foodReducer from '../reducers/admin/food';
 import foodCategoryReducer from '../reducers/admin/foodCategory';
 import restaurantReducer from '../reducers/admin/restaurant';
 import driverReducer from '../reducers/admin/driver';
+import investorReducer from '../reducers/admin/investor';
 import brandVehicleReducer from '../reducers/admin/brandVehicle';
 import subBrandVehicleReducer from '../reducers/admin/subBrandVehicle';
 
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     driver: driverReducer,
     restaurant: restaurantReducer,
     brandVehicle: brandVehicleReducer,
-    subBrandVehicle: subBrandVehicleReducer
+    subBrandVehicle: subBrandVehicleReducer,
+    investor: investorReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
