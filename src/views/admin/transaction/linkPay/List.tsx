@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import withTitle from '../../../hoc/WithTitle';
+import withTitle from '../../../../hoc/WithTitle';
 
-import HeaderView from "../../../components/Headers/HeaderView";
+import HeaderView from "../../../../components/Headers/HeaderView";
 import {
     Container,
     Row,
@@ -21,24 +21,24 @@ import {
 import {
     connect
 } from 'react-redux';
-import { AppState } from '../../../store/configureStore';
+import { AppState } from '../../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../types';
+import { AppActions } from '../../../../types';
 
 import { AxiosResponse } from 'axios';
 
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from '../../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchDriverApiAction,
-    setAlertDriverHideAction,
-    setAlertDriverShowAction,
-    deleteDriverAction
-} from '../../../actions/admin/driver';
-import { Driver } from '../../../types/admin/driver';
-import { Paginator } from '../../../types/paginator';
-import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
-import { Alert as IAlert } from '../../../types/alert';
+    fetchLinkPayAction,
+    deleteLinkPayAction,
+    setAlertLinkPayHideAction,
+    setAlertLinkPayShowAction
+} from '../../../../actions/admin/transaction/linkPay';
+import { LinkPay } from '../../../../types/admin/transaction/linkPay';
+import { Paginator } from '../../../../types/paginator';
+import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
+import { Alert as IAlert } from '../../../../types/alert';
 
 type ListProps = RouteComponentProps & {
 
@@ -52,28 +52,18 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Driver,
+    item: LinkPay,
     key: number,
-    deleteDriver: (id: number) => void
+    deleteLinkPay: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.user.name}</td>
-            <td>{props.item.user.phoneNumber}</td>
-            <td>{props.item.user.email}</td>
-            <td>{props.item.identityNumber}</td>
-            <td>{props.item.gender}</td>
-            <td>{props.item.dateOfBirth}</td>
-            <td></td>
             <td>
-                <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
-                    <i className="fa fa-document"></i> Transaksi
-                </Link>
-                <Link to={`/admin/driver/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <Link to={``} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
                 </Link>
-                <Button color="danger" size="sm" onClick={() => props.deleteDriver(props.item.id)}>
+                <Button color="danger" size="sm" onClick={() => props.deleteLinkPay(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
             </td>
@@ -98,46 +88,46 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchDriverList(page);
+        this.fetchLinkPayList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertDriverHideAction();
+        this.props.setAlertLinkPayHideAction();
     }
 
-    fetchDriverList(page: number) {
-        this.props.fetchDriverApiAction(page);
+    fetchLinkPayList = (page: number) => {
+        this.props.fetchLinkPayAction(page);
     }
 
-    deleteDriver = (id: number) => {
-        this.props.deleteDriverAction(id)
-            .then( (response: ApiResponse<Driver>) => {
-                this.fetchDriverList(1);
+    deleteLinkPay = (id: number) => {
+        this.props.deleteLinkPayAction(id)
+            .then( (response: ApiResponse<LinkPay>) => {
+                this.fetchLinkPayList(1);
 
-                this.props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
+                this.props.setAlertLinkPayShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponse<Driver>) => {
-                this.props.setAlertDriverShowAction(response.error!.metaData.message, 'danger');
+            .catch( (response: ApiResponse<LinkPay>) => {
+                this.props.setAlertLinkPayShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
     render() {
 
-        let driverList: any = <TableItemEmpty />;
+        let transactionLinkPay: any = <TableItemEmpty />;
 
-        if (this.props.driverList.length > 0) {
-            driverList = this.props.driverList.map((item: Driver, index: number) => (
+        if (this.props.transactionLinkPay.length > 0) {
+            transactionLinkPay = this.props.transactionLinkPay.map((item: LinkPay, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
-                           deleteDriver={this.deleteDriver}
+                           deleteLinkPay={this.deleteLinkPay}
                            />
             ));
         }
 
         const CAlert = (
-            <Alert color={this.props.driverAlert.color} isOpen={this.props.driverAlert.visible} toggle={() => this.props.setAlertDriverHideAction()} fade={false}>
-                <div>{this.props.driverAlert.message}</div>
+            <Alert color={this.props.transactionLinkPayAlert.color} isOpen={this.props.transactionLinkPayAlert.visible} toggle={() => this.props.setAlertLinkPayHideAction()} fade={false}>
+                <div>{this.props.transactionLinkPayAlert.message}</div>
             </Alert>
         );
 
@@ -157,15 +147,15 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Driver</h3>
+                                            <h3 className="mb-0">Daftar Sub Brand Vehicle</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/driver/create">
+                                        <Link to="/admin/sub-brand-vehicle/create">
                                             <Button
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Driver
+                                                Tambah Sub Brand Vehicle
                                             </Button>
                                         </Link>
                                         </div>
@@ -177,17 +167,12 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>No Telepon</th>
-                                            <th>Email</th>
-                                            <th>KTP</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Tanggal Lahir</th>
-                                            <th>Saldo</th>
+                                            <th>Brand Vehicle</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {driverList}
+                                        {transactionLinkPay}
                                     </tbody>
                                 </Table>
                                 
@@ -195,7 +180,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchDriverApiAction} />
+                                                    itemClicked={this.props.fetchLinkPayAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -207,37 +192,37 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    driverList: Driver[],
+    transactionLinkPay: LinkPay[],
     paginate: Paginator,
-    driverAlert: IAlert
+    transactionLinkPayAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        driverList: state.driver.list,
-        paginate: state.driver.paginate,
-        driverAlert: state.driver.alert
+        transactionLinkPay: state.transactionLinkPay.list,
+        paginate: state.transactionLinkPay.paginate,
+        transactionLinkPayAlert: state.transactionLinkPay.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchDriverApiAction: (page: number) => void,
-    setAlertDriverHideAction: () => void,
-    setAlertDriverShowAction: (message: string, color: string) => void,
-    deleteDriverAction: (id: number) => Promise<ApiResponse<Driver>>,
+    fetchLinkPayAction: (page: number) => void,
+    deleteLinkPayAction: (id: number) => Promise<ApiResponse<LinkPay>>,
+    setAlertLinkPayHideAction: () => void,
+    setAlertLinkPayShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchDriverApiAction: (page: number) => dispatch(fetchDriverApiAction(page)),
-        setAlertDriverHideAction: () => dispatch(setAlertDriverHideAction()),
-        setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
-        deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
+        fetchLinkPayAction: (page: number) => dispatch(fetchLinkPayAction(page)),
+        deleteLinkPayAction: (id: number) => dispatch(deleteLinkPayAction(id)),
+        setAlertLinkPayHideAction: () => dispatch(setAlertLinkPayHideAction()),
+        setAlertLinkPayShowAction: (message: string, color: string) => dispatch(setAlertLinkPayShowAction(message, color))
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Driver")
+                            withTitle(List, "Daftar Transaksi Link Pay")
                     )
                 );

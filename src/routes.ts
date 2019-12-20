@@ -26,6 +26,7 @@ import AdminBrandVehicle from './views/admin/brandVehicle/Index';
 import AdminSubBrandVehicle from './views/admin/subBrandVehicle/Index';
 import AdminDriver from './views/admin/driver/Index';
 import AdminInvestor from './views/admin/investor/Index';
+import AdminTransactionLinkPay from './views/admin/transaction/linkPay/Index';
 
 const routes: any[] = [
     {
@@ -98,6 +99,13 @@ const routes: any[] = [
         component: AdminInvestor,
         layout: "/admin"
     },
+    {
+        path: "/transaction",
+        name: "Transaksi",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminTransactionLinkPay,
+        layout: "/admin"
+    }
 ];
 
 export default routes;

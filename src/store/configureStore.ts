@@ -9,6 +9,7 @@ import driverReducer from '../reducers/admin/driver';
 import investorReducer from '../reducers/admin/investor';
 import brandVehicleReducer from '../reducers/admin/brandVehicle';
 import subBrandVehicleReducer from '../reducers/admin/subBrandVehicle';
+import transactionLinkPayReducer from '../reducers/admin/transaction/linkPay';
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     restaurant: restaurantReducer,
     brandVehicle: brandVehicleReducer,
     subBrandVehicle: subBrandVehicleReducer,
-    investor: investorReducer
+    investor: investorReducer,
+    transactionLinkPay: transactionLinkPayReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
