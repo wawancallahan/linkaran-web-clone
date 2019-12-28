@@ -17,11 +17,13 @@ interface LinkPayField {
 }
 
 interface LinkPayList {
-    
+    user_id: number | null,
+    name: string,
+    balance: number   
 }
 
 interface LinkPayResult {
-   
+   id: number
 }
 
 export type LinkPay = LinkPayResult & LinkPayList;

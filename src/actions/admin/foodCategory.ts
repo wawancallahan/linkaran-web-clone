@@ -60,18 +60,20 @@ export const setAlertFoodCategoryShowAction = (message: string, color: string): 
 
 export const fetchFoodCategoryAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/food-category?page=${page}`)
+        axiosService.get(`/api_linkaran/v1/web/food-category?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
                 dispatch(setFetchFoodCategorySuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.currentPage,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
                     }))
                 }
             })
@@ -90,7 +92,7 @@ export const fetchFoodCategoryAction = (page: number) => {
 
 export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/food-category?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/food-category?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
@@ -143,7 +145,7 @@ export const fetchListFoodCategoryAction = (search: string, page: number): Thunk
 
 export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/food-category', foodCategory)
+        return axiosService.post('/api_linkaran/v1/web/food-category', foodCategory)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.data;
                 
@@ -196,7 +198,7 @@ export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): Thun
 
 export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/food-category/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategory> = response.data;
 
@@ -249,7 +251,7 @@ export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiRespo
 
 export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: number): ThunkResult<Promise<ApiResponse<FoodCategoryEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/food-category/${id}`, foodCategory)
+        return axiosService.patch(`/api_linkaran/v1/web/food-category/${id}`, foodCategory)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategoryEditResult> = response.data;
                 
@@ -303,7 +305,7 @@ export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: numbe
 
 export const deleteFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/food-category/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategory> = response.data;
 

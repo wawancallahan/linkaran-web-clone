@@ -30,6 +30,7 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
+import { Paginator } from '../../../types/paginator';
 
 type FormDriverProps = {
     FormikProps: FormikProps<FormField>,
@@ -57,7 +58,8 @@ class FormDriver extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Negara) => {
@@ -97,7 +99,8 @@ class FormDriver extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Provinsi) => {
@@ -137,7 +140,8 @@ class FormDriver extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: KabupatenKota) => {
@@ -176,7 +180,8 @@ class FormDriver extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Kecamatan) => {
@@ -215,7 +220,8 @@ class FormDriver extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Kelurahan) => {

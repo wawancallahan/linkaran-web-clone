@@ -68,18 +68,20 @@ export const setAlertDriverShowAction = (message: string, color: string): AlertD
 
 export const fetchDriverApiAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/driver-profile?page=${page}`)
+        axiosService.get(`/api_linkaran/v1/web/driver-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Driver> = response.data;
 
                 dispatch(setFetchDriverSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.currentPage,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
                     }))
                 }
             })
@@ -131,7 +133,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
             data.append('photo', driver.foto_profil);
         }
         
-        return axiosService.post('/v1/web/driver-profile', data, {
+        return axiosService.post('/api_linkaran/v1/web/driver-profile', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -188,7 +190,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
 
 export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/driver-profile/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Driver> = response.data;
 
@@ -274,7 +276,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
             data.append('photo', driver.foto_profil);
         }
         
-        return axiosService.patch(`/v1/web/driver-profile/${id}`, data, {
+        return axiosService.patch(`/api_linkaran/v1/web/driver-profile/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -332,7 +334,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
 
 export const deleteDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/driver-profile/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Driver> = response.data;
 

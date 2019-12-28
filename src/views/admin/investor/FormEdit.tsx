@@ -38,6 +38,7 @@ import {
 import Dropzone from '../../../components/Dropzone/Dropzone';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import DatePicker from 'react-datepicker';
+import { Paginator } from '../../../types/paginator';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -120,7 +121,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Negara) => {
@@ -160,7 +162,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Provinsi) => {
@@ -200,7 +203,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: KabupatenKota) => {
@@ -239,7 +243,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Kecamatan) => {
@@ -278,7 +283,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Kelurahan) => {

@@ -22,6 +22,7 @@ import {
     fetchListSubBrandVehicleAction,
     fetchListVehicleTypeAction
 } from '../../../actions/admin/subBrandVehicle';
+import { Paginator } from '../../../types/paginator';
 
 type FormKendaraanProps = {
     FormikProps: FormikProps<FormField>,
@@ -49,7 +50,8 @@ class FormKendaraan extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: VehicleType) => {
@@ -88,7 +90,8 @@ class FormKendaraan extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: SubBrandVehicle) => {

@@ -60,18 +60,20 @@ export const setAlertRestaurantShowAction = (message: string, color: string): Al
 
 export const fetchRestaurantAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/restaurant?page=${page}`)
+        axiosService.get(`/api_linkaran/v1/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
                 dispatch(setFetchRestaurantSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.currentPage,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
                     }))
                 }
             })
@@ -90,7 +92,7 @@ export const fetchRestaurantAction = (page: number) => {
 
 export const fetchListRestaurantAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/restaurant?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
@@ -143,7 +145,7 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 
 export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/restaurant', restaurant)
+        return axiosService.post('/api_linkaran/v1/web/restaurant', restaurant)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
                 
@@ -196,7 +198,7 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
 
 export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/restaurant/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Restaurant> = response.data;
 
@@ -249,7 +251,7 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
 
 export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/restaurant/${id}`, restaurant)
+        return axiosService.patch(`/api_linkaran/v1/web/restaurant/${id}`, restaurant)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
                 
@@ -303,7 +305,7 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
 
 export const deleteRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/restaurant/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Restaurant> = response.data;
 

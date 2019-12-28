@@ -1,4 +1,4 @@
-import { Paginator } from "./paginator";
+import { Paginator, PaginatorLinkPay } from "./paginator";
 
 export interface MetaData {
     isError: boolean,
@@ -8,7 +8,7 @@ export interface MetaData {
 
 export interface MetaDataSuccess extends MetaData {
     statusMessage: string,
-    paginate?: Paginator
+    paginate?: Paginator | PaginatorLinkPay
 }
 
 export interface ApiResponseSuccess<T> {

@@ -59,6 +59,8 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.index + 1}</td>
+            <td></td>
+            <td>{props.item.name}</td>
             <td>
                 <Link to={``} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -166,8 +168,8 @@ class List extends Component<Props, State> {
                                     <thead className="thead-light">
                                         <tr>
                                             <th>No</th>
+                                            <th>User</th>
                                             <th>Nama</th>
-                                            <th>Brand Vehicle</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>

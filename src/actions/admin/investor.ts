@@ -68,18 +68,20 @@ export const setAlertInvestorShowAction = (message: string, color: string): Aler
 
 export const fetchInvestorApiAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/investor-profile?page=${page}`)
+        axiosService.get(`/api_linkaran/v1/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Investor> = response.data;
 
                 dispatch(setFetchInvestorSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.currentPage,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
                     }))
                 }
             })
@@ -124,7 +126,7 @@ export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Prom
             data.append('photo', investor.foto_profil);
         }
         
-        return axiosService.post('/v1/web/investor-profile', data, {
+        return axiosService.post('/api_linkaran/v1/web/investor-profile', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -181,7 +183,7 @@ export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Prom
 
 export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/investor-profile/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Investor> = response.data;
 
@@ -260,7 +262,7 @@ export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkRes
             data.append('photo', investor.foto_profil);
         }
         
-        return axiosService.patch(`/v1/web/investor-profile/${id}`, data, {
+        return axiosService.patch(`/api_linkaran/v1/web/investor-profile/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -318,7 +320,7 @@ export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkRes
 
 export const deleteInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/investor-profile/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Investor> = response.data;
 

@@ -1,6 +1,6 @@
 import axiosService from '../../../services/axiosService';
 import { Dispatch } from "redux";
-import { Paginator } from '../../../types/paginator';
+import { Paginator, PaginatorLinkPay } from '../../../types/paginator';
 import { AppState } from "../../../store/configureStore";
 import {
     LinkPay,
@@ -60,18 +60,23 @@ export const setAlertLinkPayShowAction = (message: string, color: string): Alert
 
 export const fetchLinkPayAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/transaction/link-pay?page=${page}`)
+        axiosService.get(`/api_linkpay/v1/linkpay/list?page=${page}`, {
+               data: {}
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<LinkPay> = response.data;
 
                 dispatch(setFetchLinkPaySuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+
+                    const paginate = data.metaData.paginate as PaginatorLinkPay;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.current_page,
+                        itemCount: paginate.total,
+                        pageCount: paginate.last_page
                     }))
                 }
             })
@@ -90,7 +95,7 @@ export const fetchLinkPayAction = (page: number) => {
 
 export const fetchListLinkPayAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<LinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/transaction/link-pay?page=${page}`)
+        return axiosService.get(`/api_link_pay/v1/linkpay/list?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<LinkPay> = response.data;
 
@@ -143,7 +148,7 @@ export const fetchListLinkPayAction = (search: string, page: number): ThunkResul
 
 export const createLinkPayAction = (linkPay: LinkPayCreate): ThunkResult<Promise<ApiResponse<LinkPayCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/transaction/link-pay', linkPay)
+        return axiosService.post('/api_linkaran/v1/web/transaction/link-pay', linkPay)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPayCreateResult> = response.data;
                 
@@ -196,7 +201,7 @@ export const createLinkPayAction = (linkPay: LinkPayCreate): ThunkResult<Promise
 
 export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/transaction/link-pay/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/transaction/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPay> = response.data;
 
@@ -249,7 +254,7 @@ export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<L
 
 export const editLinkPayAction = (linkPay: LinkPayEdit, id: number): ThunkResult<Promise<ApiResponse<LinkPayEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/transaction/link-pay/${id}`, linkPay)
+        return axiosService.patch(`/api_linkaran/v1/web/transaction/link-pay/${id}`, linkPay)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPayEditResult> = response.data;
                 
@@ -303,7 +308,7 @@ export const editLinkPayAction = (linkPay: LinkPayEdit, id: number): ThunkResult
 
 export const deleteLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/transaction/link-pay/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/transaction/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPay> = response.data;
 

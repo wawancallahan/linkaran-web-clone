@@ -24,6 +24,7 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, Api
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Restaurant } from '../../../types/admin/restaurant';
 import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
+import { Paginator } from '../../../types/paginator';
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -77,7 +78,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: FoodCategory) => {
@@ -116,7 +118,8 @@ class Form extends Component<Props> {
                 if ( ! data.metaData.isError) {
 
                     if (data.metaData.paginate) {
-                        hasMore = data.metaData.paginate.pageCount > options.page;
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
                     }
 
                     result = data.result.map((item: Restaurant) => {

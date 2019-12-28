@@ -30,6 +30,9 @@ import {
   Col
 } from "reactstrap";
 
+import brandArgonReactWhite from '../../assets/img/brand/argon-react-white.png';
+import brandArgonReact from '../../assets/img/brand/argon-react.png';
+
 class AdminNavbar extends React.Component<{}, {}> {
   render() {
     return (
@@ -40,7 +43,7 @@ class AdminNavbar extends React.Component<{}, {}> {
         >
           <Container className="px-4">
             <NavbarBrand to="/" tag={Link}>
-              <img alt="..." src={require("assets/img/brand/argon-react-white.png")} />
+              <img alt="..." src={brandArgonReactWhite} />
             </NavbarBrand>
             <button className="navbar-toggler" id="navbar-collapse-main">
               <span className="navbar-toggler-icon" />
@@ -52,7 +55,7 @@ class AdminNavbar extends React.Component<{}, {}> {
                     <Link to="/">
                       <img
                         alt="..."
-                        src={require("assets/img/brand/argon-react.png")}
+                        src={brandArgonReact}
                       />
                     </Link>
                   </Col>

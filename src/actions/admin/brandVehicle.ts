@@ -60,18 +60,21 @@ export const setAlertBrandVehicleShowAction = (message: string, color: string): 
 
 export const fetchBrandVehicleAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/v1/web/brand-vehicle?page=${page}`)
+        axiosService.get(`/api_linkaran/v1/web/brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<BrandVehicle> = response.data;
 
                 dispatch(setFetchBrandVehicleSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
+                    
+                    const paginate = data.metaData.paginate as Paginator;
+
                     dispatch(setPaginateAction({
-                        total: data.metaData.paginate.total,
-                        currentPage: data.metaData.paginate.currentPage,
-                        itemCount: data.metaData.paginate.itemCount,
-                        pageCount: data.metaData.paginate.pageCount
+                        total: paginate.total,
+                        currentPage: paginate.currentPage,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
                     }))
                 }
             })
@@ -90,7 +93,7 @@ export const fetchBrandVehicleAction = (page: number) => {
 
 export const fetchListBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<BrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/brand-vehicle?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<BrandVehicle> = response.data;
 
@@ -143,7 +146,7 @@ export const fetchListBrandVehicleAction = (search: string, page: number): Thunk
 
 export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreate): ThunkResult<Promise<ApiResponse<BrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/v1/web/brand-vehicle', brandVehicle)
+        return axiosService.post('/api_linkaran/v1/web/brand-vehicle', brandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<BrandVehicleCreateResult> = response.data;
                 
@@ -196,7 +199,7 @@ export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreate): Thun
 
 export const findBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<BrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/brand-vehicle/${id}`)
+        return axiosService.get(`/api_linkaran/v1/web/brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<BrandVehicle> = response.data;
 
@@ -249,7 +252,7 @@ export const findBrandVehicleAction = (id: number): ThunkResult<Promise<ApiRespo
 
 export const editBrandVehicleAction = (brandVehicle: BrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<BrandVehicleEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/v1/web/brand-vehicle/${id}`, brandVehicle)
+        return axiosService.patch(`/api_linkaran/v1/web/brand-vehicle/${id}`, brandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<BrandVehicleEditResult> = response.data;
                 
@@ -303,7 +306,7 @@ export const editBrandVehicleAction = (brandVehicle: BrandVehicleEdit, id: numbe
 
 export const deleteBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<BrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/v1/web/brand-vehicle/${id}`)
+        return axiosService.delete(`/api_linkaran/v1/web/brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<BrandVehicle> = response.data;
 

@@ -15,7 +15,7 @@ import {
 
 export const fetchListNegaraAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Negara>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/location/country?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/location/country?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Negara> = response.data;
 
@@ -68,7 +68,7 @@ export const fetchListNegaraAction = (search: string, page: number): ThunkResult
 
 export const fetchListProvinsiAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Provinsi>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/location/province/${id}?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/location/province/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Provinsi> = response.data;
 
@@ -121,7 +121,7 @@ export const fetchListProvinsiAction = (search: string, page: number, id: number
 
 export const fetchListKabupatenKotaAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<KabupatenKota>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/location/district/${id}?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/location/district/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<KabupatenKota> = response.data;
 
@@ -174,7 +174,7 @@ export const fetchListKabupatenKotaAction = (search: string, page: number, id: n
 
 export const fetchListKecamatanAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Kecamatan>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/location/sub-district/${id}?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/location/sub-district/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Kecamatan> = response.data;
 
@@ -227,7 +227,7 @@ export const fetchListKecamatanAction = (search: string, page: number, id: numbe
 
 export const fetchListKelurahanAction = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<Kelurahan>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/v1/web/location/village/${id}?page=${page}`)
+        return axiosService.get(`/api_linkaran/v1/web/location/village/${id}?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Kelurahan> = response.data;
 
