@@ -23,6 +23,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorUserActionType => {
     return {
@@ -60,7 +62,7 @@ export const setAlertUserShowAction = (message: string, color: string): AlertUse
 
 export const fetchUserAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/user?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/user?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<User> = response.data;
 
@@ -145,7 +147,7 @@ export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiRespo
 
 export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/user/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/user/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<User> = response.data;
 
@@ -198,7 +200,7 @@ export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User
 
 export const editUserAction = (user: UserEdit, id: number): ThunkResult<Promise<ApiResponse<UserEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/api_linkaran/v1/web/user/${id}`, user)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/user/${id}`, user)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<UserEditResult> = response.data;
                 
@@ -252,7 +254,7 @@ export const editUserAction = (user: UserEdit, id: number): ThunkResult<Promise<
 
 export const deleteUserAction = (id: number): ThunkResult<Promise<ApiResponse<User>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/user/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/user/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<User> = response.data;
 

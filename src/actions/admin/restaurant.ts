@@ -23,6 +23,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
     return {
@@ -60,7 +62,7 @@ export const setAlertRestaurantShowAction = (message: string, color: string): Al
 
 export const fetchRestaurantAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/restaurant?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
@@ -92,7 +94,7 @@ export const fetchRestaurantAction = (page: number) => {
 
 export const fetchListRestaurantAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/restaurant?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
@@ -198,7 +200,7 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
 
 export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/restaurant/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Restaurant> = response.data;
 
@@ -251,7 +253,7 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
 
 export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/api_linkaran/v1/web/restaurant/${id}`, restaurant)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/restaurant/${id}`, restaurant)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
                 
@@ -305,7 +307,7 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
 
 export const deleteRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/restaurant/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Restaurant> = response.data;
 

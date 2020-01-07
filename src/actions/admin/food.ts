@@ -23,6 +23,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorFoodActionType => {
     return {
@@ -60,7 +62,7 @@ export const setAlertFoodShowAction = (message: string, color: string): AlertFoo
 
 export const fetchFoodAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/food?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/food?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Food> = response.data;
 
@@ -145,7 +147,7 @@ export const createFoodAction = (food: FoodCreate): ThunkResult<Promise<ApiRespo
 
 export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/food/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/food/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Food> = response.data;
 
@@ -198,7 +200,7 @@ export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food
 
 export const editFoodAction = (food: FoodEdit, id: number): ThunkResult<Promise<ApiResponse<FoodEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/api_linkaran/v1/web/food/${id}`, food)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/food/${id}`, food)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodEditResult> = response.data;
                 
@@ -252,7 +254,7 @@ export const editFoodAction = (food: FoodEdit, id: number): ThunkResult<Promise<
 
 export const deleteFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/food/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/food/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Food> = response.data;
 

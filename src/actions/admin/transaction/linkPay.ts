@@ -201,7 +201,7 @@ export const createLinkPayAction = (linkPay: LinkPayCreate): ThunkResult<Promise
 
 export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/transaction/link-pay/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/transaction/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPay> = response.data;
 
@@ -254,7 +254,7 @@ export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<L
 
 export const editLinkPayAction = (linkPay: LinkPayEdit, id: number): ThunkResult<Promise<ApiResponse<LinkPayEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/api_linkaran/v1/web/transaction/link-pay/${id}`, linkPay)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/transaction/link-pay/${id}`, linkPay)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPayEditResult> = response.data;
                 
@@ -308,7 +308,7 @@ export const editLinkPayAction = (linkPay: LinkPayEdit, id: number): ThunkResult
 
 export const deleteLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/transaction/link-pay/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/transaction/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<LinkPay> = response.data;
 

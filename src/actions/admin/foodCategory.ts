@@ -23,6 +23,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorFoodCategoryActionType => {
     return {
@@ -60,7 +62,7 @@ export const setAlertFoodCategoryShowAction = (message: string, color: string): 
 
 export const fetchFoodCategoryAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/food-category?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/food-category?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
@@ -92,7 +94,7 @@ export const fetchFoodCategoryAction = (page: number) => {
 
 export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/food-category?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/food-category?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
@@ -198,7 +200,7 @@ export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): Thun
 
 export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/food-category/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategory> = response.data;
 
@@ -251,7 +253,7 @@ export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiRespo
 
 export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: number): ThunkResult<Promise<ApiResponse<FoodCategoryEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(`/api_linkaran/v1/web/food-category/${id}`, foodCategory)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/food-category/${id}`, foodCategory)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategoryEditResult> = response.data;
                 
@@ -305,7 +307,7 @@ export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: numbe
 
 export const deleteFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/food-category/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategory> = response.data;
 

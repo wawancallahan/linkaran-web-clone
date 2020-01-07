@@ -24,6 +24,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorDriverActionType => {
     return {
@@ -68,7 +70,7 @@ export const setAlertDriverShowAction = (message: string, color: string): AlertD
 
 export const fetchDriverApiAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/driver-profile?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/driver-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Driver> = response.data;
 
@@ -190,7 +192,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
 
 export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/driver-profile/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Driver> = response.data;
 
@@ -276,7 +278,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
             data.append('photo', driver.foto_profil);
         }
         
-        return axiosService.patch(`/api_linkaran/v1/web/driver-profile/${id}`, data, {
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/driver-profile/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -334,7 +336,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
 
 export const deleteDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/driver-profile/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Driver> = response.data;
 

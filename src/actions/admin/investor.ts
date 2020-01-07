@@ -24,6 +24,8 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorInvestorActionType => {
     return {
@@ -68,7 +70,7 @@ export const setAlertInvestorShowAction = (message: string, color: string): Aler
 
 export const fetchInvestorApiAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(`/api_linkaran/v1/web/investor-profile?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Investor> = response.data;
 
@@ -183,7 +185,7 @@ export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Prom
 
 export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(`/api_linkaran/v1/web/investor-profile/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Investor> = response.data;
 
@@ -262,7 +264,7 @@ export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkRes
             data.append('photo', investor.foto_profil);
         }
         
-        return axiosService.patch(`/api_linkaran/v1/web/investor-profile/${id}`, data, {
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/investor-profile/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -320,7 +322,7 @@ export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkRes
 
 export const deleteInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(`/api_linkaran/v1/web/investor-profile/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Investor> = response.data;
 
