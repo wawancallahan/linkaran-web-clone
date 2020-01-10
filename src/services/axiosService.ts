@@ -5,6 +5,7 @@ dotenv.config();
 
 const axiosInstance = axios.create({
     // baseURL: process.env.REACT_APP_DEV_API_URL || 'http://localhost:3000',
+    ...axios.defaults.headers,
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

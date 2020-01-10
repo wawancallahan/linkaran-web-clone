@@ -16,6 +16,10 @@ module.exports = function(app) {
         proxy('/api_linkaran', {
             target: "https://linkaran.demo.thortech.asia/api",
             changeOrigin: true,
+            secure: false,
+            pathRewrite: {
+                "^/api_linkaran": ""
+            } 
         })
     );
 };

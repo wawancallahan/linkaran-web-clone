@@ -14,18 +14,21 @@ type Props = AppProps;
 type State = {
 
 }
-
 class App extends Component<Props, State> {
+    
     render() {
         return (
             <Switch>
                 <Route path="/admin" render={ (props: RouteComponentProps) => <AdminLayout {...props} />} />    
-                <Route path="/login" render={ (props: RouteComponentProps) => <AuthLayout {...props} />} />
+                <Route path="/login" render={ (props: RouteComponentProps) => {
+                    return <AuthLayout {...props} />
+                }} />
                 <Route path="/logout" render={() => <Logout />} />
                 <Redirect from="/" to="/login" exact />
             </Switch>
         );
     }
+
 }
 
 export default withRouter(App);

@@ -25,7 +25,6 @@ import AuthNavbar from "../components/Navbars/AuthNavbar";
 import AuthFooter from "../components/Footers/AuthFooter";
 
 import routes from "../routes";
-
 class Auth extends React.Component {
   componentDidMount() {
     document.body.classList.add("bg-default");
