@@ -46,7 +46,7 @@ type State = {
     alert_message: string
 }
 
-class Create extends Component<Props, State> {
+class Edit extends Component<Props, State> {
 
     state = {
         form: {
@@ -172,6 +172,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Edit Sub Brand Vehicle")
+        withTitle(Edit, "Edit Sub Brand Vehicle")
     )
 );
