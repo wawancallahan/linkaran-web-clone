@@ -30,11 +30,11 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchLinkPayAction,
-    setAlertLinkPayHideAction,
-    setAlertLinkPayShowAction
-} from '../../../../actions/admin/transaction/linkPay';
-import { LinkPay } from '../../../../types/admin/transaction/linkPay';
+    fetchAccountLinkPayAction,
+    setAlertAccountLinkPayHideAction,
+    setAlertAccountLinkPayShowAction
+} from '../../../../actions/admin/account/linkPay';
+import { AccountLinkPay } from '../../../../types/admin/account/linkPay';
 import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
@@ -54,17 +54,16 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: LinkPay,
+    item: AccountLinkPay,
     key: number
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td></td>
-            <td>{amountFormat(props.item.amount)}</td>
-            <td>{typeOfTransaction(props.item.is_deposit, props.item.is_withdraw, props.item.is_transfer)}</td>
-            <td>{props.item.send_to}</td>
-            <td>{props.item.datetime_transaction}</td>
+            <td>{props.item.name}</td>
+            <td>{props.item.balance}</td>
+            <td>{props.item.code}</td>
+            <td>{props.item.type}</td>
             <td>
                 <Link to={`/admin/transaction/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i> Detail
@@ -91,23 +90,23 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchLinkPayList(page);
+        this.fetchAccountLinkPayList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertLinkPayHideAction();
+        this.props.setAlertAccountLinkPayHideAction();
     }
 
-    fetchLinkPayList = (page: number) => {
-        this.props.fetchLinkPayAction(page);
+    fetchAccountLinkPayList = (page: number) => {
+        this.props.fetchAccountLinkPayAction(page);
     }
 
     render() {
 
-        let transactionLinkPay: any = <TableItemEmpty />;
+        let accountLinkPay: any = <TableItemEmpty />;
 
-        if (this.props.transactionLinkPay.length > 0) {
-            transactionLinkPay = this.props.transactionLinkPay.map((item: LinkPay, index: number) => (
+        if (this.props.accountLinkPay.length > 0) {
+            accountLinkPay = this.props.accountLinkPay.map((item: AccountLinkPay, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
@@ -116,8 +115,8 @@ class List extends Component<Props, State> {
         }
 
         const CAlert = (
-            <Alert color={this.props.transactionLinkPayAlert.color} isOpen={this.props.transactionLinkPayAlert.visible} toggle={() => this.props.setAlertLinkPayHideAction()} fade={false}>
-                <div>{this.props.transactionLinkPayAlert.message}</div>
+            <Alert color={this.props.accountLinkPayAlert.color} isOpen={this.props.accountLinkPayAlert.visible} toggle={() => this.props.setAlertAccountLinkPayHideAction()} fade={false}>
+                <div>{this.props.accountLinkPayAlert.message}</div>
             </Alert>
         );
 
@@ -148,14 +147,13 @@ class List extends Component<Props, State> {
                                             <th>No</th>
                                             <th>Nama</th>
                                             <th>Jumlah</th>
+                                            <th>Kode</th>
                                             <th>Tipe</th>
-                                            <th>Dikirm ke</th>
-                                            <th>Tanggal</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactionLinkPay}
+                                        {accountLinkPay}
                                     </tbody>
                                 </Table>
                                 
@@ -163,7 +161,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchLinkPayAction} />
+                                                    itemClicked={this.props.fetchAccountLinkPayAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -175,30 +173,30 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    transactionLinkPay: LinkPay[],
+    accountLinkPay: AccountLinkPay[],
     paginate: Paginator,
-    transactionLinkPayAlert: IAlert
+    accountLinkPayAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        transactionLinkPay: state.transactionLinkPay.list,
-        paginate: state.transactionLinkPay.paginate,
-        transactionLinkPayAlert: state.transactionLinkPay.alert
+        accountLinkPay: state.accountLinkPay.list,
+        paginate: state.accountLinkPay.paginate,
+        accountLinkPayAlert: state.accountLinkPay.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchLinkPayAction: (page: number) => void,
-    setAlertLinkPayHideAction: () => void,
-    setAlertLinkPayShowAction: (message: string, color: string) => void
+    fetchAccountLinkPayAction: (page: number) => void,
+    setAlertAccountLinkPayHideAction: () => void,
+    setAlertAccountLinkPayShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchLinkPayAction: (page: number) => dispatch(fetchLinkPayAction(page)),
-        setAlertLinkPayHideAction: () => dispatch(setAlertLinkPayHideAction()),
-        setAlertLinkPayShowAction: (message: string, color: string) => dispatch(setAlertLinkPayShowAction(message, color))
+        fetchAccountLinkPayAction: (page: number) => dispatch(fetchAccountLinkPayAction(page)),
+        setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction()),
+        setAlertAccountLinkPayShowAction: (message: string, color: string) => dispatch(setAlertAccountLinkPayShowAction(message, color))
     }
 }
 

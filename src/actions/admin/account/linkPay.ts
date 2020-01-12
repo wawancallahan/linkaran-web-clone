@@ -3,72 +3,72 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../../types/paginator';
 import { AppState } from "../../../store/configureStore";
 import {
-    LinkPay,
-    SET_PAGINATOR_LINK_PAY,
-    FETCH_LINK_PAY_SUCCESS,
-    FETCH_LINK_PAY_ERROR,
-    SetPaginatorLinkPayActionType,
-    FetchLinkPayActionType,
-    FetchLinkPayErrorActionType,
-    FetchLinkPaySuccessActionType,
-    LinkPayCreate,
-    LinkPayEdit,
-    AlertLinkPayHideActionType,
-    ALERT_LINK_PAY_HIDE,
-    AlertLinkPayShowActionType,
-    ALERT_LINK_PAY_SHOW,
-    LinkPayCreateResult,
-    LinkPayEditResult
-} from '../../../types/admin/transaction/linkPay';
+    AccountLinkPay,
+    SET_PAGINATOR_ACCOUNT_LINK_PAY,
+    FETCH_ACCOUNT_LINK_PAY_SUCCESS,
+    FETCH_ACCOUNT_LINK_PAY_ERROR,
+    SetPaginatorAccountLinkPayActionType,
+    FetchAccountLinkPayActionType,
+    FetchAccountLinkPayErrorActionType,
+    FetchAccountLinkPaySuccessActionType,
+    AccountLinkPayCreate,
+    AccountLinkPayEdit,
+    AlertAccountLinkPayHideActionType,
+    ALERT_ACCOUNT_LINK_PAY_HIDE,
+    AlertAccountLinkPayShowActionType,
+    ALERT_ACCOUNT_LINK_PAY_SHOW,
+    AccountLinkPayCreateResult,
+    AccountLinkPayEditResult
+} from '../../../types/admin/account/linkPay';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import { ThunkResult } from '../../../types/thunk';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorLinkPayActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorAccountLinkPayActionType => {
     return {
-        type: SET_PAGINATOR_LINK_PAY,
+        type: SET_PAGINATOR_ACCOUNT_LINK_PAY,
         paginate: paginate
     }
 }
 
-export const setFetchLinkPaySuccessAction = (list: LinkPay[]): FetchLinkPaySuccessActionType => {
+export const setFetchAccountLinkPaySuccessAction = (list: AccountLinkPay[]): FetchAccountLinkPaySuccessActionType => {
     return {
-        type: FETCH_LINK_PAY_SUCCESS,
+        type: FETCH_ACCOUNT_LINK_PAY_SUCCESS,
         list: list
     }
 }
 
-export const setFetchLinkPayErrorAction = (): FetchLinkPayErrorActionType => {
+export const setFetchAccountLinkPayErrorAction = (): FetchAccountLinkPayErrorActionType => {
     return {
-        type: FETCH_LINK_PAY_ERROR
+        type: FETCH_ACCOUNT_LINK_PAY_ERROR
     }
 }
 
-export const setAlertLinkPayHideAction = (): AlertLinkPayHideActionType => {
+export const setAlertAccountLinkPayHideAction = (): AlertAccountLinkPayHideActionType => {
     return {
-        type: ALERT_LINK_PAY_HIDE
+        type: ALERT_ACCOUNT_LINK_PAY_HIDE
     }
 }
 
-export const setAlertLinkPayShowAction = (message: string, color: string): AlertLinkPayShowActionType => {
+export const setAlertAccountLinkPayShowAction = (message: string, color: string): AlertAccountLinkPayShowActionType => {
     return {
-        type: ALERT_LINK_PAY_SHOW,
+        type: ALERT_ACCOUNT_LINK_PAY_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchLinkPayAction = (page: number) => {
+export const fetchAccountLinkPayAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/transaction/list?page=${page}`, {
+        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/list?page=${page}`, {
                data: {}
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<LinkPay> = response.data;
+                const data: ApiResponseSuccessList<AccountLinkPay> = response.data;
 
-                dispatch(setFetchLinkPaySuccessAction(data.result));
+                dispatch(setFetchAccountLinkPaySuccessAction(data.result));
 
                 if (data.metaData.paginate) {
 
@@ -83,7 +83,7 @@ export const fetchLinkPayAction = (page: number) => {
                 }
             })
             .catch( (error: AxiosError) => {
-                dispatch(setFetchLinkPayErrorAction());
+                dispatch(setFetchAccountLinkPayErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
@@ -95,11 +95,11 @@ export const fetchLinkPayAction = (page: number) => {
     }
 }
 
-export const fetchListLinkPayAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<LinkPay>>> => {
+export const fetchListAccountLinkPayAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<AccountLinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/transaction/list?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/list?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<LinkPay> = response.data;
+                const data: ApiResponseSuccessList<AccountLinkPay> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -148,11 +148,11 @@ export const fetchListLinkPayAction = (search: string, page: number): ThunkResul
     }
 }
 
-export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
+export const findAccountLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<AccountLinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/transaction/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<LinkPay> = response.data;
+                const data: ApiResponseSuccess<AccountLinkPay> = response.data;
 
                 return Promise.resolve({
                     response: data,

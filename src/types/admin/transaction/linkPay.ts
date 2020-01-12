@@ -17,9 +17,15 @@ interface LinkPayField {
 }
 
 interface LinkPayList {
-    user_id: number | null,
-    name: string,
-    balance: number   
+    linkpay_id: number,
+    payment_id: number,
+    amount: number,
+    note: string,
+    is_deposit: number,
+    is_withdraw: number,
+    is_transfer: number,
+    send_to: string | null,
+    datetime_transaction: string
 }
 
 interface LinkPayResult {
