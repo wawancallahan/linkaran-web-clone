@@ -8,7 +8,7 @@ class Index extends Component {
         return (
             <Switch>
                 <Route exact path="/admin/account/link-pay" render={() => <LinkPayList />} />
-                <Route exact path="/admin/account/link-pay/:id" render={() => <LinkPayDetail />} />
+                <Route path="/admin/account/link-pay/:id" render={() => <LinkPayDetail />} />
             </Switch>
         );
     }

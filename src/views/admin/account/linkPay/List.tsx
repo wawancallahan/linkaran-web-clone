@@ -65,7 +65,7 @@ const TableItem = (props: {
             <td>{props.item.code}</td>
             <td>{props.item.type}</td>
             <td>
-                <Link to={`/admin/transaction/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
+                <Link to={`/admin/account/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i> Detail
                 </Link>
             </td>
