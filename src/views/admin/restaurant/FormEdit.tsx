@@ -55,159 +55,160 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const restaurant: RestaurantEdit = {
-                        name: values.name,
-                        point: values.point,
-                        rating: values.rating,
-                        openTime: values.openTime!.getHours(),
-                        closeTime: values.closeTime!.getHours()
-                    }
+                    // const restaurant: RestaurantEdit = {
+                    //     name: values.name,
+                    //     point: values.point,
+                    //     rating: values.rating,
+                    //     openTime: values.openTime!.getHours(),
+                    //     closeTime: values.closeTime!.getHours()
+                    // }
 
-                    this.props.editRestaurantAction(restaurant, this.props.id)
-                        .then( (response: ApiResponse<RestaurantEditResult>) => {
-                            const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
-                            this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<Restaurant>) => {
-                            this.props.setAlertOpen(true);
-                            this.props.setAlertMessage(error.error!.metaData.message);
-                        });
+                    // this.props.editRestaurantAction(restaurant, this.props.id)
+                    //     .then( (response: ApiResponse<RestaurantEditResult>) => {
+                    //         const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
+                    //         this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
+                    //         this.props.redirectOnSuccess();
+                    //     })
+                    //     .catch( (error: ApiResponse<Restaurant>) => {
+                    //         this.props.setAlertOpen(true);
+                    //         this.props.setAlertMessage(error.error!.metaData.message);
+                    //     });
                 }}
                 validationSchema={createSchema}
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-point"
-                                    >
-                                        Poin
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-point"
-                                    placeholder="Poin"
-                                    type="text"
-                                    name="point"
-                                    maxLength={255}
-                                    value={FormikProps.values.point}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.point && FormikProps.errors.point) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.point && FormikProps.touched.point ? FormikProps.errors.point : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-rating"
-                                    >
-                                        Rating
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-rating"
-                                    placeholder="Rating"
-                                    type="number"
-                                    name="rating"
-                                    min="0"
-                                    max="10"
-                                    value={FormikProps.values.rating}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.rating && FormikProps.errors.rating) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.rating && FormikProps.touched.rating ? FormikProps.errors.rating : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-openTime"
-                                    >
-                                        Waktu Buka
-                                    </label>
-                                    <div>
-                                        <DatePicker
-                                            selected={FormikProps.values.openTime}
-                                            onChange={date => FormikProps.setFieldValue('openTime', date)}
-                                            onBlur={() => FormikProps.setFieldTouched('openTime', true)}
-                                            showTimeSelect
-                                            showTimeSelectOnly
-                                            timeIntervals={60}
-                                            timeCaption="Time"
-                                            dateFormat="h:mm aa"
-                                            className="form-control form-control-alternative"
-                                            required
-                                            />
-                                    </div>
-                                    <div>
-                                        {FormikProps.errors.openTime && FormikProps.touched.openTime ? FormikProps.errors.openTime : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-closeTime"
-                                    >
-                                        Waktu Tutup
-                                    </label>
-                                    <div>
-                                        <DatePicker
-                                            selected={FormikProps.values.closeTime}
-                                            onChange={date => FormikProps.setFieldValue('closeTime', date)}
-                                            onBlur={() => FormikProps.setFieldTouched('closeTime', true)}
-                                            showTimeSelect
-                                            showTimeSelectOnly
-                                            timeIntervals={60}
-                                            timeCaption="Time"
-                                            dateFormat="h:mm aa"
-                                            className="form-control form-control-alternative"
-                                            required
-                                            />
-                                    </div>
-                                    <div>
-                                        {FormikProps.errors.closeTime && FormikProps.touched.closeTime ? FormikProps.errors.closeTime : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                        // <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                        //     <div className="pl-lg-4">
+                        //         <FormGroup>
+                        //             <label
+                        //             className="form-control-label"
+                        //             htmlFor="input-name"
+                        //             >
+                        //                 Nama
+                        //             </label>
+                        //             <Input
+                        //             className="form-control-alternative"
+                        //             id="input-name"
+                        //             placeholder="Nama"
+                        //             type="text"
+                        //             name="name"
+                        //             maxLength={255}
+                        //             value={FormikProps.values.name}
+                        //             required
+                        //             onChange={FormikProps.handleChange}
+                        //             onBlur={FormikProps.handleBlur}
+                        //             invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
+                        //             />
+                        //             <div>
+                        //                 {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                        //             </div>
+                        //         </FormGroup>
+                        //         <FormGroup>
+                        //             <label
+                        //             className="form-control-label"
+                        //             htmlFor="input-point"
+                        //             >
+                        //                 Poin
+                        //             </label>
+                        //             <Input
+                        //             className="form-control-alternative"
+                        //             id="input-point"
+                        //             placeholder="Poin"
+                        //             type="text"
+                        //             name="point"
+                        //             maxLength={255}
+                        //             value={FormikProps.values.point}
+                        //             required
+                        //             onChange={FormikProps.handleChange}
+                        //             onBlur={FormikProps.handleBlur}
+                        //             invalid={ !!(FormikProps.touched.point && FormikProps.errors.point) }
+                        //             />
+                        //             <div>
+                        //                 {FormikProps.errors.point && FormikProps.touched.point ? FormikProps.errors.point : ''}
+                        //             </div>
+                        //         </FormGroup>
+                        //         <FormGroup>
+                        //             <label
+                        //             className="form-control-label"
+                        //             htmlFor="input-rating"
+                        //             >
+                        //                 Rating
+                        //             </label>
+                        //             <Input
+                        //             className="form-control-alternative"
+                        //             id="input-rating"
+                        //             placeholder="Rating"
+                        //             type="number"
+                        //             name="rating"
+                        //             min="0"
+                        //             max="10"
+                        //             value={FormikProps.values.rating}
+                        //             required
+                        //             onChange={FormikProps.handleChange}
+                        //             onBlur={FormikProps.handleBlur}
+                        //             invalid={ !!(FormikProps.touched.rating && FormikProps.errors.rating) }
+                        //             />
+                        //             <div>
+                        //                 {FormikProps.errors.rating && FormikProps.touched.rating ? FormikProps.errors.rating : ''}
+                        //             </div>
+                        //         </FormGroup>
+                        //         <FormGroup>
+                        //             <label
+                        //             className="form-control-label"
+                        //             htmlFor="input-openTime"
+                        //             >
+                        //                 Waktu Buka
+                        //             </label>
+                        //             <div>
+                        //                 <DatePicker
+                        //                     selected={FormikProps.values.openTime}
+                        //                     onChange={date => FormikProps.setFieldValue('openTime', date)}
+                        //                     onBlur={() => FormikProps.setFieldTouched('openTime', true)}
+                        //                     showTimeSelect
+                        //                     showTimeSelectOnly
+                        //                     timeIntervals={60}
+                        //                     timeCaption="Time"
+                        //                     dateFormat="h:mm aa"
+                        //                     className="form-control form-control-alternative"
+                        //                     required
+                        //                     />
+                        //             </div>
+                        //             <div>
+                        //                 {FormikProps.errors.openTime && FormikProps.touched.openTime ? FormikProps.errors.openTime : ''}
+                        //             </div>
+                        //         </FormGroup>
+                        //         <FormGroup>
+                        //             <label
+                        //             className="form-control-label"
+                        //             htmlFor="input-closeTime"
+                        //             >
+                        //                 Waktu Tutup
+                        //             </label>
+                        //             <div>
+                        //                 <DatePicker
+                        //                     selected={FormikProps.values.closeTime}
+                        //                     onChange={date => FormikProps.setFieldValue('closeTime', date)}
+                        //                     onBlur={() => FormikProps.setFieldTouched('closeTime', true)}
+                        //                     showTimeSelect
+                        //                     showTimeSelectOnly
+                        //                     timeIntervals={60}
+                        //                     timeCaption="Time"
+                        //                     dateFormat="h:mm aa"
+                        //                     className="form-control form-control-alternative"
+                        //                     required
+                        //                     />
+                        //             </div>
+                        //             <div>
+                        //                 {FormikProps.errors.closeTime && FormikProps.touched.closeTime ? FormikProps.errors.closeTime : ''}
+                        //             </div>
+                        //         </FormGroup>
+                        //         <FormGroup>
+                        //             <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                        //         </FormGroup>
+                        //     </div>
+                        // </FormReactStrap>
+                        null
                     );
                 })}
             </Formik>

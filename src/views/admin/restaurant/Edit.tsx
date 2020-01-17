@@ -51,8 +51,13 @@ class Create extends Component<Props, State> {
     state = {
         form: {
             name: '',
-            point: '',
+            address: '',
+            point: {
+                lat: '',
+                lng: ''
+            },
             rating: 0,
+            image: '',
             openTime: undefined,
             closeTime: undefined
         },
@@ -73,17 +78,17 @@ class Create extends Component<Props, State> {
 
                     const data: Restaurant =response.response!.result;
 
-                    const openTime = new Date();
-                    openTime.setHours(data.openTime, 0, 0, 0);
+                    // const openTime = new Date();
+                    // openTime.setHours(data.openTime, 0, 0, 0);
 
-                    const closeTime = new Date();
-                    closeTime.setHours(data.closeTime, 0, 0, 0);
+                    // const closeTime = new Date();
+                    // closeTime.setHours(data.closeTime, 0, 0, 0);
 
-                    form.name = data.name;
-                    form.point = data.point;
-                    form.rating = data.rating;
-                    form.openTime = openTime;
-                    form.closeTime = closeTime;
+                    // form.name = data.name;
+                    // form.point = data.point;
+                    // form.rating = data.rating;
+                    // form.openTime = openTime;
+                    // form.closeTime = closeTime;
 
                     this.setState({
                         form: form,

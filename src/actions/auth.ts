@@ -15,7 +15,7 @@ dotenv.config();
 
 export const authLogin = (item: Login): ThunkResult<Promise<LoginResponse>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + '/v1/auth/login', item)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/auth/login', item)
                 .then(response => {
                     
                     const data: LoginResult = response.data;
@@ -46,7 +46,7 @@ export const authLogin = (item: Login): ThunkResult<Promise<LoginResponse>> => {
 
 export const authValidate = (item: ValidateLogin): ThunkResult<Promise<ValidateLoginResponse>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + '/v1/auth/login/validate', item)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/auth/login/validate', item)
                         .then(response => {
                             const data: ValidateLoginResult = response.data;
 

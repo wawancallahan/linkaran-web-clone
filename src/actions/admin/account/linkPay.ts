@@ -62,7 +62,7 @@ export const setAlertAccountLinkPayShowAction = (message: string, color: string)
 
 export const fetchAccountLinkPayAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/list?page=${page}`, {
+        axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/list?page=${page}`, {
                data: {}
             })
             .then( (response: AxiosResponse) => {
@@ -97,7 +97,7 @@ export const fetchAccountLinkPayAction = (page: number) => {
 
 export const fetchListAccountLinkPayAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<AccountLinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/list?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/list?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<AccountLinkPay> = response.data;
 
@@ -150,7 +150,7 @@ export const fetchListAccountLinkPayAction = (search: string, page: number): Thu
 
 export const findAccountLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<AccountLinkPay>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/link-pay/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<AccountLinkPay> = response.data;
 

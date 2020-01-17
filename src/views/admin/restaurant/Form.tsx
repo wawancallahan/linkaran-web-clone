@@ -24,9 +24,12 @@ const createSchema = Yup.object().shape({
     name: Yup.string()
              .max(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
              .required('Bidang isian nama wajib diiisi'),
-    point: Yup.string()
-             .max(255, 'Bidang isian point tidak boleh lebih dari 255 karakter')
-             .required('Bidang isian point wajib diiisi'),
+    point: Yup.object().shape({
+        lat: Yup.string()
+                .required('Bidang isian lat wajib diiisi'),
+        lng: Yup.string()
+                .required('Bidang isian lng wajib diisi')
+    }),
     rating: Yup.number()
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
              .max(10, 'Bidang isian rating tidak boleh lebih dari 10')
@@ -55,12 +58,27 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
+                    let openTime = '';
+                    let closeTime = '';
+
+                    if (values.openTime) {
+                        openTime = `${values.openTime.getHours}:${values.openTime.getMinutes}:${values.openTime.getSeconds}`
+                    }
+
+                    if (values.closeTime) {
+                        closeTime = `${values.closeTime.getHours}:${values.closeTime.getMinutes}:${values.closeTime.getSeconds}`
+                    }
+
+                    const point = `${values.point.lat},${values.point.lng}`
+
                     const restaurant: RestaurantCreate = {
                         name: values.name,
-                        point: values.point,
+                        address: values.address,
+                        point: point,
                         rating: values.rating,
-                        openTime: values.openTime!.getHours(),
-                        closeTime: values.closeTime!.getHours()
+                        image: '',
+                        openTime: openTime,
+                        closeTime: closeTime
                     }
 
                     this.props.createRestaurantAction(restaurant)
@@ -71,6 +89,9 @@ class Form extends Component<Props> {
                         })
                         .catch( (error: ApiResponse<RestaurantCreateResult>) => {
                             this.props.setAlertOpen(true);
+
+                            console.log(error)
+
                             this.props.setAlertMessage(error.error!.metaData.message);
                         });
                 }}
@@ -107,25 +128,95 @@ class Form extends Component<Props> {
                                 <FormGroup>
                                     <label
                                     className="form-control-label"
-                                    htmlFor="input-point"
+                                    htmlFor="input-address"
                                     >
-                                        Poin
+                                        Alamat
                                     </label>
                                     <Input
                                     className="form-control-alternative"
-                                    id="input-point"
-                                    placeholder="Poin"
-                                    type="text"
-                                    name="point"
+                                    id="input-address"
+                                    placeholder="Alamat"
+                                    type="textarea"
+                                    name="address"
                                     maxLength={255}
-                                    value={FormikProps.values.point}
+                                    value={FormikProps.values.address}
                                     required
                                     onChange={FormikProps.handleChange}
                                     onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.point && FormikProps.errors.point) }
+                                    invalid={ !!(FormikProps.touched.address && FormikProps.errors.address) }
                                     />
                                     <div>
-                                        {FormikProps.errors.point && FormikProps.touched.point ? FormikProps.errors.point : ''}
+                                        {FormikProps.errors.address && FormikProps.touched.address ? FormikProps.errors.address : ''}
+                                    </div>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-point-lat"
+                                    >
+                                        Lat
+                                    </label>
+                                    <Input
+                                    className="form-control-alternative"
+                                    id="input-point-lat"
+                                    placeholder="Lat"
+                                    type="text"
+                                    name="lat"
+                                    value={FormikProps.values.point.lat}
+                                    required
+                                    onChange={e => {
+                                        FormikProps.handleChange(e)
+
+                                        let value = e.currentTarget.value
+
+                                        FormikProps.setFieldValue('point.lat', value, true)
+                                    }}
+                                    onBlur={e => {
+                                        FormikProps.handleBlur(e)
+
+                                        let value = e.currentTarget.value
+
+                                        FormikProps.setFieldValue('point.lat', value, true)
+                                    }}
+                                    invalid={ !!(FormikProps.touched.point && FormikProps.errors.point && FormikProps.touched.point.lat && FormikProps.errors.point.lat) }
+                                    />
+                                    <div>
+                                        {FormikProps.touched.point && FormikProps.errors.point && FormikProps.touched.point.lat && FormikProps.errors.point.lat ? FormikProps.errors.point.lat : ''}
+                                    </div>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-point-lng"
+                                    >
+                                        Lng
+                                    </label>
+                                    <Input
+                                    className="form-control-alternative"
+                                    id="input-point-lng"
+                                    placeholder="Lng"
+                                    type="text"
+                                    name="lng"
+                                    value={FormikProps.values.point.lng}
+                                    required
+                                    onChange={e => {
+                                        FormikProps.handleChange(e)
+
+                                        let value = e.currentTarget.value
+
+                                        FormikProps.setFieldValue('point.lng', value, true)
+                                    }}
+                                    onBlur={e => {
+                                        FormikProps.handleBlur(e)
+
+                                        let value = e.currentTarget.value
+
+                                        FormikProps.setFieldValue('point.lng', value, true)
+                                    }}
+                                    invalid={ !!(FormikProps.touched.point && FormikProps.errors.point && FormikProps.touched.point.lng && FormikProps.errors.point.lng) }
+                                    />
+                                    <div>
+                                        {FormikProps.touched.point && FormikProps.errors.point && FormikProps.touched.point.lng && FormikProps.errors.point.lng ? FormikProps.errors.point.lng : ''}
                                     </div>
                                 </FormGroup>
                                 <FormGroup>

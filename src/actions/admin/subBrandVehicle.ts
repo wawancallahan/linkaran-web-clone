@@ -63,7 +63,7 @@ export const setAlertSubBrandVehicleShowAction = (message: string, color: string
 
 export const fetchSubBrandVehicleAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
 
@@ -96,7 +96,7 @@ export const fetchSubBrandVehicleAction = (page: number) => {
 
 export const fetchListSubBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<SubBrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
 
@@ -149,7 +149,7 @@ export const fetchListSubBrandVehicleAction = (search: string, page: number): Th
 
 export const fetchListVehicleTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VehicleType>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle/list-vehicle-type?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/list-vehicle-type?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VehicleType> = response.data;
 
@@ -202,7 +202,7 @@ export const fetchListVehicleTypeAction = (search: string, page: number): ThunkR
 
 export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreate): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/v1/web/sub-brand-vehicle', subBrandVehicle)
+        return axiosService.post('/api_linkaran/web/sub-brand-vehicle', subBrandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<SubBrandVehicleCreateResult> = response.data;
                 
@@ -255,7 +255,7 @@ export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCrea
 
 export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
 
@@ -308,7 +308,7 @@ export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiRe
 
 export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle/${id}`, subBrandVehicle)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/${id}`, subBrandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<SubBrandVehicleEditResult> = response.data;
                 
@@ -362,7 +362,7 @@ export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, 
 
 export const deleteSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(process.env.REACT_APP_API_URL + `/v1/web/sub-brand-vehicle/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
 

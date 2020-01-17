@@ -43,8 +43,13 @@ class Create extends Component<Props, State> {
     state = {
         form: {
             name: '',
-            point: '',
+            address: '',
+            point: {
+                lat: '',
+                lng: ''
+            },
             rating: 0,
+            image: '',
             openTime: undefined,
             closeTime: undefined
         },

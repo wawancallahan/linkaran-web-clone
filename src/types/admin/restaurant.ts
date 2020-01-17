@@ -10,31 +10,43 @@ export const ALERT_RESTAURANT_HIDE = "ALERT_RESTAURANT_HIDE";
 
 export type FormField = {
     name: string,
-    point: string,
+    address: string,
+    point: {
+        lat: string,
+        lng: string
+    },
     rating: number,
+    image: string,
     openTime?: Date,
     closeTime?: Date
 }
 
 interface RestaurantField {
     name: string,
+    address: string,
     point: string,
     rating: number,
-    openTime: number,
-    closeTime: number
+    image: string,
+    openTime: string,
+    closeTime: string
 }
 interface RestaurantList {
     name: string,
-    point: string,
+    address: string | null,
+    point: {
+        lat: number,
+        lng: number
+    } | null,
     rating: number,
-    openTime: number,
-    closeTime: number
+    image: string | null,
+    openTime: string,
+    closeTime: string
 }
 interface RestaurantResult {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
 }
 
 export type Restaurant = RestaurantResult & RestaurantList;

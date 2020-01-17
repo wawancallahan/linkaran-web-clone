@@ -60,10 +60,17 @@ const TableItem = (props: {
         <tr>
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
-            <td>{props.item.point}</td>
+            <td>{() => {
+               if (props.item.point) {
+                    return props.item.point.lat + "," + props.item.point.lng
+               } 
+
+               return ""
+            }}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.openTime}</td>
             <td>{props.item.closeTime}</td>
+            <td>{props.item.address}</td>
             <td>
                 <Link to={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -172,10 +179,11 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Poin</th>
+                                            <th>Point</th>
                                             <th>Rating</th>
                                             <th>Jam Buka</th>
                                             <th>Jam Tutup</th>
+                                            <th>Alamat</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
