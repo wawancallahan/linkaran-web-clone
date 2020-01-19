@@ -57,7 +57,8 @@ class Create extends Component<Props, State> {
                 lng: ''
             },
             rating: 0,
-            image: '',
+            photo: null,
+            photo_preview: '',
             openTime: undefined,
             closeTime: undefined
         },
@@ -77,18 +78,29 @@ class Create extends Component<Props, State> {
                     }
 
                     const data: Restaurant =response.response!.result;
+                    
+                    const [openTimeHours, openTimeMinutes, openTimeSecond] = data.openTime.split(":")
 
-                    // const openTime = new Date();
-                    // openTime.setHours(data.openTime, 0, 0, 0);
+                    const openTime = new Date();
+                    openTime.setHours(Number.parseInt(openTimeHours))
+                    openTime.setMinutes(Number.parseInt(openTimeMinutes))
 
-                    // const closeTime = new Date();
-                    // closeTime.setHours(data.closeTime, 0, 0, 0);
+                    const [closeTimeHours, closeTimeMinutes, closeTimeSecond] = data.closeTime.split(":")
 
-                    // form.name = data.name;
-                    // form.point = data.point;
-                    // form.rating = data.rating;
-                    // form.openTime = openTime;
-                    // form.closeTime = closeTime;
+                    const closeTime = new Date();
+                    closeTime.setHours(Number.parseInt(closeTimeHours))
+                    closeTime.setMinutes(Number.parseInt(closeTimeMinutes))
+
+                    form.name = data.name;
+                    form.address = data.address ? data.address : '';
+                    form.point = {
+                        lat: data.point.lat,
+                        lng: data.point.lng
+                    }
+                    form.rating = data.rating;
+                    form.openTime = openTime;
+                    form.closeTime = closeTime;
+                    form.photo_preview = data.image ? data.image : '';
 
                     this.setState({
                         form: form,

@@ -147,7 +147,22 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 
 export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/restaurant', restaurant)
+
+        const data = new FormData();
+
+        if (restaurant.photo) {
+            data.append('photo', restaurant.photo);
+        }
+
+        data.set('name', restaurant.name)
+        data.set('address', restaurant.address)
+        data.set('point.lat', restaurant.point.lat)
+        data.set('point.lng', restaurant.point.lng)
+        data.set('rating', restaurant.rating.toString())
+        data.set('openTime', restaurant.openTime)
+        data.set('closeTime', restaurant.closeTime)
+
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
                 

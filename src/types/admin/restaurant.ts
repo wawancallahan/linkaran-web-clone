@@ -16,7 +16,8 @@ export type FormField = {
         lng: string
     },
     rating: number,
-    image: string,
+    photo: File | null,
+    photo_preview: string,
     openTime?: Date,
     closeTime?: Date
 }
@@ -24,19 +25,23 @@ export type FormField = {
 interface RestaurantField {
     name: string,
     address: string,
-    point: string,
+    point: {
+        lat: string,
+        lng: string
+    },
     rating: number,
-    image: string,
     openTime: string,
-    closeTime: string
+    closeTime: string,
+    photo: File | null,
+    photo_preview: string,
 }
 interface RestaurantList {
     name: string,
     address: string | null,
     point: {
-        lat: number,
-        lng: number
-    } | null,
+        lat: string,
+        lng: string
+    },
     rating: number,
     image: string | null,
     openTime: string,

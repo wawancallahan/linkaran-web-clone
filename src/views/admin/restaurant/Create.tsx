@@ -49,7 +49,8 @@ class Create extends Component<Props, State> {
                 lng: ''
             },
             rating: 0,
-            image: '',
+            photo: null,
+            photo_preview: '',
             openTime: undefined,
             closeTime: undefined
         },

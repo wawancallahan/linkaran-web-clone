@@ -16,6 +16,7 @@ import { Restaurant, FormField, RestaurantCreate, RestaurantCreateResult } from 
 import { createRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
+import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -24,6 +25,8 @@ const createSchema = Yup.object().shape({
     name: Yup.string()
              .max(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
              .required('Bidang isian nama wajib diiisi'),
+    address: Yup.string()
+             .required('Bidang isian alamat wajib diiisi'),
     point: Yup.object().shape({
         lat: Yup.string()
                 .required('Bidang isian lat wajib diiisi'),
@@ -32,8 +35,10 @@ const createSchema = Yup.object().shape({
     }),
     rating: Yup.number()
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
-             .max(10, 'Bidang isian rating tidak boleh lebih dari 10')
+             .max(100, 'Bidang isian rating tidak boleh lebih dari 100')
              .required('Bidang isian rating wajib diiisi'),
+    photo_preview: Yup.string()
+             .required('Bidang upload foto wajib diisi'),
     openTime: Yup.mixed().required('Bidang isian waktu buka wajib diisi'),
     closeTime: Yup.mixed().required('Bidang isian waktu tutup wajib diisi'),
 });
@@ -49,6 +54,21 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
+    onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
+        const file: {
+            lastModified: number,
+            name: string,
+            preview: string,
+            size: number,
+            type: string
+        } = files.length > 0 ? files[0] : null;
+    
+        if (file) {
+            FormikProps.setFieldValue(setPreview, file.preview, true);
+            FormikProps.setFieldValue(setValue, file);
+        }
+    }
+
     render() {
         
         return (
@@ -62,21 +82,47 @@ class Form extends Component<Props> {
                     let closeTime = '';
 
                     if (values.openTime) {
-                        openTime = `${values.openTime.getHours}:${values.openTime.getMinutes}:${values.openTime.getSeconds}`
+                        let hours = values.openTime.getHours().toString();
+
+                        if (Number.parseInt(hours) < 10) {
+                            hours = `0${hours}`
+                        }
+
+                        let minutes = values.openTime.getMinutes().toString();
+                     
+                        if (Number.parseInt(minutes) < 10) {
+                            minutes = `0${minutes}`
+                        }
+
+                        openTime = `${hours}:${minutes}`
                     }
 
                     if (values.closeTime) {
-                        closeTime = `${values.closeTime.getHours}:${values.closeTime.getMinutes}:${values.closeTime.getSeconds}`
-                    }
+                        let hours = values.closeTime.getHours().toString();
+                        
+                        if (Number.parseInt(hours) < 10) {
+                            hours = `0${hours}`
+                        }
 
-                    const point = `${values.point.lat},${values.point.lng}`
+                        let minutes = values.closeTime.getMinutes().toString();
+                     
+                        if (Number.parseInt(minutes) < 10) {
+                            minutes = `0${minutes}`
+                        }
+
+                        closeTime = `${hours}:${minutes}`
+                    }
 
                     const restaurant: RestaurantCreate = {
                         name: values.name,
                         address: values.address,
-                        point: point,
+                        point: {
+                            lat: values.point.lat,
+                            lng: values.point.lng
+                        },
                         rating: values.rating,
-                        image: '',
+                        photo_preview: values.photo_preview,
+                        photo: values.photo,
                         openTime: openTime,
                         closeTime: closeTime
                     }
@@ -233,7 +279,7 @@ class Form extends Component<Props> {
                                     type="number"
                                     name="rating"
                                     min="0"
-                                    max="10"
+                                    max="100"
                                     value={FormikProps.values.rating}
                                     required
                                     onChange={FormikProps.handleChange}
@@ -294,6 +340,23 @@ class Form extends Component<Props> {
                                         {FormikProps.errors.closeTime && FormikProps.touched.closeTime ? FormikProps.errors.closeTime : ''}
                                     </div>
                                 </FormGroup>
+
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-upload-photo"
+                                    >
+                                        Upload Gambar
+                                    </label>
+                                    <Dropzone onFilesAdded={(files: any[]) => {
+                                        this.onFilesAdded(files, FormikProps, 'photo_preview', 'photo');
+                                    }} disabled={false} multiple={false} />
+                                    
+                                    <div>
+                                        {FormikProps.errors.photo_preview && FormikProps.touched.photo_preview ? FormikProps.errors.photo_preview : ''}
+                                    </div>
+                                </FormGroup>
+                                
                                 <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
                                 </FormGroup>

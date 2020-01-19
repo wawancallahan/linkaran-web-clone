@@ -60,13 +60,7 @@ const TableItem = (props: {
         <tr>
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
-            <td>{() => {
-               if (props.item.point) {
-                    return props.item.point.lat + "," + props.item.point.lng
-               } 
-
-               return ""
-            }}</td>
+            <td>{props.item.point ? (props.item.point.lat + "," + props.item.point.lng) : ''}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.openTime}</td>
             <td>{props.item.closeTime}</td>
