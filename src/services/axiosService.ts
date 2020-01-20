@@ -14,8 +14,8 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(function (config) {
-    config.headers.Authorization =  'Bearer ' + (process.env.REACT_APP_DEV_API_ACCESS_TOKEN || '');
-    // config.headers.Authorization =  'Bearer ' + (localStorage.getItem('accessToken') || '');
+    // config.headers.Authorization =  'Bearer ' + (process.env.REACT_APP_DEV_API_ACCESS_TOKEN || '');
+    config.headers.Authorization =  'Bearer ' + (localStorage.getItem('accessToken') || '');
 
     return config;
 });
