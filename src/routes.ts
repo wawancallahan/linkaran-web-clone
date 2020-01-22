@@ -27,7 +27,9 @@ import AdminSubBrandVehicle from './views/admin/subBrandVehicle/Index';
 import AdminDriver from './views/admin/driver/Index';
 import AdminInvestor from './views/admin/investor/Index';
 import AdminTransaction from './views/admin/transaction/Index';
+import AdminTransactionLinkPay from './views/admin/transaction/linkPay/Index';
 import AdminAccount from './views/admin/account/Index';
+import AdminAccountLinkPay from './views/admin/account/linkPay/Index';
 
 const routes: any[] = [
     {
@@ -105,14 +107,32 @@ const routes: any[] = [
         name: "Transaksi",
         icon: "ni ni-single-02 text-primary",
         component: AdminTransaction,
-        layout: "/admin"
+        layout: "/admin",
+        child: [
+            {
+                path: "/transaction/link-pay",
+                name: "Link Pay",
+                icon: "ni ni-pin-3 text-primary",
+                component: AdminTransactionLinkPay,
+                layout: "/admin"
+            },
+        ]
     },
     {
         path: "/account",
         name: "Account",
         icon: "ni ni-single-02 text-primary",
         component: AdminAccount,
-        layout: "/admin"
+        layout: "/admin",
+        child: [
+            {
+                path: "/account/link-pay",
+                name: "Link Pay",
+                icon: "ni ni-pin-3 text-primary",
+                component: AdminAccountLinkPay,
+                layout: "/admin"
+            },
+        ]
     }
 ];
 
