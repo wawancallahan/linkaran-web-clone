@@ -15,7 +15,7 @@ export interface Token {
 
 export interface LoginResponse {
     status: boolean,
-    response: LoginResult | null,
+    response: LoginResult | LoginFailResult | null,
     message: string
 }
 
@@ -27,6 +27,15 @@ export interface LoginResult {
         statusMessage: string
     },
     result?: Token
+}
+
+export interface LoginFailResult {
+    metaData: {
+        isError: boolean,
+        message: string,
+        statusCode: number
+    },
+    result: null
 }
 
 export interface TokenFCM {
@@ -58,8 +67,17 @@ export interface ValidateLoginResult {
     result?: LoginData
 }
 
+export interface ValidateLoginFailResult {
+    metaData: {
+        isError: boolean,
+        message: string,
+        statusCode: number
+    },
+    result: null
+}
+
 export interface ValidateLoginResponse {
     status: boolean,
-    response: ValidateLoginResult | null,
+    response: ValidateLoginResult | ValidateLoginFailResult | null,
     message: string
 }

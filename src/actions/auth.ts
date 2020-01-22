@@ -3,8 +3,10 @@ import {
     ValidateLogin,
     LoginResponse,
     LoginResult,
+    LoginFailResult,
     ValidateLoginResponse,
-    ValidateLoginResult
+    ValidateLoginResult,
+    ValidateLoginFailResult
 } from '../types/auth';
 import { Dispatch } from 'redux';
 import { AppState } from '../store/configureStore';
@@ -21,24 +23,30 @@ export const authLogin = (item: Login): ThunkResult<Promise<LoginResponse>> => {
                     const data: LoginResult = response.data;
 
                     if (data.metaData.isError) {
+                        
+                        const dataFail: LoginFailResult = response.data;
+
                         return Promise.reject({
                             status: false,
-                            response: null,
-                            message: data.metaData.message
+                            response: dataFail,
+                            message: dataFail.metaData.message
                         });
                     }
 
                     return Promise.resolve({
-                        status: false,
+                        status: true,
                         response: data,
                         message: data.metaData.message
                     });
 
                 }).catch(error => {
+
+                    const data: LoginFailResult = error.response.data;
+
                     return Promise.reject({
                         status: false,
-                        response: null,
-                        message: error
+                        response: data,
+                        message: data.metaData.message
                     });
                 });
     }
@@ -51,23 +59,28 @@ export const authValidate = (item: ValidateLogin): ThunkResult<Promise<ValidateL
                             const data: ValidateLoginResult = response.data;
 
                             if (data.metaData.isError) {
+
+                                const dataFail: ValidateLoginFailResult = response.data;
+
                                 return Promise.reject({
                                     status: false,
-                                    response: null,
-                                    message: data.metaData.message
+                                    response: dataFail,
+                                    message: dataFail.metaData.message
                                 });
                             }
 
                             return Promise.resolve({
-                                status: false,
+                                status: true,
                                 response: data,
                                 message: data.metaData.message
                             });
                         }).catch(error => {
+                            const data: ValidateLoginFailResult = error.response;
+
                             return Promise.reject({
                                 status: false,
-                                response: null,
-                                message: error
+                                response: data,
+                                message: data.metaData.message
                             });
                         })
     }

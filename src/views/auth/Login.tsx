@@ -13,7 +13,8 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
+  Alert
 } from "reactstrap";
 import { ThunkDispatch } from "redux-thunk";
 import { connect } from 'react-redux';
@@ -26,7 +27,11 @@ import {
     Login as LoginInterface,
     ValidateLogin,
     LoginResponse,
-    ValidateLoginResponse
+    ValidateLoginResponse,
+    LoginFailResult,
+    LoginResult,
+    ValidateLoginResult,
+    ValidateLoginFailResult
   } from "../../types/auth";
   import { authLogin, authValidate } from "../../actions/auth";
 
@@ -39,12 +44,14 @@ type Props = LoginProps & LinkDispatchToProps & {
 };
 
 type State = {
-    isEmailSubmited: boolean;
+    isEmailSubmited: boolean,
     form: {
         email: string;
         token: string;
         pin: string;
-    };
+    },
+    alert_visible: boolean,
+    alert_message: string
 }
 
 class Login extends React.Component<Props, State> {
@@ -55,7 +62,9 @@ class Login extends React.Component<Props, State> {
           email: "",
           token: "",
           pin: ""
-        }
+        },
+        alert_visible: false,
+        alert_message: ''
     }
 
     componentDidMount() {
@@ -97,20 +106,32 @@ class Login extends React.Component<Props, State> {
                 this.props
                     .authValidate(item)
                     .then((response: ValidateLoginResponse) => {
-                        const data = response.response!.result;
+                        const data: ValidateLoginResult = response.response as ValidateLoginResult;
 
-                        if (data) {
-                            localStorage.setItem("accessToken", data.accessToken);
-                            localStorage.setItem("name", data.name);
-                            localStorage.setItem("phoneNumber", data.phoneNumber);
-                            localStorage.setItem("email", data.email);
+                        if (data.result) {
+
+                            const result = data.result;
+
+                            localStorage.setItem("accessToken", result.accessToken);
+                            localStorage.setItem("name", result.name);
+                            localStorage.setItem("phoneNumber", result.phoneNumber);
+                            localStorage.setItem("email", result.email);
                             localStorage.setItem("role_id", `1`);
                             localStorage.setItem("role_name", "Admin");
                         }
 
                         this.goDashboard("Admin");
                     })
-                    .catch((response: ValidateLoginResponse) => {});
+                    .catch((response: ValidateLoginResponse) => {
+                        const data: ValidateLoginFailResult = response.response as ValidateLoginFailResult;
+
+                        if (data) {
+                            this.setState({
+                                alert_message: data.metaData.message,
+                                alert_visible: true
+                            });
+                        }
+                    });
             }
         } else {
             if (this.state.form.email.trim().length > 0) {
@@ -123,18 +144,33 @@ class Login extends React.Component<Props, State> {
                 this.props
                     .authLogin(item)
                     .then((response: LoginResponse) => {
-                        const data = response.response!.result!;
-            
-                        this.setState({
-                            isEmailSubmited: true,
-                            form: {
-                                ...this.state.form,
-                                email: this.state.form.email,
-                                token: data.token
-                            }
-                        });
+                        const data: LoginResult = response.response as LoginResult;
+                        
+                        if (data && data.result) {
+                            const result = data.result;
+                            
+                            this.setState({
+                                isEmailSubmited: true,
+                                form: {
+                                    ...this.state.form,
+                                    email: this.state.form.email,
+                                    token: result.token
+                                },
+                                alert_message: '',
+                                alert_visible: false
+                            });
+                        }
                     })
-                    .catch(response => {});
+                    .catch((response: LoginResponse) => {
+                        const data: LoginFailResult = response.response as LoginFailResult;
+                        
+                        if (data) {
+                            this.setState({
+                                alert_message: data.metaData.message,
+                                alert_visible: true
+                            });
+                        }
+                    });
             }
         }
     }
@@ -149,8 +185,22 @@ class Login extends React.Component<Props, State> {
         }
     };
 
+    closeErrorAlert = () => {
+        this.setState({
+            alert_visible: false,
+            alert_message: ''
+        })
+    }
+
 
     render() {
+
+        const errorAlert = (
+            <Alert color="danger" isOpen={this.state.alert_visible} toggle={() => this.closeErrorAlert()} fade={false}>
+                <div>{this.state.alert_message}</div>
+            </Alert>
+        );
+
         return (
             <>
                 <Col lg="5" md="7">
@@ -161,6 +211,7 @@ class Login extends React.Component<Props, State> {
                             </div>
                         </CardHeader>
                         <CardBody className="px-lg-5 py-lg-5">
+                            {errorAlert}
                             <Form
                                 role="form"
                                 onSubmit={e => {
@@ -178,7 +229,7 @@ class Login extends React.Component<Props, State> {
                                         <Input
                                         placeholder="Email"
                                         disabled={this.state.isEmailSubmited}
-                                        type="email"
+                                        type="text"
                                         onChange={this.inputHandlerChange}
                                         id="email"
                                         />
