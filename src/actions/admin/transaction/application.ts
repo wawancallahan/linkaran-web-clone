@@ -3,105 +3,111 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../../types/paginator';
 import { AppState } from "../../../store/configureStore";
 import {
-    LinkPay,
-    SET_PAGINATOR_LINK_PAY,
-    FETCH_LINK_PAY_SUCCESS,
-    FETCH_LINK_PAY_ERROR,
-    SetPaginatorLinkPayActionType,
-    FetchLinkPayActionType,
-    FetchLinkPayErrorActionType,
-    FetchLinkPaySuccessActionType,
-    LinkPayCreate,
-    LinkPayEdit,
-    AlertLinkPayHideActionType,
-    ALERT_LINK_PAY_HIDE,
-    AlertLinkPayShowActionType,
-    ALERT_LINK_PAY_SHOW,
-    LinkPayCreateResult,
-    LinkPayEditResult
-} from '../../../types/admin/transaction/linkPay';
+    Application,
+    SET_PAGINATOR_APPLICATION,
+    FETCH_APPLICATION_SUCCESS,
+    FETCH_APPLICATION_ERROR,
+    SetPaginatorApplicationActionType,
+    FetchApplicationActionType,
+    FetchApplicationErrorActionType,
+    FetchApplicationSuccessActionType,
+    ApplicationCreate,
+    ApplicationEdit,
+    AlertApplicationHideActionType,
+    ALERT_APPLICATION_HIDE,
+    AlertApplicationShowActionType,
+    ALERT_APPLICATION_SHOW,
+    ApplicationCreateResult,
+    ApplicationEditResult
+} from '../../../types/admin/transaction/application';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import { ThunkResult } from '../../../types/thunk';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorLinkPayActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorApplicationActionType => {
     return {
-        type: SET_PAGINATOR_LINK_PAY,
+        type: SET_PAGINATOR_APPLICATION,
         paginate: paginate
     }
 }
 
-export const setFetchLinkPaySuccessAction = (list: LinkPay[]): FetchLinkPaySuccessActionType => {
+export const setFetchApplicationSuccessAction = (list: Application[]): FetchApplicationSuccessActionType => {
     return {
-        type: FETCH_LINK_PAY_SUCCESS,
+        type: FETCH_APPLICATION_SUCCESS,
         list: list
     }
 }
 
-export const setFetchLinkPayErrorAction = (): FetchLinkPayErrorActionType => {
+export const setFetchApplicationErrorAction = (): FetchApplicationErrorActionType => {
     return {
-        type: FETCH_LINK_PAY_ERROR
+        type: FETCH_APPLICATION_ERROR
     }
 }
 
-export const setAlertLinkPayHideAction = (): AlertLinkPayHideActionType => {
+export const setAlertApplicationHideAction = (): AlertApplicationHideActionType => {
     return {
-        type: ALERT_LINK_PAY_HIDE
+        type: ALERT_APPLICATION_HIDE
     }
 }
 
-export const setAlertLinkPayShowAction = (message: string, color: string): AlertLinkPayShowActionType => {
+export const setAlertApplicationShowAction = (message: string, color: string): AlertApplicationShowActionType => {
     return {
-        type: ALERT_LINK_PAY_SHOW,
+        type: ALERT_APPLICATION_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchLinkPayAction = (page: number) => {
+export const fetchApplicationAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`, {
-               data: {}
-            })
-            .then( (response: AxiosResponse) => {
-                
-                const data: ApiResponseSuccessList<LinkPay> = response.data;
+        dispatch(setFetchApplicationErrorAction());
 
-                dispatch(setFetchLinkPaySuccessAction(data.result));
+        dispatch(setPaginateAction({
+            total: 0,
+            currentPage: 0,
+            itemCount: 0,
+            pageCount: 0
+        }))
+        // axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`, {
+        //        data: {}
+        //     })
+        //     .then( (response: AxiosResponse) => {
+        //         const data: ApiResponseSuccessList<Application> = response.data;
 
-                if (data.metaData.paginate) {
-                    console.log(data.metaData.paginate)
+        //         dispatch(setFetchApplicationSuccessAction(data.result));
 
-                    const paginate = data.metaData.paginate as Paginator;
+        //         if (data.metaData.paginate) {
 
-                    dispatch(setPaginateAction({
-                        total: paginate.itemCount * paginate.pageCount,
-                        currentPage: page,
-                        itemCount: paginate.itemCount,
-                        pageCount: paginate.pageCount
-                    }))
-                }
-            })
-            .catch( (error: AxiosError) => {
-                dispatch(setFetchLinkPayErrorAction());
+        //             const paginate = data.metaData.paginate as Paginator;
 
-                dispatch(setPaginateAction({
-                    total: 0,
-                    currentPage: 0,
-                    itemCount: 0,
-                    pageCount: 0
-                }))
-            })
+        //             dispatch(setPaginateAction({
+        //                 total: paginate.itemCount * paginate.pageCount,
+        //                 currentPage: page,
+        //                 itemCount: paginate.itemCount,
+        //                 pageCount: paginate.pageCount
+        //             }))
+        //         }
+        //     })
+        //     .catch( (error: AxiosError) => {
+        //         dispatch(setFetchApplicationErrorAction());
+
+        //         dispatch(setPaginateAction({
+        //             total: 0,
+        //             currentPage: 0,
+        //             itemCount: 0,
+        //             pageCount: 0
+        //         }))
+        //     })
     }
 }
 
-export const fetchListLinkPayAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<LinkPay>>> => {
+export const fetchListApplicationAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Application>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<LinkPay> = response.data;
+                const data: ApiResponseSuccessList<Application> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -150,11 +156,11 @@ export const fetchListLinkPayAction = (search: string, page: number): ThunkResul
     }
 }
 
-export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
+export const findApplicationAction = (id: number): ThunkResult<Promise<ApiResponse<Application>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<LinkPay> = response.data;
+                const data: ApiResponseSuccess<Application> = response.data;
 
                 return Promise.resolve({
                     response: data,

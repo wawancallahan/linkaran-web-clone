@@ -10,6 +10,7 @@ import investorReducer from '../reducers/admin/investor';
 import brandVehicleReducer from '../reducers/admin/brandVehicle';
 import subBrandVehicleReducer from '../reducers/admin/subBrandVehicle';
 import transactionLinkPayReducer from '../reducers/admin/transaction/linkPay';
+import transactionApplicationReducer from '../reducers/admin/transaction/application';
 import accountLinkPayReducer from '../reducers/admin/account/linkPay';
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     subBrandVehicle: subBrandVehicleReducer,
     investor: investorReducer,
     transactionLinkPay: transactionLinkPayReducer,
+    transactionApplication: transactionApplicationReducer,
     accountLinkPay: accountLinkPayReducer
 });
 

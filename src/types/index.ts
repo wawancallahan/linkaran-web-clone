@@ -7,6 +7,7 @@ import { SubBrandVehicleActionTypes as AdminSubBrandVehicleActionTypes } from '.
 import { DriverActionTypes as AdminDriverActionTypes } from './admin/driver'; 
 import { InvestorActionTypes as AdminInvestorActionTypes } from './admin/investor'; 
 import { LinkPayActionTypes as AdminTransactionLinkPayActionTypes } from './admin/transaction/linkPay';
+import { ApplicationActionTypes as AdminTransactionApplicationActionTypes } from './admin/transaction/application';
 import { AccountLinkPayActionTypes as AdminAccountLinkPayActionTypes } from './admin/account/linkPay'
 
 export type AppActions = 
@@ -19,4 +20,5 @@ export type AppActions =
     | AdminDriverActionTypes
     | AdminInvestorActionTypes
     | AdminTransactionLinkPayActionTypes
+    | AdminTransactionApplicationActionTypes
     | AdminAccountLinkPayActionTypes

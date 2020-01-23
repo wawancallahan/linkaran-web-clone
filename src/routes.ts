@@ -28,6 +28,7 @@ import AdminDriver from './views/admin/driver/Index';
 import AdminInvestor from './views/admin/investor/Index';
 import AdminTransaction from './views/admin/transaction/Index';
 import AdminTransactionLinkPay from './views/admin/transaction/linkPay/Index';
+import AdminTransactionApplication from './views/admin/transaction/application/Index';
 import AdminAccount from './views/admin/account/Index';
 import AdminAccountLinkPay from './views/admin/account/linkPay/Index';
 
@@ -109,6 +110,13 @@ const routes: any[] = [
         component: AdminTransaction,
         layout: "/admin",
         child: [
+            {
+                path: "/transaction/application",
+                name: "Aplikasi",
+                icon: "ni ni-pin-3 text-primary",
+                component: AdminTransactionApplication,
+                layout: "/admin"
+            },
             {
                 path: "/transaction/link-pay",
                 name: "Link Pay",

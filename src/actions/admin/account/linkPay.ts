@@ -75,8 +75,8 @@ export const fetchAccountLinkPayAction = (page: number) => {
                     const paginate = data.metaData.paginate as Paginator;
 
                     dispatch(setPaginateAction({
-                        total: paginate.total,
-                        currentPage: paginate.currentPage,
+                        total: paginate.itemCount * paginate.pageCount,
+                        currentPage: page,
                         itemCount: paginate.itemCount,
                         pageCount: paginate.pageCount
                     }))
