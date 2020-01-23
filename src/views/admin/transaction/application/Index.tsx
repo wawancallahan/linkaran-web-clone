@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import ApplicationList from './List';
-import ApplicationDetail from './List';
+import ApplicationDetail from './Detail';
 
 class Index extends Component {
     render() {
