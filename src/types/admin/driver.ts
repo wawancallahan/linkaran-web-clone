@@ -13,6 +13,7 @@ export type FormField = {
     no_telepon: string,
     email: string,
     tanggal_lahir: Date | null,
+    tempat_lahir: string,
     jenis_kelamin: number | null,
     no_ktp: string,
     ktp_file: File | null,
@@ -21,6 +22,7 @@ export type FormField = {
     sim_file: File | null,
     sim_file_preview: string,
     alamat: string,
+    alamat_domisili: string,
     negara: {
         label: string,
         value: number
@@ -57,7 +59,14 @@ export type FormField = {
     no_rangka: string,
     jumlah_seat: number | null,
     warna: string,
-    keterangan: string 
+    keterangan: string,
+    pertanyaan_1: string,
+    pertanyaan_2: string,
+    pertanyaan_3: string,
+    pertanyaan_4: string,
+    pertanyaan_5: string,
+    custom_interval_jam_kerja_start: Date | null,
+    custom_interval_jam_kerja_end: Date | null
 }
 
 interface DriverField {

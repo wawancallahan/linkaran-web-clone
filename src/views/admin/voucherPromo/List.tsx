@@ -145,7 +145,7 @@ class List extends Component<Props, State> {
                 <HeaderView />
 
                 <Container className="mt--7" fluid>
-                <Row>
+                    <Row>
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">

@@ -57,6 +57,7 @@ class Edit extends Component<Props, State> {
             email: '',
             tanggal_lahir: null,
             jenis_kelamin: null,
+            tempat_lahir: '',
             no_ktp: '',
             ktp_file: null,
             ktp_file_preview: '',
@@ -64,6 +65,7 @@ class Edit extends Component<Props, State> {
             sim_file: null,
             sim_file_preview: '',
             alamat: '',
+            alamat_domisili: '',
             negara: {
                 label: '',
                 value: 0
@@ -100,7 +102,14 @@ class Edit extends Component<Props, State> {
             jumlah_seat: null,
             warna: '',
             keterangan: '',
-            rating: null
+            rating: null,
+            pertanyaan_1: '1',
+            pertanyaan_2: '1',
+            pertanyaan_3: '1',
+            pertanyaan_4: '1',
+            pertanyaan_5: '0',
+            custom_interval_jam_kerja_start: null,
+            custom_interval_jam_kerja_end: null
         },
         alert_visible: false,
         alert_message: '',

@@ -8,22 +8,30 @@ export const SET_PAGINATOR_VOUCHER_PROMO = "SET_PAGINATOR_VOUCHER_PROMO";
 export const ALERT_VOUCHER_PROMO_SHOW = "ALERT_VOUCHER_PROMO_SHOW";
 export const ALERT_VOUCHER_PROMO_HIDE = "ALERT_VOUCHER_PROMO_HIDE";
 
+type Service = {
+    value: number,
+    label: string
+}
+
 export type FormField = {
-    basePrice: string,
-    pricePerKm: string,
+    name: string,
+    code: string,
     minKm: string,
-    district: {
+    amount: string,
+    quota: string,
+    minimumPurchase: string,
+    isLimited: number | null,
+    quantity: string,
+    description: string,
+    service: Service[],
+    type: {
         value: number,
         label: string
     },
-    service: {
-        value: number,
-        label: string
-    },
-    vechicleType: {
-        value: number,
-        label: string
-    }
+    startDateTime: Date | null,
+    endDateTime: Date | null,
+    fileimage: File | null,
+    fileImagePreview: string
 }
 
 interface VoucherPromoField {

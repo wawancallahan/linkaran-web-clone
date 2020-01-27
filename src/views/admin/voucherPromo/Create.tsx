@@ -22,9 +22,9 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Driver, FormField } from '../../../types/admin/driver';
+import { VoucherPromo, FormField } from '../../../types/admin/voucherPromo';
 
-import FormDriver from './Form';
+import FormVoucher from './Form';
 
 type CreateProps = RouteComponentProps & {
 
@@ -42,64 +42,24 @@ class Create extends Component<Props, State> {
 
     state = {
         form: {
-            nama: '',
-            no_telepon: '',
-            email: '',
-            tanggal_lahir: null,
-            jenis_kelamin: null,
-            tempat_lahir: '',
-            no_ktp: '',
-            ktp_file: null,
-            ktp_file_preview: '',
-            no_sim: '',
-            sim_file: null,
-            sim_file_preview: '',
-            alamat: '',
-            alamat_domisili: '',
-            negara: {
-                label: '',
-                value: 0
+            name: '',
+            code: '',
+            minKm: '',
+            amount: '',
+            quota: '',
+            minimumPurchase: '',
+            isLimited: null,
+            quantity: '',
+            description: '',
+            service: [],
+            type: {
+                value: 0,
+                label: ''
             },
-            provinsi: {
-                label: '',
-                value: 0
-            },
-            kabupaten_kota: {
-                label: '',
-                value: 0
-            },
-            kecamatan: {
-                label: '',
-                value: 0
-            },
-            kelurahan: {
-                label: '',
-                value: 0
-            },
-            foto_profil: null,
-            foto_profil_preview: '',
-            tipe_kendaraan: {
-                label: '',
-                value: 0
-            },
-            no_stnk: '',
-            no_polisi: '',
-            no_rangka: '',
-            merek: {
-                label: '',
-                value: 0
-            },
-            jumlah_seat: null,
-            warna: '',
-            keterangan: '',
-            rating: null,
-            pertanyaan_1: '1',
-            pertanyaan_2: '1',
-            pertanyaan_3: '1',
-            pertanyaan_4: '1',
-            pertanyaan_5: '0',
-            custom_interval_jam_kerja_start: null,
-            custom_interval_jam_kerja_end: null
+            startDateTime: null,
+            endDateTime: null,
+            fileimage: null,
+            fileImagePreview: ''
         },
         alert_visible: false,
         alert_message: ''
@@ -118,7 +78,7 @@ class Create extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/driver');
+        this.props.history.push('/admin/user');
     }
     
     render() {
@@ -139,13 +99,13 @@ class Create extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Tambah Driver</h3>
+                                    <h3 className="mb-0">Tambah Voucher Promo</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
                         <CardBody>
                             {showAlertError}
-                            <FormDriver form={this.state.form} 
+                            <FormVoucher form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
@@ -180,6 +140,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Tambah Driver")
+        withTitle(Create, "Tambah Voucher Promo")
     )
 );

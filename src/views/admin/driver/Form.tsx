@@ -22,10 +22,17 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../type
 
 import FormDriver from './FormDriver';
 import FormKendaraan from './FormKendaraan';
+import FormPertanyaan from './FormPertanyaan';
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
-                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -35,6 +42,15 @@ const createSchema = Yup.object().shape({
     jenis_kelamin: Yup.number()
                       .oneOf([0, 1], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
+    tempat_lahir: Yup.string()
+                    .test('len', 'Bidang isian tempat lahir tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                        if (val) {
+                            return val.length <= 255;
+                        }
+
+                        return true;
+                    })
+                    .required('Bidang isian tempat lahir wajib diisi'),
     no_ktp: Yup.string()
                 .length(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian no ktp wajib diisi'),
@@ -48,8 +64,9 @@ const createSchema = Yup.object().shape({
     //             .required('Bidang isian no sim wajib diisi'),
     // sim_file: File | null,
     alamat: Yup.string()
-                .length(255, 'Bidang isian alamat tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian alamat wajib diisi'),
+    alamat_domisili: Yup.string()
+                .required('Bidang isian alamat domisili wajib diisi'),
     negara: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan negara wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan negara wajib diisi').required("Bidang pilihan negara wajib diisi")
@@ -215,7 +232,13 @@ class Form extends Component<Props> {
                                     <h3>Kendaraan</h3>
                                 </FormGroup>
 
-                                <FormKendaraan FormikProps={FormikProps}/>                            
+                                <FormKendaraan FormikProps={FormikProps}/>  
+
+                                 <FormGroup>
+                                    <h3>Pertanyaan</h3>
+                                </FormGroup>
+
+                                <FormPertanyaan FormikProps={FormikProps}/>                            
                                
                                 <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>

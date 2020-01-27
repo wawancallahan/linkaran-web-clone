@@ -340,6 +340,31 @@ class FormDriver extends Component<Props> {
                 <FormGroup>
                     <label
                     className="form-control-label"
+                    htmlFor="input-tempat_lahir"
+                    >
+                        Tempat Lahir
+                    </label>
+                    <Input
+                    className="form-control-alternative"
+                    id="input-tempat_lahir"
+                    placeholder="Tempat Lahir"
+                    type="text"
+                    name="tempat_lahir"
+                    maxLength={255}
+                    value={FormikProps.values.tempat_lahir}
+                    required
+                    onChange={FormikProps.handleChange}
+                    onBlur={FormikProps.handleBlur}
+                    invalid={ !!(FormikProps.touched.tempat_lahir && FormikProps.errors.tempat_lahir) }
+                    />
+                    <div>
+                        {FormikProps.errors.tempat_lahir && FormikProps.touched.tempat_lahir ? FormikProps.errors.tempat_lahir : ''}
+                    </div>
+                </FormGroup>
+
+                <FormGroup>
+                    <label
+                    className="form-control-label"
                     htmlFor="input-tanggal-lahir"
                     >
                         Tanggal Lahir

@@ -16,3 +16,17 @@
     width: 1.5rem;
     height: 1.5rem;
 }
+
+.img-responsive {
+    max-width: 100%;
+    max-height: 150px;
+}
+
+.img-responsive > img {
+    max-width: inherit;
+    max-height: inherit;
+}
+
+.react-datepicker-w100 > .react-datepicker-wrapper, .react-datepicker-w100 > .react-datepicker__input-container {
+    display: block;
+}
