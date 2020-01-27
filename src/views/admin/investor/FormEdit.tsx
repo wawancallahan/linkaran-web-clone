@@ -44,7 +44,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const editSchema = Yup.object().shape({
     nama: Yup.string()
-                .max(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -55,7 +55,13 @@ const editSchema = Yup.object().shape({
                       .oneOf(['L', 'P'], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
     no_ktp: Yup.string()
-                .max(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
+    .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()
@@ -63,7 +69,13 @@ const editSchema = Yup.object().shape({
     foto_profil_preview: Yup.string()
                         .required('Bidang upload foto profil wajib diisi'),
     alamat: Yup.string()
-                .max(255, 'Bidang isian alamat tidak boleh lebih dari 255 karakter')
+    .test('len', 'Bidang isian alamat tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
                 .required('Bidang isian alamat wajib diisi'),
     negara: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan negara wajib diisi"),

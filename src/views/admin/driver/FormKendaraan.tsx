@@ -16,8 +16,10 @@ import { AppActions } from '../../../types';
 
 import {
     SubBrandVehicle,
-    VehicleType
 } from '../../../types/admin/subBrandVehicle';
+import {
+    VehicleType,
+} from '../../../types/admin/vehicleType';
 import {
     fetchListSubBrandVehicleAction,
     fetchListVehicleTypeAction

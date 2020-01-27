@@ -12,6 +12,8 @@ import subBrandVehicleReducer from '../reducers/admin/subBrandVehicle';
 import transactionLinkPayReducer from '../reducers/admin/transaction/linkPay';
 import transactionApplicationReducer from '../reducers/admin/transaction/application';
 import accountLinkPayReducer from '../reducers/admin/account/linkPay';
+import servicePriceReducer from '../reducers/admin/servicePrice';
+import voucherPromoReducer from '../reducers/admin/voucherPromo';
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -24,7 +26,9 @@ const rootReducer = combineReducers({
     investor: investorReducer,
     transactionLinkPay: transactionLinkPayReducer,
     transactionApplication: transactionApplicationReducer,
-    accountLinkPay: accountLinkPayReducer
+    accountLinkPay: accountLinkPayReducer,
+    servicePrice: servicePriceReducer,
+    voucherPromo: voucherPromoReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

@@ -8,7 +8,9 @@ import { DriverActionTypes as AdminDriverActionTypes } from './admin/driver';
 import { InvestorActionTypes as AdminInvestorActionTypes } from './admin/investor'; 
 import { LinkPayActionTypes as AdminTransactionLinkPayActionTypes } from './admin/transaction/linkPay';
 import { ApplicationActionTypes as AdminTransactionApplicationActionTypes } from './admin/transaction/application';
-import { AccountLinkPayActionTypes as AdminAccountLinkPayActionTypes } from './admin/account/linkPay'
+import { AccountLinkPayActionTypes as AdminAccountLinkPayActionTypes } from './admin/account/linkPay';
+import { ServicePriceActionTypes as AdminServicePriceActionTypes } from './admin/servicePrice';
+import { VoucherPromoActionTypes as AdminVoucherPromoActionTypes } from './admin/voucherPromo';
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -22,3 +24,5 @@ export type AppActions =
     | AdminTransactionLinkPayActionTypes
     | AdminTransactionApplicationActionTypes
     | AdminAccountLinkPayActionTypes
+    | AdminServicePriceActionTypes
+    | AdminVoucherPromoActionTypes

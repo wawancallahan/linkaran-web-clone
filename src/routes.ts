@@ -31,6 +31,8 @@ import AdminTransactionLinkPay from './views/admin/transaction/linkPay/Index';
 import AdminTransactionApplication from './views/admin/transaction/application/Index';
 import AdminAccount from './views/admin/account/Index';
 import AdminAccountLinkPay from './views/admin/account/linkPay/Index';
+import AdminServicePrice from './views/admin/servicePrice/Index';
+import AdminVoucherPromo from './views/admin/voucherPromo/Index';
 
 const routes: any[] = [
     {
@@ -141,6 +143,20 @@ const routes: any[] = [
                 layout: "/admin"
             },
         ]
+    },
+    {
+        path: "/service-price",
+        name: "Harga Layanan",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminServicePrice,
+        layout: "/admin"
+    },
+    {
+        path: "/voucher-promo",
+        name: "Voucher",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminVoucherPromo,
+        layout: "/admin"
     }
 ];
 

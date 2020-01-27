@@ -23,7 +23,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
-             .max(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+    .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
              .required('Bidang isian nama wajib diiisi'),
     address: Yup.string()
              .required('Bidang isian alamat wajib diiisi'),

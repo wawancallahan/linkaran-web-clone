@@ -1,0 +1,18 @@
+.no-margin {
+    margin: 0 !important;
+}
+
+.img-table {
+    max-width: 192px;
+    max-height: 90px;
+}
+
+.img-table > img {
+    max-width: inherit;
+    max-height: inherit;
+}
+
+.img-star-feedback {
+    width: 1.5rem;
+    height: 1.5rem;
+}

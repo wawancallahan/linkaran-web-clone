@@ -25,7 +25,7 @@ import FormKendaraan from './FormKendaraan';
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
-                .max(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -36,7 +36,7 @@ const createSchema = Yup.object().shape({
                       .oneOf([0, 1], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
     no_ktp: Yup.string()
-                .max(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
+                .length(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()
@@ -44,11 +44,11 @@ const createSchema = Yup.object().shape({
     foto_profil_preview: Yup.string()
                         .required('Bidang upload foto profil wajib diisi'),
     // no_sim: Yup.string()
-    //             .max(255, 'Bidang isian no sim tidak boleh lebih dari 255 karakter')
+    //             .length(255, 'Bidang isian no sim tidak boleh lebih dari 255 karakter')
     //             .required('Bidang isian no sim wajib diisi'),
     // sim_file: File | null,
     alamat: Yup.string()
-                .max(255, 'Bidang isian alamat tidak boleh lebih dari 255 karakter')
+                .length(255, 'Bidang isian alamat tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian alamat wajib diisi'),
     negara: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan negara wajib diisi"),
@@ -81,22 +81,40 @@ const createSchema = Yup.object().shape({
         value: Yup.number().notOneOf([0], 'Bidang pilihan merek wajib diisi').required("Bidang pilihan merek wajib diisi")
     }),
     no_stnk: Yup.string()
-                .max(255, 'Bidang isian no stnk tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian no stnk tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
                 .required('Bidang isian no stnk wajib diisi'),
     no_polisi: Yup.string()
-                    .max(255, 'Bidang isian no polisi tidak boleh lebih dari 255 karakter')
+                    .test('len', 'Bidang isian no polisi tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
                     .required('Bidang isian no polisi wajib diisi'),
     no_rangka: Yup.string()
-                    .max(255, 'Bidang isian no rangka tidak boleh lebih dari 255 karakter')
+                    .test('len', 'Bidang isian no rangka tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
                     .required('Bidang isian no rangka wajib diisi'),
     jumlah_seat: Yup.number()
                 .min(1, 'Bidang isian jumal seat minimal 1')
                 .required('Bidang isian jumlah seat wajib diisi'),
     warna: Yup.string()
-                .max(255, 'Bidang isian warna tidak boleh lebih dari 255 karakter')
+                .length(255, 'Bidang isian warna tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian warna wajib diisi'),
     keterangan: Yup.string()
-                    .max(255, 'Bidang isian keterangan tidak boleh lebih dari 255 karakter')
+                    .length(255, 'Bidang isian keterangan tidak boleh lebih dari 255 karakter')
                     .required('Bidang isian keterangan wajib diisi') 
 });
 
