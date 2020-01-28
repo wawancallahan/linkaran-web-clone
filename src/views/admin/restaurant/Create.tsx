@@ -107,8 +107,7 @@ class Create extends Component<Props, State> {
         return (
             <>
                 <HeaderView />
-                <Container className="mt--7" fluid>
-                    
+                <Container className="mt--7" fluid>  
                     {showAlertError}
                     <FormRestaurant form={this.state.form} 
                                     setAlertMessage={this.setAlertMessage}

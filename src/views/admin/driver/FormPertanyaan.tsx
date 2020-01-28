@@ -19,6 +19,11 @@ type FormPertanyaanProps = {
 type Props = FormPertanyaanProps;
 
 class FormPertanyaan extends Component<Props> {
+
+    choiceOfActiveWorkHours = (choice: boolean, FormikProps: FormikProps<FormField>) => {
+        FormikProps.setFieldValue('choiceOfActiveWorkHoursOther', choice)
+    }
+
     render() {
 
         const { FormikProps } = this.props;
@@ -28,7 +33,7 @@ class FormPertanyaan extends Component<Props> {
                 <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-pertanyaan_1"
+                    htmlFor="input-wasOnceAnOnlineDriver"
                     >
                         Apakah saat ini sudah pernah menjadi driver pada aplikator lain?
                     </label>
@@ -39,37 +44,37 @@ class FormPertanyaan extends Component<Props> {
                             <input
                                 className="custom-control-input"
                                 defaultChecked
-                                id="pertanyaan_1_yes"
-                                name="pertanyaan_1"
+                                id="wasOnceAnOnlineDriver_yes"
+                                name="wasOnceAnOnlineDriver"
                                 type="radio"
                                 value="1"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_1_yes">
+                            <label className="custom-control-label" htmlFor="wasOnceAnOnlineDriver_yes">
                                 Sudah
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_1_no"
-                                name="pertanyaan_1"
+                                id="wasOnceAnOnlineDriver_no"
+                                name="wasOnceAnOnlineDriver"
                                 type="radio"
                                 value="0"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_1_no">
+                            <label className="custom-control-label" htmlFor="wasOnceAnOnlineDriver_no">
                                 Belum
                             </label>
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.pertanyaan_1 && FormikProps.touched.pertanyaan_1 ? FormikProps.errors.pertanyaan_1 : ''}
+                        {FormikProps.errors.wasOnceAnOnlineDriver && FormikProps.touched.wasOnceAnOnlineDriver ? FormikProps.errors.wasOnceAnOnlineDriver : ''}
                     </div>
                 </FormGroup>
 
                 <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-pertanyaan_1"
+                    htmlFor="input-isActivelyBecomingAnotherOnlineDriver"
                     >
                         Apakah saat ini masih aktif menjadi driver pada aplikator lain?
                     </label>
@@ -80,37 +85,37 @@ class FormPertanyaan extends Component<Props> {
                             <input
                                 className="custom-control-input"
                                 defaultChecked
-                                id="pertanyaan_2_yes"
-                                name="pertanyaan_2"
+                                id="isActivelyBecomingAnotherOnlineDriver_yes"
+                                name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
                                 value="1"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_2_yes">
+                            <label className="custom-control-label" htmlFor="isActivelyBecomingAnotherOnlineDriver_yes">
                                 Masih Aktif
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_2_no"
-                                name="pertanyaan_2"
+                                id="isActivelyBecomingAnotherOnlineDriver_no"
+                                name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
                                 value="0"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_2_no">
+                            <label className="custom-control-label" htmlFor="isActivelyBecomingAnotherOnlineDriver_no">
                                 Sudah Tidak Aktif
                             </label>
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.pertanyaan_2 && FormikProps.touched.pertanyaan_2 ? FormikProps.errors.pertanyaan_2 : ''}
+                        {FormikProps.errors.isActivelyBecomingAnotherOnlineDriver && FormikProps.touched.isActivelyBecomingAnotherOnlineDriver ? FormikProps.errors.isActivelyBecomingAnotherOnlineDriver : ''}
                     </div>
                 </FormGroup>
 
                  <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-pertanyaan_3"
+                    htmlFor="input-isJoiningTheDriverCommunity"
                     >
                         Apakah anda bergabung ke komunitas driver?
                     </label>
@@ -121,78 +126,37 @@ class FormPertanyaan extends Component<Props> {
                             <input
                                 className="custom-control-input"
                                 defaultChecked
-                                id="pertanyaan_3_yes"
-                                name="pertanyaan_3"
+                                id="isJoiningTheDriverCommunity_yes"
+                                name="isJoiningTheDriverCommunity"
                                 type="radio"
                                 value="1"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_3_yes">
+                            <label className="custom-control-label" htmlFor="isJoiningTheDriverCommunity_yes">
                                 Masih Aktif
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_3_no"
-                                name="pertanyaan_3"
+                                id="isJoiningTheDriverCommunity_no"
+                                name="isJoiningTheDriverCommunity"
                                 type="radio"
                                 value="0"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_3_no">
+                            <label className="custom-control-label" htmlFor="isJoiningTheDriverCommunity_no">
                                 Sudah Tidak Aktif
                             </label>
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.pertanyaan_3 && FormikProps.touched.pertanyaan_3 ? FormikProps.errors.pertanyaan_3 : ''}
+                        {FormikProps.errors.isJoiningTheDriverCommunity && FormikProps.touched.isJoiningTheDriverCommunity ? FormikProps.errors.isJoiningTheDriverCommunity : ''}
                     </div>
                 </FormGroup>
 
                 <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-pertanyaan_1"
-                    >
-                        Apakah saat ini sudah pernah menjadi driver pada aplikator lain?
-                    </label>
-                </FormGroup>
-                <FormGroup>
-                    <fieldset>
-                        <div className="custom-control custom-radio mb-3">
-                            <input
-                                className="custom-control-input"
-                                defaultChecked
-                                id="pertanyaan_1_yes"
-                                name="pertanyaan_1"
-                                type="radio"
-                                value="1"
-                            />
-                            <label className="custom-control-label" htmlFor="pertanyaan_1_yes">
-                                Sudah
-                            </label>
-                        </div>
-                        <div className="custom-control custom-radio mb-3">
-                            <input
-                                className="custom-control-input"
-                                id="pertanyaan_1_no"
-                                name="pertanyaan_1"
-                                type="radio"
-                                value="0"
-                            />
-                            <label className="custom-control-label" htmlFor="pertanyaan_1_no">
-                                Belum
-                            </label>
-                        </div>
-                    </fieldset>
-                    <div>
-                        {FormikProps.errors.pertanyaan_1 && FormikProps.touched.pertanyaan_1 ? FormikProps.errors.pertanyaan_1 : ''}
-                    </div>
-                </FormGroup>
-
-                <FormGroup>
-                    <label
-                    className="form-control-label"
-                    htmlFor="input-pertanyaan_4"
+                    htmlFor="input-isJoiningLinkaranAsmainJob"
                     >
                         Apakah bergabung ke Linkaran sebagai pekerjaan utama atau sebagai sampingan?
                     </label>
@@ -201,37 +165,37 @@ class FormPertanyaan extends Component<Props> {
                             <input
                                 className="custom-control-input"
                                 defaultChecked
-                                id="pertanyaan_4_yes"
-                                name="pertanyaan_4"
+                                id="isJoiningLinkaranAsmainJob_yes"
+                                name="isJoiningLinkaranAsmainJob"
                                 type="radio"
                                 value="1"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_4_yes">
+                            <label className="custom-control-label" htmlFor="isJoiningLinkaranAsmainJob_yes">
                                 Pekerjaan Utama
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_4_no"
-                                name="pertanyaan_4"
+                                id="isJoiningLinkaranAsmainJob_no"
+                                name="isJoiningLinkaranAsmainJob"
                                 type="radio"
                                 value="0"
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_4_no">
+                            <label className="custom-control-label" htmlFor="isJoiningLinkaranAsmainJob_no">
                                 Pekerjaan Sampingan
                             </label>
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.pertanyaan_4 && FormikProps.touched.pertanyaan_4 ? FormikProps.errors.pertanyaan_4 : ''}
+                        {FormikProps.errors.isJoiningLinkaranAsmainJob && FormikProps.touched.isJoiningLinkaranAsmainJob ? FormikProps.errors.isJoiningLinkaranAsmainJob : ''}
                     </div>
                 </FormGroup>
 
                 <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-pertanyaan_5"
+                    htmlFor="input-choiceOfActiveWorkHours"
                     >
                         Pilihlah jam kerja yang dikehendaki!
                     </label>
@@ -240,54 +204,72 @@ class FormPertanyaan extends Component<Props> {
                             <input
                                 className="custom-control-input"
                                 defaultChecked
-                                id="pertanyaan_5_1"
-                                name="pertanyaan_5"
+                                id="choiceOfActiveWorkHours_0"
+                                name="choiceOfActiveWorkHours"
                                 type="radio"
                                 value="0"
+                                onChange={() => this.choiceOfActiveWorkHours(false, FormikProps)}
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_5_1">
+                            <label className="custom-control-label" htmlFor="choiceOfActiveWorkHours_0">
                                 Sepanjang Waktu
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_5_2"
-                                name="pertanyaan_5"
+                                id="choiceOfActiveWorkHours_1"
+                                name="choiceOfActiveWorkHours"
                                 type="radio"
                                 value="1"
+                                onChange={() => this.choiceOfActiveWorkHours(false, FormikProps)}
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_5_2">
+                            <label className="custom-control-label" htmlFor="choiceOfActiveWorkHours_1">
                                 06:00 - 14:00
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_5_3"
-                                name="pertanyaan_5"
+                                id="choiceOfActiveWorkHours_2"
+                                name="choiceOfActiveWorkHours"
                                 type="radio"
                                 value="2"
+                                onChange={() => this.choiceOfActiveWorkHours(false, FormikProps)}
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_5_3">
+                            <label className="custom-control-label" htmlFor="choiceOfActiveWorkHours_2">
                                 14:00 - 22:00
                             </label>
                         </div>
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                id="pertanyaan_5_4"
-                                name="pertanyaan_5"
+                                id="choiceOfActiveWorkHours_3"
+                                name="choiceOfActiveWorkHours"
                                 type="radio"
                                 value="3"
+                                onChange={() => this.choiceOfActiveWorkHours(false, FormikProps)}
                             />
-                            <label className="custom-control-label" htmlFor="pertanyaan_5_4">
+                            <label className="custom-control-label" htmlFor="choiceOfActiveWorkHours_3">
                                 22:00 - 06:00
+                            </label>
+                        </div>
+
+                        <div className="custom-control custom-radio mb-3">
+                            <input
+                                className="custom-control-input"
+                                id="choiceOfActiveWorkHours_4"
+                                name="choiceOfActiveWorkHours"
+                                type="radio"
+                                value="4"
+                                onChange={() => this.choiceOfActiveWorkHours(true, FormikProps)}
+                            />
+                            <label className="custom-control-label" htmlFor="choiceOfActiveWorkHours_4">
+                                Waktu Lainnya
                             </label>
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.pertanyaan_5 && FormikProps.touched.pertanyaan_5 ? FormikProps.errors.pertanyaan_5 : ''}
+                        {FormikProps.errors.choiceOfActiveWorkHours && FormikProps.touched.choiceOfActiveWorkHours ? FormikProps.errors.choiceOfActiveWorkHours : ''}
                     </div>
                 </FormGroup>
                 
@@ -310,9 +292,10 @@ class FormPertanyaan extends Component<Props> {
                                 showTimeSelectOnly
                                 timeIntervals={60}
                                 timeCaption="Time"
-                                dateFormat="h:mm aa"
+                                dateFormat="HH:mm"
                                 className="form-control form-control-alternative"
-                                required
+                                disabled={ ! FormikProps.values.choiceOfActiveWorkHoursOther}
+                                required={FormikProps.values.choiceOfActiveWorkHoursOther}
                                 />
                         </Col>
                         <Col className="react-datepicker-w100">
@@ -324,9 +307,10 @@ class FormPertanyaan extends Component<Props> {
                                 showTimeSelectOnly
                                 timeIntervals={60}
                                 timeCaption="Time"
-                                dateFormat="h:mm aa"
+                                dateFormat="HH:mm"
                                 className="form-control form-control-alternative"
-                                required
+                                disabled={ ! FormikProps.values.choiceOfActiveWorkHoursOther}
+                                required={FormikProps.values.choiceOfActiveWorkHoursOther}
                                 />
                         </Col>
                     </Row>

@@ -12,8 +12,8 @@ export const parseDateTimeFormat = () => {
     
 }
 
-export const isClosedToString = (isClosed: boolean) => {
-    return isClosed ? "true" : "false"
+export const booleanToString = (data: boolean) => {
+    return data ? "true" : "false"
 }
 
 export const midnightDate = () => {

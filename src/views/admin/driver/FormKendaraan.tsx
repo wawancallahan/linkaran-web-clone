@@ -238,7 +238,7 @@ class FormKendaraan extends Component<Props> {
                     </div>
                 </FormGroup>
     
-                <FormGroup>
+                {/* <FormGroup>
                     <label
                     className="form-control-label"
                     htmlFor="input-jumlah_seat"
@@ -261,7 +261,7 @@ class FormKendaraan extends Component<Props> {
                     <div>
                         {FormikProps.errors.jumlah_seat && FormikProps.touched.jumlah_seat ? FormikProps.errors.jumlah_seat : ''}
                     </div>
-                </FormGroup>
+                </FormGroup> */}
     
                 <FormGroup>
                     <label

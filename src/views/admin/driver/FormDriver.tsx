@@ -522,6 +522,31 @@ class FormDriver extends Component<Props> {
                 <FormGroup>
                     <label
                     className="form-control-label"
+                    htmlFor="input-alamat_domisili"
+                    >
+                        Alamat Domisili
+                    </label>
+                    <Input
+                    className="form-control-alternative"
+                    id="input-alamat_domisili"
+                    placeholder="Alamat Domisili"
+                    type="textarea"
+                    name="alamat_domisili"
+                    maxLength={255}
+                    value={FormikProps.values.alamat_domisili}
+                    required
+                    onChange={FormikProps.handleChange}
+                    onBlur={FormikProps.handleBlur}
+                    invalid={ !!(FormikProps.touched.alamat_domisili && FormikProps.errors.alamat_domisili) }
+                    />
+                    <div>
+                        {FormikProps.errors.alamat_domisili && FormikProps.touched.alamat_domisili ? FormikProps.errors.alamat_domisili : ''}
+                    </div>
+                </FormGroup>
+
+                <FormGroup>
+                    <label
+                    className="form-control-label"
                     htmlFor="input-negara"
                     >
                         Negara

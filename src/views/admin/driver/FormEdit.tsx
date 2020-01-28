@@ -130,6 +130,38 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
+    getchoiceOfActiveWorkHours = (choiceOfActiveWorkHours: string, custom_interval_jam_kerja_start: Date | null, custom_interval_jam_kerja_end: Date | null) => {
+        let activeWorks = "00:00 - 00:00";
+        
+        switch (choiceOfActiveWorkHours) {
+            case '0':
+                activeWorks = "Sepanjang Waktu";
+            case '1':
+                activeWorks = "06:00 - 14:00";
+                break;
+            case '2':
+                activeWorks = "14:00 - 22:00"
+                break;
+            case '3':
+                activeWorks = "22:00 - 06:00"
+                break;
+            case '4':
+                if (custom_interval_jam_kerja_start) {
+                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()} - `
+                } else {
+                    activeWorks += "00:00 - "
+                }
+
+                if (custom_interval_jam_kerja_end) {
+                    activeWorks += `${custom_interval_jam_kerja_end.getHours()}:${custom_interval_jam_kerja_end.getMinutes()}`
+                } else {
+                    activeWorks += "00:00"
+                }
+                break; 
+        }
+
+        return activeWorks;
+    }
 
     render() {
         return (
@@ -144,6 +176,14 @@ class Form extends Component<Props> {
                     if (values.tanggal_lahir) {
                         tanggal_lahir = `${values.tanggal_lahir.getFullYear()}-${values.tanggal_lahir.getMonth() + 1}-${values.tanggal_lahir.getDate()}`;
                     }
+
+                    const wasOnceAnOnlineDriver = values.wasOnceAnOnlineDriver == '1' ? true : false;
+                    const isActivelyBecomingAnotherOnlineDriver = values.isActivelyBecomingAnotherOnlineDriver == '1' ? true : false;
+                    const isJoiningTheDriverCommunity = values.isJoiningTheDriverCommunity == '1' ? true : false;
+                    const isJoiningLinkaranAsmainJob = values.isJoiningLinkaranAsmainJob == '1' ? true : false;
+
+                    let choiceOfActiveWorkHours = this.getchoiceOfActiveWorkHours(values.choiceOfActiveWorkHours, values.custom_interval_jam_kerja_start, values.custom_interval_jam_kerja_end);
+
 
                     const driver: DriverEdit = {
                         alamat: values.alamat,
@@ -184,7 +224,12 @@ class Form extends Component<Props> {
                         tipe_kendaraan: {
                             id: values.tipe_kendaraan.value
                         },
-                        warna: values.warna
+                        warna: values.warna,
+                        wasOnceAnOnlineDriver: wasOnceAnOnlineDriver,
+                        isActivelyBecomingAnotherOnlineDriver: isActivelyBecomingAnotherOnlineDriver,
+                        isJoiningTheDriverCommunity: isJoiningTheDriverCommunity,
+                        isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
+                        choiceOfActiveWorkHours: choiceOfActiveWorkHours,
                     }
 
                     this.props.editDriverAction(driver, this.props.id)

@@ -60,11 +60,12 @@ export type FormField = {
     jumlah_seat: number | null,
     warna: string,
     keterangan: string,
-    pertanyaan_1: string,
-    pertanyaan_2: string,
-    pertanyaan_3: string,
-    pertanyaan_4: string,
-    pertanyaan_5: string,
+    wasOnceAnOnlineDriver: string,
+    isActivelyBecomingAnotherOnlineDriver: string,
+    isJoiningTheDriverCommunity: string,
+    isJoiningLinkaranAsmainJob: string,
+    choiceOfActiveWorkHours: string,
+    choiceOfActiveWorkHoursOther: boolean,
     custom_interval_jam_kerja_start: Date | null,
     custom_interval_jam_kerja_end: Date | null
 }
@@ -108,7 +109,12 @@ interface DriverField {
     no_rangka: string,
     jumlah_seat: number,
     warna: string,
-    keterangan: string
+    keterangan: string,
+    wasOnceAnOnlineDriver: boolean,
+    isActivelyBecomingAnotherOnlineDriver: boolean,
+    isJoiningTheDriverCommunity: boolean,
+    isJoiningLinkaranAsmainJob: boolean,
+    choiceOfActiveWorkHours: string,
 }
 
 interface DriverList {
@@ -160,7 +166,12 @@ interface DriverList {
                 }
             }
         }
-    }
+    },
+    wasOnceAnOnlineDriver: boolean,
+    isActivelyBecomingAnotherOnlineDriver: boolean,
+    isJoiningTheDriverCommunity: boolean,
+    isJoiningLinkaranAsmainJob: boolean,
+    choiceOfActiveWorkHours: string,
 }
 
 interface DriverList2 {

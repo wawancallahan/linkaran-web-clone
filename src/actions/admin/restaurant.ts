@@ -25,7 +25,7 @@ import Axios, { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
-import { isClosedToString } from '../../helpers/parseData';
+import { booleanToString } from '../../helpers/parseData';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
@@ -167,10 +167,14 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
             data.set(`operatingTime.${index}.openTime`, value.openTime);
             data.set(`operatingTime.${index}.closeTime`, value.closeTime);
             data.set(`operatingTime.${index}.day`, value.day.toString());
-            data.set(`operatingTime.${index}.isClosed`, isClosedToString(value.isClosed));
+            data.set(`operatingTime.${index}.isClosed`, booleanToString(value.isClosed));
         });
 
-        return await axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data)
+        return await axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
                 

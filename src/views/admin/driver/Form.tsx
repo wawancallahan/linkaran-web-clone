@@ -52,7 +52,13 @@ const createSchema = Yup.object().shape({
                     })
                     .required('Bidang isian tempat lahir wajib diisi'),
     no_ktp: Yup.string()
-                .length(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()
@@ -124,14 +130,26 @@ const createSchema = Yup.object().shape({
                 return true;
             })
                     .required('Bidang isian no rangka wajib diisi'),
-    jumlah_seat: Yup.number()
-                .min(1, 'Bidang isian jumal seat minimal 1')
-                .required('Bidang isian jumlah seat wajib diisi'),
+    // jumlah_seat: Yup.number()
+    //             .min(1, 'Bidang isian jumal seat minimal 1')
+    //             .required('Bidang isian jumlah seat wajib diisi'),
     warna: Yup.string()
-                .length(255, 'Bidang isian warna tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian warna tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian warna wajib diisi'),
     keterangan: Yup.string()
-                    .length(255, 'Bidang isian keterangan tidak boleh lebih dari 255 karakter')
+                    .test('len', 'Bidang isian keterangan tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                        if (val) {
+                            return val.length <= 255;
+                        }
+
+                        return true;
+                    })
                     .required('Bidang isian keterangan wajib diisi') 
 });
 
@@ -146,6 +164,38 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
+    getchoiceOfActiveWorkHours = (choiceOfActiveWorkHours: string, custom_interval_jam_kerja_start: Date | null, custom_interval_jam_kerja_end: Date | null) => {
+        let activeWorks = "00:00 - 00:00";
+        
+        switch (choiceOfActiveWorkHours) {
+            case '0':
+                activeWorks = "00:00 - 00:00";
+            case '1':
+                activeWorks = "06:00 - 14:00";
+                break;
+            case '2':
+                activeWorks = "14:00 - 22:00"
+                break;
+            case '3':
+                activeWorks = "22:00 - 06:00"
+                break;
+            case '4':
+                if (custom_interval_jam_kerja_start) {
+                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()} - `
+                } else {
+                    activeWorks += "00:00 - "
+                }
+
+                if (custom_interval_jam_kerja_end) {
+                    activeWorks += `${custom_interval_jam_kerja_end.getHours()}:${custom_interval_jam_kerja_end.getMinutes()}`
+                } else {
+                    activeWorks += "00:00"
+                }
+                break; 
+        }
+
+        return activeWorks;
+    }
 
     render() {
         return (
@@ -160,6 +210,13 @@ class Form extends Component<Props> {
                     if (values.tanggal_lahir) {
                         tanggal_lahir = `${values.tanggal_lahir.getFullYear()}-${values.tanggal_lahir.getMonth() + 1}-${values.tanggal_lahir.getDate()}`;
                     }
+
+                    const wasOnceAnOnlineDriver = values.wasOnceAnOnlineDriver == '1' ? true : false;
+                    const isActivelyBecomingAnotherOnlineDriver = values.isActivelyBecomingAnotherOnlineDriver == '1' ? true : false;
+                    const isJoiningTheDriverCommunity = values.isJoiningTheDriverCommunity == '1' ? true : false;
+                    const isJoiningLinkaranAsmainJob = values.isJoiningLinkaranAsmainJob == '1' ? true : false;
+
+                    let choiceOfActiveWorkHours = this.getchoiceOfActiveWorkHours(values.choiceOfActiveWorkHours, values.custom_interval_jam_kerja_start, values.custom_interval_jam_kerja_end);
 
                     const driver: DriverCreate = {
                         alamat: values.alamat,
@@ -200,7 +257,12 @@ class Form extends Component<Props> {
                         tipe_kendaraan: {
                             id: values.tipe_kendaraan.value
                         },
-                        warna: values.warna
+                        warna: values.warna,
+                        wasOnceAnOnlineDriver: wasOnceAnOnlineDriver,
+                        isActivelyBecomingAnotherOnlineDriver: isActivelyBecomingAnotherOnlineDriver,
+                        isJoiningTheDriverCommunity: isJoiningTheDriverCommunity,
+                        isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
+                        choiceOfActiveWorkHours: choiceOfActiveWorkHours,
                     }
 
                     this.props.createDriverAction(driver)

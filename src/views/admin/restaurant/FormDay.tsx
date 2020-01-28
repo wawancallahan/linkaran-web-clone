@@ -39,6 +39,10 @@ class FormDay extends Component<Props> {
         }
     }
 
+    handleDateChangeRaw = (e: React.FormEvent<HTMLInputElement>) => {
+        e.preventDefault();
+    }
+
     render () {
 
         const { id, name, FormikProps, FormikPropsValuesDateStart, FormikPropsValuesDateEnd, FormikPropsValuesIsClosed, FormikSetValuesIsClosed, FormikSetValuesDateStart, FormikSetValuesDateEnd } = this.props
@@ -65,10 +69,11 @@ class FormDay extends Component<Props> {
                                 showTimeSelectOnly
                                 timeIntervals={60}
                                 timeCaption="Time"
-                                dateFormat="HH:mm "
+                                dateFormat="HH:mm"
                                 className="form-control form-control-alternative"
                                 placeholderText="Waktu Buka"
                                 disabled={FormikPropsValuesIsClosed}
+                                onChangeRaw={this.handleDateChangeRaw}
                                 required
                             />
                         </div>
@@ -86,6 +91,7 @@ class FormDay extends Component<Props> {
                                 className="form-control form-control-alternative"
                                 placeholderText="Waktu Tutup"
                                 disabled={FormikPropsValuesIsClosed}
+                                onChangeRaw={this.handleDateChangeRaw}
                                 required
                             />
                         </div>
