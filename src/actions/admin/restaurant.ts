@@ -18,12 +18,14 @@ import {
     AlertRestaurantShowActionType,
     ALERT_RESTAURANT_SHOW,
     RestaurantEditResult,
-    RestaurantCreateResult
+    RestaurantCreateResult,
+    OperatingTime
 } from '../../types/admin/restaurant';
-import { AxiosResponse, AxiosError } from 'axios';
+import Axios, { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
+import { isClosedToString } from '../../helpers/parseData';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
@@ -62,6 +64,7 @@ export const setAlertRestaurantShowAction = (message: string, color: string): Al
 
 export const fetchRestaurantAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
+
         axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
@@ -146,9 +149,9 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 }
 
 export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        const data = new FormData();
+        const data = new FormData;
 
         if (restaurant.photo) {
             data.append('photo', restaurant.photo);
@@ -159,10 +162,15 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
         data.set('point.lat', restaurant.point.lat)
         data.set('point.lng', restaurant.point.lng)
         data.set('rating', restaurant.rating.toString())
-        data.set('openTime', restaurant.openTime)
-        data.set('closeTime', restaurant.closeTime)
 
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data)
+        restaurant.operatingTime.forEach(async (value: OperatingTime, index: number) => {
+            data.set(`operatingTime.${index}.openTime`, value.openTime);
+            data.set(`operatingTime.${index}.closeTime`, value.closeTime);
+            data.set(`operatingTime.${index}.day`, value.day.toString());
+            data.set(`operatingTime.${index}.isClosed`, isClosedToString(value.isClosed));
+        });
+
+        return await axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantCreateResult> = response.data;
                 
@@ -172,6 +180,7 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
                 });
             })
             .catch( (error: AxiosError) => {
+                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {

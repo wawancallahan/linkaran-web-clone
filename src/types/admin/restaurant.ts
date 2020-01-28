@@ -18,8 +18,34 @@ export type FormField = {
     rating: number,
     photo: File | null,
     photo_preview: string,
-    openTime?: Date,
-    closeTime?: Date
+    monday_start: Date | null,
+    monday_end: Date | null,
+    monday_isClosed: boolean,
+    tuesday_start: Date | null,
+    tuesday_end: Date | null,
+    tuesday_isClosed: boolean,
+    wednesday_start: Date | null,
+    wednesday_end: Date | null,
+    wednesday_isClosed: boolean,
+    thursday_start: Date | null,
+    thursday_end: Date | null,
+    thursday_isClosed: boolean,
+    friday_start: Date | null,
+    friday_end: Date | null,
+    friday_isClosed: boolean,
+    saturday_start: Date | null,
+    saturday_end: Date | null,
+    saturday_isClosed: boolean,
+    sunday_start: Date | null,
+    sunday_end: Date | null,
+    sunday_isClosed: boolean,
+}
+
+export interface OperatingTime {
+    openTime: string,
+    closeTime: string,
+    day: number,
+    isClosed: boolean
 }
 
 interface RestaurantField {
@@ -30,10 +56,9 @@ interface RestaurantField {
         lng: string
     },
     rating: number,
-    openTime: string,
-    closeTime: string,
     photo: File | null,
     photo_preview: string,
+    operatingTime: OperatingTime[]
 }
 interface RestaurantList {
     name: string,
@@ -43,9 +68,7 @@ interface RestaurantList {
         lng: string
     },
     rating: number,
-    image: string | null,
-    openTime: string,
-    closeTime: string
+    image: string | null
 }
 interface RestaurantResult {
     id: number,
@@ -54,13 +77,37 @@ interface RestaurantResult {
     deletedAt: string | null,
 }
 
+interface RestaurantModel {
+    name: string,
+    address: string,
+    rating: number,
+    image: string,
+    point: {
+        lat: string,
+        lng: string
+    },
+}
+
+interface OperatingTimeModel {
+    openTime: string,
+    closeTime: string,
+    day: number,
+    isClosed: string
+}
+
 export type Restaurant = RestaurantResult & RestaurantList;
 
 export type RestaurantCreate = RestaurantField;
 
 export type RestaurantEdit = RestaurantField;
 
-export type RestaurantCreateResult = RestaurantResult;
+type operatingTimeResult = RestaurantResult & OperatingTimeModel & {
+    restaurant: RestaurantModel & RestaurantResult
+}
+
+export type RestaurantCreateResult = RestaurantResult & RestaurantModel & {
+    operatingTime: operatingTimeResult[]
+}
 
 export type RestaurantEditResult = RestaurantResult;
 

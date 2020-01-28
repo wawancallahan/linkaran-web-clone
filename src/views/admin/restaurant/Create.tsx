@@ -25,6 +25,7 @@ import { AppActions } from '../../../types';
 import { Restaurant, FormField } from '../../../types/admin/restaurant';
 
 import FormRestaurant from './Form';
+import { midnightDate } from '../../../helpers/parseData';
 
 type CreateProps = RouteComponentProps & {
 
@@ -51,8 +52,27 @@ class Create extends Component<Props, State> {
             rating: 0,
             photo: null,
             photo_preview: '',
-            openTime: undefined,
-            closeTime: undefined
+            monday_start: midnightDate(),
+            monday_end: midnightDate(),
+            monday_isClosed: false,
+            tuesday_start: midnightDate(),
+            tuesday_end: midnightDate(),
+            tuesday_isClosed: false,
+            wednesday_start: midnightDate(),
+            wednesday_end: midnightDate(),
+            wednesday_isClosed: false,
+            thursday_start: midnightDate(),
+            thursday_end: midnightDate(),
+            thursday_isClosed: false,
+            friday_start: midnightDate(),
+            friday_end: midnightDate(),
+            friday_isClosed: false,
+            saturday_start: midnightDate(),
+            saturday_end: midnightDate(),
+            saturday_isClosed: false,
+            sunday_start: midnightDate(),
+            sunday_end: midnightDate(),
+            sunday_isClosed: false,
         },
         alert_visible: false,
         alert_message: ''
@@ -88,23 +108,13 @@ class Create extends Component<Props, State> {
             <>
                 <HeaderView />
                 <Container className="mt--7" fluid>
-                    <Card className="bg-secondary shadow">
-                        <CardHeader className="bg-white border-0">
-                            <Row className="align-items-center">
-                                <Col>
-                                    <h3 className="mb-0">Tambah Restaurant</h3>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody>
-                            {showAlertError}
-                            <FormRestaurant form={this.state.form} 
-                                          setAlertMessage={this.setAlertMessage}
-                                          setAlertOpen={this.setAlertOpen}
-                                          redirectOnSuccess={this.redirectOnSuccess}
-                                            />
-                        </CardBody>
-                    </Card>
+                    
+                    {showAlertError}
+                    <FormRestaurant form={this.state.form} 
+                                    setAlertMessage={this.setAlertMessage}
+                                    setAlertOpen={this.setAlertOpen}
+                                    redirectOnSuccess={this.redirectOnSuccess}
+                                    />
                 </Container>
             </>
         );

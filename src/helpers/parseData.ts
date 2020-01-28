@@ -11,3 +11,14 @@ export const typeOfTransaction = (is_deposit: number, is_withdraw: number, is_tr
 export const parseDateTimeFormat = () => {
     
 }
+
+export const isClosedToString = (isClosed: boolean) => {
+    return isClosed ? "true" : "false"
+}
+
+export const midnightDate = () => {
+    var d = new Date();
+    d.setHours(0,0,0,0);
+
+    return d
+}

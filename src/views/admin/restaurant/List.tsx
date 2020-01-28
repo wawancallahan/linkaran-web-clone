@@ -62,8 +62,6 @@ const TableItem = (props: {
             <td>{props.item.name}</td>
             <td>{props.item.point ? (props.item.point.lat + "," + props.item.point.lng) : ''}</td>
             <td>{props.item.rating}</td>
-            <td>{props.item.openTime}</td>
-            <td>{props.item.closeTime}</td>
             <td>{props.item.address}</td>
             <td>
                 <Link to={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
@@ -175,8 +173,6 @@ class List extends Component<Props, State> {
                                             <th>Nama</th>
                                             <th>Point</th>
                                             <th>Rating</th>
-                                            <th>Jam Buka</th>
-                                            <th>Jam Tutup</th>
                                             <th>Alamat</th>
                                             <th>Option</th>
                                         </tr>

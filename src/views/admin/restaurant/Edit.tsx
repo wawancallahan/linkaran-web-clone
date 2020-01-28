@@ -46,7 +46,7 @@ type State = {
     alert_message: string
 }
 
-class Create extends Component<Props, State> {
+class Edit extends Component<Props, State> {
 
     state = {
         form: {
@@ -59,8 +59,27 @@ class Create extends Component<Props, State> {
             rating: 0,
             photo: null,
             photo_preview: '',
-            openTime: undefined,
-            closeTime: undefined
+            monday_start: null,
+            monday_end: null,
+            monday_isClosed: false,
+            tuesday_start: null,
+            tuesday_end: null,
+            tuesday_isClosed: false,
+            wednesday_start: null,
+            wednesday_end: null,
+            wednesday_isClosed: false,
+            thursday_start: null,
+            thursday_end: null,
+            thursday_isClosed: false,
+            friday_start: null,
+            friday_end: null,
+            friday_isClosed: false,
+            saturday_start: null,
+            saturday_end: null,
+            saturday_isClosed: false,
+            sunday_start: null,
+            sunday_end: null,
+            sunday_isClosed: false,
         },
         isLoaded: false,
         loadedMessage: '',
@@ -77,30 +96,30 @@ class Create extends Component<Props, State> {
                         ...this.state.form
                     }
 
-                    const data: Restaurant =response.response!.result;
+                    // const data: Restaurant =response.response!.result;
                     
-                    const [openTimeHours, openTimeMinutes, openTimeSecond] = data.openTime.split(":")
+                    // const [openTimeHours, openTimeMinutes, openTimeSecond] = data.openTime.split(":")
 
-                    const openTime = new Date();
-                    openTime.setHours(Number.parseInt(openTimeHours))
-                    openTime.setMinutes(Number.parseInt(openTimeMinutes))
+                    // const openTime = new Date();
+                    // openTime.setHours(Number.parseInt(openTimeHours))
+                    // openTime.setMinutes(Number.parseInt(openTimeMinutes))
 
-                    const [closeTimeHours, closeTimeMinutes, closeTimeSecond] = data.closeTime.split(":")
+                    // const [closeTimeHours, closeTimeMinutes, closeTimeSecond] = data.closeTime.split(":")
 
-                    const closeTime = new Date();
-                    closeTime.setHours(Number.parseInt(closeTimeHours))
-                    closeTime.setMinutes(Number.parseInt(closeTimeMinutes))
+                    // const closeTime = new Date();
+                    // closeTime.setHours(Number.parseInt(closeTimeHours))
+                    // closeTime.setMinutes(Number.parseInt(closeTimeMinutes))
 
-                    form.name = data.name;
-                    form.address = data.address ? data.address : '';
-                    form.point = {
-                        lat: data.point.lat,
-                        lng: data.point.lng
-                    }
-                    form.rating = data.rating;
-                    form.openTime = openTime;
-                    form.closeTime = closeTime;
-                    form.photo_preview = data.image ? data.image : '';
+                    // form.name = data.name;
+                    // form.address = data.address ? data.address : '';
+                    // form.point = {
+                    //     lat: data.point.lat,
+                    //     lng: data.point.lng
+                    // }
+                    // form.rating = data.rating;
+                    // form.openTime = openTime;
+                    // form.closeTime = closeTime;
+                    // form.photo_preview = data.image ? data.image : '';
 
                     this.setState({
                         form: form,
@@ -195,6 +214,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Edit Restaurant")
+        withTitle(Edit, "Edit Restaurant")
     )
 );
