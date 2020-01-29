@@ -12,13 +12,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Restaurant, FormField, RestaurantCreate, RestaurantEdit, RestaurantEditResult } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantEdit, RestaurantEditResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
 import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
-import Dropzone from '../../../components/Dropzone/Dropzone';
-import DatePicker from 'react-datepicker';
 
-import "react-datepicker/dist/react-datepicker.css";
+import FormInformation from './FormInformation';
+import FormOperational from './FormOperational';
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -40,12 +39,9 @@ const createSchema = Yup.object().shape({
     }),
     rating: Yup.number()
         .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
-        .max(100, 'Bidang isian rating tidak boleh lebih dari 100')
         .required('Bidang isian rating wajib diiisi'),
     photo_preview: Yup.string()
-        .required('Bidang upload foto wajib diisi'),
-    openTime: Yup.mixed().required('Bidang isian waktu buka wajib diisi'),
-    closeTime: Yup.mixed().required('Bidang isian waktu tutup wajib diisi'),
+        .required('Bidang upload foto wajib diisi')
 });
 
 type FormProps = {
@@ -60,18 +56,51 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
-    onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
-        const file: {
-            lastModified: number,
-            name: string,
-            preview: string,
-            size: number,
-            type: string
-        } = files.length > 0 ? files[0] : null;
-    
-        if (file) {
-            FormikProps.setFieldValue(setPreview, file.preview, true);
-            FormikProps.setFieldValue(setValue, file);
+    dayNotClosed = (day: number, isClosed: boolean, dateStart: Date | null, dateEnd: Date | null) : OperationTimeInterface => {
+        
+        let openTime = "00:00"
+        let closeTime = "00:00"
+
+        if ( ! isClosed) {
+
+            if (dateStart) {
+                let hours = dateStart.getHours().toString();
+
+                if (Number.parseInt(hours) < 10) {
+                    hours = `0${hours}`
+                }
+
+                let minutes = dateStart.getMinutes().toString();
+            
+                if (Number.parseInt(minutes) < 10) {
+                    minutes = `0${minutes}`
+                }
+
+                openTime = `${hours}:${minutes}`
+            }
+
+            if (dateEnd) {
+                let hours = dateEnd.getHours().toString();
+                
+                if (Number.parseInt(hours) < 10) {
+                    hours = `0${hours}`
+                }
+
+                let minutes = dateEnd.getMinutes().toString();
+            
+                if (Number.parseInt(minutes) < 10) {
+                    minutes = `0${minutes}`
+                }
+
+                closeTime = `${hours}:${minutes}`
+            }
+        }
+
+        return {
+            isClosed: isClosed,
+            openTime: openTime,
+            closeTime: closeTime,
+            day: day
         }
     }
 
@@ -83,47 +112,79 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    let openTime = '';
-                    let closeTime = '';
-                    // const restaurant: RestaurantEdit = {
-                    //     name: values.name,
-                    //     address: values.address,
-                    //     point: {
-                    //         lat: values.point.lat,
-                    //         lng: values.point.lng
-                    //     },
-                    //     rating: values.rating,
-                    //     photo_preview: values.photo_preview,
-                    //     photo: values.photo,
-                    //     openTime: openTime,
-                    //     closeTime: closeTime
-                    // }
+                    const operatingTime: OperationTimeInterface[] = [];
 
-                    // this.props.editRestaurantAction(restaurant, this.props.id)
-                    //     .then( (response: ApiResponse<RestaurantEditResult>) => {
-                    //         const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
-                    //         this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
-                    //         this.props.redirectOnSuccess();
-                    //     })
-                    //     .catch( (error: ApiResponse<RestaurantEditResult>) => {
-                    //         this.props.setAlertOpen(true);
+                    const mondayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        1, values.monday_isClosed, values.monday_start, values.monday_end
+                    )
 
-                    //         console.log(error)
+                    const tuesdayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        2, values.tuesday_isClosed, values.tuesday_start, values.tuesday_end
+                    )
 
-                    //         this.props.setAlertMessage(error.error!.metaData.message);
-                    //     });
+                    const wednesdayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        3, values.wednesday_isClosed, values.wednesday_start, values.wednesday_end
+                    )
+
+                    const thursdayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        4, values.thursday_isClosed, values.thursday_start, values.thursday_end
+                    )
+
+                    const fridayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        5, values.friday_isClosed, values.friday_start, values.friday_end
+                    )
+
+                    const saturdayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        6, values.saturday_isClosed, values.saturday_start, values.saturday_end
+                    )
+
+                    const sundayOperationTime: OperationTimeInterface = this.dayNotClosed(
+                        7, values.sunday_isClosed, values.sunday_start, values.sunday_end
+                    )
+
+                    operatingTime.push(mondayOperationTime)
+                    operatingTime.push(tuesdayOperationTime)
+                    operatingTime.push(wednesdayOperationTime)
+                    operatingTime.push(thursdayOperationTime)
+                    operatingTime.push(fridayOperationTime)
+                    operatingTime.push(saturdayOperationTime)
+                    operatingTime.push(sundayOperationTime)
+
+                    const restaurant: RestaurantEdit = {
+                        name: values.name,
+                        address: values.address,
+                        point: {
+                            lat: values.point.lat,
+                            lng: values.point.lng
+                        },
+                        rating: values.rating,
+                        photo_preview: values.photo_preview,
+                        photo: values.photo,
+                        operatingTime: operatingTime
+                    }
+
+                    this.props.editRestaurantAction(restaurant, this.props.id)
+                        .then( (response: ApiResponse<RestaurantEditResult>) => {
+                            const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
+                            this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
+                            this.props.redirectOnSuccess();
+
+                            action.setSubmitting(false)
+                        })
+                        .catch( (error: ApiResponse<RestaurantEditResult>) => {
+                            this.props.setAlertOpen(true);
+                            this.props.setAlertMessage(error.error!.metaData.message);
+
+                            action.setSubmitting(false)
+                        });
                 }}
                 validationSchema={createSchema}
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
+                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST" type="multipart/form-data">
+                            <FormInformation FormikProps={FormikProps} />
+                            <FormOperational FormikProps={FormikProps} />
                         </FormReactStrap>
                     );
                 })}

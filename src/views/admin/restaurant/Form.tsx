@@ -43,12 +43,9 @@ const createSchema = Yup.object().shape({
     }),
     rating: Yup.number()
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
-             .max(100, 'Bidang isian rating tidak boleh lebih dari 100')
              .required('Bidang isian rating wajib diiisi'),
     photo_preview: Yup.string()
-             .required('Bidang upload foto wajib diisi'),
-    monday_start: Yup.date()
-                    .required('Bidang isian waktu buka hari senin wajib diisi') 
+             .required('Bidang upload foto wajib diisi')
 });
 
 type FormProps = {

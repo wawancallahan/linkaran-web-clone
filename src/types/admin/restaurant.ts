@@ -88,7 +88,7 @@ interface RestaurantModel {
     },
 }
 
-interface OperatingTimeModel {
+export interface OperatingTimeModel {
     openTime: string,
     closeTime: string,
     day: number,
@@ -109,7 +109,15 @@ export type RestaurantCreateResult = RestaurantResult & RestaurantModel & {
     operatingTime: operatingTimeResult[]
 }
 
-export type RestaurantEditResult = RestaurantResult;
+export type RestaurantEditResult = RestaurantResult & RestaurantModel & {
+    operatingTime: operatingTimeResult[]
+};
+
+type OperatingTimeDetail = OperatingTime & RestaurantResult;
+
+export type RestaurantDetailResult = RestaurantResult & RestaurantModel & {
+    operatingTime: OperatingTimeDetail[]
+}
 
 export interface FetchRestaurantActionType {
     type: typeof FETCH_RESTAURANT

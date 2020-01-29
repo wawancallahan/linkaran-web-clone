@@ -7,18 +7,22 @@ interface DropzoneProps {
     multiple: boolean
 }
 
-type Props = DropzoneProps;
+type Props = DropzoneProps & {
+    previewUrl?: string
+};
 
 type State = {
     hightlight: boolean,
-    files: any[]
+    files: any[],
+    firstRender: boolean
 }
 
 class Dropzone extends Component<Props, State> {
 
     state = {
         hightlight: false,
-        files: []
+        files: [],
+        firstRender: true
     }
 
     private fileInputRef = createRef<HTMLInputElement>();
@@ -40,7 +44,8 @@ class Dropzone extends Component<Props, State> {
 
         this.props.onFilesAdded(array);
         this.setState({
-            files: array
+            files: array,
+            firstRender: false
         });
     }
   }
@@ -95,6 +100,47 @@ class Dropzone extends Component<Props, State> {
   }
 
   render() {
+
+    let previewImage = null;
+
+    if (this.state.files.length > 0) {
+        previewImage = (
+            <>
+                <h3>Previews</h3>
+                {this.state.files.map((file: {
+                    lastModified: number,
+                    name: string,
+                    preview: string,
+                    size: number,
+                    type: string
+                }) => (
+                    <div className="thumb" key={file.name}>
+                        <div className="thumbInner">
+                            <img
+                                src={file.preview}
+                                className="imgPreview"
+                            />
+                        </div>
+                    </div>
+                ))}
+            </>
+        );
+    } else if (this.props.previewUrl && this.state.firstRender) {
+        previewImage = (
+            <>
+                <h3>Previews</h3>
+                <div className="thumb">
+                    <div className="thumbInner">
+                        <img
+                            src={this.props.previewUrl}
+                            className="imgPreview"
+                        />
+                    </div>
+                </div>
+            </>
+        );
+    }
+
     return (
         <>
             <div
@@ -122,27 +168,7 @@ class Dropzone extends Component<Props, State> {
             </div>
 
             <div className="thumbsContainer">
-                {this.state.files.length > 0 &&
-                    <>
-                        <h3>Previews</h3>
-                        {this.state.files.map((file: {
-                            lastModified: number,
-                            name: string,
-                            preview: string,
-                            size: number,
-                            type: string
-                        }) => (
-                            <div className="thumb" key={file.name}>
-                                <div className="thumbInner">
-                                    <img
-                                        src={file.preview}
-                                        className="imgPreview"
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </>
-                }
+               {previewImage}
             </div>
       </>
     );

@@ -207,7 +207,7 @@ class FormInformation extends Component<Props> {
                             </label>
                             <Dropzone onFilesAdded={(files: any[]) => {
                                 this.onFilesAdded(files, FormikProps, 'photo_preview', 'photo');
-                            }} disabled={false} multiple={false} />
+                            }} disabled={false} multiple={false} previewUrl={FormikProps.values.photo_preview} />
                             
                             <div>
                                 {FormikProps.errors.photo_preview && FormikProps.touched.photo_preview ? FormikProps.errors.photo_preview : ''}

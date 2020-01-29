@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Restaurant, FormField } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantDetailResult, OperatingTime as OperatingTimeInterface, OperatingTimeModel } from '../../../types/admin/restaurant';
 import {
     findRestaurantAction
 } from '../../../actions/admin/restaurant';
@@ -87,39 +87,92 @@ class Edit extends Component<Props, State> {
         alert_message: ''
     }
 
+    findOperatingTime = (operatingTime: OperatingTimeInterface[], day: number) => {
+        const operatingTimeSelected : OperatingTimeInterface | undefined = operatingTime.find((item: OperatingTimeInterface) => item.day === day)
+
+        return operatingTimeSelected
+    }
+
+    getTimeParse = (time: string) => {
+        const [timeParseHours, timeParseMinutes, timeParseSecond] = time.split(":")
+
+        const timeParse = new Date();
+        timeParse.setHours(Number.parseInt(timeParseHours))
+        timeParse.setMinutes(Number.parseInt(timeParseMinutes))
+
+        return timeParse;
+    }
+
     componentDidMount() {
         const id = +this.props.match.params.id;
 
         this.props.findRestaurantAction(id)
-                .then((response: ApiResponse<Restaurant>) => {
+                .then((response: ApiResponse<RestaurantDetailResult>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    // const data: Restaurant =response.response!.result;
-                    
-                    // const [openTimeHours, openTimeMinutes, openTimeSecond] = data.openTime.split(":")
+                    const data: RestaurantDetailResult = response.response!.result;
 
-                    // const openTime = new Date();
-                    // openTime.setHours(Number.parseInt(openTimeHours))
-                    // openTime.setMinutes(Number.parseInt(openTimeMinutes))
+                    form.name = data.name;
+                    form.address = data.address ? data.address : '';
+                    form.point = {
+                        lat: data.point.lat,
+                        lng: data.point.lng
+                    }
+                    form.rating = data.rating;
+                    form.photo_preview = data.image ? data.image : '';
 
-                    // const [closeTimeHours, closeTimeMinutes, closeTimeSecond] = data.closeTime.split(":")
+                    const operatingTime: OperatingTimeInterface[] = data.operatingTime
+                    const operatingTimeMonday = this.findOperatingTime(operatingTime, 1)
+                    const operatingTimeTuesday = this.findOperatingTime(operatingTime, 2)
+                    const operatingTimeWednesday = this.findOperatingTime(operatingTime, 3)
+                    const operatingTimeThursday = this.findOperatingTime(operatingTime, 4)
+                    const operatingTimeFriday = this.findOperatingTime(operatingTime, 5)
+                    const operatingTimeSaturday = this.findOperatingTime(operatingTime, 6)
+                    const operatingTimeSunday = this.findOperatingTime(operatingTime, 7)
 
-                    // const closeTime = new Date();
-                    // closeTime.setHours(Number.parseInt(closeTimeHours))
-                    // closeTime.setMinutes(Number.parseInt(closeTimeMinutes))
+                    if (operatingTimeMonday) {
+                        form.monday_start = this.getTimeParse(operatingTimeMonday.openTime)
+                        form.monday_end = this.getTimeParse(operatingTimeMonday.closeTime)
+                        form.monday_isClosed = operatingTimeMonday.isClosed
+                    }
 
-                    // form.name = data.name;
-                    // form.address = data.address ? data.address : '';
-                    // form.point = {
-                    //     lat: data.point.lat,
-                    //     lng: data.point.lng
-                    // }
-                    // form.rating = data.rating;
-                    // form.openTime = openTime;
-                    // form.closeTime = closeTime;
-                    // form.photo_preview = data.image ? data.image : '';
+                    if (operatingTimeTuesday) {
+                        form.tuesday_start = this.getTimeParse(operatingTimeTuesday.openTime)
+                        form.tuesday_end = this.getTimeParse(operatingTimeTuesday.closeTime)
+                        form.tuesday_isClosed = operatingTimeTuesday.isClosed
+                    }
+
+                    if (operatingTimeWednesday) {
+                        form.wednesday_start = this.getTimeParse(operatingTimeWednesday.openTime)
+                        form.wednesday_end = this.getTimeParse(operatingTimeWednesday.closeTime)
+                        form.wednesday_isClosed = operatingTimeWednesday.isClosed
+                    }
+
+                    if (operatingTimeThursday) {
+                        form.thursday_start = this.getTimeParse(operatingTimeThursday.openTime)
+                        form.thursday_end = this.getTimeParse(operatingTimeThursday.closeTime)
+                        form.thursday_isClosed = operatingTimeThursday.isClosed
+                    }
+
+                    if (operatingTimeFriday) {
+                        form.friday_start = this.getTimeParse(operatingTimeFriday.openTime)
+                        form.friday_end = this.getTimeParse(operatingTimeFriday.closeTime)
+                        form.friday_isClosed = operatingTimeFriday.isClosed
+                    }
+
+                    if (operatingTimeSaturday) {
+                        form.saturday_start = this.getTimeParse(operatingTimeSaturday.openTime)
+                        form.saturday_end = this.getTimeParse(operatingTimeSaturday.closeTime)
+                        form.saturday_isClosed = operatingTimeSaturday.isClosed
+                    }
+
+                    if (operatingTimeSunday) {
+                        form.sunday_start = this.getTimeParse(operatingTimeSunday.openTime)
+                        form.sunday_end = this.getTimeParse(operatingTimeSunday.closeTime)
+                        form.sunday_isClosed = operatingTimeSunday.isClosed
+                    }
 
                     this.setState({
                         form: form,
@@ -164,28 +217,17 @@ class Edit extends Component<Props, State> {
             <>
                 <HeaderView />
                 <Container className="mt--7" fluid>
-                    <Card className="bg-secondary shadow">
-                        <CardHeader className="bg-white border-0">
-                            <Row className="align-items-center">
-                                <Col>
-                                    <h3 className="mb-0">Edit Restaurant</h3>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody>
-                            {showAlertError}
-                            {this.state.isLoaded ? 
-                                (
-                                    <FormRestaurant form={this.state.form} 
-                                          setAlertMessage={this.setAlertMessage}
-                                          setAlertOpen={this.setAlertOpen}
-                                          redirectOnSuccess={this.redirectOnSuccess}
-                                          id={+this.props.match.params.id}
-                                            />
-                                ) : this.state.loadedMessage
-                            }
-                        </CardBody>
-                    </Card>
+                    {showAlertError}
+                    {this.state.isLoaded ? 
+                        (
+                            <FormRestaurant form={this.state.form} 
+                                    setAlertMessage={this.setAlertMessage}
+                                    setAlertOpen={this.setAlertOpen}
+                                    redirectOnSuccess={this.redirectOnSuccess}
+                                    id={+this.props.match.params.id}
+                                    />
+                        ) : this.state.loadedMessage
+                    }
                 </Container>
             </>
         );
@@ -203,7 +245,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>
+    findRestaurantAction: (id: number) => Promise<ApiResponse<RestaurantDetailResult>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

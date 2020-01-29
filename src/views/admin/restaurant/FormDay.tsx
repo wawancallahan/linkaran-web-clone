@@ -103,6 +103,7 @@ class FormDay extends Component<Props> {
                                     id={`day_close_${id}`}
                                     name={`day_close_${id}`}
                                     type="checkbox"
+                                    defaultChecked={FormikPropsValuesIsClosed}
                                     onChange={() => this.toggleDateClose(FormikProps, FormikSetValuesIsClosed, FormikPropsValuesIsClosed, FormikSetValuesDateStart, FormikSetValuesDateEnd)}
                                 />
                                 <label className="custom-control-label" htmlFor={`day_close_${id}`}>

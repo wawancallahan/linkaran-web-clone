@@ -19,7 +19,8 @@ import {
     ALERT_RESTAURANT_SHOW,
     RestaurantEditResult,
     RestaurantCreateResult,
-    OperatingTime
+    OperatingTime,
+    RestaurantDetailResult
 } from '../../types/admin/restaurant';
 import Axios, { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -226,11 +227,11 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
     }
 }
 
-export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<Restaurant>>> => {
+export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<RestaurantDetailResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Restaurant> = response.data;
+                const data: ApiResponseSuccess<RestaurantDetailResult> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -280,8 +281,28 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
 }
 
 export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`, restaurant)
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+
+        const data = new FormData;
+
+        if (restaurant.photo) {
+            data.append('photo', restaurant.photo);
+        }
+
+        data.set('name', restaurant.name)
+        data.set('address', restaurant.address)
+        data.set('point.lat', restaurant.point.lat)
+        data.set('point.lng', restaurant.point.lng)
+        data.set('rating', restaurant.rating.toString())
+
+        restaurant.operatingTime.forEach(async (value: OperatingTime, index: number) => {
+            data.set(`operatingTime.${index}.openTime`, value.openTime);
+            data.set(`operatingTime.${index}.closeTime`, value.closeTime);
+            data.set(`operatingTime.${index}.day`, value.day.toString());
+            data.set(`operatingTime.${index}.isClosed`, booleanToString(value.isClosed));
+        });
+
+        return await axiosService.patch(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`, data)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
                 
