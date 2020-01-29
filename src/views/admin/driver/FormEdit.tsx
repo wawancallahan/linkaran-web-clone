@@ -276,7 +276,14 @@ class Form extends Component<Props> {
                     })
                     .catch( (error: ApiResponse<DriverEditResult>) => {
                         this.props.setAlertOpen(true);
-                        this.props.setAlertMessage(error.error!.metaData.message);
+                        
+                        let message = "Gagal Mendapatkan Response";
+
+                        if (error.error) {
+                            message = error.error.metaData.message;
+                        }
+                    
+                        this.props.setAlertMessage(message);
 
                         action.setSubmitting(false)
                     });
