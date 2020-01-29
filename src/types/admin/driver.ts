@@ -153,6 +153,10 @@ interface DriverList {
         vehicle: {
             id: number,
             policeNumber: string,
+            stnkNumber: string,
+            chassisNumber: string,
+            description: string,
+            color: string,
             vehicleType: {
                 id: number,
                 name: string

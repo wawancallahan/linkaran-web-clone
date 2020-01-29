@@ -208,6 +208,9 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
                 });
             })
             .catch( (error: AxiosError) => {
+
+                console.log(error.response)
+
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -251,30 +254,34 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
 
 export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Promise<ApiResponse<DriverEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-         
         const data = new FormData();
 
-        data.set('name', driver.nama);
-        data.set('phoneNumber', driver.no_telepon)
-        data.set('email', driver.email)
+        data.set('user.name', driver.nama);
+        data.set('user.phoneNumber', driver.no_telepon)
+        data.set('user.email', driver.email)
         data.set('dateOfBirth', driver.tanggal_lahir)
         data.set('identityNumber', driver.no_ktp)
         data.set('gender', driver.jenis_kelamin == 1 ? 'L' : 'P')
         data.set('address', driver.alamat)
-        data.set('countryId', driver.negara.id.toString())
-        data.set('provinceId', driver.provinsi.id.toString())
-        data.set('districtId', driver.kabupaten_kota.id.toString())
-        data.set('subDistrictId', driver.kecamatan.id.toString())
-        data.set('villageId', driver.kelurahan.id.toString())
+        data.set('country.id', driver.negara.id.toString())
+        data.set('province.id', driver.provinsi.id.toString())
+        data.set('district.id', driver.kabupaten_kota.id.toString())
+        data.set('subDistrict.id', driver.kecamatan.id.toString())
+        data.set('village.id', driver.kelurahan.id.toString())
         data.set('rating', driver.rating.toString())
-        data.set('vehicleTypeId', driver.tipe_kendaraan.id.toString())
-        data.set('policeNumber', driver.no_polisi)
-        data.set('stnkNumber', driver.no_stnk)
-        data.set('chassisNumber', driver.no_rangka)
-        data.set('subBrandVehicleId', driver.merek.id.toString())
-        data.set('description', driver.keterangan)
-        data.set('seat', driver.jumlah_seat.toString())
-        data.set('color', driver.warna)
+        data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
+        data.set('user.vehicle.policeNumber', driver.no_polisi)
+        data.set('user.vehicle.stnkNumber', driver.no_stnk)
+        data.set('user.vehicle.chassisNumber', driver.no_rangka)
+        data.set('user.vehicle.subBrandVehicle.id', driver.merek.id.toString())
+        data.set('user.vehicle.description', driver.keterangan)
+        // data.set('user.vehicle.seat', driver.jumlah_seat.toString())
+        data.set('user.vehicle.color', driver.warna)
+        data.set('wasOnceAnOnlineDriver', booleanToString(driver.wasOnceAnOnlineDriver))
+        data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
+        data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
+        data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
+        data.set('choiceOfActiveWorkHourse', driver.choiceOfActiveWorkHours)
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -283,7 +290,6 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
         if (driver.foto_profil) {
             data.append('photo', driver.foto_profil);
         }
-        
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 

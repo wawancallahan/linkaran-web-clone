@@ -30,7 +30,7 @@ import {
     findDriverAction
 } from '../../../actions/admin/driver';
 
-import { ApiResponse } from '../../../types/api';
+import { ApiResponse, ApiResponseError } from '../../../types/api';
 
 type EditProps = RouteComponentProps<{
     id: string
@@ -118,16 +118,38 @@ class Edit extends Component<Props, State> {
         loadedMessage: '',
     }
 
+    choiceOfActiveWorkHours = (choiceOfActiveWorkHoursText: string) : string => {
+
+        if ( ! choiceOfActiveWorkHoursText) {
+            choiceOfActiveWorkHoursText = "00-00"
+        }
+
+        const [startTime, endTime] = choiceOfActiveWorkHoursText.split('-');
+        
+        if (startTime == '00' && endTime == '00') {
+            return '0';
+        } else if (startTime == '06' && endTime == '14') {
+            return '1'
+        } else if (startTime == '14' && endTime == '22') {
+            return '2'
+        } else if (startTime == '22' && endTime == '06') {
+            return '3'
+        }
+
+        return '4';
+    }
+
     componentDidMount() {
         const id = +this.props.match.params.id;
 
         this.props.findDriverAction(id)
                 .then((response: ApiResponse<Driver>) => {
+
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Driver =response.response!.result;
+                    const data: Driver = response.response!.result;
 
                     form.alamat = data.address;
                     form.email = data.user.email;
@@ -159,8 +181,8 @@ class Edit extends Component<Props, State> {
                     }
                     form.no_ktp = data.identityNumber;
                     form.no_polisi = data.user.vehicle.policeNumber;
-                    form.no_rangka = '';
-                    form.no_stnk = '';
+                    form.no_rangka = data.user.vehicle.chassisNumber;
+                    form.no_stnk = data.user.vehicle.stnkNumber;
                     form.no_telepon = data.user.phoneNumber;
                     form.provinsi = {
                         value: data.province.id,
@@ -172,7 +194,38 @@ class Edit extends Component<Props, State> {
                         value: data.user.vehicle.vehicleType.id,
                         label: data.user.vehicle.vehicleType.name
                     }
-                    form.warna = '';
+                    form.warna = data.user.vehicle.color;
+                    form.keterangan = data.user.vehicle.description;
+
+                
+
+                    form.wasOnceAnOnlineDriver = data.wasOnceAnOnlineDriver ? '1' : '0'
+                    form.isActivelyBecomingAnotherOnlineDriver = data.isActivelyBecomingAnotherOnlineDriver ? '1' : '0'
+                    form.isJoiningTheDriverCommunity = data.isJoiningTheDriverCommunity ? '1' : '0'
+                    form.isJoiningLinkaranAsmainJob = data.isJoiningLinkaranAsmainJob ? '1' : '0'
+
+                    const choiceOfActiveWorkHours = this.choiceOfActiveWorkHours(data.choiceOfActiveWorkHours)
+
+                    form.choiceOfActiveWorkHours = choiceOfActiveWorkHours
+                    form.choiceOfActiveWorkHoursOther = choiceOfActiveWorkHours == '4'
+
+                    let custom_interval_jam_kerja_start = null
+                    let custom_interval_jam_kerja_end = null
+
+                    if (choiceOfActiveWorkHours == '4') {
+                        const [startTime, endTime] = data.choiceOfActiveWorkHours.split('-');
+
+                        custom_interval_jam_kerja_start = new Date()
+                        custom_interval_jam_kerja_start.setHours(Number.parseInt(startTime))
+
+                        custom_interval_jam_kerja_end = new Date()
+                        custom_interval_jam_kerja_end.setHours(Number.parseInt(endTime))
+                    }
+
+                    form.custom_interval_jam_kerja_start = custom_interval_jam_kerja_start
+                    form.custom_interval_jam_kerja_end = custom_interval_jam_kerja_end
+
+                    console.log('aman')
 
                     this.setState({
                         form: form,
@@ -181,8 +234,11 @@ class Edit extends Component<Props, State> {
                     
                 })
                 .catch((response: ApiResponse<Driver>) => {
+
+                    const error = response.error as ApiResponseError
+
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: error ? error.metaData.message : 'Gagal mengedit data'
                     })
                 })
     }

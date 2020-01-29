@@ -43,7 +43,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                defaultChecked
+                                defaultChecked={FormikProps.values.wasOnceAnOnlineDriver == '1'}
                                 id="wasOnceAnOnlineDriver_yes"
                                 name="wasOnceAnOnlineDriver"
                                 type="radio"
@@ -56,6 +56,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.wasOnceAnOnlineDriver == '0'}
                                 id="wasOnceAnOnlineDriver_no"
                                 name="wasOnceAnOnlineDriver"
                                 type="radio"
@@ -84,7 +85,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                defaultChecked
+                                defaultChecked={FormikProps.values.isActivelyBecomingAnotherOnlineDriver == '1'}
                                 id="isActivelyBecomingAnotherOnlineDriver_yes"
                                 name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
@@ -97,6 +98,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.isActivelyBecomingAnotherOnlineDriver == '0'}
                                 id="isActivelyBecomingAnotherOnlineDriver_no"
                                 name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
@@ -125,7 +127,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                defaultChecked
+                                defaultChecked={FormikProps.values.isJoiningTheDriverCommunity == '1'}
                                 id="isJoiningTheDriverCommunity_yes"
                                 name="isJoiningTheDriverCommunity"
                                 type="radio"
@@ -138,6 +140,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.isJoiningTheDriverCommunity == '0'}
                                 id="isJoiningTheDriverCommunity_no"
                                 name="isJoiningTheDriverCommunity"
                                 type="radio"
@@ -164,7 +167,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                defaultChecked
+                                defaultChecked={FormikProps.values.isJoiningLinkaranAsmainJob == '1'}
                                 id="isJoiningLinkaranAsmainJob_yes"
                                 name="isJoiningLinkaranAsmainJob"
                                 type="radio"
@@ -177,6 +180,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.isJoiningLinkaranAsmainJob == '0'}
                                 id="isJoiningLinkaranAsmainJob_no"
                                 name="isJoiningLinkaranAsmainJob"
                                 type="radio"
@@ -203,7 +207,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
-                                defaultChecked
+                                defaultChecked={FormikProps.values.choiceOfActiveWorkHours == '0'}
                                 id="choiceOfActiveWorkHours_0"
                                 name="choiceOfActiveWorkHours"
                                 type="radio"
@@ -217,6 +221,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.choiceOfActiveWorkHours == '1'}
                                 id="choiceOfActiveWorkHours_1"
                                 name="choiceOfActiveWorkHours"
                                 type="radio"
@@ -230,6 +235,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.choiceOfActiveWorkHours == '2'}
                                 id="choiceOfActiveWorkHours_2"
                                 name="choiceOfActiveWorkHours"
                                 type="radio"
@@ -243,6 +249,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.choiceOfActiveWorkHours == '3'}
                                 id="choiceOfActiveWorkHours_3"
                                 name="choiceOfActiveWorkHours"
                                 type="radio"
@@ -257,6 +264,7 @@ class FormPertanyaan extends Component<Props> {
                         <div className="custom-control custom-radio mb-3">
                             <input
                                 className="custom-control-input"
+                                defaultChecked={FormikProps.values.choiceOfActiveWorkHours == '4'}
                                 id="choiceOfActiveWorkHours_4"
                                 name="choiceOfActiveWorkHours"
                                 type="radio"

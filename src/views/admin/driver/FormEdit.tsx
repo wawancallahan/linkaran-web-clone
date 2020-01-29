@@ -22,10 +22,17 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../type
 
 import FormDriver from './FormDriver';
 import FormKendaraan from './FormKendaraan';
+import FormPertanyaan from './FormPertanyaan';
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
-                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -35,8 +42,23 @@ const createSchema = Yup.object().shape({
     jenis_kelamin: Yup.number()
                       .oneOf([0, 1], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
+    tempat_lahir: Yup.string()
+                    .test('len', 'Bidang isian tempat lahir tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                        if (val) {
+                            return val.length <= 255;
+                        }
+
+                        return true;
+                    })
+                    .required('Bidang isian tempat lahir wajib diisi'),
     no_ktp: Yup.string()
-                .length(255, 'Bidang isian no ktp tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()
@@ -48,8 +70,9 @@ const createSchema = Yup.object().shape({
     //             .required('Bidang isian no sim wajib diisi'),
     // sim_file: File | null,
     alamat: Yup.string()
-                .length(255, 'Bidang isian alamat tidak boleh lebih dari 255 karakter')
                 .required('Bidang isian alamat wajib diisi'),
+    alamat_domisili: Yup.string()
+                .required('Bidang isian alamat domisili wajib diisi'),
     negara: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan negara wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan negara wajib diisi').required("Bidang pilihan negara wajib diisi")
@@ -81,7 +104,7 @@ const createSchema = Yup.object().shape({
         value: Yup.number().notOneOf([0], 'Bidang pilihan merek wajib diisi').required("Bidang pilihan merek wajib diisi")
     }),
     no_stnk: Yup.string()
-    .test('len', 'Bidang isian no stnk tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                .test('len', 'Bidang isian no stnk tidak boleh lebih dari 255 karakter', (val: any): boolean => {
                 if (val) {
                     return val.length <= 255;
                 }
@@ -90,7 +113,7 @@ const createSchema = Yup.object().shape({
             })
                 .required('Bidang isian no stnk wajib diisi'),
     no_polisi: Yup.string()
-    .test('len', 'Bidang isian no polisi tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    .test('len', 'Bidang isian no polisi tidak boleh lebih dari 255 karakter', (val: any): boolean => {
                 if (val) {
                     return val.length <= 255;
                 }
@@ -99,7 +122,7 @@ const createSchema = Yup.object().shape({
             })
                     .required('Bidang isian no polisi wajib diisi'),
     no_rangka: Yup.string()
-    .test('len', 'Bidang isian no rangka tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    .test('len', 'Bidang isian no rangka tidak boleh lebih dari 255 karakter', (val: any): boolean => {
                 if (val) {
                     return val.length <= 255;
                 }
@@ -107,14 +130,26 @@ const createSchema = Yup.object().shape({
                 return true;
             })
                     .required('Bidang isian no rangka wajib diisi'),
-    jumlah_seat: Yup.number()
-                .min(1, 'Bidang isian jumal seat minimal 1')
-                .required('Bidang isian jumlah seat wajib diisi'),
+    // jumlah_seat: Yup.number()
+    //             .min(1, 'Bidang isian jumal seat minimal 1')
+    //             .required('Bidang isian jumlah seat wajib diisi'),
     warna: Yup.string()
-                .length(255, 'Bidang isian warna tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian warna tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian warna wajib diisi'),
     keterangan: Yup.string()
-                    .length(255, 'Bidang isian keterangan tidak boleh lebih dari 255 karakter')
+                    .test('len', 'Bidang isian keterangan tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                        if (val) {
+                            return val.length <= 255;
+                        }
+
+                        return true;
+                    })
                     .required('Bidang isian keterangan wajib diisi') 
 });
 
@@ -131,31 +166,31 @@ type Props = LinkDispatchToProps & FormProps;
 class Form extends Component<Props> {
 
     getchoiceOfActiveWorkHours = (choiceOfActiveWorkHours: string, custom_interval_jam_kerja_start: Date | null, custom_interval_jam_kerja_end: Date | null) => {
-        let activeWorks = "00:00 - 00:00";
+        let activeWorks = "00-00";
         
         switch (choiceOfActiveWorkHours) {
             case '0':
-                activeWorks = "Sepanjang Waktu";
+                activeWorks = "00-00";
             case '1':
-                activeWorks = "06:00 - 14:00";
+                activeWorks = "06-14";
                 break;
             case '2':
-                activeWorks = "14:00 - 22:00"
+                activeWorks = "14-22"
                 break;
             case '3':
-                activeWorks = "22:00 - 06:00"
+                activeWorks = "22-06"
                 break;
             case '4':
                 if (custom_interval_jam_kerja_start) {
-                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()} - `
+                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()}-`
                 } else {
-                    activeWorks += "00:00 - "
+                    activeWorks += "00-"
                 }
 
                 if (custom_interval_jam_kerja_end) {
                     activeWorks += `${custom_interval_jam_kerja_end.getHours()}:${custom_interval_jam_kerja_end.getMinutes()}`
                 } else {
-                    activeWorks += "00:00"
+                    activeWorks += "00"
                 }
                 break; 
         }
@@ -183,7 +218,6 @@ class Form extends Component<Props> {
                     const isJoiningLinkaranAsmainJob = values.isJoiningLinkaranAsmainJob == '1' ? true : false;
 
                     let choiceOfActiveWorkHours = this.getchoiceOfActiveWorkHours(values.choiceOfActiveWorkHours, values.custom_interval_jam_kerja_start, values.custom_interval_jam_kerja_end);
-
 
                     const driver: DriverEdit = {
                         alamat: values.alamat,
@@ -261,7 +295,13 @@ class Form extends Component<Props> {
                                     <h3>Kendaraan</h3>
                                 </FormGroup>
 
-                                <FormKendaraan FormikProps={FormikProps}/>                            
+                                <FormKendaraan FormikProps={FormikProps}/>
+
+                                <FormGroup>
+                                    <h3>Pertanyaan</h3>
+                                </FormGroup>
+
+                                <FormPertanyaan FormikProps={FormikProps}/>                             
                                
                                 <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>

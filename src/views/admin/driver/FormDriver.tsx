@@ -446,7 +446,7 @@ class FormDriver extends Component<Props> {
                     </label>
                     <Dropzone onFilesAdded={(files: any[]) => {
                         this.onFilesAdded(files, FormikProps, 'ktp_file_preview', 'ktp_file');
-                    }} disabled={false} multiple={false} />
+                    }} disabled={false} multiple={false} previewUrl={FormikProps.values.ktp_file_preview} />
                     
                     <div>
                         {FormikProps.errors.ktp_file_preview && FormikProps.touched.ktp_file_preview ? FormikProps.errors.ktp_file_preview : ''}
@@ -658,7 +658,7 @@ class FormDriver extends Component<Props> {
                     </label>
                     <Dropzone onFilesAdded={(files: any[]) => {
                         this.onFilesAdded(files, FormikProps, 'foto_profil_preview', 'foto_profil');
-                    }} disabled={false} multiple={false} />
+                    }} disabled={false} multiple={false} previewUrl={FormikProps.values.foto_profil_preview} />
                     
                     <div>
                         {FormikProps.errors.foto_profil_preview && FormikProps.touched.foto_profil_preview ? FormikProps.errors.foto_profil_preview : ''}

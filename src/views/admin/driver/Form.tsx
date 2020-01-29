@@ -165,31 +165,31 @@ type Props = LinkDispatchToProps & FormProps;
 class Form extends Component<Props> {
 
     getchoiceOfActiveWorkHours = (choiceOfActiveWorkHours: string, custom_interval_jam_kerja_start: Date | null, custom_interval_jam_kerja_end: Date | null) => {
-        let activeWorks = "00:00 - 00:00";
+        let activeWorks = "00-00";
         
         switch (choiceOfActiveWorkHours) {
             case '0':
-                activeWorks = "00:00 - 00:00";
+                activeWorks = "00-00";
             case '1':
-                activeWorks = "06:00 - 14:00";
+                activeWorks = "06-14";
                 break;
             case '2':
-                activeWorks = "14:00 - 22:00"
+                activeWorks = "14-22"
                 break;
             case '3':
-                activeWorks = "22:00 - 06:00"
+                activeWorks = "22-06"
                 break;
             case '4':
                 if (custom_interval_jam_kerja_start) {
-                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()} - `
+                    activeWorks += `${custom_interval_jam_kerja_start.getHours()}:${custom_interval_jam_kerja_start.getMinutes()}-`
                 } else {
-                    activeWorks += "00:00 - "
+                    activeWorks += "00-"
                 }
 
                 if (custom_interval_jam_kerja_end) {
                     activeWorks += `${custom_interval_jam_kerja_end.getHours()}:${custom_interval_jam_kerja_end.getMinutes()}`
                 } else {
-                    activeWorks += "00:00"
+                    activeWorks += "00"
                 }
                 break; 
         }
@@ -296,7 +296,7 @@ class Form extends Component<Props> {
 
                                 <FormKendaraan FormikProps={FormikProps}/>  
 
-                                 <FormGroup>
+                                <FormGroup>
                                     <h3>Pertanyaan</h3>
                                 </FormGroup>
 
