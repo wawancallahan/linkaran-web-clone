@@ -65,8 +65,6 @@ class Form extends Component<Props> {
                             
                             this.props.setAlertUserShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<UserCreateResult>) => {
                             this.props.setAlertOpen(true);

@@ -111,8 +111,6 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<SubBrandVehicleCreateResult> = response.response!;
                             this.props.setAlertSubBrandVehicleShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<SubBrandVehicleCreateResult>) => {
                             this.props.setAlertOpen(true);

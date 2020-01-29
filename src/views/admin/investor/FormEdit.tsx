@@ -380,8 +380,6 @@ class Form extends Component<Props> {
                         const data: ApiResponseSuccess<InvestorEditResult> = response.response!;
                         this.props.setAlertInvestorShowAction('Data Berhasil Diedit', 'success');
                         this.props.redirectOnSuccess();
-
-                        action.setSubmitting(false)
                     })
                     .catch( (error: ApiResponse<InvestorEditResult>) => {
                         this.props.setAlertOpen(true);

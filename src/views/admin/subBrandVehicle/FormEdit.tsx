@@ -114,8 +114,6 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<SubBrandVehicleEditResult> = response.response!;
                             this.props.setAlertSubBrandVehicleShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<SubBrandVehicleEditResult>) => {
                             this.props.setAlertOpen(true);

@@ -118,7 +118,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
         data.set('district.id', driver.kabupaten_kota.id.toString())
         data.set('subDistrict.id', driver.kecamatan.id.toString())
         data.set('village.id', driver.kelurahan.id.toString())
-        data.set('rating', driver.rating.toString())
+        data.set('rating', '0')
         data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
         data.set('user.vehicle.policeNumber', driver.no_polisi)
         data.set('user.vehicle.stnkNumber', driver.no_stnk)
@@ -155,6 +155,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
                 });
             })
             .catch( (error: AxiosError) => {
+                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -304,6 +305,9 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
                 });
             })
             .catch( (error: AxiosError) => {
+
+                console.log(error.response)
+
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {

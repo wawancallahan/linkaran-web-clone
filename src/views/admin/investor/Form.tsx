@@ -379,8 +379,6 @@ class Form extends Component<Props> {
                         const data: ApiResponseSuccess<InvestorCreateResult> = response.response!;
                         this.props.setAlertInvestorShowAction('Data Berhasil Ditambah', 'success');
                         this.props.redirectOnSuccess();
-
-                        action.setSubmitting(false)
                     })
                     .catch( (error: ApiResponse<InvestorCreateResult>) => {
                         this.props.setAlertOpen(true);

@@ -168,8 +168,6 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
                             this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<RestaurantEditResult>) => {
                             this.props.setAlertOpen(true);

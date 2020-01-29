@@ -57,8 +57,6 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.response!;
                             this.props.setAlertFoodCategoryShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<FoodCategoryCreateResult>) => {
                             this.props.setAlertOpen(true);

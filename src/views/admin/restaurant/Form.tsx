@@ -172,8 +172,6 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<RestaurantCreateResult> = response.response!;
                             this.props.setAlertRestaurantShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
-
-                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<RestaurantCreateResult>) => {
                             this.props.setAlertOpen(true);

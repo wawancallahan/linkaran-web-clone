@@ -271,8 +271,6 @@ class Form extends Component<Props> {
                         const data: ApiResponseSuccess<DriverEditResult> = response.response!;
                         this.props.setAlertDriverShowAction('Data Berhasil Diedit', 'success');
                         this.props.redirectOnSuccess();
-
-                        action.setSubmitting(false)
                     })
                     .catch( (error: ApiResponse<DriverEditResult>) => {
                         this.props.setAlertOpen(true);
