@@ -225,8 +225,6 @@ class Edit extends Component<Props, State> {
                     form.custom_interval_jam_kerja_start = custom_interval_jam_kerja_start
                     form.custom_interval_jam_kerja_end = custom_interval_jam_kerja_end
 
-                    console.log('aman')
-
                     this.setState({
                         form: form,
                         isLoaded: true
