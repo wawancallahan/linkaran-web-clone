@@ -251,7 +251,7 @@ class Form extends Component<Props> {
                         provinsi: {
                             id: values.provinsi.value
                         },
-                        rating: values.rating!,
+                        rating: 0,
                         sim_file: null,
                         tanggal_lahir: tanggal_lahir,
                         tipe_kendaraan: {

@@ -268,7 +268,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
         data.set('district.id', driver.kabupaten_kota.id.toString())
         data.set('subDistrict.id', driver.kecamatan.id.toString())
         data.set('village.id', driver.kelurahan.id.toString())
-        data.set('rating', driver.rating.toString())
+        data.set('rating', '0')
         data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
         data.set('user.vehicle.policeNumber', driver.no_polisi)
         data.set('user.vehicle.stnkNumber', driver.no_stnk)

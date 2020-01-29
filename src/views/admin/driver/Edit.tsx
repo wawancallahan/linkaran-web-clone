@@ -188,7 +188,7 @@ class Edit extends Component<Props, State> {
                         value: data.province.id,
                         label: data.province.name
                     }
-                    form.rating = data.rating;
+                    form.rating = 0;
                     form.tanggal_lahir = new Date(data.dateOfBirth);
                     form.tipe_kendaraan = {
                         value: data.user.vehicle.vehicleType.id,
