@@ -57,10 +57,14 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<FoodCategoryEditResult> = response.response!;
                             this.props.setAlertFoodCategoryShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
+
+                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<FoodCategoryEditResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
+
+                             action.setSubmitting(false)
                         });
                 }}
                 validationSchema={createSchema}

@@ -181,10 +181,14 @@ class Form extends Component<Props> {
                     //         const data: ApiResponseSuccess<ServicePriceCreateResult> = response.response!;
                     //         this.props.setAlertServicePriceShowAction('Data Berhasil Ditambah', 'success');
                     //         this.props.redirectOnSuccess();
+
+                    //          action.setSubmitting(false)
                     //     })
                     //     .catch( (error: ApiResponse<ServicePriceCreateResult>) => {
                     //         this.props.setAlertOpen(true);
                     //         this.props.setAlertMessage(error.error!.metaData.message);
+
+                    //          action.setSubmitting(false)
                     //     });
                 }}
                 validationSchema={createSchema}

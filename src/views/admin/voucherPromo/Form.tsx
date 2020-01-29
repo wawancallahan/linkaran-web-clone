@@ -67,10 +67,14 @@ class Form extends Component<Props> {
                             
                     //         this.props.setAlertVoucherPromoShowAction('Data Berhasil Ditambah', 'success');
                     //         this.props.redirectOnSuccess();
+
+                    // action.setSubmitting(false)
                     //     })
                     //     .catch( (error: ApiResponse<VoucherPromoCreateResult>) => {
                     //         this.props.setAlertOpen(true);
                     //         this.props.setAlertMessage(error.error!.metaData.message);
+
+                    //  action.setSubmitting(false)
                     //     });
                 }}
                 validationSchema={createSchema}

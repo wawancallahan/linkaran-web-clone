@@ -57,10 +57,14 @@ class Form extends Component<Props> {
                             const data: ApiResponseSuccess<BrandVehicleCreateResult> = response.response!;
                             this.props.setAlertBrandVehicleShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
+
+                            action.setSubmitting(false)
                         })
                         .catch( (error: ApiResponse<BrandVehicleCreateResult>) => {
                             this.props.setAlertOpen(true);
                             this.props.setAlertMessage(error.error!.metaData.message);
+
+                            action.setSubmitting(false)
                         });
                 }}
                 validationSchema={createSchema}
