@@ -302,7 +302,7 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
             data.set(`operatingTime.${index}.isClosed`, booleanToString(value.isClosed));
         });
 
-        return await axiosService.patch(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`, data)
+        return await axiosService.put(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`, data)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<RestaurantEditResult> = response.data;
                 
