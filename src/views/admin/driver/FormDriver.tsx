@@ -664,32 +664,6 @@ class FormDriver extends Component<Props> {
                         {FormikProps.errors.foto_profil_preview && FormikProps.touched.foto_profil_preview ? FormikProps.errors.foto_profil_preview : ''}
                     </div>
                 </FormGroup>
-
-                <FormGroup>
-                    <label
-                    className="form-control-label"
-                    htmlFor="input-rating"
-                    >
-                        Rating
-                    </label>
-                    <Input
-                    className="form-control-alternative"
-                    id="input-rating"
-                    placeholder="Rating"
-                    type="number"
-                    name="rating"
-                    min="0"
-                    max="10"
-                    value={FormikProps.values.rating || ''}
-                    required
-                    onChange={FormikProps.handleChange}
-                    onBlur={FormikProps.handleBlur}
-                    invalid={ !!(FormikProps.touched.rating && FormikProps.errors.rating) }
-                    />
-                    <div>
-                        {FormikProps.errors.rating && FormikProps.touched.rating ? FormikProps.errors.rating : ''}
-                    </div>
-                </FormGroup>
             </>
         )
     }

@@ -93,7 +93,7 @@ const createSchema = Yup.object().shape({
         label: Yup.string().required("Bidang pilihan kelurahan wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan kelurahan wajib diisi').required("Bidang pilihan kelurahan wajib diisi")
     }),
-    rating: Yup.number().required('Bidang isian rating wajib diiisi'),
+    // rating: Yup.number().required('Bidang isian rating wajib diiisi'),
     // foto_profil: File | null,
     tipe_kendaraan: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan tipe kendaraan wajib diisi"),

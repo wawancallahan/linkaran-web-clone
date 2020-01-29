@@ -131,7 +131,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
         data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
         data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
         data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
-        data.set('choiceOfActiveWorkHourse', driver.choiceOfActiveWorkHours)
+        data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -281,7 +281,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
         data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
         data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
         data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
-        data.set('choiceOfActiveWorkHourse', driver.choiceOfActiveWorkHours)
+        data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
