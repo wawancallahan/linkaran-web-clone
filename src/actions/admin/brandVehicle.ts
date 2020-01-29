@@ -148,7 +148,7 @@ export const fetchListBrandVehicleAction = (search: string, page: number): Thunk
 
 export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreate): ThunkResult<Promise<ApiResponse<BrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/brand-vehicle', brandVehicle)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/brand-vehicle', brandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<BrandVehicleCreateResult> = response.data;
                 

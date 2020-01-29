@@ -202,7 +202,7 @@ export const fetchListVehicleTypeAction = (search: string, page: number): ThunkR
 
 export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreate): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/sub-brand-vehicle', subBrandVehicle)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/sub-brand-vehicle', subBrandVehicle)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<SubBrandVehicleCreateResult> = response.data;
                 

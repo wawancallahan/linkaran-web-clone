@@ -128,7 +128,7 @@ export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Prom
             data.append('photo', investor.foto_profil);
         }
         
-        return axiosService.post('/api_linkaran/web/investor-profile', data, {
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/investor-profile', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }

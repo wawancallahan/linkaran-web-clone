@@ -141,7 +141,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
             data.append('photo', driver.foto_profil);
         }
         
-        return axiosService.post('/api_linkaran/web/driver-profile', data, {
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/driver-profile', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }

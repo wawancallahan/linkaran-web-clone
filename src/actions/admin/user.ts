@@ -94,7 +94,7 @@ export const fetchUserAction = (page: number) => {
 
 export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiResponse<UserCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/user', user)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/user', user)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<UserCreateResult> = response.data;
                 

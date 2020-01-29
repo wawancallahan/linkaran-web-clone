@@ -94,7 +94,7 @@ export const fetchFoodAction = (page: number) => {
 
 export const createFoodAction = (food: FoodCreate): ThunkResult<Promise<ApiResponse<FoodCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/food', food)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/food', food)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCreateResult> = response.data;
                 

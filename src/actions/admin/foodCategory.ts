@@ -147,7 +147,7 @@ export const fetchListFoodCategoryAction = (search: string, page: number): Thunk
 
 export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post('/api_linkaran/web/food-category', foodCategory)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/food-category', foodCategory)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.data;
                 
