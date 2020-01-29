@@ -1,7 +1,8 @@
 export interface Login {
     identity: string,
     type: string,
-    tokenFCM: ""
+    role: string,
+    tokenFCM: string
 }
 
 export interface ValidateLogin {

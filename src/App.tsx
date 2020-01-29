@@ -16,6 +16,12 @@ type State = {
 }
 class App extends Component<Props, State> {
     
+    componentDidMount() {
+        if ( ! localStorage.getItem('accessToken')) {
+            this.props.history.push('/login');
+        }
+    }
+
     render() {
         return (
             <Switch>
