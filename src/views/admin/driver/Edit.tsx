@@ -196,8 +196,8 @@ class Edit extends Component<Props, State> {
                     }
                     form.warna = data.user.vehicle.color;
                     form.keterangan = data.user.vehicle.description;
-
-                
+                    form.tempat_lahir = data.placeOfBirth
+                    form.alamat_domisili = data.residenceAddress
 
                     form.wasOnceAnOnlineDriver = data.wasOnceAnOnlineDriver ? '1' : '0'
                     form.isActivelyBecomingAnotherOnlineDriver = data.isActivelyBecomingAnotherOnlineDriver ? '1' : '0'

@@ -219,6 +219,8 @@ class Form extends Component<Props> {
                     let choiceOfActiveWorkHours = this.getchoiceOfActiveWorkHours(values.choiceOfActiveWorkHours, values.custom_interval_jam_kerja_start, values.custom_interval_jam_kerja_end);
 
                     const driver: DriverCreate = {
+                        alamat_domisili: values.alamat_domisili,
+                        tempat_lahir: values.tempat_lahir,
                         alamat: values.alamat,
                         email: values.email,
                         foto_profil: values.foto_profil,

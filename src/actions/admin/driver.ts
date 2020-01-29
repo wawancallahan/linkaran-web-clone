@@ -132,6 +132,8 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
         data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
         data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
         data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
+        data.set('placeOfBirth', driver.tempat_lahir)
+        data.set('residenceAddress', driver.alamat_domisili)
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -283,6 +285,8 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
         data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
         data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
         data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
+        data.set('placeOfBirth', driver.tempat_lahir)
+        data.set('residenceAddress', driver.alamat_domisili)
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);

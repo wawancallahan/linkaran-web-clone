@@ -74,6 +74,7 @@ interface DriverField {
     nama: string,
     no_telepon: string,
     email: string,
+    tempat_lahir: string,
     tanggal_lahir: string,
     jenis_kelamin: number,
     no_ktp: string,
@@ -81,6 +82,7 @@ interface DriverField {
     no_sim: string,
     sim_file: File | null,
     alamat: string,
+    alamat_domisili: string,
     negara: {
         id: number
     },
@@ -119,6 +121,8 @@ interface DriverField {
 
 interface DriverList {
     dateOfBirth: string,
+    placeOfBirth: string,
+    residenceAddress: string,
     gender: string,
     identityNumber: string,
     ktpPhoto: string,
