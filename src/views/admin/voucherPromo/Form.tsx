@@ -74,11 +74,11 @@ class Form extends Component<Props> {
                     //         this.props.setAlertOpen(true);
                     //          let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
+                        // if (error.error) {
+                        //     message = error.error.metaData.message;
+                        // }
                     
-                        this.props.setAlertMessage(message);
+                        // this.props.setAlertMessage(message);
 
                     //  action.setSubmitting(false)
                     //     });
