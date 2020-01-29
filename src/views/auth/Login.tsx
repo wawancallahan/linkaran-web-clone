@@ -68,7 +68,9 @@ class Login extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-       
+        if (localStorage.getItem('accessToken')) {
+            this.props.history.push('/admin');
+        }
     }
 
     cancelEmailOnSubmit = () => {
