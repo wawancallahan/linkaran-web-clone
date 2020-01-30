@@ -13,6 +13,8 @@ export type FormField = {
     price: number,
     description: string,
     rating: number,
+    image: File | null,
+    image_preview: string,
     foodCategory: {
         value: number,
         label: string
@@ -28,6 +30,8 @@ interface FoodField {
     price: number,
     description: string,
     rating: number,
+    image: File | null,
+    image_preview: string,
     foodCategory: {
         id: number
     },
@@ -41,6 +45,7 @@ interface FoodList {
     price: number,
     description: string,
     rating: number,
+    image: string | null,
     foodCategory: {
         id: number,
         name: string
@@ -56,6 +61,7 @@ interface FoodList2 {
     price: number,
     description: string,
     rating: number,
+    image: string | null,
     foodCategory: {
         id: number
     },

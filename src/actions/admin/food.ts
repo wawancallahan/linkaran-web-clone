@@ -94,7 +94,24 @@ export const fetchFoodAction = (page: number) => {
 
 export const createFoodAction = (food: FoodCreate): ThunkResult<Promise<ApiResponse<FoodCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/food', food)
+        const data = new FormData;
+
+        if (food.image) {
+            data.append('photo', food.image);
+        }
+
+        data.set('name', food.name)
+        data.set('price', food.price.toString())
+        data.set('description', food.description)
+        data.set('rating', food.rating.toString())
+        data.set('foodCategory.id', food.foodCategory.id.toString())
+        data.set('restaurant.id', food.restaurant.id.toString())
+       
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/food', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodCreateResult> = response.data;
                 
@@ -200,7 +217,24 @@ export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food
 
 export const editFoodAction = (food: FoodEdit, id: number): ThunkResult<Promise<ApiResponse<FoodEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/food/${id}`, food)
+        const data = new FormData;
+        
+        if (food.image) {
+            data.append('photo', food.image);
+        }
+
+        data.set('name', food.name)
+        data.set('price', food.price.toString())
+        data.set('description', food.description)
+        data.set('rating', food.rating.toString())
+        data.set('foodCategory.id', food.foodCategory.id.toString())
+        data.set('restaurant.id', food.restaurant.id.toString())
+        
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/food/${id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<FoodEditResult> = response.data;
                 

@@ -54,6 +54,8 @@ class Create extends Component<Props, State> {
             price: 0,
             description: '',
             rating: 0,
+            image: null,
+            image_preview: '',
             foodCategory: {
                 value: 0,
                 label: ''
@@ -92,6 +94,7 @@ class Create extends Component<Props, State> {
                         value: data.restaurant.id,
                         label: data.restaurant.name
                     }
+                    form.image_preview = data.image ? data.image : '';
 
                     this.setState({
                         form: form,

@@ -46,6 +46,8 @@ class Create extends Component<Props, State> {
             price: 0,
             description: '',
             rating: 0,
+            image: null,
+            image_preview: '',
             foodCategory: {
                 value: 0,
                 label: ''
@@ -72,7 +74,7 @@ class Create extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/sub-brand-vehicle');
+        this.props.history.push('/admin/food');
     }
     
     render() {

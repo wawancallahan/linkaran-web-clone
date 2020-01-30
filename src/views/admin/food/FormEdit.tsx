@@ -25,6 +25,7 @@ import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Restaurant } from '../../../types/admin/restaurant';
 import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
+import Dropzone from '../../../components/Dropzone/Dropzone'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -53,6 +54,8 @@ const createSchema = Yup.object().shape({
         label: Yup.string().required("Bidang pilihan restaurant wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan restaurant wajib diisi').required("Bidang pilihan restaurant wajib diisi")
     }),
+    image_preview: Yup.string()
+             .required('Bidang upload foto wajib diisi')
 });
 
 type FormProps = {
@@ -66,6 +69,21 @@ type FormProps = {
 type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
+
+    onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
+        const file: {
+            lastModified: number,
+            name: string,
+            preview: string,
+            size: number,
+            type: string
+        } = files.length > 0 ? files[0] : null;
+    
+        if (file) {
+            FormikProps.setFieldValue(setPreview, file.preview, true);
+            FormikProps.setFieldValue(setValue, file);
+        }
+    }
 
     loadFoodCategoryHandler = (search: string, loadedOption: {}, options: {
         page: number
@@ -165,13 +183,15 @@ class Form extends Component<Props> {
                         rating: values.rating,
                         restaurant: {
                             id: values.restaurant.value
-                        }
+                        },
+                        image_preview: values.image_preview,
+                        image: values.image,
                     }
 
                     this.props.editFoodAction(food, this.props.id)
                         .then( (response: ApiResponse<FoodEditResult>) => {
                             const data: ApiResponseSuccess<FoodEditResult> = response.response!;
-                            this.props.setAlertFoodShowAction('Data Berhasil Ditambah', 'success');
+                            this.props.setAlertFoodShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
                         .catch( (error: ApiResponse<FoodEditResult>) => {
@@ -329,6 +349,23 @@ class Form extends Component<Props> {
                                         { FormikProps.errors.restaurant && FormikProps.touched.restaurant ? FormikProps.errors.restaurant.value : '' }
                                     </div>
                                 </FormGroup>
+
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-upload-photo"
+                                    >
+                                        Upload Gambar
+                                    </label>
+                                    <Dropzone onFilesAdded={(files: any[]) => {
+                                        this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
+                                    }} disabled={false} multiple={false} previewUrl={FormikProps.values.image_preview} />
+                                    
+                                    <div>
+                                        {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
+                                    </div>
+                                </FormGroup>
+
                                 <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
                                 </FormGroup>
