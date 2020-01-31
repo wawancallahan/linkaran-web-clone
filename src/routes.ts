@@ -14,6 +14,7 @@ import AdminTransactionApplication from './views/admin/transaction/application/I
 import AdminAccount from './views/admin/account/Index';
 import AdminAccountLinkPay from './views/admin/account/linkPay/Index';
 import AdminServicePrice from './views/admin/servicePrice/Index';
+import AdminPrice from './views/admin/price/Index';
 import AdminVoucherPromo from './views/admin/voucherPromo/Index';
 import AdminVoucherType from './views/admin/voucherType/Index';
 
@@ -126,6 +127,13 @@ const routes: any[] = [
                 layout: "/admin"
             },
         ]
+    },
+    {
+        path: "/price",
+        name: "Harga",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminPrice,
+        layout: "/admin"
     },
     {
         path: "/service-price",

@@ -13,6 +13,7 @@ import transactionLinkPayReducer from '../reducers/admin/transaction/linkPay';
 import transactionApplicationReducer from '../reducers/admin/transaction/application';
 import accountLinkPayReducer from '../reducers/admin/account/linkPay';
 import servicePriceReducer from '../reducers/admin/servicePrice';
+import priceReducer from '../reducers/admin/price';
 import voucherPromoReducer from '../reducers/admin/voucherPromo';
 import voucherTypeReducer from '../reducers/admin/voucherType';
 
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
     transactionApplication: transactionApplicationReducer,
     accountLinkPay: accountLinkPayReducer,
     servicePrice: servicePriceReducer,
+    price: priceReducer,
     voucherPromo: voucherPromoReducer,
     voucherType: voucherTypeReducer
 });

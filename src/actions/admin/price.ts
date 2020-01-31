@@ -3,70 +3,70 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
-    ServicePrice,
-    SET_PAGINATOR_SERVICE_PRICE,
-    FETCH_SERVICE_PRICE_SUCCESS,
-    FETCH_SERVICE_PRICE_ERROR,
-    SetPaginatorServicePriceActionType,
-    FetchServicePriceActionType,
-    FetchServicePriceErrorActionType,
-    FetchServicePriceSuccessActionType,
-    ServicePriceCreate,
-    ServicePriceEdit,
-    AlertServicePriceHideActionType,
-    ALERT_SERVICE_PRICE_HIDE,
-    AlertServicePriceShowActionType,
-    ALERT_SERVICE_PRICE_SHOW,
-    ServicePriceEditResult,
-    ServicePriceCreateResult
-} from '../../types/admin/servicePrice';
+    Price,
+    SET_PAGINATOR_PRICE,
+    FETCH_PRICE_SUCCESS,
+    FETCH_PRICE_ERROR,
+    SetPaginatorPriceActionType,
+    FetchPriceActionType,
+    FetchPriceErrorActionType,
+    FetchPriceSuccessActionType,
+    PriceCreate,
+    PriceEdit,
+    AlertPriceHideActionType,
+    ALERT_PRICE_HIDE,
+    AlertPriceShowActionType,
+    ALERT_PRICE_SHOW,
+    PriceEditResult,
+    PriceCreateResult
+} from '../../types/admin/price';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorServicePriceActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorPriceActionType => {
     return {
-        type: SET_PAGINATOR_SERVICE_PRICE,
+        type: SET_PAGINATOR_PRICE,
         paginate: paginate
     }
 }
 
-export const setFetchServicePriceSuccessAction = (list: ServicePrice[]): FetchServicePriceSuccessActionType => {
+export const setFetchPriceSuccessAction = (list: Price[]): FetchPriceSuccessActionType => {
     return {
-        type: FETCH_SERVICE_PRICE_SUCCESS,
+        type: FETCH_PRICE_SUCCESS,
         list: list
     }
 }
 
-export const setFetchServicePriceErrorAction = (): FetchServicePriceErrorActionType => {
+export const setFetchPriceErrorAction = (): FetchPriceErrorActionType => {
     return {
-        type: FETCH_SERVICE_PRICE_ERROR
+        type: FETCH_PRICE_ERROR
     }
 }
 
-export const setAlertServicePriceHideAction = (): AlertServicePriceHideActionType => {
+export const setAlertPriceHideAction = (): AlertPriceHideActionType => {
     return {
-        type: ALERT_SERVICE_PRICE_HIDE
+        type: ALERT_PRICE_HIDE
     }
 }
 
-export const setAlertServicePriceShowAction = (message: string, color: string): AlertServicePriceShowActionType => {
+export const setAlertPriceShowAction = (message: string, color: string): AlertPriceShowActionType => {
     return {
-        type: ALERT_SERVICE_PRICE_SHOW,
+        type: ALERT_PRICE_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchServicePriceAction = (page: number) => {
+export const fetchPriceAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price?page=${page}`)
+        axiosService.get(process.env.REACT_APP_API_URL + `/web/price?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<ServicePrice> = response.data;
+                const data: ApiResponseSuccessList<Price> = response.data;
 
-                dispatch(setFetchServicePriceSuccessAction(data.result));
+                dispatch(setFetchPriceSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
                     const paginate = data.metaData.paginate as Paginator;
@@ -80,7 +80,7 @@ export const fetchServicePriceAction = (page: number) => {
                 }
             })
             .catch( (error: AxiosError) => {
-                dispatch(setFetchServicePriceErrorAction());
+                dispatch(setFetchPriceErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
@@ -92,11 +92,11 @@ export const fetchServicePriceAction = (page: number) => {
     }
 }
 
-export const fetchListServicePriceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServicePrice>>> => {
+export const fetchListPriceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Price>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/price?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<ServicePrice> = response.data;
+                const data: ApiResponseSuccessList<Price> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -145,12 +145,12 @@ export const fetchListServicePriceAction = (search: string, page: number): Thunk
     }
 }
 
-export const createServicePriceAction = (servicePrice: ServicePriceCreate): ThunkResult<Promise<ApiResponse<ServicePriceCreateResult>>> => {
+export const createPriceAction = (price: PriceCreate): ThunkResult<Promise<ApiResponse<PriceCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/service-price', servicePrice)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/price', price)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<ServicePriceCreateResult> = response.data;
+                const data: ApiResponseSuccess<PriceCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -199,11 +199,11 @@ export const createServicePriceAction = (servicePrice: ServicePriceCreate): Thun
     }
 }
 
-export const findServicePriceAction = (id: number): ThunkResult<Promise<ApiResponse<ServicePrice>>> => {
+export const findPriceAction = (id: number): ThunkResult<Promise<ApiResponse<Price>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/price/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<ServicePrice> = response.data;
+                const data: ApiResponseSuccess<Price> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -252,11 +252,11 @@ export const findServicePriceAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editServicePriceAction = (servicePrice: ServicePriceEdit, id: number): ThunkResult<Promise<ApiResponse<ServicePriceEditResult>>> => {
+export const editPriceAction = (price: PriceEdit, id: number): ThunkResult<Promise<ApiResponse<PriceEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/service-price/${id}`, servicePrice)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/price/${id}`, price)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<ServicePriceEditResult> = response.data;
+                const data: ApiResponseSuccess<PriceEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -306,11 +306,11 @@ export const editServicePriceAction = (servicePrice: ServicePriceEdit, id: numbe
 }
 
 
-export const deleteServicePriceAction = (id: number): ThunkResult<Promise<ApiResponse<ServicePrice>>> => {
+export const deletePriceAction = (id: number): ThunkResult<Promise<ApiResponse<Price>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(process.env.REACT_APP_API_URL + `/web/service-price/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/web/price/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<ServicePrice> = response.data;
+                const data: ApiResponseSuccess<Price> = response.data;
 
                 return Promise.resolve({
                     response: data,

@@ -24,21 +24,28 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { ServicePrice, FormField } from '../../../types/admin/servicePrice';
 
-import FormServicePrice from './Form';
+import FormServicePrice from './FormEdit';
+import { ApiResponse } from '../../../types/api';
+import { findServicePriceAction } from '../../../actions/admin/servicePrice';
 
-type CreateProps = RouteComponentProps & {
+type EditProps = RouteComponentProps<{
+    id: string
+}> & {
 
 }
 
-type Props = CreateProps & LinkStateToProps & LinkDispatchToProps;
+
+type Props = EditProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
     form: FormField,
+    isLoaded: boolean,
+    loadedMessage: string,
     alert_visible: boolean,
     alert_message: string
 }
 
-class Create extends Component<Props, State> {
+class Edit extends Component<Props, State> {
 
     state = {
         form: {
@@ -59,9 +66,58 @@ class Create extends Component<Props, State> {
                 label: ''
             }
         },
+        isLoaded: false,
+        loadedMessage: '',
         alert_visible: false,
         alert_message: ''
     }
+
+    componentDidMount() {
+        const id = +this.props.match.params.id;
+
+        this.props.findServicePriceAction(id)
+                .then((response: ApiResponse<ServicePrice>) => {
+                    const form: FormField = {
+                        ...this.state.form
+                    }
+
+                    const data: ServicePrice = response.response!.result;
+
+                    form.district = {
+                        value: data.district.id,
+                        label: data.district.name
+                    }
+
+                    form.service = {
+                        value: data.service.id,
+                        label: data.service.name
+                    }
+
+                    form.vehicleType = {
+                        value: data.vehicleType.id,
+                        label: data.vehicleType.name
+                    }
+
+                    this.setState({
+                        form: form,
+                        isLoaded: true
+                    });
+                    
+                })
+                .catch((response: ApiResponse<ServicePrice>) => {
+
+                    let message = "Gagal Mendapatkan Response";
+
+                    if (response.error) {
+                        message = response.error.metaData.message;
+                    }
+
+                    this.setState({
+                        loadedMessage: message
+                    })
+                })
+    }
+
 
     setAlertMessage = (message: string) => {
         this.setState({
@@ -97,17 +153,22 @@ class Create extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Tambah Service Price</h3>
+                                    <h3 className="mb-0">Edit Service Price</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
                         <CardBody>
                             {showAlertError}
-                            <FormServicePrice form={this.state.form} 
+                            {this.state.isLoaded ? 
+                                (
+                                    <FormServicePrice form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
+                                          id={+this.props.match.params.id}
                                             />
+                                ) : this.state.loadedMessage
+                            }
                         </CardBody>
                     </Card>
                 </Container>
@@ -127,17 +188,17 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-
+    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: CreateProps) => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
     return {
-
+        findServicePriceAction: (id: number) => dispatch(findServicePriceAction(id))
     }
 }
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Tambah Service Price")
+        withTitle(Edit, "Edit Service Price")
     )
 );

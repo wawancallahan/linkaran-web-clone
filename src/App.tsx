@@ -31,6 +31,9 @@ class App extends Component<Props, State> {
                 }} />
                 <Route path="/logout" render={() => <Logout />} />
                 <Redirect from="/" to="/login" exact />
+                <Route path="*" render={() => {
+                    return <Redirect to="/admin" />
+                }} />
             </Switch>
         );
     }

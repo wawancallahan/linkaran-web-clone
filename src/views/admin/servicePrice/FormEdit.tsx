@@ -11,11 +11,8 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
-import {
-    fetchListServicePriceAction
-} from '../../../actions/admin/servicePrice';
-import { ServicePrice, FormField, ServicePriceCreate, ServicePriceCreateResult } from '../../../types/admin/servicePrice';
-import { createServicePriceAction, setAlertServicePriceShowAction } from '../../../actions/admin/servicePrice';
+import { ServicePrice, FormField, ServicePriceEdit, ServicePriceEditResult } from '../../../types/admin/servicePrice';
+import { editServicePriceAction, setAlertServicePriceShowAction } from '../../../actions/admin/servicePrice';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../types/paginator';
@@ -49,7 +46,8 @@ type FormProps = {
     form: FormField,
     setAlertOpen: (open: boolean) => void,
     setAlertMessage: (message: string) => void,
-    redirectOnSuccess: () => void
+    redirectOnSuccess: () => void,
+    id: number
 }
 
 type Props = LinkDispatchToProps & FormProps;
@@ -185,7 +183,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const servicePrice: ServicePriceCreate = {
+                    const servicePrice: ServicePriceEdit = {
                         price: {
                             id: values.price.value
                         },
@@ -200,14 +198,14 @@ class Form extends Component<Props> {
                         },
                     }
 
-                    this.props.createServicePriceAction(servicePrice)
-                        .then( (response: ApiResponse<ServicePriceCreateResult>) => {
-                            const data: ApiResponseSuccess<ServicePriceCreateResult> = response.response!;
+                    this.props.editServicePriceAction(servicePrice, this.props.id)
+                        .then( (response: ApiResponse<ServicePriceEditResult>) => {
+                            const data: ApiResponseSuccess<ServicePriceEditResult> = response.response!;
                             this.props.setAlertServicePriceShowAction('Data Berhasil Ditambah', 'success');
                             this.props.redirectOnSuccess();
 
                         })
-                        .catch( (error: ApiResponse<ServicePriceCreateResult>) => {
+                        .catch( (error: ApiResponse<ServicePriceEditResult>) => {
                             this.props.setAlertOpen(true);
                              let message = "Gagal Mendapatkan Response";
 
@@ -319,7 +317,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createServicePriceAction: (servicePrice: ServicePriceCreate) => Promise<ApiResponse<ServicePriceCreateResult>>
+    editServicePriceAction: (servicePrice: ServicePriceEdit, id: number) => Promise<ApiResponse<ServicePriceEditResult>>
     setAlertServicePriceShowAction: (message: string, color: string) => void,
     fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
     fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleType>>,
@@ -328,7 +326,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createServicePriceAction: (servicePrice: ServicePriceCreate) => dispatch(createServicePriceAction(servicePrice)),
+        editServicePriceAction: (servicePrice: ServicePriceEdit, id: number) => dispatch(editServicePriceAction(servicePrice, id)),
         setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
         fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
         fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),

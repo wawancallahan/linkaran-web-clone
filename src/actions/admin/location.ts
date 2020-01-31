@@ -10,7 +10,8 @@ import {
     Provinsi,
     KabupatenKota,
     Kecamatan,
-    Kelurahan
+    Kelurahan,
+    RegionDistrict
 } from '../../types/admin/location';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -280,11 +281,11 @@ export const fetchListKelurahanAction = (search: string, page: number, id: numbe
     }
 }
 
-export const fetchListRegionDistrict = (search: string, page: number, id: number): ThunkResult<Promise<ApiResponseList<KabupatenKota>>> => {
+export const fetchListRegionDistrictAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<RegionDistrict>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/location/district/${id}?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-district?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<KabupatenKota> = response.data;
+                const data: ApiResponseSuccessList<RegionDistrict> = response.data;
 
                 return Promise.resolve({
                     response: data,

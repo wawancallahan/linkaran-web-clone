@@ -9,9 +9,10 @@ export const ALERT_SERVICE_PRICE_SHOW = "ALERT_SERVICE_PRICE_SHOW";
 export const ALERT_SERVICE_PRICE_HIDE = "ALERT_SERVICE_PRICE_HIDE";
 
 export type FormField = {
-    basePrice: string,
-    pricePerKm: string,
-    minKm: string,
+    price: {
+        value: number,
+        label: string
+    },
     district: {
         value: number,
         label: string
@@ -20,19 +21,25 @@ export type FormField = {
         value: number,
         label: string
     },
-    vechicleType: {
+    vehicleType: {
         value: number,
         label: string
-    }
+    },
 }
 
 interface ServicePriceField {
-    basePrice: number,
-    pricePerKm: number,
-    minKm: number,
+    price: {
+        id: number
+    },
     district: {
         id: number
-    }
+    },
+    service: {
+        id: number
+    },
+    vehicleType: {
+        id: number
+    },
 }
 
 interface ServicePriceList {
@@ -40,15 +47,18 @@ interface ServicePriceList {
     pricePerKm: number,
     minKm: number,
     district: {
+        id: number,
         name: string,
         alternativeName: string
     },
     service: {
+        id: number,
         name: string,
         code: string,
         canBeMultiple: boolean
     },
     vehicleType: {
+        id: number,
         name: string,
         code: string,
         seat: string
@@ -62,15 +72,30 @@ interface ServicePriceResult {
     deletedAt?: string,
 }
 
+type ServicePriceStoreResponse = ServicePriceResult & {
+    price: {
+        id: number
+    },
+    district: {
+        id: number
+    },
+    service: {
+        id: number
+    },
+    vehicleType: {
+        id: number
+    },
+}
+
 export type ServicePrice = ServicePriceResult & ServicePriceList;
 
 export type ServicePriceCreate = ServicePriceField;
 
 export type ServicePriceEdit = ServicePriceField;
 
-export type ServicePriceCreateResult = ServicePriceResult;
+export type ServicePriceCreateResult = ServicePriceResult & ServicePriceStoreResponse;
 
-export type ServicePriceEditResult = ServicePriceResult;
+export type ServicePriceEditResult = ServicePriceResult  & ServicePriceStoreResponse
 
 export interface FetchServicePriceActionType {
     type: typeof FETCH_SERVICE_PRICE

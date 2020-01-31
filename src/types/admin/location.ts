@@ -1,56 +1,34 @@
-
-interface NegaraList {
+export type Negara = {
+    id: number,
     name: string
-}
+};
 
-interface NegaraResult {
-    id: number
-}
-
-export type Negara = NegaraResult & NegaraList;
-
-interface ProvinsiList {
+export type Provinsi = {
+    id: number,
     name: string
-}
-
-interface ProvinsiResult {
-    id: number
-}
-
-export type Provinsi = ProvinsiResult & ProvinsiList;
+};
 
 
-interface KabupatenKotaList {
+export type KabupatenKota = {
+    id: number,
     name: string
-}
+};
 
-interface KabupatenKotaResult {
-    id: number
-}
-
-export type KabupatenKota = KabupatenKotaResult & KabupatenKotaList;
-
-
-interface KecamatanList {
+export type Kecamatan = {
+    id: number,
     name: string
-}
+};
 
-interface KecamatanResult {
-    id: number
-}
-
-export type Kecamatan = KecamatanResult & KecamatanList;
-
-interface KelurahanList {
+export type Kelurahan = {
+    id: number,
     name: string
+};
+
+
+export type RegionDistrict = {
+    id: number,
+    name: string,
+    alternativeName: string
 }
-
-interface KelurahanResult {
-    id: number
-}
-
-export type Kelurahan = KelurahanResult & KelurahanList;
-
-
 
 export type LocationActionTypes = {}

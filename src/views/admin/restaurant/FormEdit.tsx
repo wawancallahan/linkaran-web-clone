@@ -171,13 +171,14 @@ class Form extends Component<Props> {
                         })
                         .catch( (error: ApiResponse<RestaurantEditResult>) => {
                             this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                            
+                            let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                            if (error.error) {
+                                message = error.error.metaData.message;
+                            }
+                
+                            this.props.setAlertMessage(message);
 
                             action.setSubmitting(false)
                         });

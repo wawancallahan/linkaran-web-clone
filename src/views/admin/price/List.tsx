@@ -30,12 +30,12 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchUserAction,
-    deleteUserAction,
-    setAlertUserShowAction,
-    setAlertUserHideAction
-} from '../../../actions/admin/user';
-import { User } from '../../../types/admin/user';
+    fetchPriceAction,
+    deletePriceAction,
+    setAlertPriceHideAction,
+    setAlertPriceShowAction
+} from '../../../actions/admin/price';
+import { Price } from '../../../types/admin/price';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -52,22 +52,22 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: User,
+    item: Price,
     key: number,
-    deleteUser: (id: number) => void
+    deletePrice: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.name}</td>
-            <td>{props.item.phoneNumber}</td>
-            <td>{props.item.email}</td>
+            <td>{props.item.basePrice}</td>
+            <td>{props.item.perKilometer}</td>
+            <td>{props.item.minKm}</td>
             <td>
-                <Link to={`/admin/user/${props.item.id}/edit`} className="btn btn-warning btn-sm">
-                    <i className="fa fa-edit"></i> Edit
+                <Link to={`/admin/price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i>
                 </Link>
-                <Button color="danger" size="sm" onClick={() => props.deleteUser(props.item.id)}>
-                    <i className="fa fa-trash"></i> Hapus
+                <Button color="danger" size="sm" onClick={() => props.deletePrice(props.item.id)}>
+                    <i className="fa fa-trash"></i>
                 </Button>
             </td>
         </tr>
@@ -91,46 +91,46 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchUserList(page);
+        this.fetchPriceList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertUserHideAction();
+        this.props.setAlertPriceHideAction();
     }
 
-    fetchUserList = (page: number) => {
-        this.props.fetchUserAction(page);
+    fetchPriceList = (page: number) => {
+        this.props.fetchPriceAction(page);
     }
 
-    deleteUser = (id: number) => {
-        this.props.deleteUserAction(id)
-            .then( (response: ApiResponse<User>) => {
-                this.fetchUserList(1);
+    deletePrice = (id: number) => {
+        this.props.deletePriceAction(id)
+            .then( (response: ApiResponse<Price>) => {
+                this.fetchPriceList(1);
 
-                this.props.setAlertUserShowAction("Data Berhasil Dihapus", 'success');
+                this.props.setAlertPriceShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponse<User>) => {
-                this.props.setAlertUserShowAction(response.error!.metaData.message, 'danger');
+            .catch( (response: ApiResponse<Price>) => {
+                this.props.setAlertPriceShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
     render() {
 
-        let userList: any = <TableItemEmpty />;
+        let priceList: any = <TableItemEmpty />;
 
-        if (this.props.userList.length > 0) {
-            userList = this.props.userList.map((item: User, index: number) => (
+        if (this.props.priceList.length > 0) {
+            priceList = this.props.priceList.map((item: Price, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
-                           deleteUser={this.deleteUser}
+                           deletePrice={this.deletePrice}
                            />
             ));
         }
 
         const CAlert = (
-            <Alert color={this.props.userAlert.color} isOpen={this.props.userAlert.visible} toggle={() => this.props.setAlertUserHideAction()} fade={false}>
-                <div>{this.props.userAlert.message}</div>
+            <Alert color={this.props.priceAlert.color} isOpen={this.props.priceAlert.visible} toggle={() => this.props.setAlertPriceHideAction()} fade={false}>
+                <div>{this.props.priceAlert.message}</div>
             </Alert>
         );
 
@@ -150,17 +150,17 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar User</h3>
+                                            <h3 className="mb-0">Daftar Price</h3>
                                         </div>
                                         <div className="col text-right">
-                                            <Link to="/admin/voucher-promo/create">
-                                                <Button
-                                                    color="primary"
-                                                    size="sm"
-                                                >
-                                                    Tambah User
-                                                </Button>
-                                            </Link>
+                                        <Link to="/admin/price/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Price
+                                            </Button>
+                                        </Link>
                                         </div>
                                     </Row>
                                 </CardHeader>
@@ -169,14 +169,14 @@ class List extends Component<Props, State> {
                                     <thead className="thead-light">
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama</th>
-                                            <th>No Telepon</th>
-                                            <th>Email</th>
+                                            <th>Harga Dasar</th>
+                                            <th>Harga Per KM</th>
+                                            <th>Minimal Jarak Tempuh (KM)</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {userList}
+                                        {priceList}
                                     </tbody>
                                 </Table>
                                 
@@ -184,7 +184,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchUserAction} />
+                                                    itemClicked={this.props.fetchPriceAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -196,37 +196,37 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    userList: User[],
+    priceList: Price[],
     paginate: Paginator,
-    userAlert: IAlert
+    priceAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        userList: state.user.list,
-        paginate: state.user.paginate,
-        userAlert: state.user.alert
+        priceList: state.price.list,
+        paginate: state.price.paginate,
+        priceAlert: state.price.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchUserAction: (page: number) => void,
-    deleteUserAction: (id: number) => Promise<ApiResponse<User>>,
-    setAlertUserHideAction: () => void,
-    setAlertUserShowAction: (message: string, color: string) => void
+    fetchPriceAction: (page: number) => void,
+    deletePriceAction: (id: number) => Promise<ApiResponse<Price>>,
+    setAlertPriceHideAction: () => void,
+    setAlertPriceShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchUserAction: (page: number) => dispatch(fetchUserAction(page)),
-        deleteUserAction: (id: number) => dispatch(deleteUserAction(id)),
-        setAlertUserHideAction: () => dispatch(setAlertUserHideAction()),
-        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color))
+        fetchPriceAction: (page: number) => dispatch(fetchPriceAction(page)),
+        deletePriceAction: (id: number) => dispatch(deletePriceAction(id)),
+        setAlertPriceHideAction: () => dispatch(setAlertPriceHideAction()),
+        setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar User")
+                            withTitle(List, "Daftar Price")
                     )
                 );
