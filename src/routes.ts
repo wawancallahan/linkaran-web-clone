@@ -15,6 +15,7 @@ import AdminAccount from './views/admin/account/Index';
 import AdminAccountLinkPay from './views/admin/account/linkPay/Index';
 import AdminServicePrice from './views/admin/servicePrice/Index';
 import AdminVoucherPromo from './views/admin/voucherPromo/Index';
+import AdminVoucherType from './views/admin/voucherType/Index';
 
 const routes: any[] = [
     {
@@ -138,6 +139,13 @@ const routes: any[] = [
         name: "Voucher",
         icon: "ni ni-single-02 text-primary",
         component: AdminVoucherPromo,
+        layout: "/admin"
+    },
+    {
+        path: "/voucher-type",
+        name: "Tipe Voucher",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminVoucherType,
         layout: "/admin"
     }
 ];

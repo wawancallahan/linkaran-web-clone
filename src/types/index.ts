@@ -11,6 +11,7 @@ import { ApplicationActionTypes as AdminTransactionApplicationActionTypes } from
 import { AccountLinkPayActionTypes as AdminAccountLinkPayActionTypes } from './admin/account/linkPay';
 import { ServicePriceActionTypes as AdminServicePriceActionTypes } from './admin/servicePrice';
 import { VoucherPromoActionTypes as AdminVoucherPromoActionTypes } from './admin/voucherPromo';
+import { VoucherTypeActionTypes as AdminVoucherTypeActionTypes  } from './admin/voucherType'
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -26,3 +27,4 @@ export type AppActions =
     | AdminAccountLinkPayActionTypes
     | AdminServicePriceActionTypes
     | AdminVoucherPromoActionTypes
+    | AdminVoucherTypeActionTypes
