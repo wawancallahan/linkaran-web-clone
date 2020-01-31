@@ -8,8 +8,10 @@ export const typeOfTransaction = (is_deposit: number, is_withdraw: number, is_tr
     return transaction;
 }
 
-export const parseDateTimeFormat = () => {
-    
+export const parseDateTimeFormat = (date: string) => {
+    const dateParse = new Date(date)
+
+    return `${dateParse.getDate()} ${dateParse.getMonth() + 1} ${dateParse.getFullYear()} ${dateParse.getHours()}:${dateParse.getMinutes()}`
 }
 
 export const booleanToString = (data: boolean) => {
@@ -21,4 +23,17 @@ export const midnightDate = () => {
     d.setHours(0,0,0,0);
 
     return d
+}
+
+export const voucherUsedFormat = (date_start: string, date_end: string) => {
+    let label = 'Sedang Berlangsung';
+
+    const dateStartParse = new Date(date_start);
+    const dateEndParse = new Date(date_end);
+
+    if (dateStartParse > dateEndParse) {
+        label = 'Sudah Berakhir'
+    }
+
+    return label;
 }

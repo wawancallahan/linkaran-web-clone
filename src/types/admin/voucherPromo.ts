@@ -1,4 +1,6 @@
 import { Paginator } from '../paginator';
+import { Service } from './service' 
+import { VoucherType } from './voucherType';
 
 export const FETCH_VOUCHER_PROMO = "FETCH_VOUCHER_PROMO";
 export const FETCH_VOUCHER_PROMO_SUCCESS = "FETCH_VOUCHER_PROMO_SUCCESS";
@@ -8,7 +10,7 @@ export const SET_PAGINATOR_VOUCHER_PROMO = "SET_PAGINATOR_VOUCHER_PROMO";
 export const ALERT_VOUCHER_PROMO_SHOW = "ALERT_VOUCHER_PROMO_SHOW";
 export const ALERT_VOUCHER_PROMO_HIDE = "ALERT_VOUCHER_PROMO_HIDE";
 
-type Service = {
+type ServiceSelect = {
     value: number,
     label: string
 }
@@ -23,7 +25,7 @@ export type FormField = {
     isLimited: number | null,
     quantity: string,
     description: string,
-    service: Service[],
+    service: ServiceSelect[],
     type: {
         value: number,
         label: string
@@ -44,7 +46,19 @@ interface VoucherPromoField {
 }
 
 interface VoucherPromoList {
-    
+    name: string,
+    code: string,
+    image: string | null,
+    amount: number,
+    quota: number,
+    minimumPurchase: number,
+    startDateTime: string,
+    endDateTime: string,
+    isLimited: boolean,
+    quantity: number,
+    description: string,
+    type: VoucherType,
+    service: Service[]
 }
 
 interface VoucherPromoResult {

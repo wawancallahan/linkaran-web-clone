@@ -153,7 +153,7 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar User</h3>
                                         </div>
                                         <div className="col text-right">
-                                            <Link to="/admin/voucher-promo/create">
+                                            <Link to="/admin/user/create">
                                                 <Button
                                                     color="primary"
                                                     size="sm"
