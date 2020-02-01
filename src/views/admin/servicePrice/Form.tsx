@@ -24,7 +24,9 @@ import { fetchListVehicleTypeAction } from '../../../actions/admin/subBrandVehic
 import { fetchListRegionDistrictAction } from '../../../actions/admin/location';
 import { RegionDistrict } from '../../../types/admin/location';
 import { fetchListPriceAction } from '../../../actions/admin/price';
+import { fetchListServiceAction } from '../../../actions/admin/service';
 import { Price } from '../../../types/admin/price';
+import { Service } from "../../../types/admin/service";
 
 const createSchema = Yup.object().shape({
     price: Yup.object().shape({
@@ -55,6 +57,46 @@ type FormProps = {
 type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
+
+    loadServiceHandler = (search: string, loadedOption: {}, options: {
+        page: number
+    }) => {
+        return this.props.fetchListServiceAction(search, options.page)
+            .then((response: ApiResponseList<Service>) => {
+
+                const data: ApiResponseSuccessList<Service> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: Service) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
+    }
 
     loadPriceHandler = (search: string, loadedOption: {}, options: {
         page: number
@@ -275,7 +317,7 @@ class Form extends Component<Props> {
                                     </label>
                                     <ReactSelectAsyncPaginate 
                                         value={FormikProps.values.service}
-                                        loadOptions={this.loadVehicleTypeHandler}
+                                        loadOptions={this.loadServiceHandler}
                                         onChange={(option) => FormikProps.setFieldValue('service', option)}
                                         onBlur={() => FormikProps.setFieldTouched('service', true)}
                                         additional={{
@@ -323,7 +365,8 @@ type LinkDispatchToProps = {
     setAlertServicePriceShowAction: (message: string, color: string) => void,
     fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
     fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleType>>,
-    fetchListRegionDistrictAction: (search: string, page: number) => Promise<ApiResponseList<RegionDistrict>>
+    fetchListRegionDistrictAction: (search: string, page: number) => Promise<ApiResponseList<RegionDistrict>>,
+    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
@@ -333,6 +376,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
         fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
         fetchListRegionDistrictAction: (search: string, page: number) => dispatch(fetchListRegionDistrictAction(search, page)),
+        fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
     }
 }
 

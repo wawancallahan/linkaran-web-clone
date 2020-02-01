@@ -63,7 +63,7 @@ const TableItem = (props: {
             <td>{props.item.pricePerKm}</td>
             <td>{props.item.minKm}</td>
             <td>{props.item.district.name}</td>
-            <td>{props.item.vehicleType.name}</td>
+            <td>{props.item.service.name}</td>
             <td>
                 <Link to={`/admin/service-price/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>

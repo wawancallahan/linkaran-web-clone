@@ -83,6 +83,11 @@ class Edit extends Component<Props, State> {
 
                     const data: ServicePrice = response.response!.result;
 
+                    form.price = {
+                        value: data.priceId,
+                        label: data.basePrice.toString()
+                    }
+
                     form.district = {
                         value: data.district.id,
                         label: data.district.name

@@ -46,6 +46,7 @@ interface ServicePriceList {
     basePrice: number,
     pricePerKm: number,
     minKm: number,
+    priceId: number,
     district: {
         id: number,
         name: string,
