@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 // reactstrap components
@@ -34,6 +17,8 @@ import {
   Container,
   Media
 } from "reactstrap";
+
+import { name as authName} from '../../services/auth'
 
 type AdminNavbarProps = RouteComponentProps & {
   brandText?: String;
@@ -68,13 +53,12 @@ class AdminNavbar extends React.Component<AdminNavbarProps, {}> {
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-                          Jones
+                          { authName }
                       </span>
                     </Media>
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
-                  <DropdownItem divider />
                   <DropdownItem onClick={this.Logout}>
                     <i className="ni ni-user-run" />
                     <span>Logout</span>

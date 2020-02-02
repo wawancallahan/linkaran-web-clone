@@ -19,6 +19,7 @@ import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
 
 const createSchema = Yup.object().shape({
+    
 });
 
 type FormProps = {
