@@ -13,24 +13,32 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import { User, FormField, UserCreate, UserCreateResult } from '../../../types/admin/user';
+import { Role } from '../../../types/admin/role'
 import { createUserAction, setAlertUserShowAction } from '../../../actions/admin/user';
-import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import { fetchListRoleAction } from '../../../actions/admin/role';
+import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
+import { Paginator } from '../../../types/paginator';
+import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
-    .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+            .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
                 if (val) {
                     return val.length <= 255;
                 }
 
                 return true;
             })
-             .required('Bidang isian nama wajib diiisi'),
+            .required('Bidang isian nama wajib diiisi'),
     phoneNumber: Yup.string()
                     .required('Bidang isian no telepon wajib diiisi'),
     email: Yup.string()
                 .email('Bidang isian harus berupa email')
                 .required('Bidang isian email wajib diiisi'),
+    role: Yup.object().shape({
+                label: Yup.string().required("Bidang pilihan role wajib diisi"),
+                value: Yup.number().notOneOf([0], 'Bidang pilihan role wajib diisi').required("Bidang pilihan role wajib diisi")
+            })
 });
 
 type FormProps = {
@@ -44,6 +52,46 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
+    loadRoleHandler = (search: string, loadedOption: {}, options: {
+        page: number
+    }) => {
+        return this.props.fetchListRoleAction(search, options.page)
+            .then((response: ApiResponseList<Role>) => {
+
+                const data: ApiResponseSuccessList<Role> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: Role) => {
+                        return {
+                            value: item.id,
+                            label: `${item.title}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
+    }
+
 
     render() {
         return (
@@ -56,7 +104,10 @@ class Form extends Component<Props> {
                     const user: UserCreate = {
                         email: values.email,
                         name: values.name,
-                        phoneNumber: values.phoneNumber
+                        phoneNumber: values.phoneNumber,
+                        role: {
+                            id: values.role.value
+                        }
                     }
 
                     this.props.createUserAction(user)
@@ -68,13 +119,13 @@ class Form extends Component<Props> {
                         })
                         .catch( (error: ApiResponse<UserCreateResult>) => {
                             this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                            let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                            if (error.error) {
+                                message = error.error.metaData.message;
+                            }
+                        
+                            this.props.setAlertMessage(message);
 
                             action.setSubmitting(false)
                         });
@@ -158,6 +209,26 @@ class Form extends Component<Props> {
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-role"
+                                    >
+                                        Role
+                                    </label>
+                                    <ReactSelectAsyncPaginate 
+                                        value={FormikProps.values.role}
+                                        loadOptions={this.loadRoleHandler}
+                                        onChange={(option) => FormikProps.setFieldValue('role', option)}
+                                        onBlur={() => FormikProps.setFieldTouched('role', true)}
+                                        additional={{
+                                            page: 1
+                                        }}
+                                        />
+                                    <div>
+                                        { FormikProps.errors.role && FormikProps.touched.role ? FormikProps.errors.role.value : '' }
+                                    </div>
+                                </FormGroup>
+                                <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
                                 </FormGroup>
                             </div>
@@ -171,13 +242,15 @@ class Form extends Component<Props> {
 
 type LinkDispatchToProps = {
     createUserAction: (user: UserCreate) => Promise<ApiResponse<UserCreateResult>>,
-    setAlertUserShowAction: (message: string, color: string) => void
+    setAlertUserShowAction: (message: string, color: string) => void,
+    fetchListRoleAction: (search: string, page: number) => Promise<ApiResponseList<Role>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
         createUserAction: (user: UserCreate) => dispatch(createUserAction(user)),
-        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color))
+        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color)),
+        fetchListRoleAction: (search: string, page: number) => dispatch(fetchListRoleAction(search, page))
     }
 }
 

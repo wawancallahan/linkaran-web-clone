@@ -11,19 +11,28 @@ export const ALERT_USER_HIDE = "ALERT_USER_HIDE";
 export type FormField = {
     name: string,
     phoneNumber: string,
-    email: string
+    email: string,
+    role: {
+        value: number,
+        label: string
+    }
 }
 
 interface UserField {
     name: string
     phoneNumber: string,
-    email: string
+    email: string,
+    role: {
+        id: number
+    }
 }
 
 interface UserList {
     name: string
     phoneNumber: string,
-    email: string
+    email: string,
+    gUserPhoneVerified: boolean | null,
+    gUserId: string
 }
 
 interface UserResult {

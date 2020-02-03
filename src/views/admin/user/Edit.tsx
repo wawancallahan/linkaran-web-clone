@@ -52,7 +52,11 @@ class Create extends Component<Props, State> {
         form: {
             name: '',
             phoneNumber: '',
-            email: ''
+            email: '',
+            role: {
+                label: '',
+                value: 0
+            }
         },
         isLoaded: false,
         loadedMessage: '',
