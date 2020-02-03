@@ -173,7 +173,11 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): Thun
             data.set(`service.${index}.id`, value.value.toString())
         })
 
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/voucher', data)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/voucher', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<VoucherPromoCreateResult> = response.data;
                 
@@ -279,7 +283,35 @@ export const findVoucherPromoAction = (id: number): ThunkResult<Promise<ApiRespo
 
 export const editVoucherPromoAction = (voucherPromo: VoucherPromoEdit, id: number): ThunkResult<Promise<ApiResponse<VoucherPromoEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher/${id}`, voucherPromo)
+
+        const data = new FormData();
+        data.set('name', voucherPromo.name)
+        data.set('code', voucherPromo.code)
+        data.set('amount', voucherPromo.amount)
+        data.set('quota', voucherPromo.quota)
+        data.set('quantity', voucherPromo.quantity)
+        data.set('minimumPurchase', voucherPromo.minimumPurchase)
+        data.set('description', voucherPromo.description)
+        data.set('isLimited', booleanToString(voucherPromo.isLimited))
+
+        if (voucherPromo.image) {
+            data.append('fileimage', voucherPromo.image)
+        }
+
+        data.set('startDateTime', voucherPromo.startDateTime)
+        data.set('endDateTime', voucherPromo.endDateTime)
+
+        data.set('type.id', voucherPromo.type.value.toString())
+
+        voucherPromo.service.forEach((value: ServiceSelect, index: number) => {
+            data.set(`service.${index}.id`, value.value.toString())
+        })
+
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher/${id}`, voucherPromo, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<VoucherPromoEditResult> = response.data;
                 

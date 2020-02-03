@@ -14,8 +14,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { VoucherPromo, FormField, VoucherPromoCreate, VoucherPromoCreateResult } from '../../../types/admin/voucherPromo';
-import { createVoucherPromoAction, setAlertVoucherPromoShowAction } from '../../../actions/admin/voucherPromo';
+import { VoucherPromo, FormField, VoucherPromoEdit, VoucherPromoEditResult } from '../../../types/admin/voucherPromo';
+import { editVoucherPromoAction, setAlertVoucherPromoShowAction } from '../../../actions/admin/voucherPromo';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
@@ -116,7 +116,8 @@ type FormProps = {
     form: FormField,
     setAlertOpen: (open: boolean) => void,
     setAlertMessage: (message: string) => void,
-    redirectOnSuccess: () => void
+    redirectOnSuccess: () => void,
+    id: number
 }
 
 type Props = LinkDispatchToProps & FormProps;
@@ -240,7 +241,7 @@ class Form extends Component<Props> {
                         endDateTime = `${getOnlyDateFromDate(values.endDateTime)} ${getTimeFromDate(values.endDateTime)}`
                     }
 
-                    const voucherPromo: VoucherPromoCreate = {
+                    const voucherPromo: VoucherPromoEdit = {
                         name: values.name,
                         code: values.code,
                         description: values.description,
@@ -257,14 +258,14 @@ class Form extends Component<Props> {
                         service: values.service
                     }
 
-                    this.props.createVoucherPromoAction(voucherPromo)
-                        .then( (response: ApiResponse<VoucherPromoCreateResult>) => {
-                            const data: ApiResponseSuccess<VoucherPromoCreateResult> = response.response!;
+                    this.props.editVoucherPromoAction(voucherPromo, this.props.id)
+                        .then( (response: ApiResponse<VoucherPromoEditResult>) => {
+                            const data: ApiResponseSuccess<VoucherPromoEditResult> = response.response!;
                             
-                            this.props.setAlertVoucherPromoShowAction('Data Berhasil Ditambah', 'success');
+                            this.props.setAlertVoucherPromoShowAction('Data Berhasil Diedit', 'success');
                             this.props.redirectOnSuccess();
                         })
-                        .catch( (error: ApiResponse<VoucherPromoCreateResult>) => {
+                        .catch( (error: ApiResponse<VoucherPromoEditResult>) => {
                             this.props.setAlertOpen(true);
                             let message = "Gagal Mendapatkan Response";
 
@@ -482,7 +483,7 @@ class Form extends Component<Props> {
                                     </label>
                                     <Dropzone onFilesAdded={(files: any[]) => {
                                         this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
-                                    }} disabled={false} multiple={false} />
+                                    }} disabled={false} multiple={false} previewUrl={FormikProps.values.image_preview} />
                                     
                                     <div>
                                         {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
@@ -545,7 +546,7 @@ class Form extends Component<Props> {
                                     className="form-control-label"
                                     htmlFor="input-isLimited"
                                     >
-                                        Target Penggunaan
+                                       Target Penggunaan
                                     </label>
                                 </FormGroup>
 
@@ -617,7 +618,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createVoucherPromoAction: (voucherPromo: VoucherPromoCreate) => Promise<ApiResponse<VoucherPromoCreateResult>>,
+    editVoucherPromoAction: (voucherPromo: VoucherPromoEdit, id: number) => Promise<ApiResponse<VoucherPromoEditResult>>,
     setAlertVoucherPromoShowAction: (message: string, color: string) => void,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
     fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherType>>,
@@ -625,7 +626,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createVoucherPromoAction: (voucherPromo: VoucherPromoCreate) => dispatch(createVoucherPromoAction(voucherPromo)),
+        editVoucherPromoAction: (voucherPromo: VoucherPromoEdit, id: number) => dispatch(editVoucherPromoAction(voucherPromo, id)),
         setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
         fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
         fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),

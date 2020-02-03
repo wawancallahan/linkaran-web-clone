@@ -158,7 +158,7 @@ const TableItem = (props: {
                 <Link to={`/admin/voucher-promo`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
                 </Link>
-                <Link to={`/admin/voucher-promo/edit`} className="btn btn-warning btn-sm">
+                <Link to={`/admin/voucher-promo/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i>
                 </Link>
                 <Link to={`/admin/voucher-promo/edit`} className="btn btn-info btn-sm">
