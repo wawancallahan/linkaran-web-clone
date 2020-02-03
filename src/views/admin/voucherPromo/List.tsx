@@ -164,7 +164,7 @@ const TableItem = (props: {
                 <Link to={`/admin/voucher-promo/edit`} className="btn btn-info btn-sm">
                     <i className="fa fa-ticket-alt"></i>
                 </Link>
-                <Button color="danger" size="sm">
+                <Button color="danger" size="sm" onClick={() => props.deleteVoucherPromo(props.item.id)}>
                     <i className="fa fa-trash"></i>
                 </Button>
             </td>

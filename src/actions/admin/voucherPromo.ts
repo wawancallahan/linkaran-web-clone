@@ -18,11 +18,13 @@ import {
     AlertVoucherPromoShowActionType,
     ALERT_VOUCHER_PROMO_SHOW,
     VoucherPromoEditResult,
-    VoucherPromoCreateResult
+    VoucherPromoCreateResult,
+    ServiceSelect
 } from '../../types/admin/voucherPromo';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import { booleanToString } from '../../helpers/parseData';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -149,6 +151,27 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): Thun
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         const data = new FormData();
+        data.set('name', voucherPromo.name)
+        data.set('code', voucherPromo.code)
+        data.set('amount', voucherPromo.amount)
+        data.set('quota', voucherPromo.quota)
+        data.set('quantity', voucherPromo.quantity)
+        data.set('minimumPurchase', voucherPromo.minimumPurchase)
+        data.set('description', voucherPromo.description)
+        data.set('isLimited', booleanToString(voucherPromo.isLimited))
+
+        if (voucherPromo.image) {
+            data.append('fileimage', voucherPromo.image)
+        }
+
+        data.set('startDateTime', voucherPromo.startDateTime)
+        data.set('endDateTime', voucherPromo.endDateTime)
+
+        data.set('type.id', voucherPromo.type.value.toString())
+
+        voucherPromo.service.forEach((value: ServiceSelect, index: number) => {
+            data.set(`service.${index}.id`, value.value.toString())
+        })
 
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/voucher', data)
             .then( (response: AxiosResponse) => {

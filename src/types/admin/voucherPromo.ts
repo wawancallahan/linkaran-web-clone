@@ -10,7 +10,7 @@ export const SET_PAGINATOR_VOUCHER_PROMO = "SET_PAGINATOR_VOUCHER_PROMO";
 export const ALERT_VOUCHER_PROMO_SHOW = "ALERT_VOUCHER_PROMO_SHOW";
 export const ALERT_VOUCHER_PROMO_HIDE = "ALERT_VOUCHER_PROMO_HIDE";
 
-type ServiceSelect = {
+export type ServiceSelect = {
     value: number,
     label: string
 }
@@ -18,11 +18,10 @@ type ServiceSelect = {
 export type FormField = {
     name: string,
     code: string,
-    minKm: string,
     amount: string,
     quota: string,
     minimumPurchase: string,
-    isLimited: number | null,
+    isLimited: string,
     quantity: string,
     description: string,
     service: ServiceSelect[],
@@ -32,17 +31,28 @@ export type FormField = {
     },
     startDateTime: Date | null,
     endDateTime: Date | null,
-    fileimage: File | null,
-    fileImagePreview: string
+    image: File | null,
+    image_preview: string
 }
 
 interface VoucherPromoField {
-    basePrice: number,
-    pricePerKm: number,
-    minKm: number,
-    district: {
-        id: number
-    }
+    name: string,
+    code: string,
+    amount: string,
+    quota: string,
+    minimumPurchase: string,
+    isLimited: boolean,
+    quantity: string,
+    description: string,
+    service: ServiceSelect[],
+    type: {
+        value: number,
+        label: string
+    },
+    startDateTime: string,
+    endDateTime: string,
+    image: File | null,
+    image_preview: string
 }
 
 interface VoucherPromoList {

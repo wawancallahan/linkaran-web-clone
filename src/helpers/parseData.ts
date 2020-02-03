@@ -1,3 +1,12 @@
+export const addZeroOnNumber = (number: number) => {
+    let parseNumber = number.toString()
+    if (number < 10) {
+        parseNumber = `0${parseNumber}`
+    }
+
+    return parseNumber
+}
+
 export const typeOfTransaction = (is_deposit: number, is_withdraw: number, is_transfer: number): string => {
     let transaction = "";
 
@@ -12,6 +21,14 @@ export const parseDateTimeFormat = (date: string) => {
     const dateParse = new Date(date)
 
     return `${dateParse.getDate()} ${dateParse.getMonth() + 1} ${dateParse.getFullYear()} ${dateParse.getHours()}:${dateParse.getMinutes()}`
+}
+
+export const getOnlyDateFromDate = (date: Date) => {
+    return `${date.getFullYear()}-${addZeroOnNumber(date.getMonth() + 1)}-${addZeroOnNumber(date.getDate())}`
+}
+
+export const getTimeFromDate = (date: Date) => {
+    return `${addZeroOnNumber(date.getHours())}:${addZeroOnNumber(date.getMinutes())}`
 }
 
 export const booleanToString = (data: boolean) => {

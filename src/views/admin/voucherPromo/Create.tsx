@@ -44,11 +44,10 @@ class Create extends Component<Props, State> {
         form: {
             name: '',
             code: '',
-            minKm: '',
             amount: '',
             quota: '',
             minimumPurchase: '',
-            isLimited: null,
+            isLimited: '0',
             quantity: '',
             description: '',
             service: [],
@@ -58,8 +57,8 @@ class Create extends Component<Props, State> {
             },
             startDateTime: null,
             endDateTime: null,
-            fileimage: null,
-            fileImagePreview: ''
+            image: null,
+            image_preview: ''
         },
         alert_visible: false,
         alert_message: ''
@@ -78,7 +77,7 @@ class Create extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/user');
+        this.props.history.push('/admin/voucher-promo');
     }
     
     render() {
