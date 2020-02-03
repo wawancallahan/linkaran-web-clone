@@ -19,9 +19,10 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 
 import Pagination from '../../../components/Pagination/Pagination'
+import { VoucherPromo } from '../../../types/admin/voucherPromo';
 
 type DetailPenggunaanVoucherProps = {
-
+    data: VoucherPromo | null
 }
 
 type Props = DetailPenggunaanVoucherProps

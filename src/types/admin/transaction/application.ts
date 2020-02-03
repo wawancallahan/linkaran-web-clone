@@ -17,7 +17,13 @@ interface ApplicationField {
 }
 
 interface ApplicationList {
-    
+    date: string,
+    numberTransaction: string,
+    costumerName: string,
+    driverName: string,
+    service: string,
+    totalCost: 10800,
+    status: string
 }
 
 interface ApplicationResult {

@@ -62,50 +62,42 @@ export const setAlertApplicationShowAction = (message: string, color: string): A
 
 export const fetchApplicationAction = (page: number) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        dispatch(setFetchApplicationErrorAction());
+        axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}`, {
+               data: {}
+            })
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<Application> = response.data;
 
-        dispatch(setPaginateAction({
-            total: 0,
-            currentPage: 0,
-            itemCount: 0,
-            pageCount: 0
-        }))
-        // axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`, {
-        //        data: {}
-        //     })
-        //     .then( (response: AxiosResponse) => {
-        //         const data: ApiResponseSuccessList<Application> = response.data;
+                dispatch(setFetchApplicationSuccessAction(data.result));
 
-        //         dispatch(setFetchApplicationSuccessAction(data.result));
+                if (data.metaData.paginate) {
 
-        //         if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
 
-        //             const paginate = data.metaData.paginate as Paginator;
+                    dispatch(setPaginateAction({
+                        total: paginate.itemCount * paginate.pageCount,
+                        currentPage: page,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
+                    }))
+                }
+            })
+            .catch( (error: AxiosError) => {
+                dispatch(setFetchApplicationErrorAction());
 
-        //             dispatch(setPaginateAction({
-        //                 total: paginate.itemCount * paginate.pageCount,
-        //                 currentPage: page,
-        //                 itemCount: paginate.itemCount,
-        //                 pageCount: paginate.pageCount
-        //             }))
-        //         }
-        //     })
-        //     .catch( (error: AxiosError) => {
-        //         dispatch(setFetchApplicationErrorAction());
-
-        //         dispatch(setPaginateAction({
-        //             total: 0,
-        //             currentPage: 0,
-        //             itemCount: 0,
-        //             pageCount: 0
-        //         }))
-        //     })
+                dispatch(setPaginateAction({
+                    total: 0,
+                    currentPage: 0,
+                    itemCount: 0,
+                    pageCount: 0
+                }))
+            })
     }
 }
 
 export const fetchListApplicationAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Application>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Application> = response.data;
 

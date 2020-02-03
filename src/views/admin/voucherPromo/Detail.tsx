@@ -69,7 +69,24 @@ class Detail extends Component<Props, State> {
     }
 
     componentDidMount() {
+        const id = +this.props.match.params.id;
+        
+        this.props.findVoucherPromoAction(id)
+                .then((response: ApiResponse<VoucherPromo>) => {
 
+                    const data: VoucherPromo =response.response!.result;
+
+                    this.setState({
+                        data: data,
+                        isLoaded: true
+                    });
+                    
+                })
+                .catch((response: ApiResponse<VoucherPromo>) => {
+                    this.setState({
+                        loadedMessage: response.error!.metaData.message
+                    })
+                })
     }
 
     setAlertMessage = (message: string) => {
@@ -99,12 +116,20 @@ class Detail extends Component<Props, State> {
                 <HeaderView />
 
                 <Container className="mt--7" fluid>
-                    <div className="mb-4">
-                        <DetailVoucher />
-                    </div>
-                    <div>
-                        <DetailPengunaanVoucher />
-                    </div>
+                    {showAlertError}
+                    {this.state.isLoaded && this.state.data ? 
+                        (
+                            <>
+                                <div className="mb-4">
+                                    <DetailVoucher data={this.state.data} />
+                                </div>
+                                <div>
+                                    <DetailPengunaanVoucher data={this.state.data} />
+                                </div>
+                            </>
+                        ) : this.state.loadedMessage
+                    }
+                    
                 </Container>
             </>
         );

@@ -159,7 +159,7 @@ class Edit extends Component<Props, State> {
                             </Row>
                         </CardHeader>
                         <CardBody>
-                        {showAlertError}
+                            {showAlertError}
                             {this.state.isLoaded ? 
                                 (
                                     <FormVoucher form={this.state.form} 

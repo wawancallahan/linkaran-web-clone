@@ -112,7 +112,7 @@ const TableItem = (props: {
                 </div>
             </td>
             <td>
-                {props.item.isLimited ? 'Terbatas' : 'Tidak Terbatas'}
+                {props.item.isLimited ? 'Terbatas' : 'Publik'}
             </td>
             <td>
                 <div className="progress-wrapper">
@@ -155,7 +155,7 @@ const TableItem = (props: {
                 </div>
             </td>
             <td>
-                <Link to={`/admin/voucher-promo`} className="btn btn-info btn-sm">
+                <Link to={`/admin/voucher-promo/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
                 </Link>
                 <Link to={`/admin/voucher-promo/${props.item.id}/edit`} className="btn btn-warning btn-sm">

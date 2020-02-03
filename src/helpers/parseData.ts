@@ -17,6 +17,19 @@ export const typeOfTransaction = (is_deposit: number, is_withdraw: number, is_tr
     return transaction;
 }
 
+export const colorStatusFormat = (status: string) => {
+    let color = "default"
+    
+    switch (status) {
+        case "complete": color = "success"
+            break;
+        case "cancel": color = "danger"
+            break;
+    }
+
+    return color;
+}
+
 export const parseDateTimeFormat = (date: string) => {
     const dateParse = new Date(date)
 

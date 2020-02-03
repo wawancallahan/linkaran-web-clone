@@ -39,7 +39,7 @@ import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
 
-import { typeOfTransaction } from '../../../../helpers/parseData';
+import { typeOfTransaction, colorStatusFormat } from '../../../../helpers/parseData';
 import { amountFormat } from '../../../../helpers/number';
 
 type ListProps = RouteComponentProps & {
@@ -60,13 +60,23 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td></td>
+            <td>{props.item.date}</td>
+            <td>{props.item.numberTransaction}</td>
+            <td>{props.item.costumerName}</td>
+            <td>{props.item.driverName}</td>
             <td>
-                <Link to={`/admin/transaction/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
+                <Badge color="success">{props.item.service}</Badge>
+            </td>
+                <td>Rp. {props.item.totalCost}</td>
+            <td>
+                <Badge color={colorStatusFormat(props.item.status)}>{props.item.status}</Badge>
+            </td>
+            <td>
+                <Link to={``} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
                 </Link>
-                <Link to={`/admin/transaction/link-pay/${props.item.id}/edit`} className="btn btn-warning btn-sm">
-                    <i className="fa fa-pencil"></i>
+                <Link to={``} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i>
                 </Link>
                 <Button color="danger" size="sm" onClick={() => {}}>
                     <i className="fa fa-trash"></i>
@@ -159,56 +169,6 @@ class List extends Component<Props, State> {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>01-01-2018 12:00:00</td>
-                                            <td>R0120123123</td>
-                                            <td>Pelanggan</td>
-                                            <td>Driver</td>
-                                            <td>
-                                                <Badge color="success">Link-Ride</Badge>
-                                            </td>
-                                            <td>Rp. 100.000</td>
-                                            <td>
-                                                <Badge color="success">Selesai</Badge>
-                                            </td>
-                                            <td>
-                                                <Link to={``} className="btn btn-info btn-sm">
-                                                    <i className="fa fa-eye"></i>
-                                                </Link>
-                                                <Link to={``} className="btn btn-warning btn-sm">
-                                                    <i className="fa fa-edit"></i>
-                                                </Link>
-                                                <Button color="danger" size="sm" onClick={() => {}}>
-                                                    <i className="fa fa-trash"></i>
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>01-01-2018 12:00:00</td>
-                                            <td>R0120123123</td>
-                                            <td>Pelanggan</td>
-                                            <td>Driver</td>
-                                            <td>
-                                                <Badge color="success">Link-Ride</Badge>
-                                            </td>
-                                            <td>Rp. 100.000</td>
-                                            <td>
-                                                <Badge color="danger">Batal</Badge>
-                                            </td>
-                                            <td>
-                                                <Link to={``} className="btn btn-info btn-sm">
-                                                    <i className="fa fa-eye"></i>
-                                                </Link>
-                                                <Link to={``} className="btn btn-warning btn-sm">
-                                                    <i className="fa fa-edit"></i>
-                                                </Link>
-                                                <Button color="danger" size="sm" onClick={() => {}}>
-                                                    <i className="fa fa-trash"></i>
-                                                </Button>
-                                            </td>
-                                        </tr>
                                         {transactionApplication}
                                     </tbody>
                                 </Table>
