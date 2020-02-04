@@ -35,10 +35,14 @@ const createSchema = Yup.object().shape({
     email: Yup.string()
                 .email('Bidang isian harus berupa email')
                 .required('Bidang isian email wajib diiisi'),
-    role: Yup.object().shape({
-                    label: Yup.string().required("Bidang pilihan role wajib diisi"),
-                    value: Yup.number().notOneOf([0], 'Bidang pilihan role wajib diisi').required("Bidang pilihan role wajib diisi")
-                })
+    roles: Yup.array()
+                .min(1, "Bidang pilihan role wajib diisi")
+                .of(
+                    Yup.object().shape({
+                        label: Yup.string().required('Bidang pilihan role wajib diisi'),
+                        value: Yup.number().notOneOf([0], 'Bidang pilihan role wajib diisi').required('Bidang pilihan role wajib diisi')
+                    })
+                ),
 });
 
 type FormProps = {
@@ -102,13 +106,20 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
+                    let roles: {id: number}[] = values.roles.map((value: {
+                        value: number,
+                        label: string
+                    }) => {
+                        return {
+                            id: value.value
+                        }
+                    })
+
                     const user: UserEdit = {
                         email: values.email,
                         name: values.name,
                         phoneNumber: values.phoneNumber,
-                        role: {
-                            id: values.role.value
-                        }
+                        roles: roles
                     }
 
                     this.props.editUserAction(user, this.props.id)
@@ -216,16 +227,17 @@ class Form extends Component<Props> {
                                         Role
                                     </label>
                                     <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.role}
+                                        value={FormikProps.values.roles}
                                         loadOptions={this.loadRoleHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('role', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('role', true)}
+                                        onChange={(option) => FormikProps.setFieldValue('roles', option)}
+                                        onBlur={() => FormikProps.setFieldTouched('roles', true)}
                                         additional={{
                                             page: 1
                                         }}
+                                        isMulti
                                         />
                                     <div>
-                                        { FormikProps.errors.role && FormikProps.touched.role ? FormikProps.errors.role.value : '' }
+                                        { FormikProps.errors.roles && FormikProps.touched.roles ? FormikProps.errors.roles : '' }
                                     </div>
                                 </FormGroup>
                                 <FormGroup>

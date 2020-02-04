@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Role } from './role'
 
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
@@ -12,19 +13,19 @@ export type FormField = {
     name: string,
     phoneNumber: string,
     email: string,
-    role: {
+    roles: {
         value: number,
         label: string
-    }
+    }[]
 }
 
 interface UserField {
     name: string
     phoneNumber: string,
     email: string,
-    role: {
+    roles: {
         id: number
-    }
+    }[]
 }
 
 interface UserList {
@@ -33,6 +34,7 @@ interface UserList {
     email: string,
     gUserPhoneVerified: boolean | null,
     gUserId: string
+    roles: Role[]
 }
 
 interface UserResult {

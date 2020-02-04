@@ -29,6 +29,7 @@ import {
 
 import FormUser from './FormEdit';
 import { ApiResponse } from '../../../types/api';
+import { Role } from '../../../types/admin/role';
 
 type EditProps = RouteComponentProps<{
     id: string
@@ -53,10 +54,7 @@ class Create extends Component<Props, State> {
             name: '',
             phoneNumber: '',
             email: '',
-            role: {
-                label: '',
-                value: 0
-            }
+            roles: []
         },
         isLoaded: false,
         loadedMessage: '',
@@ -78,6 +76,12 @@ class Create extends Component<Props, State> {
                     form.email =  data.email;
                     form.name = data.name;
                     form.phoneNumber = data.phoneNumber;
+                    form.roles = data.roles.map((value: Role) => {
+                        return {
+                            value: value.id,
+                            label: value.title
+                        };
+                    })
 
                     this.setState({
                         form: form,
