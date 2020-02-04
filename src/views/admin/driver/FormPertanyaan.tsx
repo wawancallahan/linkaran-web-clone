@@ -48,6 +48,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="wasOnceAnOnlineDriver"
                                 type="radio"
                                 value="1"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="wasOnceAnOnlineDriver_yes">
                                 Sudah
@@ -61,6 +63,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="wasOnceAnOnlineDriver"
                                 type="radio"
                                 value="0"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="wasOnceAnOnlineDriver_no">
                                 Belum
@@ -90,6 +94,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
                                 value="1"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isActivelyBecomingAnotherOnlineDriver_yes">
                                 Masih Aktif
@@ -103,6 +109,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isActivelyBecomingAnotherOnlineDriver"
                                 type="radio"
                                 value="0"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isActivelyBecomingAnotherOnlineDriver_no">
                                 Sudah Tidak Aktif
@@ -132,6 +140,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isJoiningTheDriverCommunity"
                                 type="radio"
                                 value="1"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isJoiningTheDriverCommunity_yes">
                                 Masih Aktif
@@ -145,6 +155,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isJoiningTheDriverCommunity"
                                 type="radio"
                                 value="0"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isJoiningTheDriverCommunity_no">
                                 Sudah Tidak Aktif
@@ -172,6 +184,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isJoiningLinkaranAsmainJob"
                                 type="radio"
                                 value="1"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isJoiningLinkaranAsmainJob_yes">
                                 Pekerjaan Utama
@@ -185,6 +199,8 @@ class FormPertanyaan extends Component<Props> {
                                 name="isJoiningLinkaranAsmainJob"
                                 type="radio"
                                 value="0"
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
                             />
                             <label className="custom-control-label" htmlFor="isJoiningLinkaranAsmainJob_no">
                                 Pekerjaan Sampingan
