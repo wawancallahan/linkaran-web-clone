@@ -50,7 +50,7 @@
     "dotenv": "^8.2.0",
     "formik": "^2.0.3",
     "http-proxy-middleware": "^0.20.0",
-    "moment": "2.24.0",
+    "moment": "^2.24.0",
     "node-sass": "4.11.0",
     "nouislider": "13.1.1",
     "query-string": "^6.8.3",
@@ -70,9 +70,11 @@
     "react-select": "^3.0.8",
     "react-select-async-paginate": "^0.3.10",
     "react-table": "^6.10.3",
+    "react-toastify": "^5.5.0",
     "reactstrap": "7.1.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
+    "sweetalert": "^2.1.2",
     "yup": "^0.27.0"
   },
   "devDependencies": {
