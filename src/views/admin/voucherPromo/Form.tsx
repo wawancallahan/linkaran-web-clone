@@ -559,6 +559,8 @@ class Form extends Component<Props> {
                                                 name="isLimited"
                                                 type="radio"
                                                 value="0"
+                                                onChange={FormikProps.handleChange}
+                                                onBlur={FormikProps.handleBlur}
                                             />
                                             <label className="custom-control-label" htmlFor="isLimited_no">
                                                 Public
@@ -571,6 +573,8 @@ class Form extends Component<Props> {
                                                 name="isLimited"
                                                 type="radio"
                                                 value="1"
+                                                onChange={FormikProps.handleChange}
+                                                onBlur={FormikProps.handleBlur}
                                             />
                                             <label className="custom-control-label" htmlFor="isLimited_yes">
                                                 Terbatas

@@ -48,6 +48,10 @@ export const booleanToString = (data: boolean) => {
     return data ? "true" : "false"
 }
 
+export const booleanToIndonesiaText = (data: boolean) => {
+    return data ? "Ya" : "Tidak"
+}
+
 export const midnightDate = () => {
     var d = new Date();
     d.setHours(0,0,0,0);

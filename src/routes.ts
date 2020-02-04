@@ -17,6 +17,7 @@ import AdminServicePrice from './views/admin/servicePrice/Index';
 import AdminPrice from './views/admin/price/Index';
 import AdminVoucherPromo from './views/admin/voucherPromo/Index';
 import AdminVoucherType from './views/admin/voucherType/Index';
+import AdminService from './views/admin/service/Index'
 
 const routes: any[] = [
     {
@@ -127,6 +128,13 @@ const routes: any[] = [
                 layout: "/admin"
             },
         ]
+    },
+    {
+        path: "/service",
+        name: "Layanan",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminService,
+        layout: "/admin"
     },
     {
         path: "/price",

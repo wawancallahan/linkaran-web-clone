@@ -13,6 +13,7 @@ import { ServicePriceActionTypes as AdminServicePriceActionTypes } from './admin
 import { PriceActionTypes as AdminPriceActionTypes } from './admin/price';
 import { VoucherPromoActionTypes as AdminVoucherPromoActionTypes } from './admin/voucherPromo';
 import { VoucherTypeActionTypes as AdminVoucherTypeActionTypes  } from './admin/voucherType'
+import { ServiceActionTypes as AdminServiceActionTypes } from './admin/service'
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -30,3 +31,4 @@ export type AppActions =
     | AdminPriceActionTypes
     | AdminVoucherPromoActionTypes
     | AdminVoucherTypeActionTypes
+    | AdminServiceActionTypes
