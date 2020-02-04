@@ -40,9 +40,9 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 
 import DetailVoucher from './DetailVoucher'
-import DetailPengunaanVoucher from './DetailPengunaanVoucher'
 import DetailJumlahPenggunaanVoucher from './DetailJumlahPenggunaanVoucher'
 import DetailJumlahPenggunaanTicket from './DetailJumlahPenggunaanTicket'
+import ListTicket from './ListTicket'
 
 type DetailProps = RouteComponentProps<{
     id: string
@@ -125,8 +125,8 @@ class Detail extends Component<Props, State> {
                                 <div className="mb-4">
                                     <DetailVoucher 
                                         voucher={this.state.data} 
-                                        ticketState={false} 
-                                        voucherState={true} />
+                                        ticketState={true} 
+                                        voucherState={false} />
                                 </div>
                                 <div className="mb-4">
                                     <Row>
@@ -139,7 +139,7 @@ class Detail extends Component<Props, State> {
                                     </Row>
                                 </div>
                                 <div>
-                                    <DetailPengunaanVoucher data={this.state.data} />
+                                    <ListTicket data={this.state.data} />
                                 </div>
                             </>
                         ) : this.state.loadedMessage

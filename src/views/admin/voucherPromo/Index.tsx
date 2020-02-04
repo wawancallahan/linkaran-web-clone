@@ -4,7 +4,7 @@ import VoucherPromoList from './List';
 import VoucherPromoDetail from './Detail';
 import VoucherPromoCreate from './Create';
 import VoucherPromoEdit from './Edit';
-import Ticket from './Tiket';
+import Ticket from './DetailTicket';
 
 class Index extends Component {
     render() {
