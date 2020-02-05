@@ -1,15 +1,6 @@
 {
+  "extends": "./paths.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@actions/*": ["./src/actions/*"],
-      "@helpers/*": ["./src/helpers/*"],
-      "@reducers/*": ["./src/reducers/*"],
-      "@types/*": ["./src/types/*"],
-      "@components/*": ["./src/components/*"],
-      "@hoc/*": ["./src/hoc/*"],
-      "@services/*": ["./src/services/*"]
-    },
     "target": "es5",
     "lib": [
       "dom",
@@ -29,10 +20,14 @@
     "noEmit": true,
     "jsx": "preserve",
     "downlevelIteration": true,
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
   "include": [
     "src"
   ],
-  "exclude": ["src/setupProxy.js", "node_modules", "dist"]
+  "exclude": [
+    "src/setupProxy.js",
+    "node_modules",
+    "dist"
+  ]
 }
