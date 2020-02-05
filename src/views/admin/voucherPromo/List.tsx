@@ -46,6 +46,7 @@ import {
     argonReactImage
 } from '../../../Assets'
 import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/parseData';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -54,7 +55,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -181,7 +182,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -197,7 +198,15 @@ class List extends Component<Props, State> {
     }
 
     fetchVoucherPromoList = (page: number) => {
-        this.props.fetchVoucherPromoAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchVoucherPromoAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteVoucherPromo = (id: number) => {
@@ -214,18 +223,27 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let voucherPromoList: any = <TableItemEmpty />;
+        let voucherPromoList: any = null
 
-        if (this.props.voucherPromoList.length > 0) {
-            voucherPromoList = this.props.voucherPromoList.map((item: VoucherPromo, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteVoucherPromo={this.deleteVoucherPromo}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                color="#00BFFF"
+                                height={150}
+                                width={150}
+                                visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.voucherPromoList.length > 0) {
+                voucherPromoList = this.props.voucherPromoList.map((item: VoucherPromo, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteVoucherPromo={this.deleteVoucherPromo}
+                               />
+                ));
+            } else {
+                voucherPromoList = <TableItemEmpty />;
+            }
         }
-
         const CAlert = (
             <Alert color={this.props.voucherPromoAlert.color} isOpen={this.props.voucherPromoAlert.visible} toggle={() => this.props.setAlertVoucherPromoHideAction()} fade={false}>
                 <div>{this.props.voucherPromoAlert.message}</div>
@@ -278,6 +296,8 @@ class List extends Component<Props, State> {
                                         {voucherPromoList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -309,7 +329,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchVoucherPromoAction: (page: number) => void,
+    fetchVoucherPromoAction: (page: number) => Promise<Boolean>,
     deleteVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromo>>,
     setAlertVoucherPromoHideAction: () => void,
     setAlertVoucherPromoShowAction: (message: string, color: string) => void

@@ -61,8 +61,8 @@ export const setAlertUserShowAction = (message: string, color: string): AlertUse
 }
 
 export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/user?page=${page}`)
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/user?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<User> = response.data;
 

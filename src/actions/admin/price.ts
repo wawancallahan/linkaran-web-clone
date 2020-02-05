@@ -60,9 +60,9 @@ export const setAlertPriceShowAction = (message: string, color: string): AlertPr
     };
 }
 
-export const fetchPriceAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/price?page=${page}`)
+export const fetchPriceAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/price?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Price> = response.data;
 
@@ -78,6 +78,8 @@ export const fetchPriceAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchPriceErrorAction());
@@ -88,6 +90,8 @@ export const fetchPriceAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

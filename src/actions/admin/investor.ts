@@ -68,9 +68,9 @@ export const setAlertInvestorShowAction = (message: string, color: string): Aler
     };
 }
 
-export const fetchInvestorApiAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/investor-profile?page=${page}`)
+export const fetchInvestorApiAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Investor> = response.data;
 
@@ -86,6 +86,8 @@ export const fetchInvestorApiAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchInvestorErrorAction());
@@ -96,6 +98,8 @@ export const fetchInvestorApiAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

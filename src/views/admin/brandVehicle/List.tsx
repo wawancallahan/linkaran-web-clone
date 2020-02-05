@@ -39,6 +39,7 @@ import { BrandVehicle } from '../../../types/admin/brandVehicle';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -81,7 +82,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -97,7 +98,15 @@ class List extends Component<Props, State> {
     }
 
     fetchBrandVehicleList = (page: number) => {
-        this.props.fetchBrandVehicleAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchBrandVehicleAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteBrandVehicle = (id: number) => {
@@ -114,16 +123,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let brandVehicleList: any = <TableItemEmpty />;
+        let brandVehicleList: any = null;
 
-        if (this.props.brandVehicleList.length > 0) {
-            brandVehicleList = this.props.brandVehicleList.map((item: BrandVehicle, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteBrandVehicle={this.deleteBrandVehicle}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.brandVehicleList.length > 0) {
+                brandVehicleList = this.props.brandVehicleList.map((item: BrandVehicle, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteBrandVehicle={this.deleteBrandVehicle}
+                               />
+                ));
+            } else {
+                brandVehicleList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -175,6 +194,8 @@ class List extends Component<Props, State> {
                                         {brandVehicleList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -206,7 +227,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchBrandVehicleAction: (page: number) => void,
+    fetchBrandVehicleAction: (page: number) => Promise<Boolean>,
     deleteBrandVehicleAction: (id: number) => Promise<ApiResponse<BrandVehicle>>,
     setAlertBrandVehicleHideAction: () => void,
     setAlertBrandVehicleShowAction: (message: string, color: string) => void

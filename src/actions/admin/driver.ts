@@ -69,9 +69,9 @@ export const setAlertDriverShowAction = (message: string, color: string): AlertD
     };
 }
 
-export const fetchDriverApiAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?page=${page}`)
+export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Driver> = response.data;
 
@@ -87,6 +87,8 @@ export const fetchDriverApiAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchDriverErrorAction());
@@ -97,6 +99,8 @@ export const fetchDriverApiAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

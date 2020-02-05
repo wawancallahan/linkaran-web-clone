@@ -39,6 +39,7 @@ import { Driver } from '../../../types/admin/driver';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -90,7 +91,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -106,7 +107,15 @@ class List extends Component<Props, State> {
     }
 
     fetchDriverList(page: number) {
-        this.props.fetchDriverApiAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchDriverApiAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteDriver = (id: number) => {
@@ -123,16 +132,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let driverList: any = <TableItemEmpty />;
+        let driverList: any = null;
 
-        if (this.props.driverList.length > 0) {
-            driverList = this.props.driverList.map((item: Driver, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteDriver={this.deleteDriver}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.driverList.length > 0) {
+                driverList = this.props.driverList.map((item: Driver, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteDriver={this.deleteDriver}
+                               />
+                ));
+            } else {
+                driverList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -190,6 +209,8 @@ class List extends Component<Props, State> {
                                         {driverList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -221,7 +242,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchDriverApiAction: (page: number) => void,
+    fetchDriverApiAction: (page: number) => Promise<Boolean>,
     setAlertDriverHideAction: () => void,
     setAlertDriverShowAction: (message: string, color: string) => void,
     deleteDriverAction: (id: number) => Promise<ApiResponse<Driver>>,

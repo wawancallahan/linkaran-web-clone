@@ -60,9 +60,9 @@ export const setAlertFoodShowAction = (message: string, color: string): AlertFoo
     };
 }
 
-export const fetchFoodAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/food?page=${page}`)
+export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/food?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Food> = response.data;
 
@@ -78,6 +78,8 @@ export const fetchFoodAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchFoodErrorAction());
@@ -88,6 +90,8 @@ export const fetchFoodAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

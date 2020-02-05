@@ -39,6 +39,7 @@ import { ServicePrice } from '../../../types/admin/servicePrice';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -88,7 +89,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -104,7 +105,15 @@ class List extends Component<Props, State> {
     }
 
     fetchServicePriceList = (page: number) => {
-        this.props.fetchServicePriceAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchServicePriceAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteServicePrice = (id: number) => {
@@ -120,17 +129,26 @@ class List extends Component<Props, State> {
     }
 
     render() {
+        let servicePriceList: any = null;
 
-        let servicePriceList: any = <TableItemEmpty />;
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
 
-        if (this.props.servicePriceList.length > 0) {
-            servicePriceList = this.props.servicePriceList.map((item: ServicePrice, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteServicePrice={this.deleteServicePrice}
-                           />
-            ));
+        if ( ! this.state.loader) {
+            if (this.props.servicePriceList.length > 0) {
+                servicePriceList = this.props.servicePriceList.map((item: ServicePrice, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteServicePrice={this.deleteServicePrice}
+                               />
+                ));
+            } else {
+                servicePriceList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -186,6 +204,8 @@ class List extends Component<Props, State> {
                                         {servicePriceList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -217,7 +237,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchServicePriceAction: (page: number) => void,
+    fetchServicePriceAction: (page: number) => Promise<Boolean>,
     deleteServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>,
     setAlertServicePriceHideAction: () => void,
     setAlertServicePriceShowAction: (message: string, color: string) => void

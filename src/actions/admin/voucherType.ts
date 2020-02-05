@@ -60,9 +60,9 @@ export const setAlertVoucherTypeShowAction = (message: string, color: string): A
     };
 }
 
-export const fetchVoucherTypeAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type?page=${page}`)
+export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VoucherType> = response.data;
 
@@ -78,6 +78,8 @@ export const fetchVoucherTypeAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchVoucherTypeErrorAction());
@@ -88,6 +90,8 @@ export const fetchVoucherTypeAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

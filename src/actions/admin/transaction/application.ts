@@ -60,11 +60,9 @@ export const setAlertApplicationShowAction = (message: string, color: string): A
     };
 }
 
-export const fetchApplicationAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}`, {
-               data: {}
-            })
+export const fetchApplicationAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Application> = response.data;
 
@@ -81,6 +79,8 @@ export const fetchApplicationAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchApplicationErrorAction());
@@ -91,6 +91,8 @@ export const fetchApplicationAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

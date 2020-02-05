@@ -63,10 +63,9 @@ export const setAlertRestaurantShowAction = (message: string, color: string): Al
     };
 }
 
-export const fetchRestaurantAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant?page=${page}`)
+export const fetchRestaurantAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
@@ -82,6 +81,8 @@ export const fetchRestaurantAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchRestaurantErrorAction());
@@ -92,6 +93,8 @@ export const fetchRestaurantAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

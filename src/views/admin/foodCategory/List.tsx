@@ -39,6 +39,7 @@ import { FoodCategory } from '../../../types/admin/foodCategory';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -81,7 +82,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -97,7 +98,15 @@ class List extends Component<Props, State> {
     }
 
     fetchFoodCategoryList = (page: number) => {
-        this.props.fetchFoodCategoryAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchFoodCategoryAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteFoodCategory = (id: number) => {
@@ -114,16 +123,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let foodCategoryList: any = <TableItemEmpty />;
+        let foodCategoryList: any = null;
 
-        if (this.props.foodCategoryList.length > 0) {
-            foodCategoryList = this.props.foodCategoryList.map((item: FoodCategory, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteFoodCategory={this.deleteFoodCategory}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.foodCategoryList.length > 0) {
+                foodCategoryList = this.props.foodCategoryList.map((item: FoodCategory, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteFoodCategory={this.deleteFoodCategory}
+                               />
+                ));
+            } else {
+                foodCategoryList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -175,6 +194,8 @@ class List extends Component<Props, State> {
                                         {foodCategoryList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -206,7 +227,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchFoodCategoryAction: (page: number) => void,
+    fetchFoodCategoryAction: (page: number) =>  Promise<Boolean>,
     deleteFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategory>>,
     setAlertFoodCategoryHideAction: () => void,
     setAlertFoodCategoryShowAction: (message: string, color: string) => void

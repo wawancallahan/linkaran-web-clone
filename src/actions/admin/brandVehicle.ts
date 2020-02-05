@@ -60,9 +60,9 @@ export const setAlertBrandVehicleShowAction = (message: string, color: string): 
     };
 }
 
-export const fetchBrandVehicleAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle?page=${page}`)
+export const fetchBrandVehicleAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<BrandVehicle> = response.data;
 
@@ -79,6 +79,8 @@ export const fetchBrandVehicleAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchBrandVehicleErrorAction());
@@ -89,6 +91,8 @@ export const fetchBrandVehicleAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }

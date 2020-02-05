@@ -39,6 +39,7 @@ import { VoucherType } from '../../../types/admin/voucherType';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -81,7 +82,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -97,7 +98,15 @@ class List extends Component<Props, State> {
     }
 
     fetchVoucherTypeList = (page: number) => {
-        this.props.fetchVoucherTypeAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchVoucherTypeAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteVoucherType = (id: number) => {
@@ -114,16 +123,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let voucherTypeList: any = <TableItemEmpty />;
+        let voucherTypeList: any = null
 
-        if (this.props.voucherTypeList.length > 0) {
-            voucherTypeList = this.props.voucherTypeList.map((item: VoucherType, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteVoucherType={this.deleteVoucherType}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                color="#00BFFF"
+                                height={150}
+                                width={150}
+                                visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.voucherTypeList.length > 0) {
+                voucherTypeList = this.props.voucherTypeList.map((item: VoucherType, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteVoucherType={this.deleteVoucherType}
+                               />
+                ));
+            } else {
+                voucherTypeList = <TableItemEmpty />;
+            }
         }
 
         const CAlert = (
@@ -175,6 +194,8 @@ class List extends Component<Props, State> {
                                         {voucherTypeList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -206,7 +227,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchVoucherTypeAction: (page: number) => void,
+    fetchVoucherTypeAction: (page: number) => Promise<Boolean>,
     deleteVoucherTypeAction: (id: number) => Promise<ApiResponse<VoucherType>>,
     setAlertVoucherTypeHideAction: () => void,
     setAlertVoucherTypeShowAction: (message: string, color: string) => void

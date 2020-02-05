@@ -39,6 +39,7 @@ import { Restaurant } from '../../../types/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -84,7 +85,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -100,7 +101,15 @@ class List extends Component<Props, State> {
     }
 
     fetchRestaurantList = (page: number) => {
-        this.props.fetchRestaurantAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchRestaurantAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteRestaurant = (id: number) => {
@@ -117,16 +126,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let restaurantList: any = <TableItemEmpty />;
+        let restaurantList: any = null;
 
-        if (this.props.restaurantList.length > 0) {
-            restaurantList = this.props.restaurantList.map((item: Restaurant, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteRestaurant={this.deleteRestaurant}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.restaurantList.length > 0) {
+                restaurantList = this.props.restaurantList.map((item: Restaurant, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteRestaurant={this.deleteRestaurant}
+                               />
+                ));
+            } else {
+                restaurantList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -181,6 +200,8 @@ class List extends Component<Props, State> {
                                         {restaurantList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -212,7 +233,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchRestaurantAction: (page: number) => void,
+    fetchRestaurantAction: (page: number) => Promise<Boolean>,
     deleteRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>,
     setAlertRestaurantHideAction: () => void,
     setAlertRestaurantShowAction: (message: string, color: string) => void

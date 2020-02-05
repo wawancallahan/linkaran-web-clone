@@ -39,6 +39,7 @@ import { Investor } from '../../../types/admin/investor';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -86,7 +87,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -102,7 +103,15 @@ class List extends Component<Props, State> {
     }
 
     fetchInvestorList(page: number) {
-        this.props.fetchInvestorApiAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchInvestorApiAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteInvestor = (id: number) => {
@@ -119,16 +128,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let investorList: any = <TableItemEmpty />;
+        let investorList: any = null;
 
-        if (this.props.investorList.length > 0) {
-            investorList = this.props.investorList.map((item: Investor, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteInvestor={this.deleteInvestor}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.investorList.length > 0) {
+                investorList = this.props.investorList.map((item: Investor, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteInvestor={this.deleteInvestor}
+                               />
+                ));
+            } else {
+                investorList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -185,6 +204,8 @@ class List extends Component<Props, State> {
                                         {investorList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -216,7 +237,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchInvestorApiAction: (page: number) => void,
+    fetchInvestorApiAction: (page: number) =>  Promise<Boolean>,
     setAlertInvestorHideAction: () => void,
     setAlertInvestorShowAction: (message: string, color: string) => void,
     deleteInvestorAction: (id: number) => Promise<ApiResponse<Investor>>,

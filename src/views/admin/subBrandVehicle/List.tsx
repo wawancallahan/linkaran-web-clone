@@ -39,6 +39,7 @@ import { SubBrandVehicle } from '../../../types/admin/subBrandVehicle';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -82,7 +83,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -98,7 +99,15 @@ class List extends Component<Props, State> {
     }
 
     fetchSubBrandVehicleList = (page: number) => {
-        this.props.fetchSubBrandVehicleAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchSubBrandVehicleAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteSubBrandVehicle = (id: number) => {
@@ -114,17 +123,26 @@ class List extends Component<Props, State> {
     }
 
     render() {
+        let subBrandVehicleList: any = null;
 
-        let subBrandVehicleList: any = <TableItemEmpty />;
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
 
-        if (this.props.subBrandVehicleList.length > 0) {
-            subBrandVehicleList = this.props.subBrandVehicleList.map((item: SubBrandVehicle, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteSubBrandVehicle={this.deleteSubBrandVehicle}
-                           />
-            ));
+        if ( ! this.state.loader) {
+            if (this.props.subBrandVehicleList.length > 0) {
+                subBrandVehicleList = this.props.subBrandVehicleList.map((item: SubBrandVehicle, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteSubBrandVehicle={this.deleteSubBrandVehicle}
+                               />
+                ));
+            } else {
+                subBrandVehicleList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -177,6 +195,8 @@ class List extends Component<Props, State> {
                                         {subBrandVehicleList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -208,7 +228,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchSubBrandVehicleAction: (page: number) => void,
+    fetchSubBrandVehicleAction: (page: number) => Promise<Boolean>,
     deleteSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicle>>,
     setAlertSubBrandVehicleHideAction: () => void,
     setAlertSubBrandVehicleShowAction: (message: string, color: string) => void

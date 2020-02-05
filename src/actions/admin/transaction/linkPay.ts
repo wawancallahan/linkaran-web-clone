@@ -60,11 +60,9 @@ export const setAlertLinkPayShowAction = (message: string, color: string): Alert
     };
 }
 
-export const fetchLinkPayAction = (page: number) => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`, {
-               data: {}
-            })
+export const fetchLinkPayAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`)
             .then( (response: AxiosResponse) => {
                 
                 const data: ApiResponseSuccessList<LinkPay> = response.data;
@@ -83,6 +81,8 @@ export const fetchLinkPayAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+                
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchLinkPayErrorAction());
@@ -93,6 +93,8 @@ export const fetchLinkPayAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(true);
             })
     }
 }
