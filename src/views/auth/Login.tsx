@@ -103,103 +103,105 @@ class Login extends React.Component<Props, State> {
 
         this.setState({
             isSubmitting: true
+        }, () => {
+            if (this.state.isEmailSubmited) {
+                if (this.state.form.pin.trim().length > 0) {
+                    const item: ValidateLogin = {
+                        pin: this.state.form.pin,
+                        token: this.state.form.token
+                    };
+          
+                    this.props
+                        .authValidate(item)
+                        .then((response: ValidateLoginResponse) => {
+                            const data: ValidateLoginResult = response.response as ValidateLoginResult;
+    
+                            if (data.result) {
+    
+                                const result = data.result;
+    
+                                localStorage.setItem("accessToken", result.accessToken);
+                                localStorage.setItem("name", result.name);
+                                localStorage.setItem("phoneNumber", result.phoneNumber);
+                                localStorage.setItem("email", result.email);
+                                localStorage.setItem("role_id", `1`);
+                                localStorage.setItem("role_name", "Admin");
+                            }
+    
+                            this.goDashboard("Admin");
+                        })
+                        .catch((response: ValidateLoginResponse) => {
+                            const data: ValidateLoginFailResult = response.response as ValidateLoginFailResult;
+    
+                            let message = "Gagal mendapatkan response"
+    
+                            if (data) {
+                                message = data.metaData.message
+                            }
+    
+                            this.setState({
+                                alert_message: message,
+                                alert_visible: true,
+                                isSubmitting: false
+                            });
+                        });
+                }
+            } else {
+                if (this.state.form.email.trim().length > 0) {
+                    const item: LoginInterface = {
+                        identity: this.state.form.email,
+                        type: "email",
+                        tokenFCM: "",
+                        role: "admin"
+                    };
+            
+                    this.props
+                        .authLogin(item)
+                        .then((response: LoginResponse) => {
+                            const data: LoginResult = response.response as LoginResult;
+                            
+                            if (data && data.result) {
+                                const result = data.result;
+                                
+                                this.setState({
+                                    isEmailSubmited: true,
+                                    form: {
+                                        ...this.state.form,
+                                        email: this.state.form.email,
+                                        token: result.token
+                                    },
+                                    alert_message: '',
+                                    alert_visible: false,
+                                    isSubmitting: false
+                                });
+                            } else {
+                                this.setState({
+                                    alert_message: '',
+                                    alert_visible: false,
+                                    isSubmitting: false
+                                });
+                            }
+                        })
+                        .catch((response: LoginResponse) => {
+                            const data: LoginFailResult = response.response as LoginFailResult;
+                            
+                            let message = "Gagal mendapatkan response"
+    
+                            if (data) {
+                                message = data.metaData.message
+                            }
+    
+                            this.setState({
+                                alert_message: message,
+                                alert_visible: true,
+                                isSubmitting: false
+                            });
+                        });
+                }
+            }
         })
 
-        if (this.state.isEmailSubmited) {
-            if (this.state.form.pin.trim().length > 0) {
-                const item: ValidateLogin = {
-                    pin: this.state.form.pin,
-                    token: this.state.form.token
-                };
-      
-                this.props
-                    .authValidate(item)
-                    .then((response: ValidateLoginResponse) => {
-                        const data: ValidateLoginResult = response.response as ValidateLoginResult;
-
-                        if (data.result) {
-
-                            const result = data.result;
-
-                            localStorage.setItem("accessToken", result.accessToken);
-                            localStorage.setItem("name", result.name);
-                            localStorage.setItem("phoneNumber", result.phoneNumber);
-                            localStorage.setItem("email", result.email);
-                            localStorage.setItem("role_id", `1`);
-                            localStorage.setItem("role_name", "Admin");
-                        }
-
-                        this.goDashboard("Admin");
-                    })
-                    .catch((response: ValidateLoginResponse) => {
-                        const data: ValidateLoginFailResult = response.response as ValidateLoginFailResult;
-
-                        let message = "Gagal mendapatkan response"
-
-                        if (data) {
-                            message = data.metaData.message
-                        }
-
-                        this.setState({
-                            alert_message: message,
-                            alert_visible: true,
-                            isSubmitting: false
-                        });
-                    });
-            }
-        } else {
-            if (this.state.form.email.trim().length > 0) {
-                const item: LoginInterface = {
-                    identity: this.state.form.email,
-                    type: "email",
-                    tokenFCM: "",
-                    role: "admin"
-                };
         
-                this.props
-                    .authLogin(item)
-                    .then((response: LoginResponse) => {
-                        const data: LoginResult = response.response as LoginResult;
-                        
-                        if (data && data.result) {
-                            const result = data.result;
-                            
-                            this.setState({
-                                isEmailSubmited: true,
-                                form: {
-                                    ...this.state.form,
-                                    email: this.state.form.email,
-                                    token: result.token
-                                },
-                                alert_message: '',
-                                alert_visible: false,
-                                isSubmitting: false
-                            });
-                        } else {
-                            this.setState({
-                                alert_message: '',
-                                alert_visible: false,
-                                isSubmitting: false
-                            });
-                        }
-                    })
-                    .catch((response: LoginResponse) => {
-                        const data: LoginFailResult = response.response as LoginFailResult;
-                        
-                        let message = "Gagal mendapatkan response"
-
-                        if (data) {
-                            message = data.metaData.message
-                        }
-
-                        this.setState({
-                            alert_message: message,
-                            alert_visible: true,
-                            isSubmitting: false
-                        });
-                    });
-            }
-        }
     }
 
     goDashboard = (title: string | null) => {
