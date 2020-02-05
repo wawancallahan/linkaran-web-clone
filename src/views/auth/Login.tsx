@@ -51,7 +51,8 @@ type State = {
         pin: string;
     },
     alert_visible: boolean,
-    alert_message: string
+    alert_message: string,
+    isSubmitting: boolean
 }
 
 class Login extends React.Component<Props, State> {
@@ -64,7 +65,8 @@ class Login extends React.Component<Props, State> {
           pin: ""
         },
         alert_visible: false,
-        alert_message: ''
+        alert_message: '',
+        isSubmitting: false
     }
 
     componentDidMount() {
@@ -98,6 +100,11 @@ class Login extends React.Component<Props, State> {
     }
 
     formSubmit = () => {
+
+        this.setState({
+            isSubmitting: true
+        })
+
         if (this.state.isEmailSubmited) {
             if (this.state.form.pin.trim().length > 0) {
                 const item: ValidateLogin = {
@@ -127,12 +134,17 @@ class Login extends React.Component<Props, State> {
                     .catch((response: ValidateLoginResponse) => {
                         const data: ValidateLoginFailResult = response.response as ValidateLoginFailResult;
 
+                        let message = "Gagal mendapatkan response"
+
                         if (data) {
-                            this.setState({
-                                alert_message: data.metaData.message,
-                                alert_visible: true
-                            });
+                            message = data.metaData.message
                         }
+
+                        this.setState({
+                            alert_message: message,
+                            alert_visible: true,
+                            isSubmitting: false
+                        });
                     });
             }
         } else {
@@ -160,19 +172,31 @@ class Login extends React.Component<Props, State> {
                                     token: result.token
                                 },
                                 alert_message: '',
-                                alert_visible: false
+                                alert_visible: false,
+                                isSubmitting: false
+                            });
+                        } else {
+                            this.setState({
+                                alert_message: '',
+                                alert_visible: false,
+                                isSubmitting: false
                             });
                         }
                     })
                     .catch((response: LoginResponse) => {
                         const data: LoginFailResult = response.response as LoginFailResult;
                         
+                        let message = "Gagal mendapatkan response"
+
                         if (data) {
-                            this.setState({
-                                alert_message: data.metaData.message,
-                                alert_visible: true
-                            });
+                            message = data.metaData.message
                         }
+
+                        this.setState({
+                            alert_message: message,
+                            alert_visible: true,
+                            isSubmitting: false
+                        });
                     });
             }
         }
@@ -276,7 +300,8 @@ class Login extends React.Component<Props, State> {
                                                 className=""
                                                 color="primary"
                                                 type="button"
-                                                onClick={this.formSubmit}>
+                                                onClick={this.formSubmit}
+                                                disabled={this.state.isSubmitting}>
                                                 Next
                                             </Button>
                                         </Col>
