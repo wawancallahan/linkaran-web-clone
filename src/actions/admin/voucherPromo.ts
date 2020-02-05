@@ -311,7 +311,7 @@ export const editVoucherPromoAction = (voucherPromo: VoucherPromoEdit, id: numbe
             data.set(`service.${index}.id`, value.value.toString())
         })
 
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher/${id}`, voucherPromo, {
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
