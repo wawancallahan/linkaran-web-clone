@@ -39,6 +39,7 @@ import { User } from '../../../types/admin/user';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {
 
@@ -47,7 +48,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -83,7 +84,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -99,7 +100,15 @@ class List extends Component<Props, State> {
     }
 
     fetchUserList = (page: number) => {
-        this.props.fetchUserAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchUserAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
     }
 
     deleteUser = (id: number) => {
@@ -116,16 +125,26 @@ class List extends Component<Props, State> {
 
     render() {
 
-        let userList: any = <TableItemEmpty />;
+        let userList: any = null;
 
-        if (this.props.userList.length > 0) {
-            userList = this.props.userList.map((item: User, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           deleteUser={this.deleteUser}
-                           />
-            ));
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.userList.length > 0) {
+                userList = this.props.userList.map((item: User, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteUser={this.deleteUser}
+                               />
+                ));
+            } else {
+                userList = <TableItemEmpty />
+            }
         }
 
         const CAlert = (
@@ -179,6 +198,8 @@ class List extends Component<Props, State> {
                                         {userList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -210,7 +231,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchUserAction: (page: number) => void,
+    fetchUserAction: (page: number) => Promise<Boolean>,
     deleteUserAction: (id: number) => Promise<ApiResponse<User>>,
     setAlertUserHideAction: () => void,
     setAlertUserShowAction: (message: string, color: string) => void

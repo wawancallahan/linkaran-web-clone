@@ -60,9 +60,9 @@ export const setAlertUserShowAction = (message: string, color: string): AlertUse
     };
 }
 
-export const fetchUserAction = (page: number) => {
+export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        axiosService.get(process.env.REACT_APP_API_URL + `/web/user?page=${page}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/user?page=${page}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<User> = response.data;
 
@@ -78,6 +78,8 @@ export const fetchUserAction = (page: number) => {
                         pageCount: paginate.pageCount
                     }))
                 }
+
+                return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchUserErrorAction());
@@ -88,6 +90,8 @@ export const fetchUserAction = (page: number) => {
                     itemCount: 0,
                     pageCount: 0
                 }))
+
+                return Promise.resolve(false);
             })
     }
 }
