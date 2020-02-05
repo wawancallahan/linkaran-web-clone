@@ -1,5 +1,15 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@actions/*": ["./src/actions/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@reducers/*": ["./src/reducers/*"],
+      "@types/*": ["./src/types/*"],
+      "@components/*": ["./src/components/*"],
+      "@hoc/*": ["./src/hoc/*"],
+      "@services/*": ["./src/services/*"]
+    },
     "target": "es5",
     "lib": [
       "dom",
@@ -18,10 +28,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "outDir": "./dist",
   },
   "include": [
     "src"
   ],
-  "exclude": ["src/setupProxy.js"]
+  "exclude": ["src/setupProxy.js", "node_modules", "dist"]
 }
