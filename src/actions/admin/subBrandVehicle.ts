@@ -20,7 +20,7 @@ import {
     SubBrandVehicleCreateResult,
     SubBrandVehicleEditResult
 } from '../../types/admin/subBrandVehicle';
-import { VehicleType } from '../../types/admin/vehicleType';
+import { VehicleTypeList } from '../../types/admin/vehicleType';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
@@ -151,11 +151,11 @@ export const fetchListSubBrandVehicleAction = (search: string, page: number): Th
     }
 }
 
-export const fetchListVehicleTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VehicleType>>> => {
+export const fetchListVehicleTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VehicleTypeList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/list-vehicle-type?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VehicleType> = response.data;
+                const data: ApiResponseSuccessList<VehicleTypeList> = response.data;
 
                 return Promise.resolve({
                     response: data,

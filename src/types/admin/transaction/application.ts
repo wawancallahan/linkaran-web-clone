@@ -22,7 +22,7 @@ interface ApplicationList {
     costumerName: string,
     driverName: string,
     service: string,
-    totalCost: 10800,
+    totalCost: number,
     status: string
 }
 

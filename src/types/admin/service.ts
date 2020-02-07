@@ -34,9 +34,9 @@ interface ServiceList {
 
 interface ServiceResult {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    createdAt?: string,
+    updatedAt?: string,
+    deletedAt?: string,
 }
 
 export type Service = ServiceResult & ServiceList;

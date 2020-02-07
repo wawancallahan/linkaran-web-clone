@@ -134,7 +134,7 @@ class Detail extends Component<Props, State> {
                                             <DetailJumlahPenggunaanVoucher voucher={this.state.data} />
                                         </Col>
                                         <Col>
-                                            <DetailJumlahPenggunaanTicket />                              
+                                            <DetailJumlahPenggunaanTicket voucher={this.state.data} />                              
                                         </Col>
                                     </Row>
                                 </div>

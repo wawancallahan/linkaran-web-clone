@@ -18,7 +18,7 @@ import {
     SubBrandVehicle,
 } from '../../../types/admin/subBrandVehicle';
 import {
-    VehicleType,
+    VehicleTypeList,
 } from '../../../types/admin/vehicleType';
 import {
     fetchListSubBrandVehicleAction,
@@ -38,9 +38,9 @@ class FormKendaraan extends Component<Props> {
         page: number
     }) => {
         return this.props.fetchListVehicleTypeAction(search, options.page)
-            .then((response: ApiResponseList<VehicleType>) => {
+            .then((response: ApiResponseList<VehicleTypeList>) => {
 
-                const data: ApiResponseSuccessList<VehicleType> = response.response!;
+                const data: ApiResponseSuccessList<VehicleTypeList> = response.response!;
 
                 let result: {
                     value: number,
@@ -56,7 +56,7 @@ class FormKendaraan extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: VehicleType) => {
+                    result = data.result.map((item: VehicleTypeList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -320,7 +320,7 @@ class FormKendaraan extends Component<Props> {
 
 
 type LinkDispatchToProps = {
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleType>>
+    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>
     fetchListSubBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<SubBrandVehicle>>
 }
 

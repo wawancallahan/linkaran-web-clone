@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const addZeroOnNumber = (number: number) => {
     let parseNumber = number.toString()
     if (number < 10) {
@@ -31,9 +33,9 @@ export const colorStatusFormat = (status: string) => {
 }
 
 export const parseDateTimeFormat = (date: string) => {
-    const dateParse = new Date(date)
+    const dateParse = moment(new Date(date))
 
-    return `${dateParse.getDate()} ${dateParse.getMonth() + 1} ${dateParse.getFullYear()} ${dateParse.getHours()}:${dateParse.getMinutes()}`
+    return dateParse.format('dd MMMM YYYY hh:mm');
 }
 
 export const getOnlyDateFromDate = (date: Date) => {

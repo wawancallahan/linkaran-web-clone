@@ -74,19 +74,30 @@ class Detail extends Component<Props, State> {
         const id = +this.props.match.params.id;
         
         this.props.findVoucherPromoAction(id)
-                .then((response: ApiResponse<VoucherPromo>) => {
+                .then((response: ApiResponse<VoucherPromo>) => {    
+                    if (response.response) {
+                            const data: VoucherPromo = response.response.result;
 
-                    const data: VoucherPromo =response.response!.result;
-
-                    this.setState({
-                        data: data,
-                        isLoaded: true
-                    });
-                    
+                        this.setState({
+                            data: data,
+                            isLoaded: true
+                        });
+                    } else {
+                        this.setState({
+                            isLoaded: false
+                        });
+                    }
                 })
                 .catch((response: ApiResponse<VoucherPromo>) => {
+
+                    let message = "Gagal Mendapatkan Response";
+
+                    if (response.error) {
+                        message = response.error.metaData.message;
+                    }
+
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: message
                     })
                 })
     }
@@ -134,7 +145,7 @@ class Detail extends Component<Props, State> {
                                             <DetailJumlahPenggunaanVoucher voucher={this.state.data} />
                                         </Col>
                                         <Col>
-                                            <DetailJumlahPenggunaanTicket />                              
+                                            <DetailJumlahPenggunaanTicket voucher={this.state.data}/>                              
                                         </Col>
                                     </Row>
                                 </div>

@@ -1,4 +1,6 @@
 import { Paginator } from '../paginator';
+import { Service } from './service';
+import { VehicleType } from './vehicleType';
 
 export const FETCH_SERVICE_PRICE = "FETCH_SERVICE_PRICE";
 export const FETCH_SERVICE_PRICE_SUCCESS = "FETCH_SERVICE_PRICE_SUCCESS";
@@ -24,7 +26,7 @@ export type FormField = {
     vehicleType: {
         value: number,
         label: string
-    },
+    }
 }
 
 interface ServicePriceField {
@@ -52,18 +54,8 @@ interface ServicePriceList {
         name: string,
         alternativeName: string
     },
-    service: {
-        id: number,
-        name: string,
-        code: string,
-        canBeMultiple: boolean
-    },
-    vehicleType: {
-        id: number,
-        name: string,
-        code: string,
-        seat: string
-    }
+    service: Service,
+    vehicleType: VehicleType
 }
 
 interface ServicePriceResult {

@@ -6,32 +6,42 @@ import {
     Progress
 } from 'reactstrap'
 
+import { VoucherPromo } from '../../../types/admin/voucherPromo'
+
 type DetailJumlahPenggunaanTicketProps = {
+    voucher: VoucherPromo | null
 }
 
 type Props = DetailJumlahPenggunaanTicketProps
 
 class DetailJumlahPenggunaanTicket extends Component<Props> {
     render() {
-        return (
-            <Card className="shadow">
-                <CardBody>
-                    <h3 className="mb-0">Jumlah Penggunaan Tiket</h3>
-                    <div className="progress-wrapper">
-                        <div className="progress-info justify-content-center">
-                            <div className="progress-percentage">
-                                <span style={{
-                                    fontSize: '50px',
-                                }}>1/2</span>
+
+        const { voucher } = this.props
+
+        if (voucher) {
+            return (
+                <Card className="shadow">
+                    <CardBody>
+                        <h3 className="mb-0">Jumlah Penggunaan Tiket</h3>
+                        <div className="progress-wrapper">
+                            <div className="progress-info justify-content-center">
+                                <div className="progress-percentage">
+                                    <span style={{
+                                        fontSize: '50px',
+                                    }}>{voucher.ticketUsed}/{voucher.quota * voucher.quantity}</span>
+                                </div>
+                            </div>
+                            <div className="mb-3">
+                                <Progress max={voucher.quota * voucher.quantity} value={voucher.ticketUsed} color="success" className="w-100" />
                             </div>
                         </div>
-                        <div className="mb-3">
-                            <Progress max="100" value="60" color="success" className="w-100" />
-                        </div>
-                    </div>
-                </CardBody>
-            </Card>  
-        )
+                    </CardBody>
+                </Card>  
+            )
+        }
+
+        return null;
     }
 }
 

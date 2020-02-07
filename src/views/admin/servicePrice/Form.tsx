@@ -19,7 +19,7 @@ import { createServicePriceAction, setAlertServicePriceShowAction } from '../../
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../types/paginator';
-import { VehicleType } from '../../../types/admin/vehicleType';
+import { VehicleTypeList } from '../../../types/admin/vehicleType';
 import { fetchListVehicleTypeAction } from '../../../actions/admin/subBrandVehicle';
 import { fetchListRegionDistrictAction } from '../../../actions/admin/location';
 import { RegionDistrict } from '../../../types/admin/location';
@@ -142,9 +142,9 @@ class Form extends Component<Props> {
         page: number
     }) => {
         return this.props.fetchListVehicleTypeAction(search, options.page)
-            .then((response: ApiResponseList<VehicleType>) => {
+            .then((response: ApiResponseList<VehicleTypeList>) => {
 
-                const data: ApiResponseSuccessList<VehicleType> = response.response!;
+                const data: ApiResponseSuccessList<VehicleTypeList> = response.response!;
 
                 let result: {
                     value: number,
@@ -160,7 +160,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: VehicleType) => {
+                    result = data.result.map((item: VehicleTypeList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -364,7 +364,7 @@ type LinkDispatchToProps = {
     createServicePriceAction: (servicePrice: ServicePriceCreate) => Promise<ApiResponse<ServicePriceCreateResult>>
     setAlertServicePriceShowAction: (message: string, color: string) => void,
     fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleType>>,
+    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>,
     fetchListRegionDistrictAction: (search: string, page: number) => Promise<ApiResponseList<RegionDistrict>>,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
 }

@@ -19,7 +19,15 @@ import {
     ALERT_VOUCHER_PROMO_SHOW,
     VoucherPromoEditResult,
     VoucherPromoCreateResult,
-    ServiceSelect
+    ServiceSelect,
+    FETCH_VOUCHER_PROMO_USER_USED,
+    FETCH_VOUCHER_PROMO_USER_USED_ERROR,
+    FETCH_VOUCHER_PROMO_USER_USED_SUCCESS,
+    SET_PAGINATOR_VOUCHER_PROMO_USER_USED,
+    SetPaginatorVoucherPromoUserUsedActionType,
+    VoucherPromoUserUsed,
+    FetchVoucherPromoUserUsedErrorActionType,
+    FetchVoucherPromoUserUsedSuccessActionType
 } from '../../types/admin/voucherPromo';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -45,6 +53,26 @@ export const setFetchVoucherPromoSuccessAction = (list: VoucherPromo[]): FetchVo
 export const setFetchVoucherPromoErrorAction = (): FetchVoucherPromoErrorActionType => {
     return {
         type: FETCH_VOUCHER_PROMO_ERROR
+    }
+}
+
+export const setPaginateUserUsedAction = (paginate: Paginator): SetPaginatorVoucherPromoUserUsedActionType => {
+    return {
+        type: SET_PAGINATOR_VOUCHER_PROMO_USER_USED,
+        paginate: paginate
+    }
+}
+
+export const setFetchVoucherPromoUserUsedSuccessAction = (list: VoucherPromoUserUsed[]): FetchVoucherPromoUserUsedSuccessActionType => {
+    return {
+        type: FETCH_VOUCHER_PROMO_USER_USED_SUCCESS,
+        list: list
+    }
+}
+
+export const setFetchVoucherPromoUserUsedErrorAction = (): FetchVoucherPromoUserUsedErrorActionType => {
+    return {
+        type: FETCH_VOUCHER_PROMO_USER_USED_ERROR
     }
 }
 
@@ -85,6 +113,42 @@ export const fetchVoucherPromoAction = (page: number): ThunkResult<Promise<Boole
             })
             .catch( (error: AxiosError) => {
                 dispatch(setFetchVoucherPromoErrorAction());
+
+                dispatch(setPaginateAction({
+                    total: 0,
+                    currentPage: 0,
+                    itemCount: 0,
+                    pageCount: 0
+                }))
+
+                return Promise.resolve(true);
+            })
+    }
+}
+
+export const fetchVoucherPromoUserUsedAction = (page: number, id: number): ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher/${id}/user?page=${page}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<VoucherPromoUserUsed> = response.data;
+
+                dispatch(setFetchVoucherPromoUserUsedSuccessAction(data.result));
+
+                if (data.metaData.paginate) {
+                    const paginate = data.metaData.paginate as Paginator;
+
+                    dispatch(setPaginateAction({
+                        total: paginate.itemCount * paginate.pageCount,
+                        currentPage: page,
+                        itemCount: paginate.itemCount,
+                        pageCount: paginate.pageCount
+                    }))
+                }
+
+                return Promise.resolve(true);
+            })
+            .catch( (error: AxiosError) => {
+                dispatch(setFetchVoucherPromoUserUsedErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
