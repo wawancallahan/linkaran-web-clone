@@ -36,15 +36,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "_moduleAliases": {
-    "@actions": "./dist/actions",
-    "@helpers": "./dist/helpers",
-    "@reducers": "./dist/reducers",
-    "@types": "./dist/types",
-    "@components": "./dist/components",
-    "@hoc": "./dist/hoc",
-    "@services": "./dist/services"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -60,7 +51,6 @@
     "dotenv": "^8.2.0",
     "formik": "^2.0.3",
     "http-proxy-middleware": "^0.20.0",
-    "module-alias": "^2.2.2",
     "moment": "^2.24.0",
     "node-sass": "4.11.0",
     "nouislider": "13.1.1",
