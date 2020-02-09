@@ -16,7 +16,7 @@ export type FormField = {
     maxServiceDistanceInKm: number
 }
 
-interface ServiceField {
+export interface ServiceField {
     name: string,
     code: string,
     canBeMultiple: boolean,
@@ -24,7 +24,7 @@ interface ServiceField {
     maxServiceDistanceInKm: number
 }
 
-interface ServiceList {
+export interface ServiceList {
     name: string,
     code: string,
     canBeMultiple: boolean,
@@ -37,6 +37,12 @@ interface ServiceResult {
     createdAt?: string,
     updatedAt?: string,
     deletedAt?: string,
+}
+
+export type ServiceCount = {
+    name: string,
+    code: string,
+    transactionCount: number
 }
 
 export type Service = ServiceResult & ServiceList;

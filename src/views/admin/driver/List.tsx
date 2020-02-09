@@ -69,13 +69,16 @@ const TableItem = (props: {
             <td></td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
-                    <i className="fa fa-document"></i> Transaksi
+                    <i className="fa fa-file"></i>
+                </Link>
+                <Link to={`/admin/driver/${props.item.id}`} className="btn btn-info btn-sm">
+                    <i className="fa fa-eye"></i>
                 </Link>
                 <Link to={`/admin/driver/${props.item.id}/edit`} className="btn btn-warning btn-sm">
-                    <i className="fa fa-edit"></i> Edit
+                    <i className="fa fa-edit"></i>
                 </Link>
                 <Button color="danger" size="sm" onClick={() => props.deleteDriver(props.item.id)}>
-                    <i className="fa fa-trash"></i> Hapus
+                    <i className="fa fa-trash"></i>
                 </Button>
             </td>
         </tr>

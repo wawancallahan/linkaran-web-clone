@@ -1,4 +1,7 @@
 import { Paginator } from '../paginator';
+import { ServiceCount } from './service';
+import { Vehicle } from './vehicle';
+import { VehicleType } from './vehicleType';
 
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const FETCH_DRIVER_SUCCESS = "FETCH_DRIVER_SUCCESS";
@@ -154,13 +157,7 @@ interface DriverList {
         name: string,
         phoneNumber: string,
         email: string,
-        vehicle: {
-            id: number,
-            policeNumber: string,
-            stnkNumber: string,
-            chassisNumber: string,
-            description: string,
-            color: string,
+        vehicle: Vehicle & {
             vehicleType: {
                 id: number,
                 name: string
@@ -213,6 +210,42 @@ interface DriverList2 {
     createdAt: string,
     updatedAt: string
 }
+
+export type DriverDetail = {
+    id: number,
+    dateOfBirth: string,
+    placeOfBirth: string,
+    residenceAddress: string,
+    gender: string,
+    identityNumber:string,
+    ktpPhoto: string | null,
+    photo: string | null,
+    address: string,
+    rating: number,
+    wasOnceAnOnlineDriver: boolean,
+    isActivelyBecomingAnotherOnlineDriver: boolean,
+    isJoiningTheDriverCommunity: boolean,
+    isJoiningLinkaranAsmainJob: boolean,
+    choiceOfActiveWorkHours: string,
+    name: string,
+    phoneNumber: string,
+    email: string,
+    gUserId: string | null,
+    gUserPhoneVerified: string | null,
+    vehicle: Vehicle & {
+        vehicleType: VehicleType,        
+        subBrandVehicle: {
+            id: number,
+            name: string,
+            brandVehicle: {
+                id: number,
+                name: string
+            }
+        }
+    },
+    serviceCount: ServiceCount[]
+}
+
 interface DriverResult {
     id: number,
     createdAt: string,

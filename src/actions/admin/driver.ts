@@ -19,7 +19,8 @@ import {
     DriverEdit,
     DriverEditResult,
     FetchDriverErrorActionType,
-    FetchDriverSuccessActionType
+    FetchDriverSuccessActionType,
+    DriverDetail
 } from '../../types/admin/driver';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -203,11 +204,11 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
     }
 }
 
-export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
+export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<DriverDetail>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Driver> = response.data;
+                const data: ApiResponseSuccess<DriverDetail> = response.data;
 
                 return Promise.resolve({
                     response: data,
