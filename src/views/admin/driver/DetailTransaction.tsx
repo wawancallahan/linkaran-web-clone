@@ -9,6 +9,7 @@ import {
 
 import { DriverDetail } from '../../../types/admin/driver';
 import { ServiceCount } from '../../../types/admin/service';
+import { icoLinkImage } from '../../../helpers/parseData';
 
 type Props = {
     driver: DriverDetail | null
@@ -45,9 +46,9 @@ class DetailTransaction extends Component<Props> {
                     </Card>
 
                     <Row>
-                        {driver.serviceCount.map((value: ServiceCount) => {
+                        {driver.serviceCount.map((value: ServiceCount, index: number) => {
                             return (
-                                <Col md={6}>
+                                <Col md={6} key={index}>
                                     <Card className="card-stats mb-2">
                                         <CardBody>
                                             <Row>
@@ -57,9 +58,9 @@ class DetailTransaction extends Component<Props> {
                                                     </CardTitle>
                                                     <span className="h2 font-weight-bold mb-0">{value.transactionCount}</span>
                                                 </div>
-                                                <Col className="col-auto">
-                                                    <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                        <i className="fas fa-chart-bar" />
+                                                <Col className="col-auto align-self-center">
+                                                    <div className="img-ico-link">
+                                                        <img src={icoLinkImage(value.code)} alt=""/>
                                                     </div>
                                                 </Col>
                                             </Row>

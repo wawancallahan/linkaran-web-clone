@@ -16,7 +16,7 @@ import {
 
 import {
     starImage
-} from '../../../../../Assets'
+} from '../../../../../helpers/Assets'
 
 type Props = {
     className?: string

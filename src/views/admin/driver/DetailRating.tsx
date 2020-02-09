@@ -7,8 +7,8 @@ import {
 } from 'reactstrap'
 
 import {
-    starImage
-} from '../../../Assets'
+    icoStarActive, icoStarUnActive
+} from '../../../helpers/Assets'
 
 import { DriverDetail } from '../../../types/admin/driver';
 
@@ -24,7 +24,7 @@ class DetailRating extends  Component<Props> {
 
         if (driver) {
             const starFeedActive = [...Array.from(Array(driver.rating).keys())].map((value: number, index: number) => (
-                <img className="d-inline-block img-star-feedback mr-2" key={index} src={starImage} />
+                <img className="d-inline-block img-star-feedback mr-2" key={index} src={icoStarActive} />
             ));
 
             let numberUnActive = 5;
@@ -36,7 +36,7 @@ class DetailRating extends  Component<Props> {
             }
     
             const starFeedUnActive = [...Array.from(Array(numberUnActive).keys())].map((value: number, index: number) => (
-                <img className="d-inline-block img-star-feedback mr-2" key={index} src={starImage} />
+                <img className="d-inline-block img-star-feedback mr-2" key={index} src={icoStarUnActive} />
             ));
     
             return (

@@ -3,7 +3,7 @@ import { Row, Col, Card, CardHeader, CardBody, Progress, Badge } from 'reactstra
 
 import {
     argonReactImage
-} from '../../../Assets'
+} from '../../../helpers/Assets'
 
 import {
     Link

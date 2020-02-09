@@ -44,7 +44,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const editSchema = Yup.object().shape({
     nama: Yup.string()
-                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -55,13 +61,13 @@ const editSchema = Yup.object().shape({
                       .oneOf(['L', 'P'], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
     no_ktp: Yup.string()
-    .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
-                if (val) {
-                    return val.length <= 255;
-                }
+                .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
 
-                return true;
-            })
+                    return true;
+                })
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()
@@ -98,8 +104,22 @@ const editSchema = Yup.object().shape({
         value: Yup.number().notOneOf([0], 'Bidang pilihan kelurahan wajib diisi').required("Bidang pilihan kelurahan wajib diisi")
     }),
     nomor_asosiasi_lingkungan: Yup.string()
+                .test('len', 'Bidang isian nomor asosiasi linkungan tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian Nomor Asosiasi Lingkungan seat wajib diisi'),
     nomor_asosiasi_warga_negara: Yup.string()
+                .test('len', 'Bidang isian nomor asosiasi warga negara tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian Nomor Asosiasi Warga Negara seat wajib diisi')
 });
 

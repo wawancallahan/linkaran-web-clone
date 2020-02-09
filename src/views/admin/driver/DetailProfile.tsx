@@ -7,7 +7,7 @@ import {
     Col
 } from 'reactstrap'
 
-import { profileImage } from '../../../Assets'
+import { profileImage } from '../../../helpers/Assets'
 
 import { DriverDetail } from '../../../types/admin/driver';
 
