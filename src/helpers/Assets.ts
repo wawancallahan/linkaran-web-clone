@@ -10,6 +10,8 @@ import icoLinkFoodSrc from '../assets/img/linkaran/food.svg'
 import icoStarActiveSrc from '../assets/img/linkaran/star-active.svg'
 import icoStarUnActiveSrc from '../assets/img/linkaran/star-unactive.svg'
 
+import logoLinkaranSrc from '../assets/img/linkaran/logo-linkaran.svg'
+
 export const argonReactImage = argonReactSrc;
 export const starImage = starSrc;
 export const profileImage = profileSrc;
@@ -21,3 +23,5 @@ export const icoLinkFood = icoLinkFoodSrc
 
 export const icoStarActive = icoStarActiveSrc
 export const icoStarUnActive = icoStarUnActiveSrc
+
+export const logoLinkaran = logoLinkaranSrc
