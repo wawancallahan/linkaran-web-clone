@@ -19,7 +19,7 @@
 
 .img-responsive {
     max-width: 100%;
-    max-height: 150px;
+    max-height: 150px;  
 }
 
 .img-responsive > img {
@@ -29,4 +29,15 @@
 
 .react-datepicker-w100 > .react-datepicker-wrapper, .react-datepicker-w100 > .react-datepicker__input-container {
     display: block;
+}
+
+.img-ico-link {
+    max-width: 85px;
+    max-height: 65px;
+    position: relative;
+}
+
+.img-ico-link img {
+    max-width: inherit;
+    max-height: inherit;
 }

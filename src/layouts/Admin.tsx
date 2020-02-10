@@ -26,6 +26,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Index from '../views/admin/Index';
 import routes from "../routes";
 import NotFound from '../views/NotFound';
+import { logoLinkaran } from "../helpers/Assets";
 
 type AdminProps = RouteComponentProps & {
   
@@ -73,7 +74,7 @@ class Admin extends React.Component<AdminProps, {}> {
           })}
           logo={{
             innerLink: "/admin/index",
-            imgSrc: require("assets/img/brand/argon-react.png"),
+            imgSrc: logoLinkaran,
             imgAlt: "..."
           }}
         />

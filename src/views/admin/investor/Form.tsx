@@ -44,7 +44,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
-                .length(255, 'Bidang isian nama tidak boleh lebih dari 255 karakter')
+                .test('len', 'Bidang isian nama tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                    if (val) {
+                        return val.length <= 255;
+                    }
+
+                    return true;
+                })
                 .required('Bidang isian nama wajib diisi'),
     no_telepon: Yup.string()
                 .required('Bidang isian no telepon wajib diisi'),
@@ -55,13 +61,13 @@ const createSchema = Yup.object().shape({
                       .oneOf(['L', 'P'], 'Bidang pilihan jenis kelamin wajib diisi')
                       .required('Bidang pilihan jenis kelamin wajib diisi'),
     no_ktp: Yup.string()
-    .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
-                if (val) {
-                    return val.length <= 255;
-                }
+                .test('len', 'Bidang isian no ktp tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                            if (val) {
+                                return val.length <= 255;
+                            }
 
-                return true;
-            })
+                            return true;
+                        })
                 .required('Bidang isian no ktp wajib diisi'),
     // ktp_file: File | null,
     ktp_file_preview: Yup.string()

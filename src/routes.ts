@@ -37,77 +37,77 @@ const routes: any[] = [
     {
         path: "/food-category",
         name: "Food Category",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-ungroup text-danger",
         component: AdminFoodCategory,
         layout: "/admin"
     },
     {
         path: "/food",
         name: "Food",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-bag-17 text-success",
         component: AdminFood,
         layout: "/admin"
     },
     {
         path: "/restaurant",
         name: "Restaurant",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-shop text-info",
         component: AdminRestaurant,
         layout: "/admin"
     },
     {
         path: "/brand-vehicle",
         name: "Brand Vehicle",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-app text-warning",
         component: AdminBrandVehicle,
         layout: "/admin"
     },
     {
         path: "/sub-brand-vehicle",
         name: "Sub Brand Vehicle",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-briefcase-24 text-info",
         component: AdminSubBrandVehicle,
         layout: "/admin"
     },
     {
         path: "/user",
         name: "User",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-single-02 text-danger",
         component: AdminUser,
         layout: "/admin"
     },
     {
         path: "/driver",
         name: "Driver",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-badge text-success",
         component: AdminDriver,
         layout: "/admin"
     },
     {
         path: "/investor",
         name: "Investor",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-hat-3 text-warning",
         component: AdminInvestor,
         layout: "/admin"
     },
     {
         path: "/transaction",
         name: "Transaksi",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-collection text-primary",
         component: AdminTransaction,
         layout: "/admin",
         child: [
             {
                 path: "/transaction/application",
                 name: "Aplikasi",
-                icon: "ni ni-pin-3 text-primary",
+                icon: "ni ni-fat-delete text-primary",
                 component: AdminTransactionApplication,
                 layout: "/admin"
             },
             {
                 path: "/transaction/link-pay",
                 name: "Link Pay",
-                icon: "ni ni-pin-3 text-primary",
+                icon: "ni ni-fat-delete text-primary",
                 component: AdminTransactionLinkPay,
                 layout: "/admin"
             },
@@ -116,14 +116,14 @@ const routes: any[] = [
     {
         path: "/account",
         name: "Account",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-circle-08 text-info",
         component: AdminAccount,
         layout: "/admin",
         child: [
             {
                 path: "/account/link-pay",
                 name: "Link Pay",
-                icon: "ni ni-pin-3 text-primary",
+                icon: "ni ni-fat-delete text-primary",
                 component: AdminAccountLinkPay,
                 layout: "/admin"
             },
@@ -132,35 +132,35 @@ const routes: any[] = [
     {
         path: "/service",
         name: "Layanan",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-mobile-button text-danger",
         component: AdminService,
         layout: "/admin"
     },
     {
         path: "/price",
         name: "Harga",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-money-coins text-success",
         component: AdminPrice,
         layout: "/admin"
     },
     {
         path: "/service-price",
         name: "Harga Layanan",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-credit-card text-primary",
         component: AdminServicePrice,
         layout: "/admin"
     },
     {
         path: "/voucher-promo",
         name: "Voucher",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-paper-diploma text-info",
         component: AdminVoucherPromo,
         layout: "/admin"
     },
     {
         path: "/voucher-type",
         name: "Tipe Voucher",
-        icon: "ni ni-single-02 text-primary",
+        icon: "ni ni-ungroup text-warning",
         component: AdminVoucherType,
         layout: "/admin"
     }

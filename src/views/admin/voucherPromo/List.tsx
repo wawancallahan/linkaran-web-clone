@@ -44,7 +44,7 @@ import { Alert as IAlert } from '../../../types/alert';
 
 import {
     argonReactImage
-} from '../../../Assets'
+} from '../../../helpers/Assets'
 import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/parseData';
 import Spinner from '../../../components/Loader/Spinner'
 

@@ -1,4 +1,9 @@
 import moment from 'moment'
+import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
+
+interface icoLinkOptions {
+    [key: string]: string
+}
 
 export const addZeroOnNumber = (number: number) => {
     let parseNumber = number.toString()
@@ -72,4 +77,19 @@ export const voucherUsedFormat = (date_start: string, date_end: string) => {
     }
 
     return label;
+}
+
+export const icoLinkImage = (code: string): string => {
+    const icoLink: icoLinkOptions = {
+        "linkride": icoLinkRide,
+        "linkcar": icoLinkCar,
+        "linksend": icoLinkBox,
+        "linkfood": icoLinkFood
+    }
+
+    if (code in icoLink) {
+        return icoLink[code]
+    }
+
+    return '';
 }

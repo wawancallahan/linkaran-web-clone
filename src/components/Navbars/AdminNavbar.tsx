@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 
 import { name as authName} from '../../services/auth'
+import { profileImage } from "../../helpers/Assets";
 
 type AdminNavbarProps = RouteComponentProps & {
   brandText?: String;
@@ -48,7 +49,7 @@ class AdminNavbar extends React.Component<AdminNavbarProps, {}> {
                     <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
-                        src={require("assets/img/theme/team-4-800x800.jpg")}
+                        src={profileImage}
                       />
                     </span>
                     <Media className="ml-2 d-none d-lg-block">

@@ -100,7 +100,7 @@ class Edit extends Component<Props, State> {
 
                     form.vehicleType = {
                         value: data.vehicleType.id,
-                        label: data.vehicleType.name
+                        label: data.vehicleType.name || ''
                     }
 
                     this.setState({
