@@ -1,5 +1,8 @@
 import moment from 'moment'
+import 'moment/locale/id'
 import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
+
+moment.locale('id');
 
 interface icoLinkOptions {
     [key: string]: string
@@ -40,7 +43,7 @@ export const colorStatusFormat = (status: string) => {
 export const parseDateTimeFormat = (date: string) => {
     const dateParse = moment(new Date(date))
 
-    return dateParse.format('dd MMMM YYYY hh:mm');
+    return dateParse.format('D MMMM YYYY hh:mm');
 }
 
 export const getOnlyDateFromDate = (date: Date) => {

@@ -18,6 +18,8 @@ import voucherPromoReducer from '../reducers/admin/voucherPromo';
 import voucherPromoUserUsedReducer from '../reducers/admin/voucherPromoUserUsed';
 import voucherTypeReducer from '../reducers/admin/voucherType';
 import serviceReducer from '../reducers/admin/service'
+import ticketReducer from '../reducers/admin/ticket'
+import ticketVoucherReducer from '../reducers/admin/ticketVoucher'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -36,7 +38,9 @@ const rootReducer = combineReducers({
     voucherPromo: voucherPromoReducer,
     voucherPromoUserUsed: voucherPromoUserUsedReducer,
     voucherType: voucherTypeReducer,
-    service: serviceReducer
+    service: serviceReducer,
+    ticket: ticketReducer,
+    ticketVoucher: ticketVoucherReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
