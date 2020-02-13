@@ -70,8 +70,6 @@ const fetch = (state: initialStateInterface, action: FetchDriverActionType) => {
 const fetchSuccess = (state: initialStateInterface, action: FetchDriverSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

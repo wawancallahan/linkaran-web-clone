@@ -20,6 +20,11 @@ import voucherTypeReducer from '../reducers/admin/voucherType';
 import serviceReducer from '../reducers/admin/service'
 import ticketReducer from '../reducers/admin/ticket'
 import ticketVoucherReducer from '../reducers/admin/ticketVoucher'
+import countryReducer from '../reducers/admin/region/country'
+import provinceReducer from '../reducers/admin/region/province'
+import districtReducer from '../reducers/admin/region/district'
+import subDistrictReducer from '../reducers/admin/region/subDistrict'
+import villageReducer from '../reducers/admin/region/village'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -40,7 +45,12 @@ const rootReducer = combineReducers({
     voucherType: voucherTypeReducer,
     service: serviceReducer,
     ticket: ticketReducer,
-    ticketVoucher: ticketVoucherReducer
+    ticketVoucher: ticketVoucherReducer,
+    country: countryReducer,
+    province: provinceReducer,
+    district: districtReducer,
+    subDistrict: subDistrictReducer,
+    village: villageReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

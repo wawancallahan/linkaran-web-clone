@@ -62,8 +62,6 @@ const alertShow = (state: initialStateInterface, action: AlertBrandVehicleShowAc
 const fetchSuccess = (state: initialStateInterface, action: FetchBrandVehicleSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

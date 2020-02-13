@@ -62,8 +62,6 @@ const alertShow = (state: initialStateInterface, action: AlertFoodShowActionType
 const fetchSuccess = (state: initialStateInterface, action: FetchFoodSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

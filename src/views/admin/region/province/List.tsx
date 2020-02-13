@@ -1,0 +1,249 @@
+import React, { Component } from 'react';
+import withTitle from '../../../../hoc/WithTitle';
+
+import HeaderView from "../../../../components/Headers/HeaderView";
+import {
+    Container,
+    Row,
+    Card,
+    CardHeader,
+    CardFooter,
+    Button,
+    Table,
+    Alert
+} from 'reactstrap';
+import {
+    Link,
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+
+import {
+    connect
+} from 'react-redux';
+import { AppState } from '../../../../store/configureStore';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../../types';
+
+import { AxiosResponse } from 'axios';
+
+import Pagination from '../../../../components/Pagination/Pagination';
+import queryString from 'query-string';
+import {
+    fetchProvinceAction,
+    deleteProvinceAction,
+    setAlertProvinceHideAction,
+    setAlertProvinceShowAction
+} from '../../../../actions/admin/region/province';
+import { Province, ProvinceList } from '../../../../types/admin/region/province';
+import { Paginator } from '../../../../types/paginator';
+import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
+import { Alert as IAlert } from '../../../../types/alert';
+import Spinner from '../../../../components/Loader/Spinner'
+
+type ListProps = RouteComponentProps & {
+
+}
+
+type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
+
+type State = {
+    loader: boolean
+}
+
+const TableItem = (props: {
+    index: number,
+    item: ProvinceList,
+    key: number,
+    deleteProvince: (id: number) => void
+}) => {
+    return (
+        <tr>
+            <td>{props.index + 1}</td>
+            <td>{props.item.name}</td>
+            <td>
+                <Link to={`/admin/region/province/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i> Edit
+                </Link>
+                <Button color="danger" size="sm" onClick={() => props.deleteProvince(props.item.id)}>
+                    <i className="fa fa-trash"></i> Hapus
+                </Button>
+            </td>
+        </tr>
+    )
+}
+
+const TableItemEmpty = () => (
+    <tr>
+        <td colSpan={4}>Data Tidak Ditemukan</td> 
+    </tr>
+);
+
+class List extends Component<Props, State> {
+
+    state = {
+        loader: true
+    }
+
+    componentDidMount() {
+        const queryStringValue = queryString.parse(this.props.location.search);
+    
+        const page = + (queryStringValue.page || 1);
+
+        this.fetchProvinceList(page);
+    }
+
+    componentWillUnmount() {
+        this.props.setAlertProvinceHideAction();
+    }
+
+    fetchProvinceList = (page: number) => {
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchProvinceAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+        })
+    }
+
+    deleteProvince = (id: number) => {
+        this.props.deleteProvinceAction(id)
+            .then( (response: ApiResponse<Province>) => {
+                this.fetchProvinceList(1);
+
+                this.props.setAlertProvinceShowAction("Data Berhasil Dihapus", 'success');
+            })
+            .catch( (response: ApiResponse<Province>) => {
+                this.props.setAlertProvinceShowAction(response.error!.metaData.message, 'danger');
+            });
+    }
+
+    render() {
+
+        let provinceList: any = null
+
+        let loaderSpinner = <Spinner type="Puff"
+                                color="#00BFFF"
+                                height={150}
+                                width={150}
+                                visible={this.state.loader} />
+
+        if ( ! this.state.loader) {
+            if (this.props.provinceList.length > 0) {
+                provinceList = this.props.provinceList.map((item: ProvinceList, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               deleteProvince={this.deleteProvince}
+                               />
+                ));
+            } else {
+                provinceList = <TableItemEmpty />;
+            }
+        }
+
+        const CAlert = (
+            <Alert color={this.props.provinceAlert.color} isOpen={this.props.provinceAlert.visible} toggle={() => this.props.setAlertProvinceHideAction()} fade={false}>
+                <div>{this.props.provinceAlert.message}</div>
+            </Alert>
+        );
+
+        return (
+            <>
+                <HeaderView />
+
+                <Container className="mt--7" fluid>
+                <Row>
+                        <div className="col">
+                            <Card className="shadow">
+                                <CardHeader className="border-0">
+                                    <Row>
+                                        <div className="col">
+                                            {CAlert}
+                                        </div>
+                                    </Row>
+                                    <Row className="align-items-center">
+                                        <div className="col">
+                                            <h3 className="mb-0">Daftar Province</h3>
+                                        </div>
+                                        <div className="col text-right">
+                                        <Link to="/admin/region/province/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Province
+                                            </Button>
+                                        </Link>
+                                        </div>
+                                    </Row>
+                                </CardHeader>
+
+                                <Table className="align-items-center table-flush" responsive>
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama</th>
+                                            <th>Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {provinceList}
+                                    </tbody>
+                                </Table>
+
+                                {loaderSpinner}
+                                
+                                <CardFooter className="py-4">
+                                    <Pagination pageCount={this.props.paginate.pageCount}
+                                                    currentPage={this.props.paginate.currentPage}
+                                                    itemCount={this.props.paginate.itemCount}
+                                                    itemClicked={this.props.fetchProvinceAction} />
+                                </CardFooter>
+                            </Card>
+                        </div>
+                    </Row>
+                </Container>
+            </>
+        );
+    }
+}
+
+interface LinkStateToProps {
+    provinceList: ProvinceList[],
+    paginate: Paginator,
+    provinceAlert: IAlert
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        provinceList: state.province.list,
+        paginate: state.province.paginate,
+        provinceAlert: state.province.alert
+    }
+}
+
+interface LinkDispatchToProps {
+    fetchProvinceAction: (page: number) => Promise<Boolean>,
+    deleteProvinceAction: (id: number) => Promise<ApiResponse<Province>>,
+    setAlertProvinceHideAction: () => void,
+    setAlertProvinceShowAction: (message: string, color: string) => void
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
+    return {
+        fetchProvinceAction: (page: number) => dispatch(fetchProvinceAction(page)),
+        deleteProvinceAction: (id: number) => dispatch(deleteProvinceAction(id)),
+        setAlertProvinceHideAction: () => dispatch(setAlertProvinceHideAction()),
+        setAlertProvinceShowAction: (message: string, color: string) => dispatch(setAlertProvinceShowAction(message, color))
+    }
+}
+
+export default  withRouter(
+                    connect(mapStateToProps, mapDispatchToProps)(
+                            withTitle(List, "Daftar Province")
+                    )
+                );

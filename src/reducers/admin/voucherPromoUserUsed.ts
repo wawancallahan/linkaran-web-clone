@@ -36,8 +36,6 @@ const initialState: initialStateInterface = {
 const fetchSuccess = (state: initialStateInterface, action: FetchVoucherPromoUserUsedSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

@@ -38,8 +38,6 @@ const initialState: initialStateInterface = {
 const fetchSuccess = (state: initialStateInterface, action: FetchTicketVoucherSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

@@ -280,7 +280,6 @@ class Form extends Component<Props> {
                 validationSchema={createSchema}
             >
                 {(FormikProps => {
-                    console.log(FormikProps.errors)
                     return (
                         <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
                             <div className="pl-lg-4">

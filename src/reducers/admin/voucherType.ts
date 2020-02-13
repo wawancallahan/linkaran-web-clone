@@ -62,8 +62,6 @@ const alertShow = (state: initialStateInterface, action: AlertVoucherTypeShowAct
 const fetchSuccess = (state: initialStateInterface, action: FetchVoucherTypeSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

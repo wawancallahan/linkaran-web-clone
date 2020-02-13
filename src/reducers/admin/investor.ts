@@ -70,8 +70,6 @@ const fetch = (state: initialStateInterface, action: FetchInvestorActionType) =>
 const fetchSuccess = (state: initialStateInterface, action: FetchInvestorSuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

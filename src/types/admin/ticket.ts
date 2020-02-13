@@ -15,11 +15,14 @@ export const ALERT_TICKET_SHOW = "ALERT_TICKET_SHOW";
 export const ALERT_TICKET_HIDE = "ALERT_TICKET_HIDE";
 
 export type FormField = {
-    
+    redeemCode: string,
 }
 
 interface TicketField {
-    
+    redeemCode: string,
+    voucher: {
+        id: number
+    }
 }
 
 interface TicketList {

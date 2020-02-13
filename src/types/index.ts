@@ -14,6 +14,11 @@ import { PriceActionTypes as AdminPriceActionTypes } from './admin/price';
 import { VoucherPromoActionTypes as AdminVoucherPromoActionTypes } from './admin/voucherPromo';
 import { VoucherTypeActionTypes as AdminVoucherTypeActionTypes  } from './admin/voucherType'
 import { ServiceActionTypes as AdminServiceActionTypes } from './admin/service'
+import { CountryActionTypes as AdminCountryActionTypes } from './admin/region/country'
+import { ProvinceActionTypes as AdminProvinceActionTypes } from './admin/region/province'
+import { DistrictActionTypes as AdminDistrictActionTypes } from './admin/region/district'
+import { SubDistrictActionTypes as AdminSubDistrictActionTypes } from './admin/region/subDistrict'
+import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/village'
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -32,3 +37,8 @@ export type AppActions =
     | AdminVoucherPromoActionTypes
     | AdminVoucherTypeActionTypes
     | AdminServiceActionTypes
+    | AdminCountryActionTypes
+    | AdminProvinceActionTypes
+    | AdminDistrictActionTypes
+    | AdminSubDistrictActionTypes
+    | AdminVillageActionTypes

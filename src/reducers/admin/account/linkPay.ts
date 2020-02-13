@@ -62,8 +62,6 @@ const alertShow = (state: initialStateInterface, action: AlertAccountLinkPayShow
 const fetchSuccess = (state: initialStateInterface, action: FetchAccountLinkPaySuccessActionType) => {
     return {
         ...state,
-        isLoaded: true,
-        isSuccess: true,
         list: action.list,
         paginate: {
             ...initialState.paginate

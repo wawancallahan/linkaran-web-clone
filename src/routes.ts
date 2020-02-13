@@ -18,6 +18,12 @@ import AdminPrice from './views/admin/price/Index';
 import AdminVoucherPromo from './views/admin/voucherPromo/Index';
 import AdminVoucherType from './views/admin/voucherType/Index';
 import AdminService from './views/admin/service/Index'
+import AdminRegion from './views/admin/region/Index'
+import AdminCountry from './views/admin/region/country/Index'
+import AdminProvince from './views/admin/region/province/Index'
+import AdminDistrict from './views/admin/region/district/Index'
+import AdminSubDistrict from './views/admin/region/subDistrict/Index'
+import AdminVillage from './views/admin/region/village/Index'
 
 const routes: any[] = [
     {
@@ -100,14 +106,14 @@ const routes: any[] = [
             {
                 path: "/transaction/application",
                 name: "Aplikasi",
-                icon: "ni ni-fat-delete text-primary",
+                icon: "ni ni-fat-delete text-default",
                 component: AdminTransactionApplication,
                 layout: "/admin"
             },
             {
                 path: "/transaction/link-pay",
                 name: "Link Pay",
-                icon: "ni ni-fat-delete text-primary",
+                icon: "ni ni-fat-delete text-default",
                 component: AdminTransactionLinkPay,
                 layout: "/admin"
             },
@@ -123,7 +129,7 @@ const routes: any[] = [
             {
                 path: "/account/link-pay",
                 name: "Link Pay",
-                icon: "ni ni-fat-delete text-primary",
+                icon: "ni ni-fat-delete text-default",
                 component: AdminAccountLinkPay,
                 layout: "/admin"
             },
@@ -163,7 +169,51 @@ const routes: any[] = [
         icon: "ni ni-ungroup text-warning",
         component: AdminVoucherType,
         layout: "/admin"
-    }
+    },
+    {
+        path: "/region",
+        name: "Region",
+        icon: "ni ni-compass-04 text-success",
+        component: AdminRegion,
+        layout: "/admin",
+        child: [
+            {
+                path: "/region/country",
+                name: "Country",
+                icon: "ni ni-fat-delete text-default",
+                component: AdminCountry,
+                layout: "/admin"
+            },
+            {
+                path: "/region/province",
+                name: "Province",
+                icon: "ni ni-fat-delete text-default",
+                component: AdminProvince,
+                layout: "/admin"
+            },
+            {
+                path: "/region/district",
+                name: "District",
+                icon: "ni ni-fat-delete text-default",
+                component: AdminDistrict,
+                layout: "/admin"
+            },
+            {
+                path: "/region/sub-district",
+                name: "Sub District",
+                icon: "ni ni-fat-delete text-default",
+                component: AdminSubDistrict,
+                layout: "/admin"
+            },
+            {
+                path: "/region/village",
+                name: "Village",
+                icon: "ni ni-fat-delete text-default",
+                component: AdminVillage,
+                layout: "/admin"
+            }
+        ]
+    },
 ];
 
 export default routes;
