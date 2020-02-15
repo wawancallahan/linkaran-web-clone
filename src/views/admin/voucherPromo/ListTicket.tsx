@@ -12,7 +12,8 @@ import {
     Modal,
     Form as FormReactStrap,
     FormGroup,
-    Input
+    Input,
+    Alert
 } from 'reactstrap'
 
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
@@ -32,8 +33,15 @@ import { parseDateTimeFormat } from '../../../helpers/parseData';
 import queryString from 'query-string';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { ApiResponse } from '../../../types/api';
+import { ApiResponse, ApiResponseSuccess } from '../../../types/api';
 import { ModalToggleVisible } from '../../../types/modal';
+import { number } from 'prop-types';
+
+interface ModalState { 
+    id: number, 
+    redeemCode: string,
+    visible: boolean
+}
 
 type ListTicketProps = RouteComponentProps & {
     data: VoucherPromo | null
@@ -47,26 +55,107 @@ type State = {
     modal_edit_visible: ModalToggleVisible,
     form: FormField,
     voucherId: string,
-    modalState: string
+    modalState: ModalState[],
     alert_visible: boolean,
-    alert_message: string
+    alert_message: string,
+    alert_color: string
 }
 
 const TableItem = (props: {
     index: number,
     item: Ticket,
-    key: number
+    key: number,
+    setAlertOpen: (open: boolean) => void,
+    toggleEditModelTicket: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.item.redeemCode}</td>
             <td>{parseDateTimeFormat(props.item.claimAt)}</td>
-            <Button color="warning" size="sm">
-                <i className="fa fa-edit"></i>
-            </Button>
-            <Button color="danger" size="sm">
-                <i className="fa fa-trash"></i>
-            </Button>
+            <td>
+                <Button color="warning" size="sm" onClick={() => props.toggleEditModelTicket(props.item.id)}>
+                    <i className="fa fa-edit"></i>
+                </Button>
+                <Button color="danger" size="sm">
+                    <i className="fa fa-trash"></i>
+                </Button>
+
+                <Modal
+                    className="modal-dialog-centered"
+                    isOpen={true}
+                    toggle={() => props.toggleEditModelTicket(props.item.id)}
+                >
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="modal-ticket">
+                            Edit Tiket
+                        </h5>
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => props.toggleEditModelTicket(props.item.id)}
+                            >
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <Formik initialValues={{
+                                    redeemCode: props.item.redeemCode
+                                }}
+                                onSubmit={(values, action) => {
+                                    props.setAlertOpen(false)
+                                }}
+                                validationSchema={createSchema}>
+                            {(FormikProps => {
+                                return (
+                                    <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                        <div className="pl-lg-4">
+                                            <FormGroup>
+                                                <label
+                                                className="form-control-label"
+                                                htmlFor="input-code"
+                                                >
+                                                    Kode
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    id="input-code"
+                                                    placeholder="Kode"
+                                                    type="text"
+                                                    name="code"
+                                                    maxLength={255}
+                                                    value={FormikProps.values.redeemCode}
+                                                    required
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                    invalid={ !!(FormikProps.touched.redeemCode && FormikProps.errors.redeemCode) }
+                                                />
+                                                <div>
+                                                    {FormikProps.errors.redeemCode && FormikProps.touched.redeemCode ? FormikProps.errors.redeemCode : ''}
+                                                </div>
+                                            </FormGroup>
+                                        </div>
+                                    </FormReactStrap>
+                                );
+                            })}
+                        </Formik>
+                    </div>
+                    <div className="modal-footer">
+                        <Button
+                            color="secondary"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => props.toggleEditModelTicket(props.item.id)}
+                        >
+                            Tutup
+                        </Button>
+                        <Button color="primary" type="button">
+                            Edit
+                        </Button>
+                    </div>
+                </Modal>
+            </td>
         </tr>
     )
 }
@@ -99,9 +188,10 @@ class ListTicket extends Component<Props, State> {
             redeemCode: '',
         },
         voucherId: '',
-        modalState: 'create',
+        modalState: [],
         alert_visible: false,
-        alert_message: ''
+        alert_message: '',
+        alert_color: ''
     }
 
     componentDidMount() {
@@ -118,9 +208,21 @@ class ListTicket extends Component<Props, State> {
         this.setState({
             loader: true
         }, () => {
-            this.props.fetchTicketVoucherAction(page, id).then(() => {
+            this.props.fetchTicketVoucherAction(page, id).then(async () => {
+                
+                const modalState: ModalState[] = []
+
+                this.props.ticketVoucherList.forEach((value: Ticket) => {
+                    modalState.push({
+                        id: value.id,
+                        redeemCode: value.redeemCode,
+                        visible: false
+                    })
+                })
+
                 this.setState({
-                    loader: false
+                    loader: false,
+                    modalState: modalState
                 })
             });
         })
@@ -129,6 +231,10 @@ class ListTicket extends Component<Props, State> {
     toggleAddModalTicket = () => {
         this.setState( (prevState: State) => {
             return {
+                form: {
+                    ...prevState.form,
+                    redeemCode: ''
+                },
                 modal_add_visible: ! prevState.modal_add_visible
             }
         })
@@ -161,9 +267,10 @@ class ListTicket extends Component<Props, State> {
         });
     }
 
-    setAlertMessage = (message: string) => {
+    setAlertMessage = (message: string, color: string) => {
         this.setState({
-            alert_message: message
+            alert_message: message,
+            alert_color: color
         });
     }
 
@@ -189,6 +296,8 @@ class ListTicket extends Component<Props, State> {
                     <TableItem key={index}
                                item={item}
                                index={index}
+                               setAlertOpen={this.setAlertOpen}
+                               toggleEditModelTicket={this.toggleEditModelTicket}
                                />
                 ));
             } else {
@@ -196,10 +305,21 @@ class ListTicket extends Component<Props, State> {
             }
         }
 
+        const CAlert = (
+            <Alert color={this.state.alert_color} isOpen={this.state.alert_visible} toggle={() => this.setAlertOpen(false)} fade={false}>
+                <div>{this.state.alert_message}</div>
+            </Alert>
+        );
+
         return (
             <>
                 <Card className="shadow">
                     <CardHeader className="border-0">
+                        <Row>
+                            <div className="col">
+                                {CAlert}
+                            </div>
+                        </Row>
                         <Row className="align-items-center">
                             <div className="col">
                                 <h3 className="mb-0">Daftar Tiket</h3>
@@ -208,6 +328,7 @@ class ListTicket extends Component<Props, State> {
                                 <Button
                                     color="primary"
                                     size="sm"
+                                    onClick={() => this.toggleAddModalTicket()}
                                 >
                                     Tambah Tiket
                                 </Button>
@@ -265,24 +386,32 @@ class ListTicket extends Component<Props, State> {
                         <Formik initialValues={this.state.form}
                                 onSubmit={(values, action) => {
                                     this.setAlertOpen(false)
-
-                                    switch (this.state.modalState) {
-                                        case 'create':
-                                                const ticketForm: TicketCreate = {
-                                                    redeemCode: values.redeemCode,
-                                                    voucher: {
-                                                        id: Number.parseInt(this.state.voucherId)
-                                                    }
-                                                }
-
-                                                this.props.createTicketAction(ticketForm)
-                                            break;
-                                        case 'edit':
-                                            
-                                            break;
-                                        default:
-                                            action.setSubmitting(false)
+                                    const ticketForm: TicketCreate = {
+                                        redeemCode: values.redeemCode,
+                                        voucher: {
+                                            id: Number.parseInt(this.state.voucherId)
+                                        }
                                     }
+
+                                    this.props.createTicketAction(ticketForm)
+                                        .then( (response: ApiResponse<TicketCreateResult>) => {
+                                            const data: ApiResponseSuccess<TicketCreateResult> = response.response!;
+                                            
+                                            this.setAlertMessage('Data Berhasil Ditambah', 'success');
+                                            this.toggleAddModalTicket()
+                                        })
+                                        .catch( (error: ApiResponse<TicketCreateResult>) => {
+                                            this.setAlertOpen(true);
+                                            let message = "Gagal Mendapatkan Response";
+
+                                            if (error.error) {
+                                                message = error.error.metaData.message;
+                                            }
+                                        
+                                            this.setAlertMessage(message, 'danger');
+                                            this.toggleAddModalTicket()
+                                            action.setSubmitting(false)
+                                        });
                                 }}
                                 validationSchema={createSchema}>
                             {(FormikProps => {
