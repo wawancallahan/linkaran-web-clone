@@ -24,6 +24,7 @@ import AdminProvince from './views/admin/region/province/Index'
 import AdminDistrict from './views/admin/region/district/Index'
 import AdminSubDistrict from './views/admin/region/subDistrict/Index'
 import AdminVillage from './views/admin/region/village/Index'
+import AdminCustomer from './views/admin/customer/Index'
 
 const routes: any[] = [
     {
@@ -87,6 +88,13 @@ const routes: any[] = [
         name: "Driver",
         icon: "ni ni-badge text-success",
         component: AdminDriver,
+        layout: "/admin"
+    },
+    {
+        path: "/customer",
+        name: "Customer",
+        icon: "ni ni-single-02 text-primary",
+        component: AdminCustomer,
         layout: "/admin"
     },
     {
