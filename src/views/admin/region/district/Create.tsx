@@ -43,6 +43,7 @@ class Create extends Component<Props, State> {
     state = {
         form: {
             name: '',
+            alternativeName: '',
             province: {
                 label: '',
                 value: 0

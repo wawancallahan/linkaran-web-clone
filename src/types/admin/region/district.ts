@@ -12,6 +12,7 @@ export const ALERT_DISTRICT_HIDE = "ALERT_DISTRICT_HIDE";
 
 export type FormField = {
     name: string,
+    alternativeName: string,
     province: {
         label: string,
         value: number
@@ -20,6 +21,7 @@ export type FormField = {
 
 interface DistrictField {
     name: string,
+    alternativeName: string,
     province: {
         id: number
     }
@@ -27,7 +29,8 @@ interface DistrictField {
 
 export interface District {
     id: number,
-    name: string
+    name: string,
+    alternativeName: string,
 }
 
 export type DistrictList = District & {

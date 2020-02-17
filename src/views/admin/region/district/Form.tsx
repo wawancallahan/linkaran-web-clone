@@ -30,6 +30,15 @@ const createSchema = Yup.object().shape({
                 return true;
             })
             .required('Bidang isian nama wajib diiisi'),
+    alternativeName: Yup.string()
+            .test('len', 'Bidang isian nama alternatif tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 255;
+                }
+
+                return true;
+            })
+            .required('Bidang isian nama alternatif wajib diiisi'),
     province: Yup.object().shape({
                 label: Yup.string().required("Bidang pilihan province wajib diisi"),
                 value: Yup.number().notOneOf([0], 'Bidang pilihan province wajib diisi').required("Bidang pilihan province wajib diisi")
@@ -97,6 +106,7 @@ class Form extends Component<Props> {
 
                     const district: DistrictCreateField = {
                         name: values.name,
+                        alternativeName: values.alternativeName,
                         province: {
                             id: values.province.value
                         }
@@ -149,6 +159,30 @@ class Form extends Component<Props> {
                                     />
                                     <div>
                                         {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                    </div>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-alternativeName"
+                                    >
+                                        Nama Alternatif
+                                    </label>
+                                    <Input
+                                    className="form-control-alternative"
+                                    id="input-alternativeName"
+                                    placeholder="Nama Alternatif"
+                                    type="text"
+                                    name="alternativeName"
+                                    maxLength={255}
+                                    value={FormikProps.values.alternativeName}
+                                    required
+                                    onChange={FormikProps.handleChange}
+                                    onBlur={FormikProps.handleBlur}
+                                    invalid={ !!(FormikProps.touched.alternativeName && FormikProps.errors.alternativeName) }
+                                    />
+                                    <div>
+                                        {FormikProps.errors.alternativeName && FormikProps.touched.alternativeName ? FormikProps.errors.alternativeName : ''}
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
