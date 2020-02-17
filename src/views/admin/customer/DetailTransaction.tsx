@@ -22,29 +22,14 @@ class DetailTransaction extends Component<Props> {
 
         if (customer) {
 
-            const transactionCount = 0;
-            const serviceCount: ServiceCount[] = [
-                {
-                    "name": "LINKCAR",
-                    "code": "linkcar",
-                    "transactionCount": 0
-                },
-                {
-                    "name": "LINKSEND",
-                    "code": "linksend",
-                    "transactionCount": 0
-                },
-                {
-                    "name": "LINKFOOD",
-                    "code": "linkfood",
-                    "transactionCount": 0
-                },
-                {
-                    "name": "LINKRIDE",
-                    "code": "linkride",
-                    "transactionCount": 0
-                }
-            ];
+            const serviceCount: Partial<ServiceCount>[] = customer.service;
+            const transactionCount = serviceCount.map((value: Partial<ServiceCount>) => {
+                let transactionCount = 0;
+
+                if (value.transactionCount) transactionCount = value.transactionCount;
+
+                return transactionCount
+            }).reduce((previousValue: number, currentValue: number) => previousValue + currentValue);
 
             return (
                 <>
@@ -66,7 +51,11 @@ class DetailTransaction extends Component<Props> {
                     </Card>
 
                     <Row>
-                        {serviceCount.map((value: ServiceCount, index: number) => {
+                        {serviceCount.map((value: Partial<ServiceCount>, index: number) => {
+                            let code = '';
+
+                            if (value.code) code = value.code;
+
                             return (
                                 <Col md={6} key={index}>
                                     <Card className="card-stats mb-2">
@@ -80,7 +69,7 @@ class DetailTransaction extends Component<Props> {
                                                 </div>
                                                 <Col className="col-auto align-self-center">
                                                     <div className="img-ico-link">
-                                                        <img src={icoLinkImage(value.code)} alt=""/>
+                                                        <img src={icoLinkImage(code)} alt=""/>
                                                     </div>
                                                 </Col>
                                             </Row>

@@ -1,5 +1,6 @@
 import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
+import { ServiceCount } from './service';
 
 export const FETCH_CUSTOMER = "FETCH_CUSTOMER";
 export const FETCH_CUSTOMER_SUCCESS = "FETCH_CUSTOMER_SUCCESS";
@@ -27,7 +28,9 @@ export interface Customer {
 
 export type CustomerList = Customer
 
-export type CustomerShow = Customer
+export type CustomerShow = Customer & {
+    service: Partial<ServiceCount>[]
+}
 
 export type CustomerCreateField = CustomerField
 
