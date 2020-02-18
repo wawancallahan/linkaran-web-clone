@@ -39,7 +39,7 @@ import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
 
-import { typeOfTransaction } from '../../../../helpers/parseData';
+import { typeOfTransaction } from '../../../../helpers/utils';
 import { amountFormat } from '../../../../helpers/number';
 
 type ListProps = RouteComponentProps & {

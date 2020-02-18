@@ -9,7 +9,7 @@ import {
 
 import { CustomerShow } from '../../../types/admin/customer';
 import { ServiceCount } from '../../../types/admin/service';
-import { icoLinkImage } from '../../../helpers/parseData';
+import { icoLinkImage } from '../../../helpers/utils';
 
 type Props = {
     customer: CustomerShow | null

@@ -25,7 +25,7 @@ import { AppActions } from '../../../types';
 import { Restaurant, FormField } from '../../../types/admin/restaurant';
 
 import FormRestaurant from './Form';
-import { midnightDate } from '../../../helpers/parseData';
+import { midnightDate } from '../../../helpers/utils';
 
 type CreateProps = RouteComponentProps & {
 

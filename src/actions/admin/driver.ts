@@ -26,7 +26,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
-import { booleanToString } from '../../helpers/parseData';
+import { booleanToString } from '../../helpers/utils';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorDriverActionType => {

@@ -10,9 +10,9 @@ class Index extends Component {
         return (
             <Switch>
                 <Route exact path="/admin/driver" render={() => <DriverList />}/>
+                <Route exact path="/admin/driver/create" render={() => <DriverCreate />} />
                 <Route path="/admin/driver/:id" render={() => <DriverDetail />} />
                 <Route path="/admin/driver/:id/edit" render={() => <DriverEdit />} />
-                <Route path="/admin/driver/create" render={() => <DriverCreate />} />
             </Switch>
         );
     }

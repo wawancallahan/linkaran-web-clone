@@ -9,7 +9,7 @@ import {
 
 import { DriverDetail } from '../../../types/admin/driver';
 import { ServiceCount } from '../../../types/admin/service';
-import { icoLinkImage } from '../../../helpers/parseData';
+import { icoLinkImage } from '../../../helpers/utils';
 
 type Props = {
     driver: DriverDetail | null

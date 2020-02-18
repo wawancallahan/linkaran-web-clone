@@ -29,7 +29,7 @@ import {
 } from '../../../actions/admin/voucherPromo';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
-import { parseDateTimeFormat } from '../../../helpers/parseData';
+import { parseDateTimeFormat } from '../../../helpers/utils';
 
 type DetailPenggunaanVoucherProps = RouteComponentProps & {
     data: VoucherPromo | null

@@ -26,7 +26,7 @@ import { fetchListServiceAction } from '../../../actions/admin/service';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListVoucherTypeAction } from '../../../actions/admin/voucherType';
 import { VoucherType } from '../../../types/admin/voucherType';
-import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/parseData';
+import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/utils';
 
 const createSchema = Yup.object().shape({
     name: Yup.string()

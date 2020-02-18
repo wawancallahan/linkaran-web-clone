@@ -45,7 +45,7 @@ import { Alert as IAlert } from '../../../types/alert';
 import {
     argonReactImage
 } from '../../../helpers/Assets'
-import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/parseData';
+import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {

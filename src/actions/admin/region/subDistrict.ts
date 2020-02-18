@@ -26,6 +26,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorSubDistrictActionType => {
@@ -100,9 +101,24 @@ export const fetchSubDistrictAction = (page: number): ThunkResult<Promise<Boolea
 }
 
 
-export const fetchListSubDistrictAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<SubDistrictList>>> => {
+export const fetchListSubDistrictAction = (search: string, page: number, districtId?: number): ThunkResult<Promise<ApiResponseList<SubDistrictList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-sub-district?page=${page}`)
+        
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        if (districtId) {
+            paramsObject = {
+                ...paramsObject,
+                districtId: districtId.toString()
+            }
+        }
+
+        const params = objectToParamsUrl(paramsObject)
+        
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-sub-district?${params}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<SubDistrictList> = response.data;
 

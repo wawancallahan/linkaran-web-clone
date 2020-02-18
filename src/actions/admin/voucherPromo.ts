@@ -32,7 +32,7 @@ import {
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
-import { booleanToString } from '../../helpers/parseData';
+import { booleanToString } from '../../helpers/utils';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

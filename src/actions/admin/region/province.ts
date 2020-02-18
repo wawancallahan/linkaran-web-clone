@@ -26,6 +26,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorProvinceActionType => {
@@ -100,9 +101,24 @@ export const fetchProvinceAction = (page: number): ThunkResult<Promise<Boolean>>
 }
 
 
-export const fetchListProvinceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ProvinceList>>> => {
+export const fetchListProvinceAction = (search: string, page: number, countryId?: number): ThunkResult<Promise<ApiResponseList<ProvinceList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-province?page=${page}`)
+        
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        if (countryId) {
+            paramsObject = {
+                ...paramsObject,
+                countryId: countryId.toString()
+            }
+        }
+
+        const params = objectToParamsUrl(paramsObject)
+        
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-province?${params}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ProvinceList> = response.data;
 

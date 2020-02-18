@@ -29,7 +29,7 @@ import { Ticket, FormField, TicketCreate, TicketCreateResult } from '../../../ty
 import { Paginator } from '../../../types/paginator';
 import { fetchTicketVoucherAction, createTicketAction } from '../../../actions/admin/ticket';
 import Spinner from '../../../components/Loader/Spinner'
-import { parseDateTimeFormat } from '../../../helpers/parseData';
+import { parseDateTimeFormat } from '../../../helpers/utils';
 import queryString from 'query-string';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

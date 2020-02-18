@@ -12,25 +12,21 @@ import Dropzone from '../../../components/Dropzone/Dropzone';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { connect } from 'react-redux';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
-import {
-    fetchListKabupatenKotaAction,
-    fetchListKecamatanAction,
-    fetchListKelurahanAction,
-    fetchListNegaraAction,
-    fetchListProvinsiAction
-} from '../../../actions/admin/location';
-import {
-    Negara,
-    KabupatenKota,
-    Kecamatan,
-    Kelurahan,
-    Provinsi
-} from '../../../types/admin/location';
 
 import "react-datepicker/dist/react-datepicker.css";
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { Paginator } from '../../../types/paginator';
+import { fetchListCountryAction } from '../../../actions/admin/region/country';
+import { Country } from '../../../types/admin/region/country';
+import { fetchListProvinceAction } from '../../../actions/admin/region/province';
+import { Province } from '../../../types/admin/region/province';
+import { fetchListDistrictAction } from '../../../actions/admin/region/district';
+import { District } from '../../../types/admin/region/district';
+import { SubDistrict } from '../../../types/admin/region/subDistrict';
+import { fetchListSubDistrictAction } from '../../../actions/admin/region/subDistrict';
+import { fetchListVillageAction } from '../../../actions/admin/region/village';
+import { Village } from '../../../types/admin/region/village';
 
 type FormDriverProps = {
     FormikProps: FormikProps<FormField>,
@@ -39,14 +35,16 @@ type FormDriverProps = {
 type Props = FormDriverProps & LinkDispatchToProps;
 
 class FormDriver extends Component<Props> {
+
+    private selectProvince = React.createRef<(ReactSelectAsyncPaginate<{}, {page: number}>)>();
     
     loadNegaraHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListNegaraAction(search, options.page)
-            .then((response: ApiResponseList<Negara>) => {
+        return this.props.fetchListCountryAction(search, options.page)
+            .then((response: ApiResponseList<Country>) => {
 
-                const data: ApiResponseSuccessList<Negara> = response.response!;
+                const data: ApiResponseSuccessList<Country> = response.response!;
 
                 let result: {
                     value: number,
@@ -62,7 +60,7 @@ class FormDriver extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Negara) => {
+                    result = data.result.map((item: Country) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -84,10 +82,11 @@ class FormDriver extends Component<Props> {
         page: number
     }) => {
 
-        return this.props.fetchListProvinsiAction(search, options.page, this.props.FormikProps.values.negara.value)
-            .then((response: ApiResponseList<Provinsi>) => {
+        if (this.props.FormikProps.values.negara.value && this.props.FormikProps.values.negara.value > 0) {
+            return this.props.fetchListProvinceAction(search, options.page, this.props.FormikProps.values.negara.value)
+            .then((response: ApiResponseList<Province>) => {
 
-                const data: ApiResponseSuccessList<Provinsi> = response.response!;
+                const data: ApiResponseSuccessList<Province> = response.response!;
 
                 let result: {
                     value: number,
@@ -103,7 +102,7 @@ class FormDriver extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Provinsi) => {
+                    result = data.result.map((item: Province) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -118,128 +117,187 @@ class FormDriver extends Component<Props> {
                       page: options.page + 1,
                     },
                 };
-            });
+            });   
+        }
+
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
 
     loadKabupatenKotaHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListKabupatenKotaAction(search, options.page, this.props.FormikProps.values.provinsi.value)
-            .then((response: ApiResponseList<KabupatenKota>) => {
 
-                const data: ApiResponseSuccessList<KabupatenKota> = response.response!;
+        if (this.props.FormikProps.values.provinsi.value && this.props.FormikProps.values.provinsi.value > 0) {
+            
+            return this.props.fetchListDistrictAction(search, options.page, this.props.FormikProps.values.provinsi.value)
+                .then((response: ApiResponseList<District>) => {
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    const data: ApiResponseSuccessList<District> = response.response!;
 
-                let hasMore = false;
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                if ( ! data.metaData.isError) {
+                    let hasMore = false;
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                    if ( ! data.metaData.isError) {
+
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: District) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: KabupatenKota) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
+        return new Promise((resolve, reject) => {
+                resolve();
+            }).then(() => {
                 return {
-                    options: result,
-                    hasMore: hasMore,
+                    options: [],
+                    hasMore: false,
                     additional: {
-                      page: options.page + 1,
+                        page: 1,
                     },
                 };
-            });
+            })
     }
 
     loadKecamatanHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListKecamatanAction(search, options.page, this.props.FormikProps.values.kabupaten_kota.value)
-            .then((response: ApiResponseList<Kecamatan>) => {
+        if (this.props.FormikProps.values.kabupaten_kota.value && this.props.FormikProps.values.kabupaten_kota.value > 0) {
+            
+            return this.props.fetchListSubDistrictAction(search, options.page, this.props.FormikProps.values.kabupaten_kota.value)
+                .then((response: ApiResponseList<SubDistrict>) => {
 
-                const data: ApiResponseSuccessList<Kecamatan> = response.response!;
+                    const data: ApiResponseSuccessList<SubDistrict> = response.response!;
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                let hasMore = false;
+                    let hasMore = false;
 
-                if ( ! data.metaData.isError) {
+                    if ( ! data.metaData.isError) {
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: SubDistrict) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: Kecamatan) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
     loadKelurahanHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListKelurahanAction(search, options.page, this.props.FormikProps.values.kecamatan.value)
-            .then((response: ApiResponseList<Kelurahan>) => {
+        if (this.props.FormikProps.values.kecamatan.value && this.props.FormikProps.values.kecamatan.value > 0) {
+            
+            return this.props.fetchListVillageAction(search, options.page, this.props.FormikProps.values.kecamatan.value)
+                .then((response: ApiResponseList<Village>) => {
 
-                const data: ApiResponseSuccessList<Kelurahan> = response.response!;
+                    const data: ApiResponseSuccessList<Village> = response.response!;
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                let hasMore = false;
+                    let hasMore = false;
 
-                if ( ! data.metaData.isError) {
+                    if ( ! data.metaData.isError) {
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: Village) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: Kelurahan) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
     onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
@@ -559,6 +617,7 @@ class FormDriver extends Component<Props> {
                         additional={{
                             page: 1
                         }}
+
                         />
                     <div>
                         { FormikProps.errors.negara && FormikProps.touched.negara ? FormikProps.errors.negara.value : '' }
@@ -671,20 +730,20 @@ class FormDriver extends Component<Props> {
 }
 
 interface LinkDispatchToProps {
-    fetchListNegaraAction: (search: string, page: number) => Promise<ApiResponseList<Negara>>,
-    fetchListProvinsiAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Provinsi>>,
-    fetchListKabupatenKotaAction: (search: string, page: number, id: number) => Promise<ApiResponseList<KabupatenKota>>,
-    fetchListKecamatanAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Kecamatan>>,
-    fetchListKelurahanAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Kelurahan>>
+    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<Country>>,
+    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Province>>,
+    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<District>>,
+    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrict>>,
+    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Village>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormDriverProps): LinkDispatchToProps => {
     return {
-        fetchListNegaraAction: (search: string, page: number) => dispatch(fetchListNegaraAction(search, page)),
-        fetchListProvinsiAction: (search: string, page: number, id: number) => dispatch(fetchListProvinsiAction(search, page, id)),
-        fetchListKabupatenKotaAction: (search: string, page: number, id: number) => dispatch(fetchListKabupatenKotaAction(search, page, id)),
-        fetchListKecamatanAction: (search: string, page: number, id: number) => dispatch(fetchListKecamatanAction(search, page, id)),
-        fetchListKelurahanAction: (search: string, page: number, id: number) => dispatch(fetchListKelurahanAction(search, page, id))
+        fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
+        fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
+        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
+        fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
+        fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
     }
 }
 

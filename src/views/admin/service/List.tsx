@@ -39,7 +39,7 @@ import { Service } from '../../../types/admin/service';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
-import { booleanToIndonesiaText } from '../../../helpers/parseData';
+import { booleanToIndonesiaText } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
 
 type ListProps = RouteComponentProps & {

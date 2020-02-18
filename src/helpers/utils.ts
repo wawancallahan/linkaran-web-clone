@@ -4,8 +4,12 @@ import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
 
 moment.locale('id');
 
-interface icoLinkOptions {
+export interface OptionObjectString {
     [key: string]: string
+}
+
+export interface OptionObjectNumber {
+    [key: string]: number
 }
 
 export const addZeroOnNumber = (number: number) => {
@@ -82,8 +86,17 @@ export const voucherUsedFormat = (date_start: string, date_end: string) => {
     return label;
 }
 
+export const objectToParamsUrl = (params: OptionObjectString | OptionObjectNumber) => {
+
+    let obj: OptionObjectString | OptionObjectNumber = {...params};
+
+    return Object.keys(obj).map((value: string) => {
+        return value + '=' + obj[value]
+    }).join('&')
+}
+
 export const icoLinkImage = (code: string): string => {
-    const icoLink: icoLinkOptions = {
+    const icoLink: OptionObjectString = {
         "linkride": icoLinkRide,
         "linkcar": icoLinkCar,
         "linksend": icoLinkBox,

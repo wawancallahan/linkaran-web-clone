@@ -26,6 +26,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils'
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorVillageActionType => {
@@ -100,9 +101,24 @@ export const fetchVillageAction = (page: number): ThunkResult<Promise<Boolean>> 
 }
 
 
-export const fetchListVillageAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VillageList>>> => {
+export const fetchListVillageAction = (search: string, page: number, subDistrictId?: number): ThunkResult<Promise<ApiResponseList<VillageList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-village?page=${page}`)
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        if (subDistrictId) {
+            paramsObject = {
+                ...paramsObject,
+                subDistrictId: subDistrictId.toString()
+            }
+        }
+
+        const params = objectToParamsUrl(paramsObject)
+
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/region-village?${params}`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VillageList> = response.data;
 

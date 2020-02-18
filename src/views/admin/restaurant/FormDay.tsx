@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css"
 
 import { FormikProps } from 'formik'
 import { FormField } from '../../../types/admin/restaurant'
-import { midnightDate } from '../../../helpers/parseData';
+import { midnightDate } from '../../../helpers/utils';
 
 type FormDayProps = {
     FormikProps: FormikProps<FormField>,

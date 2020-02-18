@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom'
 import { VoucherPromo } from '../../../types/admin/voucherPromo'
 import { Service } from '../../../types/admin/service'
-import { voucherUsedFormat, parseDateTimeFormat } from '../../../helpers/parseData'
+import { voucherUsedFormat, parseDateTimeFormat } from '../../../helpers/utils'
 
 type DetailVoucherProps = {
     voucher: VoucherPromo | null,
