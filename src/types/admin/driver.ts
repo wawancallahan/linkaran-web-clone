@@ -2,6 +2,11 @@ import { Paginator } from '../paginator';
 import { ServiceCount } from './service';
 import { Vehicle } from './vehicle';
 import { VehicleType } from './vehicleType';
+import { Country } from './region/country';
+import { Province } from './region/province';
+import { District } from './region/district';
+import { Village } from './region/village';
+import { SubDistrict } from './region/subDistrict';
 
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const FETCH_DRIVER_SUCCESS = "FETCH_DRIVER_SUCCESS";
@@ -70,7 +75,8 @@ export type FormField = {
     choiceOfActiveWorkHours: string,
     choiceOfActiveWorkHoursOther: boolean,
     custom_interval_jam_kerja_start: Date | null,
-    custom_interval_jam_kerja_end: Date | null
+    custom_interval_jam_kerja_end: Date | null,
+    isMeried: boolean
 }
 
 interface DriverField {
@@ -120,6 +126,7 @@ interface DriverField {
     isJoiningTheDriverCommunity: boolean,
     isJoiningLinkaranAsmainJob: boolean,
     choiceOfActiveWorkHours: string,
+    isMeried: boolean
 }
 
 interface DriverList {
@@ -177,6 +184,7 @@ interface DriverList {
     isJoiningTheDriverCommunity: boolean,
     isJoiningLinkaranAsmainJob: boolean,
     choiceOfActiveWorkHours: string,
+    isMeried: boolean
 }
 
 interface DriverList2 {
@@ -205,6 +213,7 @@ interface DriverList2 {
     user: {
         id: number
     },
+    isMeried: boolean,
     deletedAt: string,
     id: number,
     createdAt: string,
@@ -253,7 +262,13 @@ interface DriverResult {
     deletedAt: string,
 }
 
-export type Driver = DriverResult & DriverList;
+export type Driver = DriverResult & DriverList & {
+    country?: Partial<Country>,
+    province?: Partial<Province>,
+    district?: Partial<District>,
+    subDistrict?: Partial<SubDistrict>,
+    village?: Partial<Village>
+};
 
 export type DriverCreate = DriverField;
 

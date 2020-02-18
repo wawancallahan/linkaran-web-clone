@@ -446,6 +446,56 @@ class FormDriver extends Component<Props> {
                 <FormGroup>
                     <label
                     className="form-control-label"
+                    htmlFor="input-isMeried"
+                    >
+                        Apakah saat ini sudah pernah menjadi driver pada aplikator lain?
+                    </label>
+                </FormGroup>
+                <FormGroup>
+                    <fieldset>
+                        <div className="custom-control custom-radio mb-3">
+                            <input
+                                className="custom-control-input"
+                                defaultChecked={ ! FormikProps.values.isMeried}
+                                id="isMeried_no"
+                                name="isMeried"
+                                type="radio"
+                                value="0"
+                                onChange={() => {
+                                    FormikProps.setFieldValue('isMeried', false, true);
+                                }}
+                                onBlur={FormikProps.handleBlur}
+                            />
+                            <label className="custom-control-label" htmlFor="isMeried_no">
+                                Belum
+                            </label>
+                        </div>
+                        <div className="custom-control custom-radio mb-3">
+                            <input
+                                className="custom-control-input"
+                                defaultChecked={FormikProps.values.isMeried}
+                                id="isMeried_yes"
+                                name="isMeried"
+                                type="radio"
+                                value="1"
+                                onChange={() => {
+                                    FormikProps.setFieldValue('isMeried', true, true);
+                                }}
+                                onBlur={FormikProps.handleBlur}
+                            />
+                            <label className="custom-control-label" htmlFor="isMeried_yes">
+                                Sudah
+                            </label>
+                        </div>
+                    </fieldset>
+                    <div>
+                        {FormikProps.errors.wasOnceAnOnlineDriver && FormikProps.touched.wasOnceAnOnlineDriver ? FormikProps.errors.wasOnceAnOnlineDriver : ''}
+                    </div>
+                </FormGroup>
+
+                <FormGroup>
+                    <label
+                    className="form-control-label"
                     htmlFor="input-no-ktp"
                     >
                         No KTP

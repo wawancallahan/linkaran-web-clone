@@ -139,6 +139,7 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
         data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
         data.set('placeOfBirth', driver.tempat_lahir)
         data.set('residenceAddress', driver.alamat_domisili)
+        data.set('isMeried', booleanToString(driver.isMeried))
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -292,6 +293,7 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
         data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
         data.set('placeOfBirth', driver.tempat_lahir)
         data.set('residenceAddress', driver.alamat_domisili)
+        data.set('isMeried', booleanToString(driver.isMeried))
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);

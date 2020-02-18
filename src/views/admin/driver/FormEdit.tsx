@@ -150,7 +150,9 @@ const createSchema = Yup.object().shape({
 
                         return true;
                     })
-                    .required('Bidang isian keterangan wajib diisi') 
+                    .required('Bidang isian keterangan wajib diisi'),
+    isMeried: Yup.boolean()
+                    .required('Bidang isian status pernikahan wajib diisi') 
 });
 
 type FormProps = {
@@ -266,6 +268,7 @@ class Form extends Component<Props> {
                         isJoiningTheDriverCommunity: isJoiningTheDriverCommunity,
                         isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
                         choiceOfActiveWorkHours: choiceOfActiveWorkHours,
+                        isMeried: values.isMeried
                     }
 
                     this.props.editDriverAction(driver, this.props.id)

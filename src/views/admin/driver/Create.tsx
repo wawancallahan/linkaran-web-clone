@@ -100,7 +100,8 @@ class Create extends Component<Props, State> {
             choiceOfActiveWorkHours: '0',
             choiceOfActiveWorkHoursOther: false,
             custom_interval_jam_kerja_start: null,
-            custom_interval_jam_kerja_end: null
+            custom_interval_jam_kerja_end: null,
+            isMeried: false
         },
         alert_visible: false,
         alert_message: ''
