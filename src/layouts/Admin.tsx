@@ -27,6 +27,7 @@ import Index from '../views/admin/Index';
 import routes from "../routes";
 import NotFound from '../views/NotFound';
 import { logoLinkaran } from "../helpers/Assets";
+import { rolesToArray } from "../services/auth";
 
 type AdminProps = RouteComponentProps & {
   
@@ -37,8 +38,14 @@ class Admin extends React.Component<AdminProps, {}> {
   mainContent = createRef<HTMLDivElement>();
 
   getRoutes = (routes: any) => {
+
+    const roles = rolesToArray();
     return routes.map((prop: any, key: string) => {
-      if (prop.layout === "/admin") {
+
+      const rolesRoutes: string[] = prop.roles;
+      const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
+
+      if (prop.layout === "/admin" && constainRole) {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -63,15 +70,25 @@ class Admin extends React.Component<AdminProps, {}> {
     }
     return "Brand";
   };
+
+  getRoutesForSidebar = (routes: any) => {
+    const roles = rolesToArray();
+
+    return routes.filter( (item: any) => {
+      const rolesRoutes: string[] = item.roles;
+      const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
+
+      return item.layout === '/admin' && constainRole
+    })
+  }
+
   render() {
 
     return (
       <>
         <Sidebar
           {...this.props}
-          routes={routes.filter(item => {
-            return item.layout === '/admin'
-          })}
+          routes={this.getRoutesForSidebar(routes)}
           logo={{
             innerLink: "/admin/index",
             imgSrc: logoLinkaran,

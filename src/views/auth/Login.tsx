@@ -34,6 +34,7 @@ import {
     ValidateLoginFailResult
   } from "../../types/auth";
   import { authLogin, authValidate } from "../../actions/auth";
+import { Role } from "../../types/admin/role";
 
 type LoginProps = RouteComponentProps & {
 
@@ -124,8 +125,10 @@ class Login extends React.Component<Props, State> {
                                 localStorage.setItem("name", result.name);
                                 localStorage.setItem("phoneNumber", result.phoneNumber);
                                 localStorage.setItem("email", result.email);
-                                localStorage.setItem("role_id", `1`);
-                                localStorage.setItem("role_name", "Admin");
+
+                                const roles = JSON.stringify(Object.assign({}, result.roles.map((value: Role) => value.title)));
+
+                                localStorage.setItem("roles", roles)
                             }
     
                             this.goDashboard("Admin");

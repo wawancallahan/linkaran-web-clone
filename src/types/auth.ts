@@ -1,3 +1,8 @@
+export interface Role {
+    id: number,
+    title: string
+}
+
 export interface Login {
     identity: string,
     type: string,
@@ -55,7 +60,10 @@ export interface LoginData {
     phoneNumber: string,
     email: string,
     tokenFCM: TokenFCM[],
-    accessToken: string
+    accessToken: string,
+    isActive: boolean,
+    roles: Role[],
+    linkWithGoogle: boolean
 }
 
 export interface ValidateLoginResult {
