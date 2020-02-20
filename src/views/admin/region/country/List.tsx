@@ -167,7 +167,7 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Country</h3>
+                                            <h3 className="mb-0">Daftar Negara</h3>
                                         </div>
                                         <div className="col text-right">
                                         <Link to="/admin/region/country/create">
@@ -175,7 +175,7 @@ class List extends Component<Props, State> {
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Country
+                                                Tambah Negara
                                             </Button>
                                         </Link>
                                         </div>
@@ -244,6 +244,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Country")
+                            withTitle(List, "Daftar Negara")
                     )
                 );

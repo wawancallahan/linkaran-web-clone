@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { District } from './region/district';
 
 export const FETCH_RESTAURANT = "FETCH_RESTAURANT";
 export const FETCH_RESTAURANT_SUCCESS = "FETCH_RESTAURANT_SUCCESS";
@@ -39,6 +40,10 @@ export type FormField = {
     sunday_start: Date | null,
     sunday_end: Date | null,
     sunday_isClosed: boolean,
+    district: {
+        label: string,
+        value: number
+    }
 }
 
 export interface OperatingTime {
@@ -58,7 +63,10 @@ interface RestaurantField {
     rating: number,
     photo: File | null,
     photo_preview: string,
-    operatingTime: OperatingTime[]
+    operatingTime: OperatingTime[],
+    district: {
+        id: number
+    }
 }
 interface RestaurantList {
     name: string,
@@ -95,28 +103,35 @@ export interface OperatingTimeModel {
     isClosed: string
 }
 
-export type Restaurant = RestaurantResult & RestaurantList;
+export type Restaurant = RestaurantResult & RestaurantList & {
+    district?: Partial<District>
+};
 
 export type RestaurantCreate = RestaurantField;
 
 export type RestaurantEdit = RestaurantField;
 
 type operatingTimeResult = RestaurantResult & OperatingTimeModel & {
-    restaurant: RestaurantModel & RestaurantResult
+    restaurant: RestaurantModel & RestaurantResult & {
+        district?: Partial<District>
+    }
 }
 
 export type RestaurantCreateResult = RestaurantResult & RestaurantModel & {
-    operatingTime: operatingTimeResult[]
+    operatingTime: operatingTimeResult[],
+    district?: Partial<District>
 }
 
 export type RestaurantEditResult = RestaurantResult & RestaurantModel & {
-    operatingTime: operatingTimeResult[]
+    operatingTime: operatingTimeResult[],
+    district?: Partial<District>
 };
 
 type OperatingTimeDetail = OperatingTime & RestaurantResult;
 
 export type RestaurantDetailResult = RestaurantResult & RestaurantModel & {
-    operatingTime: OperatingTimeDetail[]
+    operatingTime: OperatingTimeDetail[],
+    district?: Partial<District>
 }
 
 export interface FetchRestaurantActionType {

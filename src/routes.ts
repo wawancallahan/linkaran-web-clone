@@ -45,7 +45,7 @@ const routes: any[] = [
     },
     {
         path: "/food-category",
-        name: "Food Category",
+        name: "Karegori Makanan",
         icon: "ni ni-ungroup text-danger",
         component: AdminFoodCategory,
         layout: "/admin",
@@ -53,7 +53,7 @@ const routes: any[] = [
     },
     {
         path: "/food",
-        name: "Food",
+        name: "Makanan",
         icon: "ni ni-bag-17 text-success",
         component: AdminFood,
         layout: "/admin",
@@ -61,7 +61,7 @@ const routes: any[] = [
     },
     {
         path: "/restaurant",
-        name: "Restaurant",
+        name: "Restoran",
         icon: "ni ni-shop text-info",
         component: AdminRestaurant,
         layout: "/admin",
@@ -69,7 +69,7 @@ const routes: any[] = [
     },
     {
         path: "/brand-vehicle",
-        name: "Brand Vehicle",
+        name: "Merek Kendaraan",
         icon: "ni ni-app text-warning",
         component: AdminBrandVehicle,
         layout: "/admin",
@@ -77,7 +77,7 @@ const routes: any[] = [
     },
     {
         path: "/sub-brand-vehicle",
-        name: "Sub Brand Vehicle",
+        name: "Model Kendaraan",
         icon: "ni ni-briefcase-24 text-info",
         component: AdminSubBrandVehicle,
         layout: "/admin",
@@ -143,7 +143,7 @@ const routes: any[] = [
     },
     {
         path: "/account",
-        name: "Account",
+        name: "Akun",
         icon: "ni ni-circle-08 text-info",
         component: AdminAccount,
         layout: "/admin",
@@ -201,7 +201,7 @@ const routes: any[] = [
     },
     {
         path: "/region",
-        name: "Region",
+        name: "Wilayah",
         icon: "ni ni-compass-04 text-success",
         component: AdminRegion,
         layout: "/admin",
@@ -209,7 +209,7 @@ const routes: any[] = [
         child: [
             {
                 path: "/region/country",
-                name: "Country",
+                name: "Negara",
                 icon: "ni ni-fat-delete text-default",
                 component: AdminCountry,
                 layout: "/admin",
@@ -217,7 +217,7 @@ const routes: any[] = [
             },
             {
                 path: "/region/province",
-                name: "Province",
+                name: "Provinsi",
                 icon: "ni ni-fat-delete text-default",
                 component: AdminProvince,
                 layout: "/admin",
@@ -225,7 +225,7 @@ const routes: any[] = [
             },
             {
                 path: "/region/district",
-                name: "District",
+                name: "Kabupaten/ Kota",
                 icon: "ni ni-fat-delete text-default",
                 component: AdminDistrict,
                 layout: "/admin",
@@ -233,7 +233,7 @@ const routes: any[] = [
             },
             {
                 path: "/region/sub-district",
-                name: "Sub District",
+                name: "Kecamatan",
                 icon: "ni ni-fat-delete text-default",
                 component: AdminSubDistrict,
                 layout: "/admin",
@@ -241,7 +241,7 @@ const routes: any[] = [
             },
             {
                 path: "/region/village",
-                name: "Village",
+                name: "Kelurahan",
                 icon: "ni ni-fat-delete text-default",
                 component: AdminVillage,
                 layout: "/admin",

@@ -127,7 +127,7 @@ class Create extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Edit Province</h3>
+                                    <h3 className="mb-0">Edit Provinsi</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
@@ -173,6 +173,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Edit Province")
+        withTitle(Create, "Edit Provinsi")
     )
 );

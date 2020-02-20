@@ -73,6 +73,10 @@ class Create extends Component<Props, State> {
             sunday_start: midnightDate(),
             sunday_end: midnightDate(),
             sunday_isClosed: false,
+            district: {
+                value: 0,
+                label: ''
+            }
         },
         alert_visible: false,
         alert_message: ''

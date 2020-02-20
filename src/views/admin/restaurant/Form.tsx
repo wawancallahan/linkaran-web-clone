@@ -45,7 +45,11 @@ const createSchema = Yup.object().shape({
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
              .required('Bidang isian rating wajib diiisi'),
     photo_preview: Yup.string()
-             .required('Bidang upload foto wajib diisi')
+             .required('Bidang upload foto wajib diisi'),
+    district: Yup.object().shape({
+                label: Yup.string().required("Bidang pilihan district wajib diisi"),
+                value: Yup.number().notOneOf([0], 'Bidang pilihan district wajib diisi').required("Bidang pilihan district wajib diisi")
+            }),
 });
 
 type FormProps = {
@@ -164,7 +168,10 @@ class Form extends Component<Props> {
                         rating: values.rating,
                         photo_preview: values.photo_preview,
                         photo: values.photo,
-                        operatingTime: operatingTime
+                        operatingTime: operatingTime,
+                        district: {
+                            id: values.district.value
+                        }
                     }
 
                     this.props.createRestaurantAction(restaurant)

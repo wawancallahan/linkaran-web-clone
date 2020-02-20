@@ -15,11 +15,20 @@ import { FormikProps } from 'formik'
 import { FormField } from '../../../types/admin/restaurant'
 import Dropzone from '../../../components/Dropzone/Dropzone'
 
+import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
+import { fetchListDistrictAction } from '../../../actions/admin/region/district';
+import { DistrictList } from '../../../types/admin/region/district';
+import ReactSelectAsyncPaginate from 'react-select-async-paginate';
+import { Paginator } from '../../../types/paginator';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../types';
+import { connect } from 'react-redux';
+
 type FormInformationProps = {
     FormikProps: FormikProps<FormField>,
 };
 
-type Props = FormInformationProps
+type Props = FormInformationProps & LinkDispatchToProps
 
 class FormInformation extends Component<Props> {
 
@@ -36,6 +45,46 @@ class FormInformation extends Component<Props> {
             FormikProps.setFieldValue(setPreview, file.preview, true);
             FormikProps.setFieldValue(setValue, file);
         }
+    }
+
+    loadDistrictHandler = (search: string, loadedOption: {}, options: {
+        page: number
+    }) => {
+        return this.props.fetchListDistrictAction(search, options.page)
+            .then((response: ApiResponseList<DistrictList>) => {
+
+                const data: ApiResponseSuccessList<DistrictList> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: DistrictList) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
     }
 
     render() {
@@ -175,6 +224,27 @@ class FormInformation extends Component<Props> {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-district"
+                            >
+                                Kabupaten / Kota
+                            </label>
+                            <ReactSelectAsyncPaginate 
+                                value={FormikProps.values.district}
+                                loadOptions={this.loadDistrictHandler}
+                                onChange={(option) => FormikProps.setFieldValue('district', option)}
+                                onBlur={() => FormikProps.setFieldTouched('district', true)}
+                                additional={{
+                                    page: 1
+                                }}
+                                />
+                            <div>
+                                { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }
+                            </div>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-rating"
                             >
                                 Rating
@@ -220,4 +290,14 @@ class FormInformation extends Component<Props> {
     }
 }
 
-export default FormInformation
+type LinkDispatchToProps = {
+    fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormInformationProps): LinkDispatchToProps => {
+    return {
+        fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(FormInformation);

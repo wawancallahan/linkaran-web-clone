@@ -29,6 +29,7 @@ import {
 
 import FormRestaurant from './FormEdit';
 import { ApiResponse } from '../../../types/api';
+import { midnightDate } from '../../../helpers/utils';
 
 type EditProps = RouteComponentProps<{
     id: string
@@ -59,27 +60,31 @@ class Edit extends Component<Props, State> {
             rating: 0,
             photo: null,
             photo_preview: '',
-            monday_start: null,
-            monday_end: null,
+            monday_start: midnightDate(),
+            monday_end: midnightDate(),
             monday_isClosed: false,
-            tuesday_start: null,
-            tuesday_end: null,
+            tuesday_start: midnightDate(),
+            tuesday_end: midnightDate(),
             tuesday_isClosed: false,
-            wednesday_start: null,
-            wednesday_end: null,
+            wednesday_start: midnightDate(),
+            wednesday_end: midnightDate(),
             wednesday_isClosed: false,
-            thursday_start: null,
-            thursday_end: null,
+            thursday_start: midnightDate(),
+            thursday_end: midnightDate(),
             thursday_isClosed: false,
-            friday_start: null,
-            friday_end: null,
+            friday_start: midnightDate(),
+            friday_end: midnightDate(),
             friday_isClosed: false,
-            saturday_start: null,
-            saturday_end: null,
+            saturday_start: midnightDate(),
+            saturday_end: midnightDate(),
             saturday_isClosed: false,
-            sunday_start: null,
-            sunday_end: null,
+            sunday_start: midnightDate(),
+            sunday_end: midnightDate(),
             sunday_isClosed: false,
+            district: {
+                value: 0,
+                label: ''
+            }
         },
         isLoaded: false,
         loadedMessage: '',
@@ -122,6 +127,12 @@ class Edit extends Component<Props, State> {
                     }
                     form.rating = data.rating;
                     form.photo_preview = data.image ? data.image : '';
+                    if (data.district) {
+                        form.district = {
+                            value: data.district.id ? data.district.id : 0,
+                            label: data.district.name ? data.district.name : ''
+                        }
+                    }
 
                     const operatingTime: OperatingTimeInterface[] = data.operatingTime
                     const operatingTimeMonday = this.findOperatingTime(operatingTime, 1)
