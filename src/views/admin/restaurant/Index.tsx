@@ -1,19 +1,27 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import RestaurantList from './List';
 import RestaurantCreate from './Create';
 import RestaurantEdit from './Edit';
 
-class Index extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/admin/restaurant" render={() => <RestaurantList />}/>
-                <Route path="/admin/restaurant/:id/edit" render={() => <RestaurantEdit />} />
-                <Route path="/admin/restaurant/create" render={() => <RestaurantCreate />}/>
-            </Switch>
-        );
-    }
-}
-
-export default Index;
+export default [
+    {
+        path: "/admin/restaurant",
+        exact: true,
+        component: RestaurantList,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/restaurant/:id/edit",
+        exact: true,
+        component: RestaurantEdit,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/restaurant/create",
+        exact: true,
+        component: RestaurantCreate,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+];

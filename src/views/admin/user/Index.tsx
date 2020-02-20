@@ -1,19 +1,27 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import UserList from './List';
 import UserCreate from './Create';
 import UserEdit from './Edit';
 
-class Index extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/admin/user" render={() => <UserList />}/>
-                <Route path="/admin/user/:id/edit" render={() => <UserEdit />} />
-                <Route path="/admin/user/create" render={() => <UserCreate />}/>
-            </Switch>
-        );
-    }
-}
-
-export default Index;
+export default [
+    {
+        path: "/admin/user",
+        exact: true,
+        component: UserList,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/user/:id/edit",
+        exact: true,
+        component: UserEdit,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/user/create",
+        exact: true,
+        component: UserCreate,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+];

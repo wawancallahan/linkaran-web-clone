@@ -14,7 +14,8 @@ import {
   InputGroup,
   Row,
   Col,
-  Alert
+  Alert,
+  Container
 } from "reactstrap";
 import { ThunkDispatch } from "redux-thunk";
 import { connect } from 'react-redux';
@@ -35,6 +36,9 @@ import {
   } from "../../types/auth";
   import { authLogin, authValidate } from "../../actions/auth";
 import { Role } from "../../types/admin/role";
+
+import AuthNavbar from "../../components/Navbars/AuthNavbar";
+import AuthFooter from "../../components/Footers/AuthFooter";
 
 type LoginProps = RouteComponentProps & {
 
@@ -74,6 +78,8 @@ class Login extends React.Component<Props, State> {
         if (localStorage.getItem('accessToken')) {
             this.props.history.push('/admin');
         }
+
+        document.body.classList.add("bg-default");
     }
 
     cancelEmailOnSubmit = () => {
@@ -235,87 +241,112 @@ class Login extends React.Component<Props, State> {
 
         return (
             <>
-                <Col lg="5" md="7">
-                    <Card className="bg-secondary shadow border-0">
-                        <CardHeader className="bg-transparent pb-5">
-                            <div className="text-muted text-center mt-2 mb-3">
-                                Log in
-                            </div>
-                        </CardHeader>
-                        <CardBody className="px-lg-5 py-lg-5">
-                            {errorAlert}
-                            <Form
-                                role="form"
-                                onSubmit={e => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    this.formSubmit();
-                                }}>
-                                <FormGroup className="mb-3">
-                                    <InputGroup className="input-group-alternative">
-                                        <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="ni ni-email-83" />
-                                        </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                        placeholder="Email"
-                                        disabled={this.state.isEmailSubmited}
-                                        type="text"
-                                        onChange={this.inputHandlerChange}
-                                        id="email"
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
+            <div className="main-content">
+                <AuthNavbar />
+                <div className="header bg-gradient-info py-7 py-lg-8">
+                    <div className="separator separator-bottom separator-skew zindex-100">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            preserveAspectRatio="none"
+                            version="1.1"
+                            viewBox="0 0 2560 100"
+                            x="0"
+                            y="0"
+                        >
+                            <polygon
+                            className="fill-default"
+                            points="2560 0 2560 100 0 100"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <Container className="mt--8 pb-5">
+                    <Row className="justify-content-center">
+                        <Col lg="5" md="7">
+                            <Card className="bg-secondary shadow border-0">
+                                <CardHeader className="bg-transparent pb-5">
+                                    <div className="text-muted text-center mt-2 mb-3">
+                                        Log in
+                                    </div>
+                                </CardHeader>
+                                <CardBody className="px-lg-5 py-lg-5">
+                                    {errorAlert}
+                                    <Form
+                                        role="form"
+                                        onSubmit={e => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            this.formSubmit();
+                                        }}>
+                                        <FormGroup className="mb-3">
+                                            <InputGroup className="input-group-alternative">
+                                                <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="ni ni-email-83" />
+                                                </InputGroupText>
+                                                </InputGroupAddon>
+                                                <Input
+                                                placeholder="Email"
+                                                disabled={this.state.isEmailSubmited}
+                                                type="text"
+                                                onChange={this.inputHandlerChange}
+                                                id="email"
+                                                />
+                                            </InputGroup>
+                                        </FormGroup>
 
-                                {this.state.isEmailSubmited ? (
-                                    <FormGroup>
-                                        <InputGroup className="input-group-alternative">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                            <i className="ni ni-lock-circle-open" />
-                                            </InputGroupText>
-                                        </InputGroupAddon>
+                                        {this.state.isEmailSubmited ? (
+                                            <FormGroup>
+                                                <InputGroup className="input-group-alternative">
+                                                <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText>
+                                                    <i className="ni ni-lock-circle-open" />
+                                                    </InputGroupText>
+                                                </InputGroupAddon>
 
-                                        <Input
-                                            placeholder="Pin"
-                                            type="text"
-                                            onChange={this.inputHandlerChange}
-                                            id="pin"
-                                        />
-                                        </InputGroup>
-                                    </FormGroup>
-                                ) : (
-                                ""
-                                )}
+                                                <Input
+                                                    placeholder="Pin"
+                                                    type="text"
+                                                    onChange={this.inputHandlerChange}
+                                                    id="pin"
+                                                />
+                                                </InputGroup>
+                                            </FormGroup>
+                                        ) : (
+                                        ""
+                                        )}
 
-                                <div>
-                                    <Row>
-                                        <Col>
-                                            {this.state.isEmailSubmited ? (
-                                                <a href="#" onClick={this.cancelEmailOnSubmit}>
-                                                Ganti Email
-                                                </a>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </Col>
-                                        <Col className="text-right">
-                                            <Button
-                                                className=""
-                                                color="primary"
-                                                type="button"
-                                                onClick={this.formSubmit}
-                                                disabled={this.state.isSubmitting}>
-                                                Next
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Form>
-                        </CardBody>
-                    </Card>
-                </Col>
+                                        <div>
+                                            <Row>
+                                                <Col>
+                                                    {this.state.isEmailSubmited ? (
+                                                        <a href="#" onClick={this.cancelEmailOnSubmit}>
+                                                        Ganti Email
+                                                        </a>
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                </Col>
+                                                <Col className="text-right">
+                                                    <Button
+                                                        className=""
+                                                        color="primary"
+                                                        type="button"
+                                                        onClick={this.formSubmit}
+                                                        disabled={this.state.isSubmitting}>
+                                                        Next
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+            <AuthFooter />
             </>
         );
     }

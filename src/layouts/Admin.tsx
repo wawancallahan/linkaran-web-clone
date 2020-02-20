@@ -1,21 +1,4 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React, { createRef } from "react";
+import React, { createRef, Component } from "react";
 import { Route, Switch, RouteComponentProps } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -23,64 +6,223 @@ import { Container } from "reactstrap";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminFooter from "../components/Footers/AdminFooter";
 import Sidebar from "../components/Sidebar/Sidebar";
-import Index from '../views/admin/Index';
-import routes from "../routes";
-import NotFound from '../views/NotFound';
 import { logoLinkaran } from "../helpers/Assets";
 import { rolesToArray } from "../services/auth";
+import { SidebarRoute } from '../components/Sidebar/Sidebar'
 
-type AdminProps = RouteComponentProps & {
-  
-}
+const routeList: (SidebarRoute | null)[] = [
+  {
+      path: "/admin/index",
+      name: "Dashboard",
+      icon: "ni ni-tv-2 text-primary",
+      roles: ["admin", "super admin"]
+  },
+  {
+      path: "/admin/food-category",
+      name: "Karegori Makanan",
+      icon: "ni ni-ungroup text-danger",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/food",
+      name: "Makanan",
+      icon: "ni ni-bag-17 text-success",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/restaurant",
+      name: "Restoran",
+      icon: "ni ni-shop text-info",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/brand-vehicle",
+      name: "Merek Kendaraan",
+      icon: "ni ni-app text-warning",
+      roles: ["super admin", "admin"]
+  },
+  {
+      path: "/admin/sub-brand-vehicle",
+      name: "Model Kendaraan",
+      icon: "ni ni-briefcase-24 text-info",
+      roles: ["super admin", "admin"]
+  },
+  {
+      path: "/admin/user",
+      name: "User",
+      icon: "ni ni-single-02 text-danger",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/driver",
+      name: "Driver",
+      icon: "ni ni-badge text-success",
+      roles: ["super admin", "admin"]
+  },
+  {
+      path: "/admin/customer",
+      name: "Customer",
+      icon: "ni ni-single-02 text-primary",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/investor",
+      name: "Investor",
+      icon: "ni ni-hat-3 text-warning",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/transaction",
+      name: "Transaksi",
+      icon: "ni ni-collection text-primary",
+      roles: ["super admin", "admin"],
+      child: [
+          {
+              path: "/admin/transaction/application",
+              name: "Aplikasi",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin", "admin"]
+          },
+          {
+              path: "/admin/transaction/link-pay",
+              name: "Link Pay",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin", "admin"]
+          },
+      ]
+  },
+  {
+      path: "/admin/account",
+      name: "Akun",
+      icon: "ni ni-circle-08 text-info",
+      roles: ["super admin", "admin"],
+      child: [
+          {
+              path: "/admin/account/link-pay",
+              name: "Link Pay",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin", "admin"]
+          },
+      ]
+  },
+  {
+      path: "/admin/service",
+      name: "Layanan",
+      icon: "ni ni-mobile-button text-danger",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/price",
+      name: "Harga",
+      icon: "ni ni-money-coins text-success",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/service-price",
+      name: "Harga Layanan",
+      icon: "ni ni-credit-card text-primary",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/voucher-promo",
+      name: "Voucher",
+      icon: "ni ni-paper-diploma text-info",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/voucher-type",
+      name: "Tipe Voucher",
+      icon: "ni ni-ungroup text-warning",
+      roles: ["super admin"]
+  },
+  {
+      path: "/admin/region",
+      name: "Wilayah",
+      icon: "ni ni-compass-04 text-success",
+      roles: ["super admin"],
+      child: [
+          {
+              path: "/admin/region/country",
+              name: "Negara",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin"]
+          },
+          {
+              path: "/admin/region/province",
+              name: "Provinsi",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin"]
+          },
+          {
+              path: "/admin/region/district",
+              name: "Kabupaten/ Kota",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin"]
+          },
+          {
+              path: "/admin/region/sub-district",
+              name: "Kecamatan",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin"]
+          },
+          {
+              path: "/admin/region/village",
+              name: "Kelurahan",
+              icon: "ni ni-fat-delete text-default",
+              roles: ["super admin"]
+          }
+      ]
+  },
+];
 
-class Admin extends React.Component<AdminProps, {}> {
+type AdminProps = RouteComponentProps
+type Props = AdminProps
+
+class Admin extends Component<Props> {
 
   mainContent = createRef<HTMLDivElement>();
 
-  getRoutes = (routes: any) => {
-
-    const roles = rolesToArray();
-    return routes.map((prop: any, key: string) => {
-
-      const rolesRoutes: string[] = prop.roles;
-      const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
-
-      if (prop.layout === "/admin" && constainRole) {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
-  getBrandText = (path: any) => {
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        this.props.location.pathname.indexOf(
-          routes[i].layout + routes[i].path
-        ) !== -1
-      ) {
-        return routes[i].name;
-      }
-    }
-    return "Brand";
-  };
-
-  getRoutesForSidebar = (routes: any) => {
+  getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
     const roles = rolesToArray();
 
-    return routes.filter( (item: any) => {
+    return routes.map((item: SidebarRoute | null) => {
+      if ( ! item) return null;
+
       const rolesRoutes: string[] = item.roles;
       const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
 
-      return item.layout === '/admin' && constainRole
-    })
+      if (constainRole) {
+        if (item.child) {
+          const newItemChild = this.getRoutesForSidebar(item.child);
+
+          item.child = newItemChild
+        }
+
+        return item;
+      }
+
+      return null;
+    }).filter((value: SidebarRoute | null) => {
+      if (value) return true
+
+      return false
+    });
   }
+
+  getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
+    let brandText = 'Brand';
+
+    for (const route of routes) {
+      if (route) {
+        if (path.indexOf(route.path) !== -1) {
+          brandText =  route.name;
+          break;
+        };
+      }
+    }
+
+    return brandText;
+  };
 
   render() {
 
@@ -88,7 +230,7 @@ class Admin extends React.Component<AdminProps, {}> {
       <>
         <Sidebar
           {...this.props}
-          routes={this.getRoutesForSidebar(routes)}
+          routes={this.getRoutesForSidebar(routeList)}
           logo={{
             innerLink: "/admin/index",
             imgSrc: logoLinkaran,
@@ -98,13 +240,10 @@ class Admin extends React.Component<AdminProps, {}> {
         <div className="main-content" ref={this.mainContent}>
           <AdminNavbar
             {...this.props}
-            brandText={this.getBrandText(this.props.location.pathname)}
+            brandText={this.getBrandText(routeList, this.props.location.pathname)}
           />
           <Switch>
-            <Route path="/admin" exact render={() => <Index />} />
-            <Route path="/admin/index" exact render={() => <Index />} />
-            {this.getRoutes(routes)}
-            <Route component={NotFound} />
+            {this.props.children}
           </Switch>
           <Container fluid>
             <AdminFooter />

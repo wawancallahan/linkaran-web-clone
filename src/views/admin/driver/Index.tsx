@@ -1,21 +1,35 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import DriverList from './List';
 import DriverCreate from './Create';
 import DriverEdit from './Edit';
 import DriverDetail from './Detail';
 
-class Index extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/admin/driver" render={() => <DriverList />}/>
-                <Route exact path="/admin/driver/create" render={() => <DriverCreate />} />
-                <Route path="/admin/driver/:id" render={() => <DriverDetail />} />
-                <Route path="/admin/driver/:id/edit" render={() => <DriverEdit />} />
-            </Switch>
-        );
-    }
-}
-
-export default Index;
+export default [
+    {
+        path: "/admin/driver",
+        exact: true,
+        component: DriverList,
+        layout: "admin",
+        roles: ["super admin", "admin"]
+    },
+    {
+        path: "/admin/driver/create",
+        exact: true,
+        component: DriverCreate,
+        layout: "admin",
+        roles: ["super admin", "admin"]
+    },
+    {
+        path: "/admin/driver/:id",
+        exact: true,
+        component: DriverDetail,
+        layout: "admin",
+        roles: ["super admin", "admin"]
+    },
+    {
+        path: "/admin/driver/:id/edit",
+        exact: true,
+        component: DriverEdit,
+        layout: "admin",
+        roles: ["super admin", "admin"]
+    },
+];

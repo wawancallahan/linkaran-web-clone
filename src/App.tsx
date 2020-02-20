@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect, withRouter, RouteComponentProps } from "react-router-dom";
-
-import Logout from './views/auth/Logout';
-import AuthLayout from './layouts/Auth';
-import AdminLayout from './layouts/Admin';
 import NotFound from './views/NotFound'
 
-type AppProps = RouteComponentProps & {
+import AdminLayout from './layouts/Admin'
 
-}
+import routes, { Route as RouteInterface } from './routes'
+import authRoutes from './views/auth/Index'
+import { rolesToArray } from './services/auth';
+
+type AppProps = RouteComponentProps
 
 type Props = AppProps;
-
-type State = {
-
-}
-class App extends Component<Props, State> {
+class App extends Component<Props> {
     
     componentDidMount() {
         if ( ! localStorage.getItem('accessToken')) {
@@ -23,16 +19,49 @@ class App extends Component<Props, State> {
         }
     }
 
+    getRoleRoutes = (routes: RouteInterface[]) => {
+        const roles = rolesToArray();
+        return routes.map((prop: RouteInterface, key: number) => {
+            const rolesRoutes: string[] = prop.roles;
+            const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
+    
+            if (prop.layout === "admin" && constainRole) {
+                return (
+                    <Route
+                        exact={prop.exact}
+                        path={prop.path}
+                        component={prop.component}
+                        key={`${prop.path.replace('/', '_')}_${key}`}
+                    />
+                );
+            } else {
+                return null;
+            }
+        });
+    }
+
+    getAuthRoutes = (routes: RouteInterface[]) => {
+        return routes.map((prop: RouteInterface, key: number) => {
+            return <Route exact={prop.exact}
+                        path={prop.path}
+                        component={prop.component}
+                        key={`${prop.path.replace('/', '_')}_${key}`} 
+                        />
+        })
+    }
+
     render() {
+        console.log(this.getRoleRoutes(routes))
         return (
             <Switch>
-                <Route path="/admin" render={ (props: RouteComponentProps) => <AdminLayout {...props} />} />    
-                <Route path="/login" render={ (props: RouteComponentProps) => <AuthLayout {...props} />} />
-                <Route path="/logout" render={() => <Logout />} />
-
+                {this.getAuthRoutes(authRoutes)}
+                <AdminLayout {...this.props}>
+                    <Switch>
+                        {this.getRoleRoutes(routes)}
+                    </Switch>
+                </AdminLayout>
                 <Redirect from="/" to="/login" exact />
-
-                <Route render={() => <NotFound />} />
+                <Route render={() => <Redirect to="/" />} />
             </Switch>
         );
     }

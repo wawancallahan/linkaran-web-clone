@@ -1,19 +1,27 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import PriceList from './List';
 import PriceCreate from './Create';
 import PriceEdit from './Edit';
 
-class Index extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/admin/price" render={() => <PriceList />}/>
-                <Route path="/admin/price/:id/edit" render={() => <PriceEdit />}/>
-                <Route path="/admin/price/create" render={() => <PriceCreate />}/>
-            </Switch>
-        );
-    }
-}
-
-export default Index;
+export default [
+    {
+        path: "/admin/price",
+        exact: true,
+        component: PriceList,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/price/:id/edit",
+        exact: true,
+        component: PriceEdit,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+    {
+        path: "/admin/price/create",
+        exact: true,
+        component: PriceCreate,
+        layout: "admin",
+        roles: ["super admin"]
+    },
+];

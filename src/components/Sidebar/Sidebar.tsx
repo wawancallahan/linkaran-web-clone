@@ -57,6 +57,14 @@ import { name as authName} from '../../services/auth'
 import './Sidebar.css';
 import { profileImage } from "../../helpers/Assets";
 
+export interface SidebarRoute {
+  path: string,
+  name: string,
+  icon: string,
+  roles: string[],
+  child?: (SidebarRoute | null)[]
+}
+
 interface logoInterface {
   innerLink?: string,
   outterLink?: string,
@@ -64,7 +72,19 @@ interface logoInterface {
   imgSrc?: string
 }
 
-const CreateDropdownLink = (props: any) => {
+interface SidebarDropdown {
+  index: string,
+  collapseOpen: boolean,
+} 
+
+const CreateDropdownLink = (props: {
+  key: string,
+  index: number,
+  item: SidebarRoute,
+  SidebarDropdown: SidebarDropdown[],
+  closeCollapse: () => void,
+  toggleCollapseSidebar: (index: number, key: string) => void,
+}) => {
 
   const collapseSidebarDropdown: SidebarDropdown[] = {
     ...props.SidebarDropdown
@@ -90,24 +110,31 @@ const CreateDropdownLink = (props: any) => {
         </span>
       </NavLink>
       <Collapse isOpen={isOpen}>
-          {props.item.child.map((item: any, index: number) => {
+          {props.item.child ? props.item.child.map((item: any, index: number) => {
               return <CreateSingleLink key={`nav_dropdown_${props.index}_${index}`}
-                                index={`nav_dropdown_${props.index}_${index}`}
-                                layout={item.layout}
+                                index={index}
                                 path={item.path}
                                 closeCollapse={props.closeCollapse}
                                 icon={item.icon}
                                 name={item.name}
                                 isChild={true} />
-            })}
+            }) : null}
       </Collapse>
     </>
   );
 }
 
-const CreateSingleLink = (props: any) => (
+const CreateSingleLink = (props: {
+  key: string,
+  index: number,
+  path: string,
+  closeCollapse: () => void,
+  icon: string,
+  name: string,
+  isChild: boolean
+}) => (
   <NavLink
-    to={props.layout + props.path}
+    to={props.path}
     tag={NavLinkRRD}
     onClick={props.closeCollapse}
     activeClassName="active"
@@ -118,24 +145,20 @@ const CreateSingleLink = (props: any) => (
   </NavLink>
 );
 
-
 type SidebarProps = RouteComponentProps & {
   bgColor?: string;
-  routes?: any;
+  routes: (SidebarRoute | null)[];
   logo?: logoInterface;
 }
 
-interface SidebarDropdown {
-  index: string,
-  collapseOpen: boolean,
-} 
+type Props = SidebarProps
 
-type SidebarState = {
+type State = {
   collapseOpen: boolean,
   collapseSidebarDropdown: SidebarDropdown[]
 }
 
-class Sidebar extends React.Component<SidebarProps, SidebarState> {
+class Sidebar extends React.Component<Props, State> {
 
   static defaultProps = {
     routes: [{}]
@@ -218,26 +241,29 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
   };
 
   // creates the links that appear in the left menu / Sidebar
-  createLinks = (routes: any) => {
-    return routes.map((prop: any, key: number) => (
+  createLinks = (routes: (SidebarRoute | null)[]) => {
+    return routes.map((item: (SidebarRoute | null), key: number) => (
       <NavItem key={key}>
         {
-            prop.hasOwnProperty('child')
-            ? <CreateDropdownLink key={key}
+          item ? (
+            item.child ? (
+              <CreateDropdownLink key={`${key}`}
                                   index={key}
-                                  item={prop}
+                                  item={item}
                                   SidebarDropdown={this.state.collapseSidebarDropdown}
                                   closeCollapse={this.closeCollapse}
                                   toggleCollapseSidebar={this.toggleCollapseSidebar} />
-            : <CreateSingleLink key={key}
+            ) : (
+              <CreateSingleLink key={`${key}`}
                                 index={key}
-                                layout={prop.layout}
-                                path={prop.path}
+                                path={item.path}
                                 closeCollapse={this.closeCollapse}
-                                icon={prop.icon}
-                                name={prop.name}
+                                icon={item.icon}
+                                name={item.name}
                                 isChild={false} />
-          }
+            )
+          ) : null
+        }
       </NavItem>
     ));
   };

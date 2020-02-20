@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import LinkPayList from './List';
 import LinkPayDetail from './Detail';
 
-class Index extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/admin/account/link-pay" render={() => <LinkPayList />} />
-                <Route path="/admin/account/link-pay/:id" render={() => <LinkPayDetail />} />
-            </Switch>
-        );
+export default [
+    {
+        path: "/admin/account/link-pay",
+        exact: true,
+        component: LinkPayList,
+        layout: "admin",
+        roles: ["super admin", "admin"]
+    },
+    {
+        path: "/admin/account/link-pay/:id",
+        exact: true,
+        component: LinkPayDetail,
+        layout: "admin",
+        roles: ["super admin", "admin"]
     }
-}
-
-export default Index;
+];
