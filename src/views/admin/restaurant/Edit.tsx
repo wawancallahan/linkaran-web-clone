@@ -84,6 +84,10 @@ class Edit extends Component<Props, State> {
             district: {
                 value: 0,
                 label: ''
+            },
+            province: {
+                value: 0,
+                label: ''
             }
         },
         isLoaded: false,
@@ -127,10 +131,18 @@ class Edit extends Component<Props, State> {
                     }
                     form.rating = data.rating;
                     form.photo_preview = data.image ? data.image : '';
+
                     if (data.district) {
-                        form.district = {
-                            value: data.district.id ? data.district.id : 0,
-                            label: data.district.name ? data.district.name : ''
+                        if (data.district.province) {
+                            form.province = {
+                                value: data.district.province.id ? data.district.province.id : 0,
+                                label: data.district.province.name ? data.district.province.name : ''
+                            }
+
+                            form.district = {
+                                value: data.district.id ? data.district.id : 0,
+                                label: data.district.name ? data.district.name : ''
+                            }
                         }
                     }
 

@@ -34,11 +34,11 @@ export interface Province {
 }
 
 export type ProvinceList = Province & {
-    country: Partial<Country>
+    country?: Partial<Country>
 }
 
 export type ProvinceShow = Province & {
-    country: Partial<Country>
+    country?: Partial<Country>
 }
 
 export type ProvinceCreateField = ProvinceField
@@ -46,11 +46,11 @@ export type ProvinceCreateField = ProvinceField
 export type ProvinceEditField = ProvinceField
 
 export type ProvinceCreateResult = Province & Partial<Timestamps> & {
-    country: Partial<Country>
+    country?: Partial<Country>
 }
 
 export type ProvinceEditResult = Province & Partial<Timestamps> & {
-    country: Partial<Country>
+    country?: Partial<Country>
 }
 
 export interface FetchProvinceActionType {

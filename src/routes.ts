@@ -41,7 +41,7 @@ const routes: any[] = [
         icon: "ni ni-tv-2 text-primary",
         component: AdminIndex,
         layout: "/admin",
-        roles: ["admin", "superadmin"]
+        roles: ["admin", "super admin"]
     },
     {
         path: "/food-category",
@@ -49,7 +49,7 @@ const routes: any[] = [
         icon: "ni ni-ungroup text-danger",
         component: AdminFoodCategory,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/food",
@@ -57,7 +57,7 @@ const routes: any[] = [
         icon: "ni ni-bag-17 text-success",
         component: AdminFood,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/restaurant",
@@ -65,7 +65,7 @@ const routes: any[] = [
         icon: "ni ni-shop text-info",
         component: AdminRestaurant,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/brand-vehicle",
@@ -73,7 +73,7 @@ const routes: any[] = [
         icon: "ni ni-app text-warning",
         component: AdminBrandVehicle,
         layout: "/admin",
-        roles: ["superadmin", "admin"]
+        roles: ["super admin", "admin"]
     },
     {
         path: "/sub-brand-vehicle",
@@ -81,7 +81,7 @@ const routes: any[] = [
         icon: "ni ni-briefcase-24 text-info",
         component: AdminSubBrandVehicle,
         layout: "/admin",
-        roles: ["superadmin", "admin"]
+        roles: ["super admin", "admin"]
     },
     {
         path: "/user",
@@ -89,7 +89,7 @@ const routes: any[] = [
         icon: "ni ni-single-02 text-danger",
         component: AdminUser,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/driver",
@@ -97,7 +97,7 @@ const routes: any[] = [
         icon: "ni ni-badge text-success",
         component: AdminDriver,
         layout: "/admin",
-        roles: ["superadmin", "admin"]
+        roles: ["super admin", "admin"]
     },
     {
         path: "/customer",
@@ -105,7 +105,7 @@ const routes: any[] = [
         icon: "ni ni-single-02 text-primary",
         component: AdminCustomer,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/investor",
@@ -113,7 +113,7 @@ const routes: any[] = [
         icon: "ni ni-hat-3 text-warning",
         component: AdminInvestor,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/transaction",
@@ -121,7 +121,7 @@ const routes: any[] = [
         icon: "ni ni-collection text-primary",
         component: AdminTransaction,
         layout: "/admin",
-        roles: ["superadmin", "admin"],
+        roles: ["super admin", "admin"],
         child: [
             {
                 path: "/transaction/application",
@@ -129,7 +129,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminTransactionApplication,
                 layout: "/admin",
-                roles: ["superadmin", "admin"]
+                roles: ["super admin", "admin"]
             },
             {
                 path: "/transaction/link-pay",
@@ -137,7 +137,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminTransactionLinkPay,
                 layout: "/admin",
-                roles: ["superadmin", "admin"]
+                roles: ["super admin", "admin"]
             },
         ]
     },
@@ -147,7 +147,7 @@ const routes: any[] = [
         icon: "ni ni-circle-08 text-info",
         component: AdminAccount,
         layout: "/admin",
-        roles: ["superadmin", "admin"],
+        roles: ["super admin", "admin"],
         child: [
             {
                 path: "/account/link-pay",
@@ -155,7 +155,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminAccountLinkPay,
                 layout: "/admin",
-                roles: ["superadmin", "admin"]
+                roles: ["super admin", "admin"]
             },
         ]
     },
@@ -165,7 +165,7 @@ const routes: any[] = [
         icon: "ni ni-mobile-button text-danger",
         component: AdminService,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/price",
@@ -173,7 +173,7 @@ const routes: any[] = [
         icon: "ni ni-money-coins text-success",
         component: AdminPrice,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/service-price",
@@ -181,7 +181,7 @@ const routes: any[] = [
         icon: "ni ni-credit-card text-primary",
         component: AdminServicePrice,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/voucher-promo",
@@ -189,7 +189,7 @@ const routes: any[] = [
         icon: "ni ni-paper-diploma text-info",
         component: AdminVoucherPromo,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/voucher-type",
@@ -197,7 +197,7 @@ const routes: any[] = [
         icon: "ni ni-ungroup text-warning",
         component: AdminVoucherType,
         layout: "/admin",
-        roles: ["superadmin"]
+        roles: ["super admin"]
     },
     {
         path: "/region",
@@ -205,7 +205,7 @@ const routes: any[] = [
         icon: "ni ni-compass-04 text-success",
         component: AdminRegion,
         layout: "/admin",
-        roles: ["superadmin"],
+        roles: ["super admin"],
         child: [
             {
                 path: "/region/country",
@@ -213,7 +213,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminCountry,
                 layout: "/admin",
-                roles: ["superadmin"]
+                roles: ["super admin"]
             },
             {
                 path: "/region/province",
@@ -221,7 +221,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminProvince,
                 layout: "/admin",
-                roles: ["superadmin"]
+                roles: ["super admin"]
             },
             {
                 path: "/region/district",
@@ -229,7 +229,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminDistrict,
                 layout: "/admin",
-                roles: ["superadmin"]
+                roles: ["super admin"]
             },
             {
                 path: "/region/sub-district",
@@ -237,7 +237,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminSubDistrict,
                 layout: "/admin",
-                roles: ["superadmin"]
+                roles: ["super admin"]
             },
             {
                 path: "/region/village",
@@ -245,7 +245,7 @@ const routes: any[] = [
                 icon: "ni ni-fat-delete text-default",
                 component: AdminVillage,
                 layout: "/admin",
-                roles: ["superadmin"]
+                roles: ["super admin"]
             }
         ]
     },

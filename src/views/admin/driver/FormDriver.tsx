@@ -18,15 +18,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { Paginator } from '../../../types/paginator';
 import { fetchListCountryAction } from '../../../actions/admin/region/country';
-import { Country } from '../../../types/admin/region/country';
+import { Country, CountryList } from '../../../types/admin/region/country';
 import { fetchListProvinceAction } from '../../../actions/admin/region/province';
-import { Province } from '../../../types/admin/region/province';
+import { Province, ProvinceList } from '../../../types/admin/region/province';
 import { fetchListDistrictAction } from '../../../actions/admin/region/district';
-import { District } from '../../../types/admin/region/district';
-import { SubDistrict } from '../../../types/admin/region/subDistrict';
+import { District, DistrictList } from '../../../types/admin/region/district';
+import { SubDistrict, SubDistrictList } from '../../../types/admin/region/subDistrict';
 import { fetchListSubDistrictAction } from '../../../actions/admin/region/subDistrict';
 import { fetchListVillageAction } from '../../../actions/admin/region/village';
-import { Village } from '../../../types/admin/region/village';
+import { Village, VillageList } from '../../../types/admin/region/village';
 
 type FormDriverProps = {
     FormikProps: FormikProps<FormField>,
@@ -662,7 +662,25 @@ class FormDriver extends Component<Props> {
                     <ReactSelectAsyncPaginate 
                         value={FormikProps.values.negara}
                         loadOptions={this.loadNegaraHandler}
-                        onChange={(option) => FormikProps.setFieldValue('negara', option)}
+                        onChange={(option) => {
+                            FormikProps.setFieldValue('negara', option)
+                            FormikProps.setFieldValue('provinsi', {
+                                value: 0,
+                                label: ''
+                            })
+                            FormikProps.setFieldValue('kabupaten_kota', {
+                                value: 0,
+                                label: ''
+                            })
+                            FormikProps.setFieldValue('kecamatan', {
+                                value: 0,
+                                label: ''
+                            })
+                            FormikProps.setFieldValue('kelurahan', {
+                                value: 0,
+                                label: ''
+                            })
+                        }}
                         onBlur={() => FormikProps.setFieldTouched('negara', true)}
                         additional={{
                             page: 1
@@ -684,11 +702,26 @@ class FormDriver extends Component<Props> {
                     <ReactSelectAsyncPaginate 
                         value={FormikProps.values.provinsi}
                         loadOptions={this.loadProvinsiHandler}
-                        onChange={(option) => FormikProps.setFieldValue('provinsi', option)}
+                        onChange={(option) => {
+                            FormikProps.setFieldValue('provinsi', option)
+                            FormikProps.setFieldValue('kabupaten_kota', {
+                                value: 0,
+                                label: ''
+                            })
+                            FormikProps.setFieldValue('kecamatan', {
+                                value: 0,
+                                label: ''
+                            })
+                            FormikProps.setFieldValue('kelurahan', {
+                                value: 0,
+                                label: ''
+                            })
+                        }}
                         onBlur={() => FormikProps.setFieldTouched('provinsi', true)}
                         additional={{
                             page: 1
                         }}
+                        key={JSON.stringify(FormikProps.values.negara.value)}
                         />
                     <div>
                         { FormikProps.errors.provinsi && FormikProps.touched.provinsi ? FormikProps.errors.provinsi.value : '' }
@@ -705,11 +738,23 @@ class FormDriver extends Component<Props> {
                     <ReactSelectAsyncPaginate 
                         value={FormikProps.values.kabupaten_kota}
                         loadOptions={this.loadKabupatenKotaHandler}
-                        onChange={(option) => FormikProps.setFieldValue('kabupaten_kota', option)}
+                        onChange={(option) => {
+                            FormikProps.setFieldValue('kabupaten_kota', option)
+                            FormikProps.setFieldValue('kecamatan', {
+                                value: 0,
+                                label: ''
+                            })
+
+                            FormikProps.setFieldValue('kelurahan', {
+                                value: 0,
+                                label: ''
+                            })
+                        }}
                         onBlur={() => FormikProps.setFieldTouched('kabupaten_kota', true)}
                         additional={{
                             page: 1
                         }}
+                        key={JSON.stringify(FormikProps.values.provinsi.value)}
                         />
                     <div>
                         { FormikProps.errors.kabupaten_kota && FormikProps.touched.kabupaten_kota ? FormikProps.errors.kabupaten_kota.value : '' }
@@ -726,11 +771,18 @@ class FormDriver extends Component<Props> {
                     <ReactSelectAsyncPaginate 
                         value={FormikProps.values.kecamatan}
                         loadOptions={this.loadKecamatanHandler}
-                        onChange={(option) => FormikProps.setFieldValue('kecamatan', option)}
+                        onChange={(option) => {
+                            FormikProps.setFieldValue('kecamatan', option)
+                            FormikProps.setFieldValue('kelurahan', {
+                                value: 0,
+                                label: ''
+                            })
+                        }}
                         onBlur={() => FormikProps.setFieldTouched('kecamatan', true)}
                         additional={{
                             page: 1
                         }}
+                        key={JSON.stringify(FormikProps.values.kabupaten_kota.value)}
                         />
                     <div>
                         { FormikProps.errors.kecamatan && FormikProps.touched.kecamatan ? FormikProps.errors.kecamatan.value : '' }
@@ -752,6 +804,7 @@ class FormDriver extends Component<Props> {
                         additional={{
                             page: 1
                         }}
+                        key={JSON.stringify(FormikProps.values.kecamatan.value)}
                         />
                     <div>
                         { FormikProps.errors.kelurahan && FormikProps.touched.kelurahan ? FormikProps.errors.kelurahan.value : '' }
@@ -780,11 +833,11 @@ class FormDriver extends Component<Props> {
 }
 
 interface LinkDispatchToProps {
-    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<Country>>,
-    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Province>>,
-    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<District>>,
-    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrict>>,
-    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Village>>
+    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
+    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
+    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
+    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrictList>>,
+    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<VillageList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormDriverProps): LinkDispatchToProps => {

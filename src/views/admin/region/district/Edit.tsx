@@ -76,9 +76,11 @@ class Create extends Component<Props, State> {
 
                     form.name = data.name;
                     form.alternativeName = data.alternativeName;
-                    form.province = {
-                        label: data.province.name ? data.province.name : '',
-                        value: data.province.id ? data.province.id : 0
+                    if (data.province) {
+                        form.province = {
+                            label: data.province.name ? data.province.name : '',
+                            value: data.province.id ? data.province.id : 0
+                        }
                     }
 
                     this.setState({

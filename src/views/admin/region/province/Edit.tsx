@@ -76,9 +76,11 @@ class Create extends Component<Props, State> {
 
                     form.name = data.name;
                     form.alternativeName = data.alternativeName;
-                    form.country = {
-                        label: data.country.name ? data.country.name : '',
-                        value: data.country.id ? data.country.id : 0
+                    if ( data.country) {
+                        form.country = {
+                            label: data.country.name ? data.country.name : '',
+                            value: data.country.id ? data.country.id : 0
+                        }
                     }
 
                     this.setState({

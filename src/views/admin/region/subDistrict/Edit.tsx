@@ -74,12 +74,13 @@ class Create extends Component<Props, State> {
                     const data: SubDistrictShow = response.response!.result;
 
                     form.name = data.name;
-                    
-                    form.district = {
-                        label: data.district.name ? data.district.name : '',
-                        value: data.district.id ? data.district.id : 0
+                    if (data.district) {
+                        form.district = {
+                            label: data.district.name ? data.district.name : '',
+                            value: data.district.id ? data.district.id : 0
+                        }
                     }
-
+                    
                     this.setState({
                         form: form,
                         isLoaded: true

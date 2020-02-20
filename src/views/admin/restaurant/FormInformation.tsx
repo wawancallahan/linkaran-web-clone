@@ -11,18 +11,21 @@ import {
     Button
 } from 'reactstrap'
 
-import { FormikProps } from 'formik'
+import { FormikProps, Formik } from 'formik'
 import { FormField } from '../../../types/admin/restaurant'
 import Dropzone from '../../../components/Dropzone/Dropzone'
 
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { fetchListDistrictAction } from '../../../actions/admin/region/district';
 import { DistrictList } from '../../../types/admin/region/district';
+import ReactSelect from 'react-select'
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../types/paginator';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
+import { ProvinceList } from '../../../types/admin/region/province'
+import { fetchListProvinceAction } from '../../../actions/admin/region/province'
 
 type FormInformationProps = {
     FormikProps: FormikProps<FormField>,
@@ -47,44 +50,99 @@ class FormInformation extends Component<Props> {
         }
     }
 
-    loadDistrictHandler = (search: string, loadedOption: {}, options: {
+    loadProvinceHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListDistrictAction(search, options.page)
-            .then((response: ApiResponseList<DistrictList>) => {
-
-                const data: ApiResponseSuccessList<DistrictList> = response.response!;
-
+        return this.props.fetchListProvinceAction(search, options.page)
+            .then((response: ApiResponseList<ProvinceList>) => {
+    
+                const data: ApiResponseSuccessList<ProvinceList> = response.response!;
+    
                 let result: {
                     value: number,
                     label: string
                 }[] = [];
-
+    
                 let hasMore = false;
-
+    
                 if ( ! data.metaData.isError) {
-
+    
                     if (data.metaData.paginate) {
                         const paginate = data.metaData.paginate as Paginator;
                         hasMore = paginate.pageCount > options.page;
                     }
-
-                    result = data.result.map((item: DistrictList) => {
+    
+                    result = data.result.map((item: ProvinceList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
                         };
                     });
                 }
-
+    
                 return {
                     options: result,
                     hasMore: hasMore,
                     additional: {
-                      page: options.page + 1,
+                        page: options.page + 1,
                     },
                 };
-            });
+            });       
+    }
+
+    loadDistrictHandler = (search: string, loadedOption: {}, options: {
+        page: number
+    }) => {
+        if (this.props.FormikProps.values.province.value && this.props.FormikProps.values.province.value > 0) {
+
+            return this.props.fetchListDistrictAction(search, options.page, this.props.FormikProps.values.province.value)
+                .then((response: ApiResponseList<DistrictList>) => {
+
+                    const data: ApiResponseSuccessList<DistrictList> = response.response!;
+
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
+
+                    let hasMore = false;
+
+                    if ( ! data.metaData.isError) {
+
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: DistrictList) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
+                    }
+
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                            page: options.page + 1
+                        },
+                    };
+                });
+        }
+
+        return new Promise((resolve, reject) => {
+                resolve();
+            }).then(() => {
+                return {
+                    options: [],
+                    hasMore: false,
+                    additional: {
+                        page: 0,
+                    },
+                };
+            })
     }
 
     render() {
@@ -224,6 +282,33 @@ class FormInformation extends Component<Props> {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-province"
+                            >
+                                Provinsi
+                            </label>
+                            <ReactSelectAsyncPaginate 
+                                value={FormikProps.values.province}
+                                loadOptions={this.loadProvinceHandler}
+                                onChange={(option) => {
+                                    FormikProps.setFieldValue('province', option)
+                                    FormikProps.setFieldValue('district', {
+                                        value: 0,
+                                        label: ''
+                                    })
+                                }}
+                                onBlur={() => FormikProps.setFieldTouched('province', true)}
+                                additional={{
+                                    page: 1
+                                }}
+                                />
+                            <div>
+                                { FormikProps.errors.province && FormikProps.touched.province ? FormikProps.errors.province.value : '' }
+                            </div>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-district"
                             >
                                 Kabupaten / Kota
@@ -236,6 +321,7 @@ class FormInformation extends Component<Props> {
                                 additional={{
                                     page: 1
                                 }}
+                                key={JSON.stringify(FormikProps.values.province.value)}
                                 />
                             <div>
                                 { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }
@@ -291,12 +377,14 @@ class FormInformation extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
+    fetchListProvinceAction: (search: string, page: number) => Promise<ApiResponseList<ProvinceList>>,
+    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormInformationProps): LinkDispatchToProps => {
     return {
-        fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
+        fetchListProvinceAction: (search: string, page: number) => dispatch(fetchListProvinceAction(search, page)),
+        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
     }
 }
 

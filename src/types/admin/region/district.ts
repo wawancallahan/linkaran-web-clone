@@ -34,11 +34,11 @@ export interface District {
 }
 
 export type DistrictList = District & {
-    province: Partial<Province>
+    province?: Partial<Province>
 }
 
 export type DistrictShow = District & {
-    province: Partial<Province>
+    province?: Partial<Province>
 }
 
 export type DistrictCreateField = DistrictField
@@ -46,11 +46,11 @@ export type DistrictCreateField = DistrictField
 export type DistrictEditField = DistrictField
 
 export type DistrictCreateResult = District & Partial<Timestamps> & {
-    province: Partial<Province>
+    province?: Partial<Province>
 }
 
 export type DistrictEditResult = District & Partial<Timestamps> & {
-    province: Partial<Province>
+    province?: Partial<Province>
 }
 
 export interface FetchDistrictActionType {

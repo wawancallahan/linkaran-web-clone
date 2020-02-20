@@ -76,6 +76,10 @@ class Create extends Component<Props, State> {
             district: {
                 value: 0,
                 label: ''
+            },
+            province: {
+                value: 0,
+                label: ''
             }
         },
         alert_visible: false,

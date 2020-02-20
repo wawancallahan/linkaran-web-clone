@@ -1,5 +1,6 @@
 import { Paginator } from '../paginator';
 import { District } from './region/district';
+import { Province } from './region/province';
 
 export const FETCH_RESTAURANT = "FETCH_RESTAURANT";
 export const FETCH_RESTAURANT_SUCCESS = "FETCH_RESTAURANT_SUCCESS";
@@ -40,6 +41,10 @@ export type FormField = {
     sunday_start: Date | null,
     sunday_end: Date | null,
     sunday_isClosed: boolean,
+    province: {
+        label: string,
+        value: number
+    },
     district: {
         label: string,
         value: number
@@ -104,7 +109,9 @@ export interface OperatingTimeModel {
 }
 
 export type Restaurant = RestaurantResult & RestaurantList & {
-    district?: Partial<District>
+    district?: Partial<District> & {
+        province?: Partial<Province>
+    }
 };
 
 export type RestaurantCreate = RestaurantField;
@@ -119,19 +126,25 @@ type operatingTimeResult = RestaurantResult & OperatingTimeModel & {
 
 export type RestaurantCreateResult = RestaurantResult & RestaurantModel & {
     operatingTime: operatingTimeResult[],
-    district?: Partial<District>
+    district?: Partial<District> & {
+        province?: Partial<Province>
+    }
 }
 
 export type RestaurantEditResult = RestaurantResult & RestaurantModel & {
     operatingTime: operatingTimeResult[],
-    district?: Partial<District>
+    district?: Partial<District> & {
+        province?: Partial<Province>
+    }
 };
 
 type OperatingTimeDetail = OperatingTime & RestaurantResult;
 
 export type RestaurantDetailResult = RestaurantResult & RestaurantModel & {
     operatingTime: OperatingTimeDetail[],
-    district?: Partial<District>
+    district?: Partial<District> & {
+        province?: Partial<Province>
+    }
 }
 
 export interface FetchRestaurantActionType {

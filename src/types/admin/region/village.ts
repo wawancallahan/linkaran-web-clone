@@ -31,11 +31,11 @@ export interface Village {
 }
 
 export type VillageList = Village & {
-    subDistrict: Partial<SubDistrict>
+    subDistrict?: Partial<SubDistrict>
 }
 
 export type VillageShow = Village & {
-    subDistrict: Partial<SubDistrict>
+    subDistrict?: Partial<SubDistrict>
 }
 
 export type VillageCreateField = VillageField
@@ -43,11 +43,11 @@ export type VillageCreateField = VillageField
 export type VillageEditField = VillageField
 
 export type VillageCreateResult = Village & Partial<Timestamps> & {
-    subDistrict: Partial<SubDistrict>
+    subDistrict?: Partial<SubDistrict>
 }
 
 export type VillageEditResult = Village & Partial<Timestamps> & {
-    subDistrict: Partial<SubDistrict>
+    subDistrict?: Partial<SubDistrict>
 }
 
 export interface FetchVillageActionType {

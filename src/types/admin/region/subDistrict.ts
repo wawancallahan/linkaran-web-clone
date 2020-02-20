@@ -31,11 +31,11 @@ export interface SubDistrict {
 }
 
 export type SubDistrictList = SubDistrict & {
-    district: Partial<District>
+    district?: Partial<District>
 }
 
 export type SubDistrictShow = SubDistrict & {
-    district: Partial<District>
+    district?: Partial<District>
 }
 
 export type SubDistrictCreateField = SubDistrictField
@@ -43,11 +43,11 @@ export type SubDistrictCreateField = SubDistrictField
 export type SubDistrictEditField = SubDistrictField
 
 export type SubDistrictCreateResult = SubDistrict & Partial<Timestamps> & {
-    district: Partial<District>
+    district?: Partial<District>
 }
 
 export type SubDistrictEditResult = SubDistrict & Partial<Timestamps> & {
-    district: Partial<District>
+    district?: Partial<District>
 }
 
 export interface FetchSubDistrictActionType {
