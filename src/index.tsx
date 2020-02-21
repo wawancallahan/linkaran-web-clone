@@ -7,17 +7,17 @@ import history from './services/history';
 
 import App from './App';
 
-import "assets/vendor/nucleo/css/nucleo.css";
-import "assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/scss/argon-dashboard-react.scss";
+import "./assets/vendor/nucleo/css/nucleo.css";
+import "./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
+import "./assets/scss/argon-dashboard-react.scss";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
-import "assets/css/app.css";
+import "./assets/css/app.css";
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <App />
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );

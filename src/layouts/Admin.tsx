@@ -182,6 +182,10 @@ class Admin extends Component<Props> {
 
   mainContent = createRef<HTMLDivElement>();
 
+  componentDidMount() {
+    document.body.classList.remove("bg-default");
+  }
+
   getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
     const roles = rolesToArray();
 
