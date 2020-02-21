@@ -75,8 +75,8 @@ export const authValidate = (item: ValidateLogin): ThunkResult<Promise<ValidateL
                                 message: data.metaData.message
                             });
                         }).catch(error => {
-                            const data: ValidateLoginFailResult = error.response;
-
+                            const data: ValidateLoginFailResult = error.response.data;
+                            
                             return Promise.reject({
                                 status: false,
                                 response: data,

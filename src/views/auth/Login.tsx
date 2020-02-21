@@ -80,7 +80,7 @@ class Login extends React.Component<Props, State> {
         }
 
         document.body.classList.add("bg-default");
-    }
+    } 
 
     cancelEmailOnSubmit = () => {
         this.setState({
@@ -140,7 +140,7 @@ class Login extends React.Component<Props, State> {
                             this.goDashboard("Admin");
                         })
                         .catch((response: ValidateLoginResponse) => {
-                            const data: ValidateLoginFailResult = response.response as ValidateLoginFailResult;
+                            const data = response.response as ValidateLoginFailResult;
     
                             let message = "Gagal mendapatkan response"
     
