@@ -51,7 +51,6 @@ class App extends Component<Props> {
     }
 
     render() {
-        console.log(this.getRoleRoutes(routes))
         return (
             <Switch>
                 {this.getAuthRoutes(authRoutes)}

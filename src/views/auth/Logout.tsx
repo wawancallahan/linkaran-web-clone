@@ -13,6 +13,7 @@ const Logout = (props: Props) => {
     localStorage.removeItem("email");
     localStorage.removeItem("role_id");
     localStorage.removeItem("role_name");
+    localStorage.removeItem("roles");
 
     return (
         <Redirect from="/logout" to="/login" />
