@@ -2,14 +2,14 @@
     margin: 0 !important;
 }
 
-.img-table {
+.img-table > div {
     max-width: 192px;
     max-height: 90px;
 }
 
-.img-table > img {
-    max-width: inherit;
-    max-height: inherit;
+.img-table img {
+    max-width: inherit !important;
+    max-height: inherit !important;
 }
 
 .img-star-feedback {

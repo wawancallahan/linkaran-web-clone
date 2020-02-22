@@ -19,10 +19,15 @@
     "noEmit": true,
     "jsx": "preserve",
     "downlevelIteration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "typeRoots" : [
+      "node_modules/@types/",
+      "types/"
+    ],
+    "noImplicitAny": true,
   },
   "include": [
-    "src"
+    "src", "types/react-modal-image"
   ],
   "exclude": [
     "src/setupProxy.js",

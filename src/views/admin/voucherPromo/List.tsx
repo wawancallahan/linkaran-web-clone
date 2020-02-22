@@ -47,6 +47,8 @@ import {
 } from '../../../helpers/Assets'
 import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
+import '../../../react-modal-image.d.ts'
+import ModalImage from 'react-modal-image'
 
 type ListProps = RouteComponentProps & {
 
@@ -65,7 +67,7 @@ const TableItem = (props: {
     deleteVoucherPromo: (id: number) => void
 }) => {
 
-    let image = '';
+    let image: string | undefined = undefined;
 
     if (props.item.image) {
         image = props.item.image;
@@ -79,7 +81,11 @@ const TableItem = (props: {
             <td>
                 <div className="d-flex flex-row">
                     <div className="img-table mr-3">
-                        <img src={image} alt=""/>
+                        {image ? (
+                        <ModalImage small={new URL(image)} 
+                                    large={new URL(image)} />
+                        ) : null}
+                        
                     </div>
                     <div>
                         <div style={{
