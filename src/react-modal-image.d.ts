@@ -24,7 +24,9 @@ declare module 'react-modal-image' {
         imageBackgroundColor?: string
     }
     
-    type LightboxProps = ModalImageProps & {
+    interface LightboxProps extends Omit<ModalImageProps, "small" | "large"> {
+        small?: URL,
+        large: URL,
         onClose: () => void
     }
     

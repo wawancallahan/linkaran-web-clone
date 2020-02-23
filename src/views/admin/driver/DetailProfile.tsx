@@ -126,14 +126,14 @@ class DetailProfile extends Component<Props, State> {
                                 <label htmlFor="">No. Identitas</label>
                             </Col>
                             <Col>
-                                <div>
+                                <div className="mb-1">
                                     {driver.identityNumber}
                                 </div>
                                 <div>
                                     {
                                         image ? (
-                                            <Button onClick={() => this.onToggleKtpPhotoVisible()}>
-                                                <i className="fa fa-eye text-info"></i>
+                                            <Button color="info" size="sm" onClick={() => this.onToggleKtpPhotoVisible()}>
+                                                <i className="fa fa-eye"></i>
                                             </Button>
                                         ) : null
                                     }
@@ -141,8 +141,7 @@ class DetailProfile extends Component<Props, State> {
                                     {
                                         image ? (
                                             this.state.ktp_photo_visible ? (
-                                            <Lightbox small={new URL(image)} 
-                                                    large={new URL(image)}
+                                            <Lightbox large={new URL(image)}
                                                     onClose={() => this.onToggleKtpPhotoVisible(false)}/>
                                             ) : null
                                         ) : null
