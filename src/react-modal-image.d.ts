@@ -24,13 +24,13 @@ declare module 'react-modal-image' {
         imageBackgroundColor?: string
     }
     
-    type LighboxProps = ModalImageProps & {
+    type LightboxProps = ModalImageProps & {
         onClose: () => void
     }
     
     const ModalImage: FC<ModalImageProps>;
     
-    export const Lighbox: FC<LighboxProps>;
+    export const Lightbox: FC<LightboxProps>;
     
     export default ModalImage;
 }

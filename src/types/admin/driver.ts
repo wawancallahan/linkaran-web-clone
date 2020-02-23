@@ -252,7 +252,8 @@ export type DriverDetail = {
             }
         }
     },
-    serviceCount: ServiceCount[]
+    serviceCount: ServiceCount[],
+    isMeried: boolean
 }
 
 interface DriverResult {

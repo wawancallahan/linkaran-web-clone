@@ -4,21 +4,21 @@ import FoodEdit from './Edit';
 
 export default [
     {
-        path: "/admin/driver",
+        path: "/admin/food",
         exact: true,
         component: FoodList,
         layout: "admin",
         roles: ["super admin"]
     },
     {
-        path: "/admin/driver/:id/edit",
+        path: "/admin/food/:id/edit",
         exact: true,
         component: FoodEdit,
         layout: "admin",
         roles: ["super admin"]
     },
     {
-        path: "/admin/driver/create",
+        path: "/admin/food/create",
         exact: true,
         component: FoodCreate,
         layout: "admin",

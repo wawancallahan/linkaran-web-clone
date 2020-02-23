@@ -19,7 +19,7 @@ const routeList: (SidebarRoute | null)[] = [
   },
   {
       path: "/admin/food-category",
-      name: "Karegori Makanan",
+      name: "Kategori Makanan",
       icon: "ni ni-ungroup text-danger",
       roles: ["super admin"]
   },

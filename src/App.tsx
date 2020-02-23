@@ -54,11 +54,13 @@ class App extends Component<Props> {
         return (
             <Switch>
                 {this.getAuthRoutes(authRoutes)}
-                <AdminLayout {...this.props}>
-                    <Switch>
-                        {this.getRoleRoutes(routes)}
-                    </Switch>
-                </AdminLayout>
+                <Route path="/admin">
+                    <AdminLayout {...this.props}>
+                        <Switch>
+                            {this.getRoleRoutes(routes)}
+                        </Switch>
+                    </AdminLayout>
+                </Route>
                 <Redirect from="/" to="/login" exact />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>
