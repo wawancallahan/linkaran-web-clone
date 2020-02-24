@@ -77,55 +77,55 @@ class DetailProfile extends Component<Props, State> {
                         </Col>
                     </Row>
                     <CardBody className="border-0 mt-8">
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">ID</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Nama</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.name}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Email</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.email}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">TTL</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.placeOfBirth}, {driver.dateOfBirth}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Jenis Kelamin</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.gender == "L" ? "Laki Laki" : "Perempuan"}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">No. Identitas</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 <div className="mb-1">
                                     {driver.identityNumber}
                                 </div>
@@ -133,7 +133,7 @@ class DetailProfile extends Component<Props, State> {
                                     {
                                         image ? (
                                             <Button color="info" size="sm" onClick={() => this.onToggleKtpPhotoVisible()}>
-                                                <i className="fa fa-eye"></i>
+                                                <i className="fa fa-eye"></i> KTP
                                             </Button>
                                         ) : null
                                     }
@@ -150,29 +150,29 @@ class DetailProfile extends Component<Props, State> {
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Alamat</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.address}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Alamat Domisili</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.residenceAddress}
                             </Col>
                         </Row>
     
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Status Pernikahan</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.isMeried ? "Sudah Menikah" : "Belum Menikah"}
                             </Col>
                         </Row>

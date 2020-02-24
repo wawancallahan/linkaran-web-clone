@@ -24,51 +24,51 @@ class DetailKendaraan extends Component<Props> {
                 <Card>
                     <CardBody>
                         <CardTitle className="font-weight-bold">Kendaraan</CardTitle>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Jenis Kendaraan</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.subBrandVehicle.brandVehicle.name}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">No. Plat</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.policeNumber}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">No. STNK</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.stnkNumber}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">No. Rangka</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.chassisNumber}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Tipe Kendaraan</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.vehicleType.name}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mb-3">
+                            <Col md="6">
                                 <label htmlFor="">Keterangan</label>
                             </Col>
-                            <Col>
+                            <Col md="6">
                                 {driver.vehicle.description}
                             </Col>
                         </Row>

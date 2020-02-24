@@ -29,11 +29,11 @@ class DetailKeterangan extends Component<Props> {
                     <CardBody>
                         <CardTitle className="font-weight-bold">Keterangan</CardTitle>
                         <ul className="list-unstyled">
-                            <li>1. {wasOnceAnOnlineDriverText} pernah menjadi driver pada aplikator lain</li>
-                            <li>2. {isActivelyBecomingAnotherOnlineDriverText} menjadi driver pada aplikator lain</li>
-                            <li>3. {isJoiningTheDriverCommunityText} bergabung ke komunitas driver</li>
-                            <li>4. bergabung ke Linkaran {isJoiningLinkaranAsmainJobText} sebagai pekerjaan utama</li>
-                            <li>5. Jam kerja aktif yang dikehendaki yaitu {choiceOfActiveWorkHoursText}</li>
+                            <li className="mb-3">1. {wasOnceAnOnlineDriverText} pernah menjadi driver pada aplikator lain</li>
+                            <li className="mb-3">2. {isActivelyBecomingAnotherOnlineDriverText} menjadi driver pada aplikator lain</li>
+                            <li className="mb-3">3. {isJoiningTheDriverCommunityText} bergabung ke komunitas driver</li>
+                            <li className="mb-3">4. bergabung ke Linkaran {isJoiningLinkaranAsmainJobText} sebagai pekerjaan utama</li>
+                            <li className="mb-3">5. Jam kerja aktif yang dikehendaki yaitu {choiceOfActiveWorkHoursText}</li>
                         </ul>
                     </CardBody>
                 </Card>
