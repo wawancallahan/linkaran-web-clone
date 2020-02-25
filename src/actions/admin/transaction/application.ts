@@ -60,7 +60,7 @@ export const setAlertApplicationShowAction = (message: string, color: string): A
     };
 }
 
-export const fetchApplicationAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const fetchApplicationAction = (page: number, type: string) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}`)
             .then( (response: AxiosResponse) => {

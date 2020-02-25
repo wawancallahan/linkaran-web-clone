@@ -42,7 +42,9 @@ import { Alert as IAlert } from '../../../../types/alert';
 import { typeOfTransaction, colorStatusFormat } from '../../../../helpers/utils';
 import { amountFormat } from '../../../../helpers/number';
 
-type ListProps = RouteComponentProps & {
+type ListProps = RouteComponentProps<{
+    type?: string
+}> & {
 
 }
 
@@ -103,15 +105,23 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchApplicationList(page);
+        const typeParams = this.props.match.params.type;
+
+        let type = 'complete';
+        
+        if (typeParams) {
+            type = typeParams;
+        }
+
+        this.fetchApplicationList(page, type);
     }
 
     componentWillUnmount() {
         this.props.setAlertApplicationHideAction();
     }
 
-    fetchApplicationList = (page: number) => {
-        this.props.fetchApplicationAction(page);
+    fetchApplicationList = (page: number, type: string) => {
+        this.props.fetchApplicationAction(page, type);
     }
 
     render() {
@@ -177,7 +187,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchApplicationAction} />
+                                                    itemClicked={(page: number) => this.props.fetchApplicationAction(page, type)} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -203,14 +213,14 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchApplicationAction: (page: number) => void,
+    fetchApplicationAction: (page: number, type: string) => void,
     setAlertApplicationHideAction: () => void,
     setAlertApplicationShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchApplicationAction: (page: number) => dispatch(fetchApplicationAction(page)),
+        fetchApplicationAction: (page: number, type: string = 'complete') => dispatch(fetchApplicationAction(page, type)),
         setAlertApplicationHideAction: () => dispatch(setAlertApplicationHideAction()),
         setAlertApplicationShowAction: (message: string, color: string) => dispatch(setAlertApplicationShowAction(message, color))
     }

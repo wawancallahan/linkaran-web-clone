@@ -44,6 +44,16 @@ export const colorStatusFormat = (status: string) => {
     return color;
 }
 
+export const typeTransactionFormat = (status: string) => {
+    let type = "complete"
+
+    if (["inprogress", "complete"].includes(status)) {
+        type = status
+    }
+
+    return type;
+}
+
 export const parseDateTimeFormat = (date: string) => {
     const dateParse = moment(new Date(date))
 

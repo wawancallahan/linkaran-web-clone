@@ -3,14 +3,14 @@ import ApplicationDetail from './Detail';
 
 export default [
     {
-        path: "/admin/transaction/application",
+        path: "/admin/transaction/application/:type?",
         exact: true,
         component: ApplicationList,
         layout: "admin",
         roles: ["super admin", "admin"]
     },
     {
-        path: "/admin/transaction/application/:id",
+        path: "/admin/transaction/application/:type/:id",
         exact: true,
         component: ApplicationDetail,
         layout: "admin",

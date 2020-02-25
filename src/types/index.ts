@@ -20,6 +20,7 @@ import { DistrictActionTypes as AdminDistrictActionTypes } from './admin/region/
 import { SubDistrictActionTypes as AdminSubDistrictActionTypes } from './admin/region/subDistrict'
 import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/village'
 import { CustomerActionTypes as AdminCustomerActionTypes } from './admin/customer'
+import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -44,3 +45,4 @@ export type AppActions =
     | AdminSubDistrictActionTypes
     | AdminVillageActionTypes
     | AdminCustomerActionTypes
+    | AdminBankActionTypes

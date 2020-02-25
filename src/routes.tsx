@@ -17,6 +17,7 @@ import AdminVoucherTypeRoutes from './views/admin/voucherType/Index';
 import AdminServiceRoutes from './views/admin/service/Index'
 import AdminRegionRoutes from './views/admin/region/Index'
 import AdminCustomerRoutes from './views/admin/customer/Index'
+import AdminBankRoutes from './views/admin/bank/Index'
 
 export interface Route {
     exact: boolean,
@@ -44,7 +45,8 @@ const routes: Route[] = [
     ...AdminVoucherTypeRoutes,
     ...AdminServiceRoutes,
     ...AdminRegionRoutes,
-    ...AdminCustomerRoutes
+    ...AdminCustomerRoutes,
+    ...AdminBankRoutes
 ]
 
 export default routes;

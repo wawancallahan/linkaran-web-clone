@@ -136,6 +136,12 @@ const routeList: (SidebarRoute | null)[] = [
       roles: ["super admin"]
   },
   {
+      path: "/admin/bank",
+      name: "Bank",
+      icon: "ni ni-credit-card text-danger",
+      roles: ["super admin"]
+  },
+  {
       path: "/admin/region",
       name: "Wilayah",
       icon: "ni ni-compass-04 text-success",
