@@ -10,7 +10,7 @@ export default [
         roles: ["super admin", "admin"]
     },
     {
-        path: "/admin/transaction/application/:type/:id",
+        path: "/admin/transaction/application/:type/:numberTransaction",
         exact: true,
         component: ApplicationDetail,
         layout: "admin",

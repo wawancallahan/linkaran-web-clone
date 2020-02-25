@@ -39,7 +39,7 @@ import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
 
-import { typeOfTransaction, colorStatusFormat } from '../../../../helpers/utils';
+import { typeOfTransaction, colorStatusFormat, typeTransactionFormat } from '../../../../helpers/utils';
 import { amountFormat } from '../../../../helpers/number';
 
 type ListProps = RouteComponentProps<{
@@ -57,7 +57,8 @@ type State = {
 const TableItem = (props: {
     index: number,
     item: Application,
-    key: number
+    key: number,
+    type: string
 }) => {
     return (
         <tr>
@@ -74,15 +75,9 @@ const TableItem = (props: {
                 <Badge color={colorStatusFormat(props.item.status)}>{props.item.status}</Badge>
             </td>
             <td>
-                <Link to={``} className="btn btn-info btn-sm">
+                <Link to={`/admin/transaction/application/${props.type}/${props.item.numberTransaction}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
                 </Link>
-                <Link to={``} className="btn btn-warning btn-sm">
-                    <i className="fa fa-edit"></i>
-                </Link>
-                <Button color="danger" size="sm" onClick={() => {}}>
-                    <i className="fa fa-trash"></i>
-                </Button>
             </td>
         </tr>
     )
@@ -107,11 +102,7 @@ class List extends Component<Props, State> {
 
         const typeParams = this.props.match.params.type;
 
-        let type = 'complete';
-        
-        if (typeParams) {
-            type = typeParams;
-        }
+        const type = typeTransactionFormat(typeParams)
 
         this.fetchApplicationList(page, type);
     }
@@ -128,11 +119,14 @@ class List extends Component<Props, State> {
 
         let transactionApplication: any = <TableItemEmpty />;
 
+        const type = typeTransactionFormat(this.props.match.params.type);
+
         if (this.props.transactionApplication.length > 0) {
             transactionApplication = this.props.transactionApplication.map((item: Application, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
+                           type={type}
                            />
             ));
         }

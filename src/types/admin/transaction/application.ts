@@ -1,4 +1,7 @@
 import { Paginator } from '../../paginator';
+import { Timestamps } from '../../timestamps';
+import { VehicleType } from '../vehicleType';
+import { Service } from '../service';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -9,14 +12,13 @@ export const ALERT_APPLICATION_SHOW = "ALERT_APPLICATION_SHOW";
 export const ALERT_APPLICATION_HIDE = "ALERT_APPLICATION_HIDE";
 
 export type FormField = {
-   
 }
 
 interface ApplicationField {
-    
 }
 
-interface ApplicationList {
+export interface Application {
+    id: number,
     date: string,
     numberTransaction: string,
     costumerName: string,
@@ -26,19 +28,118 @@ interface ApplicationList {
     status: string
 }
 
-interface ApplicationResult {
-   id: number
+export type ApplicationList = Application
+
+export type ApplicationShowComplete = {
+    driverId: 2,
+    costumer: {
+        userInfo: {
+            email: string,
+            name: string,
+            phoneNumber: string
+        },
+        id: number
+    },
+    driverInformation: {
+        name: string,
+        policeNumber: string,
+        profileImage: string | null,
+        phoneNumber: string,
+        rating: string,
+        vehicleTypeCode: string,
+        vehicleMerk: string
+    },
+    transaction: {
+        code: string,
+        service: {
+            name: string,
+            code: string
+        },
+        dateTime: string,
+        note: string,
+        vehicleType: {
+            code: string,
+            name: string,
+            seat: number
+        },
+        paymentFromVoucher: number,
+        totalCost: number,
+        totalCostBeforeCut: number,
+        typePayment: string,
+        priceSplit: number[],
+        cost: number,
+        status: string
+    },
+    driverFeedback: {
+        rating: number,
+        description: string
+    },
+    costumerFeedback: {
+        rating: number,
+        description: string,
+        tip: number
+    },
+    foodTransaction: any | null,
+    sendTransaction: any | null
 }
 
-export type Application = ApplicationResult & ApplicationList;
+export type ApplicationShowInprogress = {
+    costumer: {
+        id: number,
+        userInfo: {
+            email: string,
+            isActive: boolean,
+            linkWithGoogle: boolean,
+            name: string,
+            phoneNumber: string,
+            tokenFCM: string[]
+        }
+    },
+    id: string,
+    transaction: {
+        addressDestination: string,
+        addressOrigin: string,
+        code: string,
+        cost: number,
+        dateTime: number,
+        destination: {
+            $reql_type$: string,
+            coordinates: number[],
+            type: string
+        },
+        distance: string,
+        driverPaymentDeductions: number,
+        foodFee: number,
+        note: string,
+        origin: {
+            $reql_type$: string,
+            coordinates: number[],
+            type: string
+        },
+        paymentFromVoucher: number,
+        priceSplit: number[],
+        service: Partial<Service>,
+        status: string,
+        totalCost: number,
+        totalCostBeforeCut: number,
+        transportationFee: number,
+        typePayment: string,
+        vehicleType: Partial<VehicleType>
+    } | null
+}
 
-export type ApplicationCreate = ApplicationField;
+export type ApplicationShow = {
+    type: "complete" | "inprogress",
+    item: ApplicationShowComplete | ApplicationShowInprogress
+}
 
-export type ApplicationEdit = ApplicationField;
+export type ApplicationCreateField = ApplicationField
 
-export type ApplicationCreateResult = ApplicationResult;
+export type ApplicationEditField = ApplicationField
 
-export type ApplicationEditResult = ApplicationResult;
+export type ApplicationCreateResult = Application & Partial<Timestamps>
+
+export type ApplicationEditResult = Application & Partial<Timestamps>
 
 export interface FetchApplicationActionType {
     type: typeof FETCH_APPLICATION
@@ -46,7 +147,7 @@ export interface FetchApplicationActionType {
 
 export interface FetchApplicationSuccessActionType {
     type: typeof FETCH_APPLICATION_SUCCESS,
-    list: Application[]
+    list: ApplicationList[]
 }
 
 export interface FetchApplicationErrorActionType {

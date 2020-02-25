@@ -13,12 +13,17 @@ import {
 import {
     Link
 } from 'react-router-dom';
+import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
 
 type Props = {
-    className?: string
+    className?: string,
+    application: ApplicationShowComplete
 }
 
 const Service = (props: Props) => {
+
+    const { application } = props;
+
     return (
         <div className={props.className}>
             <Card>
@@ -32,21 +37,25 @@ const Service = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Layanan</label></Col>
-                        <Col>Link Ride</Col>
+                        <Col>{application.transaction ? application.transaction.service.name : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Jemput</label></Col>
                         <Col>
-                            Jl.Panjaitan Perumahan Citraland Komplek I-Walk Blok 15 No55 Mugirejo, Kota Samarinda 75123, Kalimantan Timur  Indonesia 
+                            <p></p>
                         </Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Tujuan</label></Col>
-                        <Col>Jl.Panjaitan Perumahan Citraland Komplek I-Walk Blok 15 No55 Mugirejo, Kota Samarinda 75123, Kalimantan Timur  Indonesia </Col>
+                        <Col>
+                            <p></p>
+                        </Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Deskripsi</label></Col>
-                        <Col>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Col>
+                        <Col>
+                            <p></p>
+                        </Col>
                     </Row>
                 </CardBody>
             </Card>   

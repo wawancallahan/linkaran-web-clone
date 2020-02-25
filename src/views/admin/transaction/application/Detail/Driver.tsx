@@ -13,12 +13,16 @@ import {
 import {
     Link
 } from 'react-router-dom';
+import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
 
 type Props = {
-    className?: string
+    className?: string,
+    application: ApplicationShowComplete
 }
 
 const Driver = (props: Props) => {
+    const { application } = props;
+
     return (
         <div className={props.className}>
             <Card>
@@ -42,19 +46,19 @@ const Driver = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>12931287381274</Col>
+                        <Col>{application.driverId}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>Name</Col>
+                        <Col>{application.driverInformation.name}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">No. Polisi</label></Col>
-                        <Col>Name</Col>
+                        <Col>{application.driverInformation.policeNumber}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Kendaraan</label></Col>
-                        <Col>Name</Col>
+                        <Col>{application.driverInformation.vehicleMerk}</Col>
                     </Row>
                 </CardBody>
             </Card>

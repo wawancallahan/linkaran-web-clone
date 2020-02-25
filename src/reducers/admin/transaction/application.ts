@@ -2,7 +2,7 @@ import {
     FETCH_APPLICATION,
     FETCH_APPLICATION_ERROR,
     FETCH_APPLICATION_SUCCESS,
-    Application,
+    ApplicationList,
     ApplicationActionTypes,
     FetchApplicationActionType,
     FetchApplicationSuccessActionType,
@@ -19,7 +19,7 @@ import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
 interface initialStateInterface {
-    list: Application[],
+    list: ApplicationList[],
     paginate: Paginator,
     alert: Alert
 };

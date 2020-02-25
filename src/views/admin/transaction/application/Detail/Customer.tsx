@@ -13,12 +13,17 @@ import {
 import {
     Link
 } from 'react-router-dom';
+import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
 
 type Props = {
-    className?: string
+    className?: string,
+    application: ApplicationShowComplete
 }
 
 const Customer = (props: Props) => {
+
+    const { application } = props;
+
     return (
         <div className={props.className}>
             <Card>
@@ -42,11 +47,11 @@ const Customer = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>12931287381274</Col>
+                        <Col>{application.costumer.id}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>Name</Col>
+                        <Col>{application.costumer.userInfo.name}</Col>
                     </Row>
                 </CardBody>
             </Card>

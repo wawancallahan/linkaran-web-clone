@@ -17,14 +17,18 @@ import {
 import {
     starImage
 } from '../../../../../helpers/Assets'
+import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
 
 type Props = {
-    className?: string
+    className?: string,
+    application: ApplicationShowComplete
 }
 
 const Feedback = (props: Props) => {
 
-    const starFeed = [...Array.from(Array(2).keys())].map(() => (
+    const { application } = props;
+
+    const starFeed = [...Array.from(Array(application.costumerFeedback.rating).keys())].map(() => (
         <img className="d-inline-block img-star-feedback mr-2" src={starImage} />
     ));
 
@@ -47,7 +51,9 @@ const Feedback = (props: Props) => {
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Pesan Customer</label></Col>
-                        <Col>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Col>
+                        <Col>
+                            <p>{application.costumerFeedback.description}</p>
+                        </Col>
                     </Row>
                 </CardBody>
             </Card>

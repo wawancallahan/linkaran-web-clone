@@ -34,7 +34,7 @@ import {
     setAlertBankHideAction,
     setAlertBankShowAction
 } from '../../../actions/admin/bank';
-import { Bank } from '../../../types/admin/bank';
+import { BankList } from '../../../types/admin/bank';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -51,7 +51,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Bank,
+    item: BankList,
     key: number
 }) => {
     return (
@@ -94,7 +94,7 @@ class List extends Component<Props, State> {
         let bank: any = <TableItemEmpty />;
 
         if (this.props.bank.length > 0) {
-            bank = this.props.bank.map((item: Bank, index: number) => (
+            bank = this.props.bank.map((item: BankList, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
@@ -159,7 +159,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    bank: Bank[],
+    bank: BankList[],
     paginate: Paginator,
     bankAlert: IAlert
 }

@@ -44,11 +44,13 @@ export const colorStatusFormat = (status: string) => {
     return color;
 }
 
-export const typeTransactionFormat = (status: string) => {
+export const typeTransactionFormat = (status?: string) => {
     let type = "complete"
 
-    if (["inprogress", "complete"].includes(status)) {
-        type = status
+    if (status) {
+        if (["inprogress", "complete"].includes(status)) {
+            type = status
+        }
     }
 
     return type;

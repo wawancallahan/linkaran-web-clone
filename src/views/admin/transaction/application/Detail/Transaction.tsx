@@ -14,12 +14,17 @@ import {
 import {
     Link
 } from 'react-router-dom';
+import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
 
 type Props = {
-    className?: string
+    className?: string,
+    application: ApplicationShowComplete
 }
 
 const Transaction = (props: Props) => {
+
+    const { application } = props;
+
     return (
         <div className={props.className}>
             <Card>
@@ -33,32 +38,32 @@ const Transaction = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Tarif</label></Col>
-                        <Col>Rp. 500.000</Col>
+                        <Col>Rp. {application.transaction ? application.transaction.cost : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Pembayaran Lain</label></Col>
-                        <Col>Rp. 300.000 <Badge color="info">Link Aja</Badge></Col>
+                        <Col></Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Promo / Potongan</label></Col>
-                        <Col>Rp. 200.000 <Badge color="info">Detail</Badge></Col>
+                        <Col></Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Total Transaksi</label></Col>
-                        <Col>Rp. 700.000</Col>
+                        <Col>Rp. {application.transaction ? application.transaction.totalCost : ''}</Col>
                     </Row>
                     <hr />
                     <Row className="mb-2">
                         <Col><label htmlFor="">Potongan Driver</label></Col>
-                        <Col>6%</Col>
+                        <Col></Col>
                     </Row>
                     <Row className="mb-2">
-                        <Col><label htmlFor="">Tis</label></Col>
-                        <Col>Rp. 500.000</Col>
+                        <Col><label htmlFor="">Tip</label></Col>
+                        <Col>Rp.</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Total Pendapatan Driver</label></Col>
-                        <Col>Rp. 2.000.000</Col>
+                        <Col>Rp.</Col>
                     </Row>
                 </CardBody>
             </Card>
