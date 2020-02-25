@@ -77,7 +77,7 @@ interface VoucherPromoList {
     type: VoucherType,
     service: Service[],
     ticketUsed?: number
-    quotaUsed?: number,
+    quotaUsed?: string,
     typeId?: number
 }
 
