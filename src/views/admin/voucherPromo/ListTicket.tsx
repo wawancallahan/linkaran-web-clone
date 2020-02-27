@@ -25,9 +25,9 @@ import { AppActions } from '../../../types';
 
 import Pagination from '../../../components/Pagination/Pagination'
 import { VoucherPromo } from '../../../types/admin/voucherPromo';
-import { Ticket, FormField, TicketCreate, TicketCreateResult } from '../../../types/admin/ticket';
+import { Ticket, FormField, TicketCreate, TicketCreateResult, TicketEdit, TicketEditResult } from '../../../types/admin/ticket';
 import { Paginator } from '../../../types/paginator';
-import { fetchTicketVoucherAction, createTicketAction } from '../../../actions/admin/ticket';
+import { fetchTicketVoucherAction, createTicketAction, deleteTicketAction, editTicketAction } from '../../../actions/admin/ticket';
 import Spinner from '../../../components/Loader/Spinner'
 import { parseDateTimeFormat } from '../../../helpers/utils';
 import queryString from 'query-string';
@@ -65,25 +65,31 @@ const TableItem = (props: {
     index: number,
     item: Ticket,
     key: number,
+    modalState: ModalState,
+    voucher: VoucherPromo | null,
+    editTicketAction: (ticket: TicketEdit, id: number) => Promise<ApiResponse<TicketEditResult>>,
+    setAlertMessage: (message: string, color: string) => void,
+    loadTicketVoucherList: () => void,
     setAlertOpen: (open: boolean) => void,
-    toggleEditModelTicket: (id: number) => void
+    toggleEditModelTicket: (id: number) => void,
+    deleteTicket: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.item.redeemCode}</td>
             <td>{parseDateTimeFormat(props.item.claimAt)}</td>
             <td>
-                <Button color="warning" size="sm" onClick={() => props.toggleEditModelTicket(props.item.id)}>
+                <Button color="warning" size="sm" onClick={() => props.toggleEditModelTicket(props.index)}>
                     <i className="fa fa-edit"></i>
                 </Button>
-                <Button color="danger" size="sm">
+                <Button color="danger" size="sm" onClick={() => props.deleteTicket(props.item.id)}>
                     <i className="fa fa-trash"></i>
                 </Button>
 
                 <Modal
                     className="modal-dialog-centered"
-                    isOpen={true}
-                    toggle={() => props.toggleEditModelTicket(props.item.id)}
+                    isOpen={props.modalState.visible}
+                    toggle={() => props.toggleEditModelTicket(props.index)}
                 >
                     <div className="modal-header">
                         <h5 className="modal-title" id="modal-ticket">
@@ -94,7 +100,7 @@ const TableItem = (props: {
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => props.toggleEditModelTicket(props.item.id)}
+                            onClick={() => props.toggleEditModelTicket(props.index)}
                             >
                             <span aria-hidden={true}>×</span>
                         </button>
@@ -105,6 +111,37 @@ const TableItem = (props: {
                                 }}
                                 onSubmit={(values, action) => {
                                     props.setAlertOpen(false)
+
+                                    if (props.voucher) {
+                                        const ticketForm: TicketEdit = {
+                                            redeemCode: values.redeemCode,
+                                            voucher: {
+                                                id: props.voucher.id
+                                            }
+                                        }
+    
+                                        props.editTicketAction(ticketForm, props.item.id)
+                                            .then( (response: ApiResponse<TicketEditResult>) => {
+                                                const data: ApiResponseSuccess<TicketEditResult> = response.response!;
+                                                
+                                                props.setAlertMessage('Data Berhasil Diedit', 'success');
+                                                props.setAlertOpen(true);
+                                                props.toggleEditModelTicket(props.index);
+                                                props.loadTicketVoucherList();
+                                            })
+                                            .catch( (error: ApiResponse<TicketEditResult>) => {
+                                                let message = "Gagal Mendapatkan Response";
+    
+                                                if (error.error) {
+                                                    message = error.error.metaData.message;
+                                                }
+                                            
+                                                props.setAlertMessage(message, 'danger');
+                                                props.setAlertOpen(true);
+                                                props.toggleEditModelTicket(props.index)
+                                                action.setSubmitting(false)
+                                            });
+                                    }
                                 }}
                                 validationSchema={createSchema}>
                             {(FormikProps => {
@@ -123,7 +160,7 @@ const TableItem = (props: {
                                                     id="input-code"
                                                     placeholder="Kode"
                                                     type="text"
-                                                    name="code"
+                                                    name="redeemCode"
                                                     maxLength={255}
                                                     value={FormikProps.values.redeemCode}
                                                     required
@@ -135,24 +172,29 @@ const TableItem = (props: {
                                                     {FormikProps.errors.redeemCode && FormikProps.touched.redeemCode ? FormikProps.errors.redeemCode : ''}
                                                 </div>
                                             </FormGroup>
+                                            <FormGroup>
+                                                <div className="text-right">
+                                                    <Button
+                                                        color="secondary"
+                                                        data-dismiss="modal"
+                                                        type="button"
+                                                        onClick={() => props.toggleEditModelTicket(props.index)}
+                                                    >
+                                                        Tutup
+                                                    </Button>
+                                                    <Button color="primary" type="button" onClick={() => {
+                                                        FormikProps.setSubmitting(true)
+                                                        FormikProps.submitForm();
+                                                    }} disabled={FormikProps.isSubmitting}>
+                                                        Edit
+                                                    </Button>
+                                                </div>
+                                            </FormGroup>
                                         </div>
                                     </FormReactStrap>
                                 );
                             })}
                         </Formik>
-                    </div>
-                    <div className="modal-footer">
-                        <Button
-                            color="secondary"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => props.toggleEditModelTicket(props.item.id)}
-                        >
-                            Tutup
-                        </Button>
-                        <Button color="primary" type="button">
-                            Edit
-                        </Button>
                     </div>
                 </Modal>
             </td>
@@ -195,6 +237,10 @@ class ListTicket extends Component<Props, State> {
     }
 
     componentDidMount() {
+        this.loadTicketVoucherList();
+    }
+
+    loadTicketVoucherList = () => {
         const queryStringValue = queryString.parse(this.props.location.search);
     
         const page = + (queryStringValue.page || 1);
@@ -208,11 +254,11 @@ class ListTicket extends Component<Props, State> {
         this.setState({
             loader: true
         }, () => {
-            this.props.fetchTicketVoucherAction(page, id).then(async () => {
+            this.props.fetchTicketVoucherAction(page, id).then(() => {
                 
                 const modalState: ModalState[] = []
 
-                this.props.ticketVoucherList.forEach((value: Ticket) => {
+                this.props.ticketVoucherList.forEach(async (value: Ticket) => {
                     modalState.push({
                         id: value.id,
                         redeemCode: value.redeemCode,
@@ -240,30 +286,20 @@ class ListTicket extends Component<Props, State> {
         })
     }
 
-    toggleEditModelTicket = (id: number) => {
-        this.setState((prevState: State) => {
+    toggleEditModelTicket = (index: number) => {
 
-            let modal_edit_visible = {
-                ...prevState.modal_edit_visible
-            };
-
-            if ( ! (id in modal_edit_visible))  {
-
-                const new_modal_visible: ModalToggleVisible = {
-                    [id]: true
-                }
-
-                modal_edit_visible = {
-                    ...modal_edit_visible,
-                    ...new_modal_visible
-                }
-            } else {
-                modal_edit_visible[id] = ! prevState.modal_edit_visible[id]
-            }
-
-            return {
-                modal_edit_visible: modal_edit_visible
-            }
+        const modalStateList: ModalState[] = {
+            ...this.state.modalState
+        };
+    
+        modalStateList[index].visible = ! modalStateList[index].visible;
+        
+        const newModalState: ModalState[] = {
+            ...modalStateList
+        }
+    
+        this.setState({
+            modalState: newModalState
         });
     }
 
@@ -280,6 +316,25 @@ class ListTicket extends Component<Props, State> {
         })
     }
 
+    deleteTicket = (id: number) => {
+        this.props.deleteTicketAction(id)
+            .then( (response: ApiResponse<Ticket>) => {
+                this.setAlertMessage('Data Berhasil Dihapus', 'success');
+                this.setAlertOpen(true);
+                this.loadTicketVoucherList();
+            })
+            .catch( (error: ApiResponse<Ticket>) => {
+                let message = "Gagal Mendapatkan Response";
+    
+                if (error.error) {
+                    message = error.error.metaData.message;
+                }
+            
+                this.setAlertMessage(message, 'danger');
+                this.setAlertOpen(true);
+            });
+    }
+
     render () {
 
         let ticketVoucherList: any = null
@@ -292,14 +347,24 @@ class ListTicket extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.ticketVoucherList.length > 0) {
-                ticketVoucherList = this.props.ticketVoucherList.map((item: Ticket, index: number) => (
-                    <TableItem key={index}
+                ticketVoucherList = this.props.ticketVoucherList.map((item: Ticket, index: number) => {
+                    const selectedModalState = this.state.modalState[index];
+
+                    return (
+                        <TableItem key={index}
                                item={item}
                                index={index}
+                               modalState={selectedModalState}
+                               voucher={this.props.data}
+                               editTicketAction={this.props.editTicketAction}
+                               loadTicketVoucherList={this.loadTicketVoucherList}
+                               setAlertMessage={this.setAlertMessage}
                                setAlertOpen={this.setAlertOpen}
+                               deleteTicket={this.deleteTicket}
                                toggleEditModelTicket={this.toggleEditModelTicket}
                                />
-                ));
+                    )
+                });
             } else {
                 ticketVoucherList = <TableItemEmpty />;
             }
@@ -386,80 +451,91 @@ class ListTicket extends Component<Props, State> {
                         <Formik initialValues={this.state.form}
                                 onSubmit={(values, action) => {
                                     this.setAlertOpen(false)
-                                    const ticketForm: TicketCreate = {
-                                        redeemCode: values.redeemCode,
-                                        voucher: {
-                                            id: Number.parseInt(this.state.voucherId)
-                                        }
-                                    }
 
-                                    this.props.createTicketAction(ticketForm)
-                                        .then( (response: ApiResponse<TicketCreateResult>) => {
-                                            const data: ApiResponseSuccess<TicketCreateResult> = response.response!;
-                                            
-                                            this.setAlertMessage('Data Berhasil Ditambah', 'success');
-                                            this.toggleAddModalTicket()
-                                        })
-                                        .catch( (error: ApiResponse<TicketCreateResult>) => {
-                                            this.setAlertOpen(true);
-                                            let message = "Gagal Mendapatkan Response";
-
-                                            if (error.error) {
-                                                message = error.error.metaData.message;
+                                    if (this.props.data) {
+                                        const ticketForm: TicketCreate = {
+                                            redeemCode: values.redeemCode,
+                                            voucher: {
+                                                id: this.props.data.id
                                             }
-                                        
-                                            this.setAlertMessage(message, 'danger');
-                                            this.toggleAddModalTicket()
-                                            action.setSubmitting(false)
-                                        });
+                                        }
+    
+                                        this.props.createTicketAction(ticketForm)
+                                            .then( (response: ApiResponse<TicketCreateResult>) => {
+                                                const data: ApiResponseSuccess<TicketCreateResult> = response.response!;
+                                                
+                                                this.setAlertMessage('Data Berhasil Ditambah', 'success');
+                                                this.setAlertOpen(true);
+                                                this.toggleAddModalTicket();
+                                                this.loadTicketVoucherList();
+                                            })
+                                            .catch( (error: ApiResponse<TicketCreateResult>) => {
+                                                let message = "Gagal Mendapatkan Response";
+    
+                                                if (error.error) {
+                                                    message = error.error.metaData.message;
+                                                }
+                                            
+                                                this.setAlertMessage(message, 'danger');
+                                                this.setAlertOpen(true);
+                                                this.toggleAddModalTicket()
+                                                action.setSubmitting(false)
+                                            });
+                                    } else {
+                                        this.setAlertMessage('Data Gagal Ditambah', 'danger');
+                                        this.setAlertOpen(true);
+                                        this.toggleAddModalTicket()
+                                        action.setSubmitting(false)
+                                    }
                                 }}
                                 validationSchema={createSchema}>
                             {(FormikProps => {
                                 return (
                                     <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                                        <div className="pl-lg-4">
-                                            <FormGroup>
-                                                <label
-                                                className="form-control-label"
-                                                htmlFor="input-code"
-                                                >
-                                                    Kode
-                                                </label>
-                                                <Input
-                                                    className="form-control-alternative"
-                                                    id="input-code"
-                                                    placeholder="Kode"
-                                                    type="text"
-                                                    name="code"
-                                                    maxLength={255}
-                                                    value={FormikProps.values.redeemCode}
-                                                    required
-                                                    onChange={FormikProps.handleChange}
-                                                    onBlur={FormikProps.handleBlur}
-                                                    invalid={ !!(FormikProps.touched.redeemCode && FormikProps.errors.redeemCode) }
-                                                />
-                                                <div>
-                                                    {FormikProps.errors.redeemCode && FormikProps.touched.redeemCode ? FormikProps.errors.redeemCode : ''}
-                                                </div>
-                                            </FormGroup>
+                                        <FormGroup>
+                                            <label
+                                            className="form-control-label"
+                                            htmlFor="input-code"
+                                            >
+                                                Kode
+                                            </label>
+                                            <Input
+                                                className="form-control-alternative"
+                                                id="input-code"
+                                                placeholder="Kode"
+                                                type="text"
+                                                name="redeemCode"
+                                                maxLength={255}
+                                                value={FormikProps.values.redeemCode}
+                                                required
+                                                onChange={FormikProps.handleChange}
+                                                onBlur={FormikProps.handleBlur}
+                                                invalid={ !!(FormikProps.touched.redeemCode && FormikProps.errors.redeemCode) }
+                                            />
+                                            <div>
+                                                {FormikProps.errors.redeemCode && FormikProps.touched.redeemCode ? FormikProps.errors.redeemCode : ''}
+                                            </div>
+                                        </FormGroup>
+                                        <div className="text-right">
+                                            <Button
+                                                color="secondary"
+                                                data-dismiss="modal"
+                                                type="button"
+                                                onClick={() => this.toggleAddModalTicket()}
+                                            >
+                                                Tutup
+                                            </Button>
+                                            <Button color="primary" type="button" onClick={() => {
+                                                FormikProps.setSubmitting(true)
+                                                FormikProps.submitForm();
+                                            }} disabled={FormikProps.isSubmitting}>
+                                                Tambah
+                                            </Button>
                                         </div>
                                     </FormReactStrap>
                                 );
                             })}
                         </Formik>
-                    </div>
-                    <div className="modal-footer">
-                        <Button
-                            color="secondary"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleAddModalTicket()}
-                        >
-                            Tutup
-                        </Button>
-                        <Button color="primary" type="button">
-                            Tambah
-                        </Button>
                     </div>
                 </Modal>
             </>
@@ -481,13 +557,17 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 
 interface LinkDispatchToProps {
     fetchTicketVoucherAction: (page: number, id: number) => Promise<Boolean>,
-    createTicketAction: (ticket: TicketCreate) => Promise<ApiResponse<TicketCreateResult>>
+    deleteTicketAction: (id: number) => Promise<ApiResponse<Ticket>>,
+    createTicketAction: (ticket: TicketCreate) => Promise<ApiResponse<TicketCreateResult>>,
+    editTicketAction: (ticket: TicketEdit, id: number) => Promise<ApiResponse<TicketEditResult>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListTicketProps): LinkDispatchToProps => {
     return {
         fetchTicketVoucherAction: (page: number, id: number) => dispatch(fetchTicketVoucherAction(page, id)),
-        createTicketAction: (ticket: TicketCreate) => dispatch(createTicketAction(ticket))
+        deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
+        createTicketAction: (ticket: TicketCreate) => dispatch(createTicketAction(ticket)),
+        editTicketAction: (ticket: TicketEdit, id: number) => dispatch(editTicketAction(ticket, id))
     }
 }
 
