@@ -37,6 +37,8 @@ import {
   import { authLogin, authValidate } from "../../actions/auth";
 import { Role } from "../../types/admin/role";
 
+import Select from 'react-select'
+
 import AuthNavbar from "../../components/Navbars/AuthNavbar";
 import AuthFooter from "../../components/Footers/AuthFooter";
 
@@ -48,17 +50,32 @@ type Props = LoginProps & LinkDispatchToProps & {
     
 };
 
+interface OptionType {
+    value: string,
+    label: string
+}
+
+type OptionsType<OptionType> = ReadonlyArray<OptionType>;
+type ValueType<OptionType> = OptionType | OptionsType<OptionType> | null | undefined;
+
 type State = {
     isEmailSubmited: boolean,
     form: {
         email: string;
         token: string;
         pin: string;
+        role: OptionType;
     },
     alert_visible: boolean,
     alert_message: string,
     isSubmitting: boolean
 }
+
+const roleOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'super admin', label: 'Super Admin' },
+    { value: 'financial manager', label: 'Financial Manager' }
+]
 
 class Login extends React.Component<Props, State> {
 
@@ -67,7 +84,11 @@ class Login extends React.Component<Props, State> {
         form: {
           email: "",
           token: "",
-          pin: ""
+          pin: "",
+          role: {
+            value: 'admin', 
+            label: 'Admin'
+          },
         },
         alert_visible: false,
         alert_message: '',
@@ -88,7 +109,11 @@ class Login extends React.Component<Props, State> {
             form: {
                 email: "",
                 token: "",
-                pin: ""
+                pin: "",
+                role: {
+                    value: 'admin', 
+                    label: 'Admin'
+                }
             }
         });
     }
@@ -161,7 +186,7 @@ class Login extends React.Component<Props, State> {
                         identity: this.state.form.email,
                         type: "email",
                         tokenFCM: "",
-                        role: "admin"
+                        role: this.state.form.role.value
                     };
             
                     this.props
@@ -293,6 +318,40 @@ class Login extends React.Component<Props, State> {
                                                 id="email"
                                                 />
                                             </InputGroup>
+                                        </FormGroup>
+
+                                        <FormGroup className="mb-3">
+                                            <Select options={roleOptions}
+                                                defaultValue={roleOptions[0]}
+                                                isDisabled={this.state.isEmailSubmited}
+                                                isClearable={false}
+                                                isRtl={false}
+                                                isSearchable={false}
+                                                name="role"
+                                                onChange={(value: ValueType<OptionType>) => {
+                                                    let optionTypes: OptionType;
+
+                                                    if (value == null || value == undefined) {
+                                                        optionTypes = {
+                                                            value: "",
+                                                            label: ""
+                                                        }
+                                                    } else if (Array.isArray(value)) {
+                                                        optionTypes = value[0];
+                                                    } else {
+                                                        optionTypes = value as OptionType;
+                                                    }
+
+                                                    this.setState(prevState => {
+                                                        return {
+                                                            form: {
+                                                                ...prevState.form,
+                                                                role: optionTypes
+                                                            }
+                                                        }
+                                                    })
+                                                }}
+                                                 />
                                         </FormGroup>
 
                                         {this.state.isEmailSubmited ? (

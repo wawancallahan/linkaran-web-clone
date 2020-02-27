@@ -21,13 +21,12 @@
     "downlevelIteration": true,
     "outDir": "./dist",
     "typeRoots" : [
-      "node_modules/@types/",
-      "types/"
+      "node_modules/@types/"
     ],
     "noImplicitAny": true,
   },
   "include": [
-    "src", "types/react-modal-image"
+    "src"
   ],
   "exclude": [
     "src/setupProxy.js",
