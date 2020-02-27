@@ -303,22 +303,6 @@ class Login extends React.Component<Props, State> {
                                             e.stopPropagation();
                                             this.formSubmit();
                                         }}>
-                                        <FormGroup className="mb-3">
-                                            <InputGroup className="input-group-alternative">
-                                                <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>
-                                                    <i className="ni ni-email-83" />
-                                                </InputGroupText>
-                                                </InputGroupAddon>
-                                                <Input
-                                                placeholder="Email"
-                                                disabled={this.state.isEmailSubmited}
-                                                type="text"
-                                                onChange={this.inputHandlerChange}
-                                                id="email"
-                                                />
-                                            </InputGroup>
-                                        </FormGroup>
 
                                         <FormGroup className="mb-3">
                                             <Select options={roleOptions}
@@ -351,7 +335,24 @@ class Login extends React.Component<Props, State> {
                                                         }
                                                     })
                                                 }}
-                                                 />
+                                            />
+                                        </FormGroup>
+
+                                        <FormGroup className="mb-3">
+                                            <InputGroup className="input-group-alternative">
+                                                <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="ni ni-email-83" />
+                                                </InputGroupText>
+                                                </InputGroupAddon>
+                                                <Input
+                                                placeholder="Email"
+                                                disabled={this.state.isEmailSubmited}
+                                                type="text"
+                                                onChange={this.inputHandlerChange}
+                                                id="email"
+                                                />
+                                            </InputGroup>
                                         </FormGroup>
 
                                         {this.state.isEmailSubmited ? (
