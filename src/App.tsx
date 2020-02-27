@@ -13,11 +13,11 @@ type AppProps = RouteComponentProps
 type Props = AppProps;
 class App extends Component<Props> {
     
-    componentDidMount() {
-        if ( ! localStorage.getItem('accessToken')) {
-            this.props.history.push('/login');
-        }
-    }
+    // componentDidMount() {
+    //     if ( ! localStorage.getItem('accessToken')) {
+    //         this.props.history.push('/login');
+    //     }
+    // }
 
     getRoleRoutes = (routes: RouteInterface[]) => {
         const roles = rolesToArray();

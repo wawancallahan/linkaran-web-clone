@@ -11,7 +11,11 @@ import {
     Button,
     Table,
     Alert,
-    Badge 
+    Badge,
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
 } from 'reactstrap';
 import {
     Link,
@@ -51,7 +55,7 @@ type ListProps = RouteComponentProps<{
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    dropdownVisible: boolean
 }
 
 const TableItem = (props: {
@@ -92,19 +96,33 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        dropdownVisible: false
     }
 
     componentDidMount() {
+        this.loadApplicationList();
+    }
+
+    loadApplicationList = (typeParams?: string) => {
         const queryStringValue = queryString.parse(this.props.location.search);
     
         const page = + (queryStringValue.page || 1);
 
+        let type = this.typeTransaction();
+
+        if (typeParams) {
+            type = typeParams
+        }
+
+        this.fetchApplicationList(page, type);
+    }
+
+    typeTransaction = () => {
         const typeParams = this.props.match.params.type;
 
         const type = typeTransactionFormat(typeParams)
 
-        this.fetchApplicationList(page, type);
+        return type;
     }
 
     componentWillUnmount() {
@@ -113,6 +131,19 @@ class List extends Component<Props, State> {
 
     fetchApplicationList = (page: number, type: string) => {
         this.props.fetchApplicationAction(page, type);
+    }
+
+    goToTransactionRoute = (type: string) => {
+        this.props.history.push(`/admin/transaction/application/${type}`)
+        this.loadApplicationList(type);
+    }
+
+    dropdownToggle = () => {
+        this.setState(prevState => {
+            return {
+                dropdownVisible: ! prevState.dropdownVisible
+            }
+        })
     }
 
     render() {
@@ -151,10 +182,30 @@ class List extends Component<Props, State> {
                                             {CAlert}
                                         </div>
                                     </Row>
-                                    <Row className="align-items-center">
+                                    <Row className="align-items-center mb-3">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Transaksi Link Pay</h3>
+                                            <h3 className="mb-0">Daftar Transaksi Aplikasi</h3>
                                         </div>
+                                    </Row>
+                                    <Row>
+                                        <Dropdown isOpen={this.state.dropdownVisible} toggle={this.dropdownToggle}>
+                                            <DropdownToggle caret>
+                                                {this.typeTransaction()}
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                <DropdownItem onClick={() => {
+                                                    this.goToTransactionRoute('complete')
+                                                }}>
+                                                    Complete
+                                                </DropdownItem>
+
+                                                <DropdownItem onClick={() => {
+                                                    this.goToTransactionRoute('inprogress')
+                                                }}>
+                                                    In Progress
+                                                </DropdownItem>
+                                            </DropdownMenu>
+                                        </Dropdown>
                                     </Row>
                                 </CardHeader>
 
