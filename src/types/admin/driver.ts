@@ -253,7 +253,12 @@ export type DriverDetail = {
         }
     },
     serviceCount: ServiceCount[],
-    isMeried: boolean
+    isMeried: boolean,
+    country?: Country,
+    province?: Province,
+    district?: District,
+    subDistrict?: SubDistrict,
+    village?: Village
 }
 
 interface DriverResult {
