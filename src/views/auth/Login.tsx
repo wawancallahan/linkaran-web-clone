@@ -157,9 +157,11 @@ class Login extends React.Component<Props, State> {
                                 localStorage.setItem("phoneNumber", result.phoneNumber);
                                 localStorage.setItem("email", result.email);
 
-                                const roles = JSON.stringify(Object.assign({}, result.roles.map((value: Role) => value.title)));
+                                if (result.roles) {
+                                    const roles = JSON.stringify(Object.assign({}, result.roles.map((value: Role) => value.title)));
 
-                                localStorage.setItem("roles", roles)
+                                    localStorage.setItem("roles", roles)
+                                }
                             }
     
                             this.goDashboard("Admin");
