@@ -41,6 +41,7 @@ import Select from 'react-select'
 
 import AuthNavbar from "../../components/Navbars/AuthNavbar";
 import AuthFooter from "../../components/Footers/AuthFooter";
+import { accessToken } from '../../services/auth'
 
 type LoginProps = RouteComponentProps & {
 
@@ -96,7 +97,7 @@ class Login extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('accessToken')) {
+        if (accessToken()) {
             this.props.history.push('/admin');
         }
 

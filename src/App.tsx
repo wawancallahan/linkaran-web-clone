@@ -6,7 +6,7 @@ import AdminLayout from './layouts/Admin'
 
 import routes, { Route as RouteInterface } from './routes'
 import authRoutes from './views/auth/Index'
-import { rolesToArray } from './services/auth';
+import { rolesToArray, accessToken } from './services/auth';
 
 type AppProps = RouteComponentProps
 
@@ -28,7 +28,7 @@ class App extends Component<Props> {
             <Switch>
                 {this.getAuthRoutes(authRoutes)}
                 <Route path="/admin" render={() => {
-                    if ( ! localStorage.getItem('accessToken')) {
+                    if ( ! accessToken()) {
                         return <Redirect to="/login" />
                     } else {
                         return (
