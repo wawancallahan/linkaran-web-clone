@@ -168,13 +168,13 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
 
-        restaurant.operatingTime.forEach(async (value: OperatingTime, index: number) => {
-            data.set(`operatingTime.${index}.openTime`, value.openTime);
-            data.set(`operatingTime.${index}.closeTime`, value.closeTime);
-            data.set(`operatingTime.${index}.day`, value.day.toString());
-            data.set(`operatingTime.${index}.isClosed`, booleanToString(value.isClosed));
-        });
-
+        for (var i = 0; i < restaurant.operatingTime.length; i++) {
+            data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);
+            data.set(`operatingTime.${i}.closeTime`, restaurant.operatingTime[i].closeTime);
+            data.set(`operatingTime.${i}.day`, restaurant.operatingTime[i].day.toString());
+            data.set(`operatingTime.${i}.isClosed`, booleanToString(restaurant.operatingTime[i].isClosed));   
+        }
+        
         return await axiosService.post(process.env.REACT_APP_API_URL + '/web/restaurant', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
@@ -300,12 +300,12 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
 
-        restaurant.operatingTime.forEach(async (value: OperatingTime, index: number) => {
-            data.set(`operatingTime.${index}.openTime`, value.openTime);
-            data.set(`operatingTime.${index}.closeTime`, value.closeTime);
-            data.set(`operatingTime.${index}.day`, value.day.toString());
-            data.set(`operatingTime.${index}.isClosed`, booleanToString(value.isClosed));
-        });
+        for (var i = 0; i < restaurant.operatingTime.length; i++) {
+            data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);
+            data.set(`operatingTime.${i}.closeTime`, restaurant.operatingTime[i].closeTime);
+            data.set(`operatingTime.${i}.day`, restaurant.operatingTime[i].day.toString());
+            data.set(`operatingTime.${i}.isClosed`, booleanToString(restaurant.operatingTime[i].isClosed));   
+        }
 
         return await axiosService.patch(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`, data, {
                 headers: {
