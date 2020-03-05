@@ -121,11 +121,13 @@ class Edit extends Component<Props, State> {
 
     choiceOfActiveWorkHours = (choiceOfActiveWorkHoursText: string) : string => {
 
-        if ( ! choiceOfActiveWorkHoursText) {
-            choiceOfActiveWorkHoursText = "00-00"
+        let filterChoiceOfActiveWorkHoursText = choiceOfActiveWorkHoursText.replace(" ", "");
+
+        if ( ! filterChoiceOfActiveWorkHoursText || filterChoiceOfActiveWorkHoursText == "") {
+            filterChoiceOfActiveWorkHoursText = "00-00"
         }
 
-        const [startTime, endTime] = choiceOfActiveWorkHoursText.split('-');
+        const [startTime, endTime = ""] = filterChoiceOfActiveWorkHoursText.split('-');
         
         if (startTime == '00' && endTime == '00') {
             return '0';
@@ -234,11 +236,15 @@ class Edit extends Component<Props, State> {
                     if (choiceOfActiveWorkHours == '4') {
                         const [startTime, endTime] = data.choiceOfActiveWorkHours.split('-');
 
-                        custom_interval_jam_kerja_start = new Date()
-                        custom_interval_jam_kerja_start.setHours(Number.parseInt(startTime))
+                        if (typeof(startTime) === 'number') {
+                            custom_interval_jam_kerja_start = new Date()
+                            custom_interval_jam_kerja_start.setHours(Number.parseInt(startTime))
+                        }
 
-                        custom_interval_jam_kerja_end = new Date()
-                        custom_interval_jam_kerja_end.setHours(Number.parseInt(endTime))
+                        if (typeof(endTime) === 'number') {
+                            custom_interval_jam_kerja_end = new Date()
+                            custom_interval_jam_kerja_end.setHours(Number.parseInt(endTime))
+                        }
                     }
 
                     form.custom_interval_jam_kerja_start = custom_interval_jam_kerja_start
