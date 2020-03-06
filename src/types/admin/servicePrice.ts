@@ -26,7 +26,8 @@ export type FormField = {
     vehicleType: {
         value: number,
         label: string
-    }
+    },
+    driverPaymentDeductions: string
 }
 
 interface ServicePriceField {
@@ -42,6 +43,7 @@ interface ServicePriceField {
     vehicleType: {
         id: number
     },
+    driverPaymentDeductions: number
 }
 
 interface ServicePriceList {
@@ -55,7 +57,8 @@ interface ServicePriceList {
         alternativeName: string
     },
     service: Service,
-    vehicleType: VehicleType
+    vehicleType: VehicleType,
+    driverPaymentDeductions?: number
 }
 
 interface ServicePriceResult {

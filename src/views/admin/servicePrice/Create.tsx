@@ -57,7 +57,8 @@ class Create extends Component<Props, State> {
             vehicleType: {
                 value: 0,
                 label: ''
-            }
+            },
+            driverPaymentDeductions: ""
         },
         alert_visible: false,
         alert_message: ''

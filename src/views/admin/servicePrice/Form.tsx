@@ -27,12 +27,24 @@ import { fetchListPriceAction } from '../../../actions/admin/price';
 import { fetchListServiceAction } from '../../../actions/admin/service';
 import { Price } from '../../../types/admin/price';
 import { Service } from "../../../types/admin/service";
+import { fetchListDistrictAction } from '../../../actions/admin/region/district';
+import { DistrictList } from '../../../types/admin/region/district';
 
 const createSchema = Yup.object().shape({
     price: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan harga wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan harga wajib diisi').required("Bidang pilihan harga wajib diisi")
     }),
+    driverPaymentDeductions: Yup.string()
+        .matches(/^[0-9]*$/, "Wajib Diisi dengan angka")
+        .test('len', 'Bidang isian pengurangan pembayaran driver tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+            if (val) {
+                return val.length <= 255;
+            }
+
+            return true;
+        })
+        .required('Bidang isian pengurangan pembayaran driver wajib diisi'),
     district: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan wilayah wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan wilayah wajib diisi').required("Bidang pilihan wilayah wajib diisi")
@@ -181,10 +193,10 @@ class Form extends Component<Props> {
     loadRegionDistrictHandler = (search: string, loadedOption: {}, options: {
         page: number
     }) => {
-        return this.props.fetchListRegionDistrictAction(search, options.page)
-            .then((response: ApiResponseList<RegionDistrict>) => {
+        return this.props.fetchListDistrictAction(search, options.page)
+            .then((response: ApiResponseList<DistrictList>) => {
 
-                const data: ApiResponseSuccessList<RegionDistrict> = response.response!;
+                const data: ApiResponseSuccessList<DistrictList> = response.response!;
 
                 let result: {
                     value: number,
@@ -200,7 +212,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: RegionDistrict) => {
+                    result = data.result.map((item: DistrictList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -240,6 +252,7 @@ class Form extends Component<Props> {
                         vehicleType: {
                             id: values.vehicleType.value
                         },
+                        driverPaymentDeductions: Number.parseInt(values.driverPaymentDeductions)
                     }
 
                     this.props.createServicePriceAction(servicePrice)
@@ -286,6 +299,30 @@ class Form extends Component<Props> {
                                         />
                                     <div>
                                         { FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price.value : '' }
+                                    </div>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label
+                                    className="form-control-label"
+                                    htmlFor="input-driverPaymentDeductions"
+                                    >
+                                        Pengurangan Pembayaran driver
+                                    </label>
+                                    <Input
+                                    className="form-control-alternative"
+                                    id="input-driverPaymentDeductions"
+                                    placeholder="Pengurangan Pembayaran driver"
+                                    type="text"
+                                    name="driverPaymentDeductions"
+                                    maxLength={255}
+                                    value={FormikProps.values.driverPaymentDeductions}
+                                    required
+                                    onChange={FormikProps.handleChange}
+                                    onBlur={FormikProps.handleBlur}
+                                    invalid={ !!(FormikProps.touched.driverPaymentDeductions && FormikProps.errors.driverPaymentDeductions) }
+                                    />
+                                    <div>
+                                        {FormikProps.errors.driverPaymentDeductions && FormikProps.touched.driverPaymentDeductions ? FormikProps.errors.driverPaymentDeductions : ''}
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
@@ -365,7 +402,7 @@ type LinkDispatchToProps = {
     setAlertServicePriceShowAction: (message: string, color: string) => void,
     fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
     fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>,
-    fetchListRegionDistrictAction: (search: string, page: number) => Promise<ApiResponseList<RegionDistrict>>,
+    fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
 }
 
@@ -375,7 +412,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
         fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
         fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
-        fetchListRegionDistrictAction: (search: string, page: number) => dispatch(fetchListRegionDistrictAction(search, page)),
+        fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
         fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
     }
 }

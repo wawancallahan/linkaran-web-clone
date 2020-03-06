@@ -64,7 +64,8 @@ class Edit extends Component<Props, State> {
             vehicleType: {
                 value: 0,
                 label: ''
-            }
+            },
+            driverPaymentDeductions: ""
         },
         isLoaded: false,
         loadedMessage: '',
@@ -101,6 +102,10 @@ class Edit extends Component<Props, State> {
                     form.vehicleType = {
                         value: data.vehicleType.id,
                         label: data.vehicleType.name || ''
+                    }
+
+                    if (data.driverPaymentDeductions) {
+                        form.driverPaymentDeductions = data.driverPaymentDeductions.toString()
                     }
 
                     this.setState({
