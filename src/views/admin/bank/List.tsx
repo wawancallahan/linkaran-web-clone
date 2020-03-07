@@ -32,9 +32,10 @@ import queryString from 'query-string';
 import {
     fetchBankAction,
     setAlertBankHideAction,
-    setAlertBankShowAction
+    setAlertBankShowAction,
+    deleteBankAction
 } from '../../../actions/admin/bank';
-import { BankList } from '../../../types/admin/bank';
+import { BankList, Bank } from '../../../types/admin/bank';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -52,11 +53,24 @@ type State = {
 const TableItem = (props: {
     index: number,
     item: BankList,
-    key: number
+    key: number,
+    deleteBank: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
+            <td>{props.item.nama}</td>
+            <td>{props.item.bankName}</td>
+            <td>{props.item.accountName}</td>
+            <td>{props.item.accountNumber}</td>
+            <td>
+                <Link to={`/admin/bank/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i> Edit
+                </Link>
+                <Button color="danger" size="sm" onClick={() => props.deleteBank(props.item.id)}>
+                    <i className="fa fa-trash"></i> Hapus
+                </Button>
+            </td>
         </tr>
     )
 }
@@ -89,6 +103,18 @@ class List extends Component<Props, State> {
         this.props.fetchBankAction(page);
     }
 
+    deleteBank = (id: number) => {
+        this.props.deleteBankAction(id)
+            .then( (response: ApiResponse<Bank>) => {
+                this.fetchBankList(1);
+
+                this.props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
+            })
+            .catch( (response: ApiResponse<Bank>) => {
+                this.props.setAlertBankShowAction(response.error!.metaData.message, 'danger');
+            });
+    }
+
     render() {
 
         let bank: any = <TableItemEmpty />;
@@ -98,6 +124,7 @@ class List extends Component<Props, State> {
                 <TableItem key={index}
                            item={item}
                            index={index}
+                           deleteBank={this.deleteBank}
                            />
             ));
         }
@@ -126,6 +153,16 @@ class List extends Component<Props, State> {
                                         <div className="col">
                                             <h3 className="mb-0">Daftar Bank</h3>
                                         </div>
+                                        <div className="col text-right">
+                                            <Link to="/admin/bank/create">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Bank
+                                                </Button>
+                                            </Link>
+                                        </div>
                                     </Row>
                                 </CardHeader>
 
@@ -134,8 +171,9 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Atas Nama</th>
-                                            <th>Nomor</th>
+                                            <th>Nama Bank</th>
+                                            <th>Nama Akun</th>
+                                            <th>Nomor Akun</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -175,14 +213,16 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 interface LinkDispatchToProps {
     fetchBankAction: (page: number) => void,
     setAlertBankHideAction: () => void,
-    setAlertBankShowAction: (message: string, color: string) => void
+    setAlertBankShowAction: (message: string, color: string) => void,
+    deleteBankAction: (id: number) => Promise<ApiResponse<Bank>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchBankAction: (page: number) => dispatch(fetchBankAction(page)),
         setAlertBankHideAction: () => dispatch(setAlertBankHideAction()),
-        setAlertBankShowAction: (message: string, color: string) => dispatch(setAlertBankShowAction(message, color))
+        setAlertBankShowAction: (message: string, color: string) => dispatch(setAlertBankShowAction(message, color)),
+        deleteBankAction: (id: number) => dispatch(deleteBankAction(id))
     }
 }
 
