@@ -22,6 +22,8 @@ import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/vi
 import { CustomerActionTypes as AdminCustomerActionTypes } from './admin/customer'
 import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
 
+import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
+
 export type AppActions = 
     | AdminUserActionTypes
     | AdminFoodActionTypes
@@ -46,3 +48,4 @@ export type AppActions =
     | AdminVillageActionTypes
     | AdminCustomerActionTypes
     | AdminBankActionTypes
+    | FinancialManagerTopUpActionTypes

@@ -180,6 +180,12 @@ const routeList: (SidebarRoute | null)[] = [
           }
       ]
   },
+  {
+    path: "/admin/topup",
+    name: "Top Up",
+    icon: "ni ni-credit-card text-danger",
+    roles: ["financial manager"]
+  }
 ];
 
 type AdminProps = RouteComponentProps
@@ -191,7 +197,6 @@ class Admin extends Component<Props> {
 
   componentDidMount() {
     document.body.classList.remove("bg-default");
-    console.log(rolesToArray(), 'Component Did Mount');
   }
 
   getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {

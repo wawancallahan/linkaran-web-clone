@@ -18,6 +18,10 @@ interface BankField {
 
 export interface Bank {
     id: number,
+    nama: string,
+    bankName: number,
+    accountName: string,
+    accountNumber: string
 }
 
 export type BankList = Bank

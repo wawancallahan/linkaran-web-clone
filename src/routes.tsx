@@ -19,6 +19,8 @@ import AdminRegionRoutes from './views/admin/region/Index'
 import AdminCustomerRoutes from './views/admin/customer/Index'
 import AdminBankRoutes from './views/admin/bank/Index'
 
+import FinancialManagerTopUpRoutes from './views/financialManager/topup/Index'
+
 export interface Route {
     exact: boolean,
     path: string,
@@ -46,7 +48,8 @@ const routes: Route[] = [
     ...AdminServiceRoutes,
     ...AdminRegionRoutes,
     ...AdminCustomerRoutes,
-    ...AdminBankRoutes
+    ...AdminBankRoutes,
+    ...FinancialManagerTopUpRoutes
 ]
 
 export default routes;
