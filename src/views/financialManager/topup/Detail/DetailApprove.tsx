@@ -14,10 +14,11 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../types'
 import { approveTopUpAction } from '../../../../actions/financialManager/topup'
 import { ApiResponse } from '../../../../types/api'
+import { loadStateInterface } from '../Detail'
 
 type DetailApproveProps = RouteComponentProps & {
     data: TopUpShow | null,
-    reLoadTopUp: () => void,
+    reLoadTopUp: (state?: loadStateInterface) => void,
     setAlertMessage: (message: string, color: string) => void,
     setAlertOpen: (open: boolean) => void
 }
@@ -41,7 +42,11 @@ class DetailApprove extends Component<Props, State> {
             if (this.props.data) {
                 this.props.approveTopUpAction(this.props.data.id)
                     .then((response: ApiResponse<TopUpApprove>) => {
-                        this.props.reLoadTopUp()
+                        this.props.reLoadTopUp({
+                            alert_visible: true,
+                            alert_message: 'Berhasil menyetujui topup',
+                            alert_color: 'success'
+                        })
                     })
                     .catch((error: ApiResponse<TopUpApprove>) => {
                         this.setState({

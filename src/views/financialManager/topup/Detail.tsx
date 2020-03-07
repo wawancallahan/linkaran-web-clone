@@ -47,6 +47,12 @@ type State = {
     alert_color: string
 }
 
+export type loadStateInterface = {
+    alert_visible: boolean,
+    alert_message: string,
+    alert_color: string
+}
+
 class Detail extends Component<Props, State> {
 
     state = {
@@ -62,7 +68,7 @@ class Detail extends Component<Props, State> {
         this.loadTopUp()
     }
 
-    loadTopUp = () => {
+    loadTopUp = (state?: loadStateInterface) => {
         const id = +this.props.match.params.id;
         
         this.props.findTopUpAction(id)
@@ -70,9 +76,12 @@ class Detail extends Component<Props, State> {
                     if (response.response) {
                         const data: TopUpShow = response.response.result;
 
+                        const newState = state ? state : {}
+
                         this.setState({
                             data: data,
-                            isLoaded: true
+                            isLoaded: true,
+                            ...newState
                         });
                     } else {
                         this.setState({
@@ -94,7 +103,7 @@ class Detail extends Component<Props, State> {
                 })
     }
 
-    reLoadTopUp = () => {
+    reLoadTopUp = (state?: loadStateInterface) => {
         this.setState({
             data: null,
             isLoaded: false,
@@ -103,7 +112,7 @@ class Detail extends Component<Props, State> {
             alert_message: '',
             alert_color: ''
         }, () => {
-            this.loadTopUp()
+            this.loadTopUp(state)
         })
     }
 
@@ -122,7 +131,7 @@ class Detail extends Component<Props, State> {
 
     render() {
         const showAlertError = (
-            <Alert color="danger" isOpen={this.state.alert_visible} toggle={() => this.setAlertOpen(false)} fade={false}>
+            <Alert color={this.state.alert_color} isOpen={this.state.alert_visible} toggle={() => this.setAlertOpen(false)} fade={false}>
                 <ul>
                     <li>{this.state.alert_message}</li>
                 </ul>
