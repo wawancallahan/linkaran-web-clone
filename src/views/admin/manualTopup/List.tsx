@@ -30,11 +30,12 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchTopUpAction,
-    setAlertTopUpHideAction,
-    setAlertTopUpShowAction
-} from '../../../actions/financialManager/topup';
-import { TopUpList } from '../../../types/financialManager/topup';
+    fetchManualTopUpAction,
+    setAlertManualTopUpHideAction,
+    setAlertManualTopUpShowAction,
+    deleteManualTopUpAction
+} from '../../../actions/admin/manualTopup';
+import { ManualTopUpList, ManualTopUp } from '../../../types/admin/manualTopup';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -51,8 +52,9 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: TopUpList,
-    key: number
+    item: ManualTopUpList,
+    key: number,
+    deleteManualTopUp: (id: number) => void
 }) => {
     return (
         <tr>
@@ -66,9 +68,12 @@ const TableItem = (props: {
             <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
             <td>
-                <Link to={`/admin/topup/${props.item.id}`} className="btn btn-info btn-sm">
-                    <i className="fa fa-eye"></i> Detail
+                <Link to={`/admin/manual-topup/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                    <i className="fa fa-edit"></i> Edit
                 </Link>
+                <Button color="danger" size="sm" onClick={() => props.deleteManualTopUp(props.item.id)}>
+                    <i className="fa fa-trash"></i> Hapus
+                </Button>
             </td>
         </tr>
     )
@@ -91,33 +96,46 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchTopUpList(page);
+        this.fetchManualTopUpList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertTopUpHideAction();
+        this.props.setAlertManualTopUpHideAction();
     }
 
-    fetchTopUpList = (page: number) => {
-        this.props.fetchTopUpAction(page);
+    fetchManualTopUpList = (page: number) => {
+        this.props.fetchManualTopUpAction(page);
+    }
+
+    deleteManualTopUp = (id: number) => {
+        this.props.deleteManualTopUpAction(id)
+            .then( (response: ApiResponse<ManualTopUp>) => {
+                this.fetchManualTopUpList(1);
+
+                this.props.setAlertManualTopUpShowAction("Data Berhasil Dihapus", 'success');
+            })
+            .catch( (response: ApiResponse<ManualTopUp>) => {
+                this.props.setAlertManualTopUpShowAction(response.error!.metaData.message, 'danger');
+            });
     }
 
     render() {
 
-        let topup: any = <TableItemEmpty />;
+        let manualTopup: any = <TableItemEmpty />;
 
-        if (this.props.topup.length > 0) {
-            topup = this.props.topup.map((item: TopUpList, index: number) => (
+        if (this.props.manualTopup.length > 0) {
+            manualTopup = this.props.manualTopup.map((item: ManualTopUpList, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
+                           deleteManualTopUp={this.deleteManualTopUp}
                            />
             ));
         }
 
         const CAlert = (
-            <Alert color={this.props.topupAlert.color} isOpen={this.props.topupAlert.visible} toggle={() => this.props.setAlertTopUpHideAction()} fade={false}>
-                <div>{this.props.topupAlert.message}</div>
+            <Alert color={this.props.manualTopupAlert.color} isOpen={this.props.manualTopupAlert.visible} toggle={() => this.props.setAlertManualTopUpHideAction()} fade={false}>
+                <div>{this.props.manualTopupAlert.message}</div>
             </Alert>
         );
 
@@ -137,7 +155,17 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar TopUp</h3>
+                                            <h3 className="mb-0">Daftar Manual Top Up</h3>
+                                        </div>
+                                        <div className="col text-right">
+                                            <Link to="/admin/manual-topup/create">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Manual Top Up
+                                                </Button>
+                                            </Link>
                                         </div>
                                     </Row>
                                 </CardHeader>
@@ -158,7 +186,7 @@ class List extends Component<Props, State> {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {topup}
+                                        {manualTopup}
                                     </tbody>
                                 </Table>
                                 
@@ -166,7 +194,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchTopUpAction} />
+                                                    itemClicked={this.props.fetchManualTopUpAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -178,35 +206,37 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    topup: TopUpList[],
+    manualTopup: ManualTopUpList[],
     paginate: Paginator,
-    topupAlert: IAlert
+    manualTopupAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        topup: state.topup.list,
-        paginate: state.topup.paginate,
-        topupAlert: state.topup.alert
+        manualTopup: state.manualTopup.list,
+        paginate: state.manualTopup.paginate,
+        manualTopupAlert: state.manualTopup.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchTopUpAction: (page: number) => void,
-    setAlertTopUpHideAction: () => void,
-    setAlertTopUpShowAction: (message: string, color: string) => void
+    fetchManualTopUpAction: (page: number) => void,
+    setAlertManualTopUpHideAction: () => void,
+    setAlertManualTopUpShowAction: (message: string, color: string) => void,
+    deleteManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUp>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchTopUpAction: (page: number) => dispatch(fetchTopUpAction(page)),
-        setAlertTopUpHideAction: () => dispatch(setAlertTopUpHideAction()),
-        setAlertTopUpShowAction: (message: string, color: string) => dispatch(setAlertTopUpShowAction(message, color))
+        fetchManualTopUpAction: (page: number) => dispatch(fetchManualTopUpAction(page)),
+        setAlertManualTopUpHideAction: () => dispatch(setAlertManualTopUpHideAction()),
+        setAlertManualTopUpShowAction: (message: string, color: string) => dispatch(setAlertManualTopUpShowAction(message, color)),
+        deleteManualTopUpAction: (id: number) => dispatch(deleteManualTopUpAction(id))
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar TopUp")
+                            withTitle(List, "Daftar Manual Top Up")
                     )
                 );

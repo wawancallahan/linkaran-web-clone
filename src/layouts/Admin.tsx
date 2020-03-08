@@ -181,6 +181,12 @@ const routeList: (SidebarRoute | null)[] = [
       ]
   },
   {
+    path: "/admin/manual-topup",
+    name: "Manual Top Up",
+    icon: "ni ni-credit-card text-danger",
+    roles: ["super admin"]
+  },
+  {
     path: "/admin/topup",
     name: "Top Up",
     icon: "ni ni-credit-card text-danger",

@@ -32,21 +32,21 @@ class DetailTransfer extends Component<Props> {
                         <div className="form-group">
                             <label htmlFor="">Nama</label>
                             <div>
-                                { data && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.name : '' }
+                                { data && data.request && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.name : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">No. Telepon</label>
                             <div>
-                                { data && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.phoneNumber : '' }
+                                { data && data.request && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.phoneNumber : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Email</label>
                             <div>
-                                { data && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.email : '' }
+                                { data && data.request && data.request.driverProfile && data.request.driverProfile.user ? data.request.driverProfile.user.email : '' }
                             </div>
                         </div>
                     </div>

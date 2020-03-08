@@ -34,28 +34,28 @@ class DetailBank extends Component<Props> {
                         <div className="form-group">
                             <label htmlFor="">Nama</label>
                             <div>
-                                { data ? data.request.bankName : '' }
+                                { data && data.request ? data.request.bankName : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Nomor Akun</label>
                             <div>
-                                { data ? data.request.accountNumber : ''}
+                                { data && data.request ? data.request.accountNumber : ''}
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Nama Akun</label>
                             <div>
-                                {data ? data.request.accountName : '' }
+                                {data && data.request ? data.request.accountName : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Jumlah</label>
                             <div>
-                                { data ? data.request.uniqueCodeWithAmount : '' }
+                                { data && data.request ? data.request.uniqueCodeWithAmount : '' }
                             </div>
                         </div>
                     </div>
@@ -68,28 +68,28 @@ class DetailBank extends Component<Props> {
                         <div className="form-group">
                             <label htmlFor="">Nama</label>
                             <div>
-                                { data && data.request.bank ? data.request.bank.nama : '' }
+                                { data && data.request && data.request.bank ? data.request.bank.nama : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Nama Bank</label>
                             <div>
-                                { data && data.request.bank ? data.request.bank.bankName : '' }
+                                { data && data.request && data.request.bank ? data.request.bank.bankName : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Nama Akun</label>
                             <div>
-                                { data && data.request.bank ? data.request.bank.accountName : '' }
+                                { data && data.request && data.request.bank ? data.request.bank.accountName : '' }
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="">Nomor Akun</label>
                             <div>
-                                { data && data.request.bank ? data.request.bank.accountNumber : '' }
+                                { data && data.request && data.request.bank ? data.request.bank.accountNumber : '' }
                             </div>
                         </div>
                     </div>

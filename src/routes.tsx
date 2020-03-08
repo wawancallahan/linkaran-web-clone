@@ -18,6 +18,7 @@ import AdminServiceRoutes from './views/admin/service/Index'
 import AdminRegionRoutes from './views/admin/region/Index'
 import AdminCustomerRoutes from './views/admin/customer/Index'
 import AdminBankRoutes from './views/admin/bank/Index'
+import AdminManualTopupRoutes from './views/admin/manualTopup/Index'
 
 import FinancialManagerTopUpRoutes from './views/financialManager/topup/Index'
 
@@ -49,6 +50,7 @@ const routes: Route[] = [
     ...AdminRegionRoutes,
     ...AdminCustomerRoutes,
     ...AdminBankRoutes,
+    ...AdminManualTopupRoutes,
     ...FinancialManagerTopUpRoutes
 ]
 

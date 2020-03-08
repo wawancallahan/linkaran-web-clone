@@ -2,6 +2,7 @@ import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
 import { Bank } from '../admin/bank';
 import { TokenFCM } from '../auth';
+import { User } from '../admin/user';
 
 export const FETCH_TOPUP = "FETCH_TOPUP";
 export const FETCH_TOPUP_SUCCESS = "FETCH_TOPUP_SUCCESS";
@@ -33,19 +34,19 @@ export interface TopUpApprovedBy {
 
 export interface TopUp {
     id: number,
-    evidance: string,
+    evidance: string | null,
     idManualTopup: number,
     transactionDate: string | null,
     isManual: boolean,
     approvedAt: string | null,
-    approvedBy: Partial<TopUpApprovedBy> | null,
-    userMakerTopup: string | number | null,
 }
 
 export type TopUpApprove = Partial<TopUp> & Partial<Timestamps>
 
 export type TopUpList = TopUp & {
-    request: {
+    approvedBy?: Partial<TopUpApprovedBy> | null,
+    userMakerTopup?: Partial<User> | null,
+    request?: {
         bankName: string,
         accountNumber: string,
         accountName: string,
@@ -53,17 +54,15 @@ export type TopUpList = TopUp & {
         bank?: Partial<Bank>,
         driverProfile?: {
             id: number,
-            user?: {
-                name: string,
-                phoneNumber: string,
-                email: string
-            }
+            user?: Partial<User>
         }
     }
 }
 
 export type TopUpShow = TopUp & {
-    request: {
+    approvedBy?: Partial<TopUpApprovedBy> | null,
+    userMakerTopup?: Partial<User> | null,
+    request?: {
         bankName: string,
         accountNumber: string,
         accountName: string,
@@ -71,11 +70,7 @@ export type TopUpShow = TopUp & {
         bank?: Partial<Bank>,
         driverProfile?: {
             id: number,
-            user?: {
-                name: string,
-                phoneNumber: string,
-                email: string
-            }
+            user?: Partial<User>
         }
     }
 }
