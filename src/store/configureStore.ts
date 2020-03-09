@@ -27,6 +27,9 @@ import subDistrictReducer from '../reducers/admin/region/subDistrict'
 import villageReducer from '../reducers/admin/region/village'
 import customerReducer from '../reducers/admin/customer'
 import bankReducer from '../reducers/admin/bank'
+import manualTopupReducer from '../reducers/admin/manualTopup'
+
+import topUpReducer from '../reducers/financialManager/topup'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -54,7 +57,9 @@ const rootReducer = combineReducers({
     subDistrict: subDistrictReducer,
     village: villageReducer,
     customer: customerReducer,
-    bank: bankReducer
+    bank: bankReducer,
+    topup: topUpReducer,
+    manualTopup: manualTopupReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

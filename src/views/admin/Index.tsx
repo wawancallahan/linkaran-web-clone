@@ -7,7 +7,7 @@ export default [
         exact: true,
         component: Dashboard,
         layout: "admin",
-        roles: ["super admin", "admin"]
+        roles: ["super admin", "admin", "financial manager"]
     },
     {
         path: "/admin/index",
@@ -15,6 +15,6 @@ export default [
         exact: true,
         component: Dashboard,
         layout: "admin",
-        roles: ["super admin", "admin"]
+        roles: ["super admin", "admin", "financial manager"]
     },
 ]

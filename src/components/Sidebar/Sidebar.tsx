@@ -326,7 +326,7 @@ class Sidebar extends React.Component<Props, State> {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">{ authName }</h6>
+                  <h6 className="text-overflow m-0">{ authName() }</h6>
                 </DropdownItem>
                 <DropdownItem href="#pablo" onClick={this.Logout}>
                   <i className="ni ni-user-run" />

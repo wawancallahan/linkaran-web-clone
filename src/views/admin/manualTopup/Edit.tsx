@@ -22,18 +22,19 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { ServicePrice, FormField } from '../../../types/admin/servicePrice';
+import { ManualTopUpShow, FormField } from '../../../types/admin/manualTopup';
+import {
+    findManualTopUpAction
+} from '../../../actions/admin/manualTopup';
 
-import FormServicePrice from './FormEdit';
+import FormManualTopUp from './FormEdit';
 import { ApiResponse } from '../../../types/api';
-import { findServicePriceAction } from '../../../actions/admin/servicePrice';
 
 type EditProps = RouteComponentProps<{
     id: string
 }> & {
 
 }
-
 
 type Props = EditProps & LinkStateToProps & LinkDispatchToProps;
 
@@ -45,27 +46,21 @@ type State = {
     alert_message: string
 }
 
-class Edit extends Component<Props, State> {
+class Create extends Component<Props, State> {
 
     state = {
         form: {
-            price: {
-                value: 0,
-                label: ''
+            amount: '',
+            driverProfile: {
+                label: '',
+                value: 0
             },
-            district: {
-                value: 0,
-                label: ''
+            bank: {
+                label: '',
+                value: 0
             },
-            service: {
-                value: 0,
-                label: ''
-            },
-            vehicleType: {
-                value: 0,
-                label: ''
-            },
-            driverPaymentDeductions: ""
+            image: null,
+            image_preview: ''
         },
         isLoaded: false,
         loadedMessage: '',
@@ -76,37 +71,31 @@ class Edit extends Component<Props, State> {
     componentDidMount() {
         const id = +this.props.match.params.id;
 
-        this.props.findServicePriceAction(id)
-                .then((response: ApiResponse<ServicePrice>) => {
+        this.props.findManualTopUpAction(id)
+                .then((response: ApiResponse<ManualTopUpShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: ServicePrice = response.response!.result;
+                    const data: ManualTopUpShow =response.response!.result;
 
-                    form.price = {
-                        value: data.priceId,
-                        label: data.basePrice.toString()
+                    form.amount = data.request ? data.request.uniqueCodeWithAmount.toString() : '';
+
+                    if (data.request && data.request.driverProfile && data.request.driverProfile.user) {
+                        form.driverProfile = {
+                            label: `${(data.request.driverProfile.user.phoneNumber || '')} - ${(data.request.driverProfile.user.name || '')}`,
+                            value: data.request.driverProfile.id || 0
+                        }
                     }
 
-                    form.district = {
-                        value: data.district.id,
-                        label: data.district.name
+                    if (data.request && data.request.bank) {
+                        form.bank = {
+                            label: data.request.bank.nama || '',
+                            value: data.request.bank.id || 0
+                        }
                     }
 
-                    form.service = {
-                        value: data.service.id,
-                        label: data.service.name
-                    }
-
-                    form.vehicleType = {
-                        value: data.vehicleType.id,
-                        label: data.vehicleType.name || ''
-                    }
-
-                    if (data.driverPaymentDeductions) {
-                        form.driverPaymentDeductions = data.driverPaymentDeductions.toString()
-                    }
+                    form.image_preview = data.evidance || ''
 
                     this.setState({
                         form: form,
@@ -114,20 +103,12 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ServicePrice>) => {
-
-                    let message = "Gagal Mendapatkan Response";
-
-                    if (response.error) {
-                        message = response.error.metaData.message;
-                    }
-
+                .catch((response: ApiResponse<ManualTopUpShow>) => {
                     this.setState({
-                        loadedMessage: message
+                        loadedMessage: response.error!.metaData.message
                     })
                 })
     }
-
 
     setAlertMessage = (message: string) => {
         this.setState({
@@ -142,7 +123,7 @@ class Edit extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/service-price');
+        this.props.history.push('/admin/manual-topup');
     }
     
     render() {
@@ -163,7 +144,7 @@ class Edit extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Edit Harga Layanan</h3>
+                                    <h3 className="mb-0">Edit Manual Top Up</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
@@ -171,7 +152,7 @@ class Edit extends Component<Props, State> {
                             {showAlertError}
                             {this.state.isLoaded ? 
                                 (
-                                    <FormServicePrice form={this.state.form} 
+                                    <FormManualTopUp form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
@@ -198,17 +179,17 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>
+    findManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUpShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
     return {
-        findServicePriceAction: (id: number) => dispatch(findServicePriceAction(id))
+        findManualTopUpAction: (id: number) => dispatch(findManualTopUpAction(id))
     }
 }
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Edit, "Edit Harga Layanan")
+        withTitle(Create, "Edit Manual Top Up")
     )
 );

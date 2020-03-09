@@ -3,80 +3,83 @@ import { Dispatch } from "redux";
 import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
-    Driver,
-    SET_PAGINATOR_DRIVER,
-    FETCH_DRIVER,
-    FETCH_DRIVER_ERROR,
-    FETCH_DRIVER_SUCCESS,
-    SetPaginatorDriverActionType,
-    FetchDriverActionType,
-    AlertDriverHideActionType,
-    ALERT_DRIVER_HIDE,
-    AlertDriverShowActionType,
-    ALERT_DRIVER_SHOW,
-    DriverCreate,
-    DriverCreateResult,
-    DriverEdit,
-    DriverEditResult,
-    FetchDriverErrorActionType,
-    FetchDriverSuccessActionType,
-    DriverDetail
-} from '../../types/admin/driver';
+    TopUp,
+    SET_PAGINATOR_TOPUP,
+    FETCH_TOPUP_SUCCESS,
+    FETCH_TOPUP_ERROR,
+    SetPaginatorTopUpActionType,
+    FetchTopUpActionType,
+    FetchTopUpErrorActionType,
+    FetchTopUpSuccessActionType,
+    TopUpCreateField,
+    TopUpEditField,
+    AlertTopUpHideActionType,
+    ALERT_TOPUP_HIDE,
+    AlertTopUpShowActionType,
+    ALERT_TOPUP_SHOW,
+    TopUpEditResult,
+    TopUpCreateResult,
+    TopUpList,
+    TopUpShow,
+    TopUpApprove
+} from '../../types/financialManager/topup';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
-import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
-import { booleanToString, OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
+import { ThunkResult } from '../../types/thunk'
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
 
-export const setPaginateAction = (paginate: Paginator): SetPaginatorDriverActionType => {
+export const setPaginateAction = (paginate: Paginator): SetPaginatorTopUpActionType => {
     return {
-        type: SET_PAGINATOR_DRIVER,
+        type: SET_PAGINATOR_TOPUP,
         paginate: paginate
     }
 }
 
-export const setFetchDriverAction = (list: Driver[]): FetchDriverActionType => {
+export const setFetchTopUpSuccessAction = (list: TopUpList[]): FetchTopUpSuccessActionType => {
     return {
-        type: FETCH_DRIVER,
+        type: FETCH_TOPUP_SUCCESS,
         list: list
     }
 }
 
-export const setFetchDriverSuccessAction = (list: Driver[]): FetchDriverSuccessActionType => {
+export const setFetchTopUpErrorAction = (): FetchTopUpErrorActionType => {
     return {
-        type: FETCH_DRIVER_SUCCESS,
-        list: list
+        type: FETCH_TOPUP_ERROR
     }
 }
 
-export const setFetchDriverErrorAction = (): FetchDriverErrorActionType => {
+export const setAlertTopUpHideAction = (): AlertTopUpHideActionType => {
     return {
-        type: FETCH_DRIVER_ERROR
+        type: ALERT_TOPUP_HIDE
     }
 }
 
-export const setAlertDriverHideAction = (): AlertDriverHideActionType => {
+export const setAlertTopUpShowAction = (message: string, color: string): AlertTopUpShowActionType => {
     return {
-        type: ALERT_DRIVER_HIDE
-    }
-}
-
-export const setAlertDriverShowAction = (message: string, color: string): AlertDriverShowActionType => {
-    return {
-        type: ALERT_DRIVER_SHOW,
+        type: ALERT_TOPUP_SHOW,
         color: color,
         message: message
     };
 }
 
-export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean>> => {
-    return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?page=${page}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Driver> = response.data;
 
-                dispatch(setFetchDriverSuccessAction(data.result));
+export const fetchTopUpAction = (page: number, needApproved: number = 1): ThunkResult<Promise<Boolean>> => {
+    return async (dispatch: Dispatch, getState: () => AppState) => {
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            needApproved: needApproved.toString()
+        }
+
+        const params = objectToParamsUrl(paramsObject)
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/list?${params}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<TopUpList> = response.data;
+
+                dispatch(setFetchTopUpSuccessAction(data.result));
 
                 if (data.metaData.paginate) {
                     const paginate = data.metaData.paginate as Paginator;
@@ -92,7 +95,7 @@ export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean
                 return Promise.resolve(true);
             })
             .catch( (error: AxiosError) => {
-                dispatch(setFetchDriverErrorAction());
+                dispatch(setFetchTopUpErrorAction());
 
                 dispatch(setPaginateAction({
                     total: 0,
@@ -106,18 +109,19 @@ export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean
     }
 }
 
-export const fetchListDriverApiAction = (search: string, page: number) : ThunkResult<Promise<ApiResponseList<Driver>>> => {
-    return async (dispatch: Dispatch, getState: () => AppState) => {
+
+export const fetchListTopUpAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<TopUpList>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             name: search
         }
 
         const params = objectToParamsUrl(paramsObject)
-        
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?${params}`)
+       
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/topup?${params}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Driver> = response.data;
+                const data: ApiResponseSuccessList<TopUpList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -125,7 +129,7 @@ export const fetchListDriverApiAction = (search: string, page: number) : ThunkRe
                 });
             })
             .catch( (error: AxiosError) => {
-                if (error.response) {
+                 if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
                             metaData: {
@@ -135,7 +139,7 @@ export const fetchListDriverApiAction = (search: string, page: number) : ThunkRe
                             },
                             result: null
                         }
-
+    
                         return Promise.reject({
                             response: null,
                             error: errorResponse
@@ -166,56 +170,11 @@ export const fetchListDriverApiAction = (search: string, page: number) : ThunkRe
     }
 }
 
-export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<ApiResponse<DriverCreateResult>>> => {
+export const createTopUpAction = (topUp: TopUpCreateField): ThunkResult<Promise<ApiResponse<TopUpCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        
-        const data = new FormData();
-
-        data.set('user.name', driver.nama);
-        data.set('user.phoneNumber', driver.no_telepon)
-        data.set('user.email', driver.email)
-        data.set('dateOfBirth', driver.tanggal_lahir)
-        data.set('identityNumber', driver.no_ktp)
-        data.set('gender', driver.jenis_kelamin == 1 ? 'L' : 'P')
-        data.set('address', driver.alamat)
-        data.set('country.id', driver.negara.id.toString())
-        data.set('province.id', driver.provinsi.id.toString())
-        data.set('district.id', driver.kabupaten_kota.id.toString())
-        data.set('subDistrict.id', driver.kecamatan.id.toString())
-        data.set('village.id', driver.kelurahan.id.toString())
-        data.set('rating', '0')
-        data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
-        data.set('user.vehicle.policeNumber', driver.no_polisi)
-        data.set('user.vehicle.stnkNumber', driver.no_stnk)
-        data.set('user.vehicle.chassisNumber', driver.no_rangka)
-        data.set('user.vehicle.subBrandVehicle.id', driver.merek.id.toString())
-        data.set('user.vehicle.description', driver.keterangan)
-        // data.set('user.vehicle.seat', driver.jumlah_seat.toString())
-        data.set('user.vehicle.color', driver.warna)
-        data.set('wasOnceAnOnlineDriver', booleanToString(driver.wasOnceAnOnlineDriver))
-        data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
-        data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
-        data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
-        data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
-        data.set('placeOfBirth', driver.tempat_lahir)
-        data.set('residenceAddress', driver.alamat_domisili)
-        data.set('isMeried', booleanToString(driver.isMeried))
-
-        if (driver.ktp_file) {
-            data.append('ktpPhoto', driver.ktp_file);
-        }
-
-        if (driver.foto_profil) {
-            data.append('photo', driver.foto_profil);
-        }
-        
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/driver-profile', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data' 
-                }
-            })
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/financial-manager/topup', topUp)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<DriverCreateResult> = response.data;
+                const data: ApiResponseSuccess<TopUpCreateResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -223,7 +182,6 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
                 });
             })
             .catch( (error: AxiosError) => {
-                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -265,11 +223,11 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
     }
 }
 
-export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<DriverDetail>>> => {
+export const findTopUpAction = (id: number): ThunkResult<Promise<ApiResponse<TopUpShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/detail/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<DriverDetail> = response.data;
+                const data: ApiResponseSuccess<TopUpShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -277,9 +235,6 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
                 });
             })
             .catch( (error: AxiosError) => {
-
-                console.log(error.response)
-
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -321,54 +276,11 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
     }
 }
 
-export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Promise<ApiResponse<DriverEditResult>>> => {
+export const editTopUpAction = (topUp: TopUpEditField, id: number): ThunkResult<Promise<ApiResponse<TopUpEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        const data = new FormData();
-
-        data.set('user.name', driver.nama);
-        data.set('user.phoneNumber', driver.no_telepon)
-        data.set('user.email', driver.email)
-        data.set('dateOfBirth', driver.tanggal_lahir)
-        data.set('identityNumber', driver.no_ktp)
-        data.set('gender', driver.jenis_kelamin == 1 ? 'L' : 'P')
-        data.set('address', driver.alamat)
-        data.set('country.id', driver.negara.id.toString())
-        data.set('province.id', driver.provinsi.id.toString())
-        data.set('district.id', driver.kabupaten_kota.id.toString())
-        data.set('subDistrict.id', driver.kecamatan.id.toString())
-        data.set('village.id', driver.kelurahan.id.toString())
-        data.set('rating', '0')
-        data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
-        data.set('user.vehicle.policeNumber', driver.no_polisi)
-        data.set('user.vehicle.stnkNumber', driver.no_stnk)
-        data.set('user.vehicle.chassisNumber', driver.no_rangka)
-        data.set('user.vehicle.subBrandVehicle.id', driver.merek.id.toString())
-        data.set('user.vehicle.description', driver.keterangan)
-        // data.set('user.vehicle.seat', driver.jumlah_seat.toString())
-        data.set('user.vehicle.color', driver.warna)
-        data.set('wasOnceAnOnlineDriver', booleanToString(driver.wasOnceAnOnlineDriver))
-        data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
-        data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
-        data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
-        data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
-        data.set('placeOfBirth', driver.tempat_lahir)
-        data.set('residenceAddress', driver.alamat_domisili)
-        data.set('isMeried', booleanToString(driver.isMeried))
-
-        if (driver.ktp_file) {
-            data.append('ktpPhoto', driver.ktp_file);
-        }
-
-        if (driver.foto_profil) {
-            data.append('photo', driver.foto_profil);
-        }
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data' 
-                }
-            })
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/${id}`, topUp)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<DriverEditResult> = response.data;
+                const data: ApiResponseSuccess<TopUpEditResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,
@@ -376,9 +288,6 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
                 });
             })
             .catch( (error: AxiosError) => {
-
-                console.log(error.response)
-
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -421,11 +330,64 @@ export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Pr
 }
 
 
-export const deleteDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Driver>>> => {
+export const deleteTopUpAction = (id: number): ThunkResult<Promise<ApiResponse<TopUp>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.delete(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`)
+        return axiosService.delete(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Driver> = response.data;
+                const data: ApiResponseSuccess<TopUp> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const approveTopUpAction = (id: number): ThunkResult<Promise<ApiResponse<TopUpApprove>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.post(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/${id}/approved`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<TopUpApprove> = response.data;
 
                 return Promise.resolve({
                     response: data,

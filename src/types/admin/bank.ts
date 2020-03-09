@@ -10,14 +10,25 @@ export const ALERT_BANK_SHOW = "ALERT_BANK_SHOW";
 export const ALERT_BANK_HIDE = "ALERT_BANK_HIDE";
 
 export type FormField = {
-    name: string,
+    nama: string,
+    bankName: string,
+    accountNumber: string,
+    accountName: string
 }
 
 interface BankField {
+    nama: string,
+    bankName: number,
+    accountNumber: string,
+    accountName: string
 }
 
 export interface Bank {
     id: number,
+    nama: string,
+    bankName: number,
+    accountName: string,
+    accountNumber: string
 }
 
 export type BankList = Bank

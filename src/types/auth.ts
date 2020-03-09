@@ -62,7 +62,7 @@ export interface LoginData {
     tokenFCM: TokenFCM[],
     accessToken: string,
     isActive: boolean,
-    roles: Role[],
+    roles?: Role[],
     linkWithGoogle: boolean
 }
 

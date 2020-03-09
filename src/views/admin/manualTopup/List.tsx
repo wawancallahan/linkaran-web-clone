@@ -30,12 +30,12 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchBankAction,
-    setAlertBankHideAction,
-    setAlertBankShowAction,
-    deleteBankAction
-} from '../../../actions/admin/bank';
-import { BankList, Bank } from '../../../types/admin/bank';
+    fetchManualTopUpAction,
+    setAlertManualTopUpHideAction,
+    setAlertManualTopUpShowAction,
+    deleteManualTopUpAction
+} from '../../../actions/admin/manualTopup';
+import { ManualTopUpList, ManualTopUp } from '../../../types/admin/manualTopup';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -52,22 +52,26 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: BankList,
+    item: ManualTopUpList,
     key: number,
-    deleteBank: (id: number) => void
+    deleteManualTopUp: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.nama}</td>
-            <td>{props.item.bankName}</td>
-            <td>{props.item.accountName}</td>
-            <td>{props.item.accountNumber}</td>
+            <td>{(props.item.request && props.item.request.driverProfile && props.item.request.driverProfile.user) ? props.item.request.driverProfile.user.name : ''}</td>
+            <td>{(props.item.request && props.item.request.driverProfile && props.item.request.driverProfile.user) ? props.item.request.driverProfile.user.phoneNumber : ''}</td>
+            <td>{(props.item.request && props.item.request.driverProfile && props.item.request.driverProfile.user) ? props.item.request.driverProfile.user.email : ''}</td>
+            <td>{props.item.request && props.item.request.bankName}/{props.item.request && props.item.request.accountNumber}</td>
+            <td>{props.item.request && props.item.request.accountName}</td>
+            <td>{props.item.request && props.item.request.uniqueCodeWithAmount}</td>
+            <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
+            <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
             <td>
-                <Link to={`/admin/bank/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <Link to={`/admin/manual-topup/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
                 </Link>
-                <Button color="danger" size="sm" onClick={() => props.deleteBank(props.item.id)}>
+                <Button color="danger" size="sm" onClick={() => props.deleteManualTopUp(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
             </td>
@@ -92,46 +96,46 @@ class List extends Component<Props, State> {
     
         const page = + (queryStringValue.page || 1);
 
-        this.fetchBankList(page);
+        this.fetchManualTopUpList(page);
     }
 
     componentWillUnmount() {
-        this.props.setAlertBankHideAction();
+        this.props.setAlertManualTopUpHideAction();
     }
 
-    fetchBankList = (page: number) => {
-        this.props.fetchBankAction(page);
+    fetchManualTopUpList = (page: number) => {
+        this.props.fetchManualTopUpAction(page);
     }
 
-    deleteBank = (id: number) => {
-        this.props.deleteBankAction(id)
-            .then( (response: ApiResponse<Bank>) => {
-                this.fetchBankList(1);
+    deleteManualTopUp = (id: number) => {
+        this.props.deleteManualTopUpAction(id)
+            .then( (response: ApiResponse<ManualTopUp>) => {
+                this.fetchManualTopUpList(1);
 
-                this.props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
+                this.props.setAlertManualTopUpShowAction("Data Berhasil Dihapus", 'success');
             })
-            .catch( (response: ApiResponse<Bank>) => {
-                this.props.setAlertBankShowAction(response.error!.metaData.message, 'danger');
+            .catch( (response: ApiResponse<ManualTopUp>) => {
+                this.props.setAlertManualTopUpShowAction(response.error!.metaData.message, 'danger');
             });
     }
 
     render() {
 
-        let bank: any = <TableItemEmpty />;
+        let manualTopup: any = <TableItemEmpty />;
 
-        if (this.props.bank.length > 0) {
-            bank = this.props.bank.map((item: BankList, index: number) => (
+        if (this.props.manualTopup.length > 0) {
+            manualTopup = this.props.manualTopup.map((item: ManualTopUpList, index: number) => (
                 <TableItem key={index}
                            item={item}
                            index={index}
-                           deleteBank={this.deleteBank}
+                           deleteManualTopUp={this.deleteManualTopUp}
                            />
             ));
         }
 
         const CAlert = (
-            <Alert color={this.props.bankAlert.color} isOpen={this.props.bankAlert.visible} toggle={() => this.props.setAlertBankHideAction()} fade={false}>
-                <div>{this.props.bankAlert.message}</div>
+            <Alert color={this.props.manualTopupAlert.color} isOpen={this.props.manualTopupAlert.visible} toggle={() => this.props.setAlertManualTopUpHideAction()} fade={false}>
+                <div>{this.props.manualTopupAlert.message}</div>
             </Alert>
         );
 
@@ -151,15 +155,15 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Bank</h3>
+                                            <h3 className="mb-0">Daftar Manual Top Up</h3>
                                         </div>
                                         <div className="col text-right">
-                                            <Link to="/admin/bank/create">
+                                            <Link to="/admin/manual-topup/create">
                                                 <Button
                                                     color="primary"
                                                     size="sm"
                                                 >
-                                                    Tambah Bank
+                                                    Tambah Manual Top Up
                                                 </Button>
                                             </Link>
                                         </div>
@@ -171,13 +175,18 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Nama Bank</th>
+                                            <th>No. Telepon</th>
+                                            <th>Email</th>
+                                            <th>Bank/Akun</th>
                                             <th>Nama Akun</th>
-                                            <th>Nomor Akun</th>
+                                            <th>Jumlah</th>
+                                            <th>Bank Tujuan</th>
+                                            <th>Manual</th>
+                                            <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {bank}
+                                        {manualTopup}
                                     </tbody>
                                 </Table>
                                 
@@ -185,7 +194,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchBankAction} />
+                                                    itemClicked={this.props.fetchManualTopUpAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -197,37 +206,37 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    bank: BankList[],
+    manualTopup: ManualTopUpList[],
     paginate: Paginator,
-    bankAlert: IAlert
+    manualTopupAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        bank: state.bank.list,
-        paginate: state.bank.paginate,
-        bankAlert: state.bank.alert
+        manualTopup: state.manualTopup.list,
+        paginate: state.manualTopup.paginate,
+        manualTopupAlert: state.manualTopup.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchBankAction: (page: number) => void,
-    setAlertBankHideAction: () => void,
-    setAlertBankShowAction: (message: string, color: string) => void,
-    deleteBankAction: (id: number) => Promise<ApiResponse<Bank>>
+    fetchManualTopUpAction: (page: number) => void,
+    setAlertManualTopUpHideAction: () => void,
+    setAlertManualTopUpShowAction: (message: string, color: string) => void,
+    deleteManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUp>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchBankAction: (page: number) => dispatch(fetchBankAction(page)),
-        setAlertBankHideAction: () => dispatch(setAlertBankHideAction()),
-        setAlertBankShowAction: (message: string, color: string) => dispatch(setAlertBankShowAction(message, color)),
-        deleteBankAction: (id: number) => dispatch(deleteBankAction(id))
+        fetchManualTopUpAction: (page: number) => dispatch(fetchManualTopUpAction(page)),
+        setAlertManualTopUpHideAction: () => dispatch(setAlertManualTopUpHideAction()),
+        setAlertManualTopUpShowAction: (message: string, color: string) => dispatch(setAlertManualTopUpShowAction(message, color)),
+        deleteManualTopUpAction: (id: number) => dispatch(deleteManualTopUpAction(id))
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Bank")
+                            withTitle(List, "Daftar Manual Top Up")
                     )
                 );

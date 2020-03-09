@@ -9,6 +9,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import { logoLinkaran } from "../helpers/Assets";
 import { rolesToArray } from "../services/auth";
 import { SidebarRoute } from '../components/Sidebar/Sidebar'
+import roleRoutes, { Route as RouteInterface } from '../routes'
 
 const routeList: (SidebarRoute | null)[] = [
   {
@@ -179,6 +180,18 @@ const routeList: (SidebarRoute | null)[] = [
           }
       ]
   },
+  {
+    path: "/admin/manual-topup",
+    name: "Manual Top Up",
+    icon: "ni ni-credit-card text-danger",
+    roles: ["super admin"]
+  },
+  {
+    path: "/admin/topup",
+    name: "Top Up",
+    icon: "ni ni-credit-card text-danger",
+    roles: ["financial manager"]
+  }
 ];
 
 type AdminProps = RouteComponentProps
@@ -219,6 +232,27 @@ class Admin extends Component<Props> {
     });
   }
 
+  getRoleRoutes = (routes: RouteInterface[]) => {
+    const roles = rolesToArray();
+    return routes.map((prop: RouteInterface, key: number) => {
+        const rolesRoutes: string[] = prop.roles;
+        const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
+
+        if (prop.layout === "admin" && constainRole) {
+            return (
+                <Route
+                    exact={prop.exact}
+                    path={prop.path}
+                    component={prop.component}
+                    key={`${prop.path.replace('/', '_')}_${key}`}
+                />
+            );
+        } else {
+            return null;
+        }
+    });
+  }
+
   getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
     let brandText = 'Brand';
 
@@ -235,7 +269,6 @@ class Admin extends Component<Props> {
   };
 
   render() {
-
     return (
       <>
         <Sidebar
@@ -253,7 +286,7 @@ class Admin extends Component<Props> {
             brandText={this.getBrandText(routeList, this.props.location.pathname)}
           />
           <Switch>
-            {this.props.children}
+            {this.getRoleRoutes(roleRoutes)}
           </Switch>
           <Container fluid>
             <AdminFooter />

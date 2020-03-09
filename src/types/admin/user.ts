@@ -34,7 +34,11 @@ interface UserList {
     email: string,
     gUserPhoneVerified: boolean | null,
     gUserId: string
-    roles: Role[]
+    roles: Role[],
+    iat?: number,
+    exp?: number,
+    linkWithGoogle?: boolean,
+    isActive?: boolean
 }
 
 interface UserResult {

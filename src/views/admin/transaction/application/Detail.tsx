@@ -112,8 +112,6 @@ class Detail extends Component<Props, State> {
                 case "inprogress":
                 break;
             }
-        } else {
-            
         }
 
         return (

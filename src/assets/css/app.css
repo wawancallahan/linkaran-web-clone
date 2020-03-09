@@ -41,3 +41,11 @@
     max-width: inherit;
     max-height: inherit;
 }
+
+.font-size-control {
+    font-size: 0.875rem
+}
+
+.no-border {
+    border: 0 !important;
+}

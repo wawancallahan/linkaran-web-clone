@@ -4,6 +4,9 @@ import {
     Button,
     FormGroup,
     Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
 } from 'reactstrap';
 import { Formik, getIn, FormikProps } from 'formik';
 import { Driver, FormField } from '../../../types/admin/driver';
@@ -352,19 +355,24 @@ class FormDriver extends Component<Props> {
                     >
                         No Telepon
                     </label>
-                    <Input
-                    className="form-control-alternative"
-                    id="input-no_telepon"
-                    placeholder="No Telepon"
-                    type="text"
-                    name="no_telepon"
-                    maxLength={255}
-                    value={FormikProps.values.no_telepon}
-                    required
-                    onChange={FormikProps.handleChange}
-                    onBlur={FormikProps.handleBlur}
-                    invalid={ !!(FormikProps.touched.no_telepon && FormikProps.errors.no_telepon) }
-                    />
+                    <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                            <InputGroupText className="font-size-control no-border">+62</InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                            className="form-control-alternative"
+                            id="input-no_telepon"
+                            placeholder="No Telepon"
+                            type="text"
+                            name="no_telepon"
+                            maxLength={255}
+                            value={FormikProps.values.no_telepon}
+                            required
+                            onChange={FormikProps.handleChange}
+                            onBlur={FormikProps.handleBlur}
+                            invalid={ !!(FormikProps.touched.no_telepon && FormikProps.errors.no_telepon) }
+                            />
+                    </InputGroup>
                     <div>
                         {FormikProps.errors.no_telepon && FormikProps.touched.no_telepon ? FormikProps.errors.no_telepon : ''}
                     </div>

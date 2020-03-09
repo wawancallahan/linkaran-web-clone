@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Driver, FormField } from '../../../types/admin/driver';
+import { Driver, FormField, DriverDetail } from '../../../types/admin/driver';
 
 import FormDriver from './FormEdit';
 
@@ -121,11 +121,13 @@ class Edit extends Component<Props, State> {
 
     choiceOfActiveWorkHours = (choiceOfActiveWorkHoursText: string) : string => {
 
-        if ( ! choiceOfActiveWorkHoursText) {
-            choiceOfActiveWorkHoursText = "00-00"
+        let filterChoiceOfActiveWorkHoursText = choiceOfActiveWorkHoursText.replace(" ", "");
+
+        if ( ! filterChoiceOfActiveWorkHoursText || filterChoiceOfActiveWorkHoursText == "") {
+            filterChoiceOfActiveWorkHoursText = "00-00"
         }
 
-        const [startTime, endTime] = choiceOfActiveWorkHoursText.split('-');
+        const [startTime, endTime = ""] = filterChoiceOfActiveWorkHoursText.split('-');
         
         if (startTime == '00' && endTime == '00') {
             return '0';
@@ -144,59 +146,77 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findDriverAction(id)
-                .then((response: ApiResponse<Driver>) => {
+                .then((response: ApiResponse<DriverDetail>) => {
 
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Driver = response.response!.result;
+                    const data: DriverDetail = response.response!.result;
 
                     form.alamat = data.address;
-                    form.email = data.user.email;
-                    form.foto_profil_preview = data.photo;
+                    form.email = data.email;
+                    form.foto_profil_preview = data.photo || '';
                     form.jenis_kelamin = data.gender == 'L' ? 1 : 0;
                     form.jumlah_seat = 0;
-                    form.kabupaten_kota = {
-                        value: data.district.id,
-                        label: data.district.name
+                    if (data.district) {
+                        form.kabupaten_kota = {
+                            value: data.district.id,
+                            label: data.district.name   
+                        }
                     }
-                    form.kecamatan = {
-                        value: data.subDistrict.id,
-                        label: data.subDistrict.name
+                    
+                    if (data.subDistrict) {
+                        form.kecamatan = {
+                            value: data.subDistrict.id,
+                            label: data.subDistrict.name
+                        }
                     }
-                    form.kelurahan = {
-                        value: data.village.id,
-                        label: data.village.name
+                    
+                    if (data.village) {
+                        form.kelurahan = {
+                            value: data.village.id,
+                            label: data.village.name
+                        }
+                    }
+                    
+                    if (data.country) {
+                        form.negara = {
+                            value: data.country.id,
+                            label: data.country.name
+                        }
+                    }
+                    
+                    if (data.province) {
+                        form.provinsi = {
+                            value: data.province.id,
+                            label: data.province.name
+                        }
                     }
                     form.keterangan = '';
-                    form.ktp_file_preview = data.ktpPhoto;
+                    form.ktp_file_preview = data.ktpPhoto || '';
                     form.merek = {
-                        value: data.user.vehicle.subBrandVehicle.id,
-                        label: data.user.vehicle.subBrandVehicle.name
+                        value: data.vehicle.subBrandVehicle.id,
+                        label: data.vehicle.subBrandVehicle.name
                     }
-                    form.nama = data.user.name;
-                    form.negara = {
-                        value: data.country.id,
-                        label: data.country.name
-                    }
+                    form.nama = data.name;
+                    form.tempat_lahir = data.placeOfBirth
+                    form.alamat_domisili = data.residenceAddress
                     form.no_ktp = data.identityNumber;
-                    form.no_polisi = data.user.vehicle.policeNumber;
-                    form.no_rangka = data.user.vehicle.chassisNumber;
-                    form.no_stnk = data.user.vehicle.stnkNumber;
-                    form.no_telepon = data.user.phoneNumber;
-                    form.provinsi = {
-                        value: data.province.id,
-                        label: data.province.name
-                    }
+                    form.no_polisi = data.vehicle.policeNumber;
+                    form.no_rangka = data.vehicle.chassisNumber;
+                    form.no_stnk = data.vehicle.stnkNumber;
+                    form.no_telepon = data.phoneNumber;
+                   
                     form.rating = 0;
                     form.tanggal_lahir = new Date(data.dateOfBirth);
                     form.tipe_kendaraan = {
-                        value: data.user.vehicle.vehicleType.id,
-                        label: data.user.vehicle.vehicleType.name
+                        value: data.vehicle.vehicleType.id,
+                        label: data.vehicle.vehicleType.name || ''
                     }
-                    form.warna = data.user.vehicle.color;
-                    form.keterangan = data.user.vehicle.description;
+
+                    form.warna = data.vehicle.color;
+                    form.keterangan = data.vehicle.description;
                     form.tempat_lahir = data.placeOfBirth
                     form.alamat_domisili = data.residenceAddress
 
@@ -216,11 +236,15 @@ class Edit extends Component<Props, State> {
                     if (choiceOfActiveWorkHours == '4') {
                         const [startTime, endTime] = data.choiceOfActiveWorkHours.split('-');
 
-                        custom_interval_jam_kerja_start = new Date()
-                        custom_interval_jam_kerja_start.setHours(Number.parseInt(startTime))
+                        if (typeof(startTime) === 'number') {
+                            custom_interval_jam_kerja_start = new Date()
+                            custom_interval_jam_kerja_start.setHours(Number.parseInt(startTime))
+                        }
 
-                        custom_interval_jam_kerja_end = new Date()
-                        custom_interval_jam_kerja_end.setHours(Number.parseInt(endTime))
+                        if (typeof(endTime) === 'number') {
+                            custom_interval_jam_kerja_end = new Date()
+                            custom_interval_jam_kerja_end.setHours(Number.parseInt(endTime))
+                        }
                     }
 
                     form.custom_interval_jam_kerja_start = custom_interval_jam_kerja_start
@@ -233,7 +257,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<Driver>) => {
+                .catch((response: ApiResponse<DriverDetail>) => {
 
                     const error = response.error as ApiResponseError
 
@@ -312,7 +336,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findDriverAction: (id: number) => Promise<ApiResponse<Driver>>
+    findDriverAction: (id: number) => Promise<ApiResponse<DriverDetail>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
