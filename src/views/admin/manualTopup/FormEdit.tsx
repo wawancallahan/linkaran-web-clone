@@ -138,7 +138,7 @@ class Form extends Component<Props> {
                     result = data.result.map((item: Driver) => {
                         return {
                             value: item.id,
-                            label: `${item.user.name}`
+                            label: `${item.user.phoneNumber} - ${item.user.name}`
                         };
                     });
                 }

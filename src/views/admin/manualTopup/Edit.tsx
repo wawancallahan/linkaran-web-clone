@@ -83,7 +83,7 @@ class Create extends Component<Props, State> {
 
                     if (data.request && data.request.driverProfile && data.request.driverProfile.user) {
                         form.driverProfile = {
-                            label: data.request.driverProfile.user.name || '',
+                            label: `${(data.request.driverProfile.user.phoneNumber || '')} - ${(data.request.driverProfile.user.name || '')}`,
                             value: data.request.driverProfile.id || 0
                         }
                     }
