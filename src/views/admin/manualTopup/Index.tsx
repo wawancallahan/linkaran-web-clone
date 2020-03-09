@@ -8,20 +8,20 @@ export default [
         exact: true,
         component: ManualTopupList,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
     {
         path: "/admin/manual-topup/:id/edit",
         exact: true,
         component: ManualTopupEdit,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
     {
         path: "/admin/manual-topup/create",
         exact: true,
         component: ManualTopupCreate,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
 ];

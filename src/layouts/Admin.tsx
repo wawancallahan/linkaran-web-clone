@@ -22,19 +22,19 @@ const routeList: (SidebarRoute | null)[] = [
       path: "/admin/food-category",
       name: "Kategori Makanan",
       icon: "ni ni-ungroup text-danger",
-      roles: ["super admin"]
+      roles: ["super admin", "admin"]
   },
   {
       path: "/admin/food",
       name: "Makanan",
       icon: "ni ni-bag-17 text-success",
-      roles: ["super admin"]
+      roles: ["super admin", "admin"]
   },
   {
       path: "/admin/restaurant",
       name: "Restoran",
       icon: "ni ni-shop text-info",
-      roles: ["super admin"]
+      roles: ["super admin", "admin"]
   },
   {
       path: "/admin/brand-vehicle",
@@ -184,7 +184,7 @@ const routeList: (SidebarRoute | null)[] = [
     path: "/admin/manual-topup",
     name: "Manual Top Up",
     icon: "ni ni-credit-card text-danger",
-    roles: ["super admin"]
+    roles: ["admin", "super admin"]
   },
   {
     path: "/admin/topup",

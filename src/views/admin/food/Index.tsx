@@ -8,20 +8,20 @@ export default [
         exact: true,
         component: FoodList,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
     {
         path: "/admin/food/:id/edit",
         exact: true,
         component: FoodEdit,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
     {
         path: "/admin/food/create",
         exact: true,
         component: FoodCreate,
         layout: "admin",
-        roles: ["super admin"]
+        roles: ["admin", "super admin"]
     },
 ];
