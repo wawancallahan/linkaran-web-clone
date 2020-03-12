@@ -40,6 +40,7 @@ import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -111,15 +112,23 @@ class List extends Component<Props, State> {
     }
 
     deleteSubBrandVehicle = (id: number) => {
-        this.props.deleteSubBrandVehicleAction(id)
-            .then( (response: ApiResponse<SubBrandVehicle>) => {
-                this.fetchSubBrandVehicleList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteSubBrandVehicleAction(id)
+                .then( (response: ApiResponse<SubBrandVehicle>) => {
+                    this.fetchSubBrandVehicleList(1);
 
-                this.props.setAlertSubBrandVehicleShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<SubBrandVehicle>) => {
-                this.props.setAlertSubBrandVehicleShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertSubBrandVehicleShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<SubBrandVehicle>) => {
+                    this.props.setAlertSubBrandVehicleShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

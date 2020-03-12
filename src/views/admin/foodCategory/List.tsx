@@ -40,6 +40,7 @@ import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -110,15 +111,23 @@ class List extends Component<Props, State> {
     }
 
     deleteFoodCategory = (id: number) => {
-        this.props.deleteFoodCategoryAction(id)
-            .then( (response: ApiResponse<FoodCategory>) => {
-                this.fetchFoodCategoryList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteFoodCategoryAction(id)
+                .then( (response: ApiResponse<FoodCategory>) => {
+                    this.fetchFoodCategoryList(1);
 
-                this.props.setAlertFoodCategoryShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<FoodCategory>) => {
-                this.props.setAlertFoodCategoryShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertFoodCategoryShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<FoodCategory>) => {
+                    this.props.setAlertFoodCategoryShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

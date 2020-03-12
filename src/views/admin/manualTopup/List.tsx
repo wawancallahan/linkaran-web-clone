@@ -39,6 +39,7 @@ import { ManualTopUpList, ManualTopUp } from '../../../types/admin/manualTopup';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -108,15 +109,23 @@ class List extends Component<Props, State> {
     }
 
     deleteManualTopUp = (id: number) => {
-        this.props.deleteManualTopUpAction(id)
-            .then( (response: ApiResponse<ManualTopUp>) => {
-                this.fetchManualTopUpList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteManualTopUpAction(id)
+                .then( (response: ApiResponse<ManualTopUp>) => {
+                    this.fetchManualTopUpList(1);
 
-                this.props.setAlertManualTopUpShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<ManualTopUp>) => {
-                this.props.setAlertManualTopUpShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertManualTopUpShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<ManualTopUp>) => {
+                    this.props.setAlertManualTopUpShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

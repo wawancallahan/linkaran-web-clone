@@ -40,6 +40,7 @@ import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
 import Spinner from '../../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -110,15 +111,23 @@ class List extends Component<Props, State> {
     }
 
     deleteCountry = (id: number) => {
-        this.props.deleteCountryAction(id)
-            .then( (response: ApiResponse<Country>) => {
-                this.fetchCountryList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteCountryAction(id)
+                .then( (response: ApiResponse<Country>) => {
+                    this.fetchCountryList(1);
 
-                this.props.setAlertCountryShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<Country>) => {
-                this.props.setAlertCountryShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertCountryShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<Country>) => {
+                    this.props.setAlertCountryShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

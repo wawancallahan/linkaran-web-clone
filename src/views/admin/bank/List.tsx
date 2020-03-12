@@ -39,6 +39,7 @@ import { BankList, Bank } from '../../../types/admin/bank';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -104,15 +105,23 @@ class List extends Component<Props, State> {
     }
 
     deleteBank = (id: number) => {
-        this.props.deleteBankAction(id)
-            .then( (response: ApiResponse<Bank>) => {
-                this.fetchBankList(1);
-
-                this.props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<Bank>) => {
-                this.props.setAlertBankShowAction(response.error!.metaData.message, 'danger');
-            });
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteBankAction(id)
+                .then( (response: ApiResponse<Bank>) => {
+                    this.fetchBankList(1);
+    
+                    this.props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<Bank>) => {
+                    this.props.setAlertBankShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

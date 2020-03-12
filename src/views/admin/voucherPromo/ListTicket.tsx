@@ -36,6 +36,7 @@ import * as Yup from 'yup';
 import { ApiResponse, ApiResponseSuccess } from '../../../types/api';
 import { ModalToggleVisible } from '../../../types/modal';
 import { number } from 'prop-types';
+import swal from 'sweetalert'
 
 interface ModalState { 
     id: number, 
@@ -317,22 +318,30 @@ class ListTicket extends Component<Props, State> {
     }
 
     deleteTicket = (id: number) => {
-        this.props.deleteTicketAction(id)
-            .then( (response: ApiResponse<Ticket>) => {
-                this.setAlertMessage('Data Berhasil Dihapus', 'success');
-                this.setAlertOpen(true);
-                this.loadTicketVoucherList();
-            })
-            .catch( (error: ApiResponse<Ticket>) => {
-                let message = "Gagal Mendapatkan Response";
-    
-                if (error.error) {
-                    message = error.error.metaData.message;
-                }
-            
-                this.setAlertMessage(message, 'danger');
-                this.setAlertOpen(true);
-            });
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteTicketAction(id)
+                .then( (response: ApiResponse<Ticket>) => {
+                    this.setAlertMessage('Data Berhasil Dihapus', 'success');
+                    this.setAlertOpen(true);
+                    this.loadTicketVoucherList();
+                })
+                .catch( (error: ApiResponse<Ticket>) => {
+                    let message = "Gagal Mendapatkan Response";
+        
+                    if (error.error) {
+                        message = error.error.metaData.message;
+                    }
+                
+                    this.setAlertMessage(message, 'danger');
+                    this.setAlertOpen(true);
+                });
+            }
+        })
     }
 
     render () {

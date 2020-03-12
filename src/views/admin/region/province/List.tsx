@@ -40,6 +40,7 @@ import { Paginator } from '../../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../../types/api';
 import { Alert as IAlert } from '../../../../types/alert';
 import Spinner from '../../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -110,15 +111,23 @@ class List extends Component<Props, State> {
     }
 
     deleteProvince = (id: number) => {
-        this.props.deleteProvinceAction(id)
-            .then( (response: ApiResponse<Province>) => {
-                this.fetchProvinceList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteProvinceAction(id)
+                .then( (response: ApiResponse<Province>) => {
+                    this.fetchProvinceList(1);
 
-                this.props.setAlertProvinceShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<Province>) => {
-                this.props.setAlertProvinceShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertProvinceShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<Province>) => {
+                    this.props.setAlertProvinceShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

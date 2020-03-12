@@ -49,6 +49,7 @@ import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
 import '../../../react-modal-image.d.ts'
 import ModalImage from 'react-modal-image'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -216,15 +217,23 @@ class List extends Component<Props, State> {
     }
 
     deleteVoucherPromo = (id: number) => {
-        this.props.deleteVoucherPromoAction(id)
-            .then( (response: ApiResponse<VoucherPromo>) => {
-                this.fetchVoucherPromoList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteVoucherPromoAction(id)
+                .then( (response: ApiResponse<VoucherPromo>) => {
+                    this.fetchVoucherPromoList(1);
 
-                this.props.setAlertVoucherPromoShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<VoucherPromo>) => {
-                this.props.setAlertVoucherPromoShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertVoucherPromoShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<VoucherPromo>) => {
+                    this.props.setAlertVoucherPromoShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

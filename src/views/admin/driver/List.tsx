@@ -40,6 +40,7 @@ import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -122,15 +123,23 @@ class List extends Component<Props, State> {
     }
 
     deleteDriver = (id: number) => {
-        this.props.deleteDriverAction(id)
-            .then( (response: ApiResponse<Driver>) => {
-                this.fetchDriverList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteDriverAction(id)
+                .then( (response: ApiResponse<Driver>) => {
+                    this.fetchDriverList(1);
 
-                this.props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<Driver>) => {
-                this.props.setAlertDriverShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<Driver>) => {
+                    this.props.setAlertDriverShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {

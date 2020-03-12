@@ -41,6 +41,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import { booleanToIndonesiaText } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -115,15 +116,23 @@ class List extends Component<Props, State> {
     }
 
     deleteService = (id: number) => {
-        this.props.deleteServiceAction(id)
-            .then( (response: ApiResponse<Service>) => {
-                this.fetchServiceList(1);
+        swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deleteServiceAction(id)
+                .then( (response: ApiResponse<Service>) => {
+                    this.fetchServiceList(1);
 
-                this.props.setAlertServiceShowAction("Data Berhasil Dihapus", 'success');
-            })
-            .catch( (response: ApiResponse<Service>) => {
-                this.props.setAlertServiceShowAction(response.error!.metaData.message, 'danger');
-            });
+                    this.props.setAlertServiceShowAction("Data Berhasil Dihapus", 'success');
+                })
+                .catch( (response: ApiResponse<Service>) => {
+                    this.props.setAlertServiceShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
     }
 
     render() {
