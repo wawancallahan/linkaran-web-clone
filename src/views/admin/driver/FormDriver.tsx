@@ -456,7 +456,7 @@ class FormDriver extends Component<Props> {
                     className="form-control-label"
                     htmlFor="input-isMeried"
                     >
-                        Apakah saat ini sudah pernah menjadi driver pada aplikator lain?
+                        Apakah Anda Pernah Menikah?
                     </label>
                 </FormGroup>
                 <FormGroup>
