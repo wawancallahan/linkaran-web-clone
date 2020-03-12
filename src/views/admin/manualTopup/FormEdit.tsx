@@ -22,6 +22,7 @@ import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListBankAction } from '../../../actions/admin/bank';
 import { Driver } from '../../../types/admin/driver';
 import { fetchListDriverApiAction } from '../../../actions/admin/driver';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     amount: Yup.string()
@@ -169,24 +170,33 @@ class Form extends Component<Props> {
                         image_preview: values.image_preview
                     }
 
-                    this.props.editManualTopUpAction(manualTopup, this.props.id)
-                        .then( (response: ApiResponse<ManualTopUpEditResult>) => {
-                            const data: ApiResponseSuccess<ManualTopUpEditResult> = response.response!;
-                            this.props.setAlertManualTopUpShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<ManualTopUpEditResult>) => {
-                            this.props.setAlertOpen(true);
-                            let message = "Gagal Mendapatkan Response";
-
-                            if (error.error) {
-                                message = error.error.metaData.message;
-                            }
-                        
-                            this.props.setAlertMessage(message);
-
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editManualTopUpAction(manualTopup, this.props.id)
+                                .then( (response: ApiResponse<ManualTopUpEditResult>) => {
+                                    const data: ApiResponseSuccess<ManualTopUpEditResult> = response.response!;
+                                    this.props.setAlertManualTopUpShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<ManualTopUpEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
+        
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+        
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

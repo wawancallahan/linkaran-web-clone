@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryCreateResult } from '../../../types/admin/foodCategory';
 import { createFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,24 +53,33 @@ class Form extends Component<Props> {
                         name: values.name
                     }
 
-                    this.props.createFoodCategoryAction(foodCategory)
-                        .then( (response: ApiResponse<FoodCategoryCreateResult>) => {
-                            const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.response!;
-                            this.props.setAlertFoodCategoryShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<FoodCategoryCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createFoodCategoryAction(foodCategory)
+                                .then( (response: ApiResponse<FoodCategoryCreateResult>) => {
+                                    const data: ApiResponseSuccess<FoodCategoryCreateResult> = response.response!;
+                                    this.props.setAlertFoodCategoryShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<FoodCategoryCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

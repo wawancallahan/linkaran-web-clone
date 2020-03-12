@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { Country, FormField, CountryEditField, CountryEditResult } from '../../../../types/admin/region/country';
 import { editCountryAction, setAlertCountryShowAction } from '../../../../actions/admin/region/country';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,24 +53,33 @@ class Form extends Component<Props> {
                         name: values.name
                     }
 
-                    this.props.editCountryAction(country, this.props.id)
-                        .then( (response: ApiResponse<CountryEditResult>) => {
-                            const data: ApiResponseSuccess<CountryEditResult> = response.response!;
-                            this.props.setAlertCountryShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<CountryEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editCountryAction(country, this.props.id)
+                                .then( (response: ApiResponse<CountryEditResult>) => {
+                                    const data: ApiResponseSuccess<CountryEditResult> = response.response!;
+                                    this.props.setAlertCountryShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<CountryEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

@@ -15,6 +15,7 @@ import { AppActions } from '../../../../types'
 import { approveTopUpAction } from '../../../../actions/financialManager/topup'
 import { ApiResponse } from '../../../../types/api'
 import { loadStateInterface } from '../Detail'
+import swal from 'sweetalert'
 
 type DetailApproveProps = RouteComponentProps & {
     data: TopUpShow | null,
@@ -40,28 +41,42 @@ class DetailApprove extends Component<Props, State> {
             submitApprove: true
         }, () => {
             if (this.props.data) {
-                this.props.approveTopUpAction(this.props.data.id)
-                    .then((response: ApiResponse<TopUpApprove>) => {
-                        this.props.reLoadTopUp({
-                            alert_visible: true,
-                            alert_message: 'Berhasil menyetujui topup',
-                            alert_color: 'success'
-                        })
-                    })
-                    .catch((error: ApiResponse<TopUpApprove>) => {
+
+                const data = this.props.data as TopUpShow
+
+                swal("Apakah anda yakin?", "Persetujuan topup akan dilakukan!", {
+                    icon: "warning",
+                    buttons: ["Tutup!", true],
+                }).then((willCreated) => {
+                    if (willCreated) {
+                        this.props.approveTopUpAction(data.id)
+                            .then((response: ApiResponse<TopUpApprove>) => {
+                                this.props.reLoadTopUp({
+                                    alert_visible: true,
+                                    alert_message: 'Berhasil menyetujui topup',
+                                    alert_color: 'success'
+                                })
+                            })
+                            .catch((error: ApiResponse<TopUpApprove>) => {
+                                this.setState({
+                                    submitApprove: false
+                                })
+
+                                let message = "Gagal Mendapatkan Response";
+            
+                                if (error.error) {
+                                    message = error.error.metaData.message;
+                                }
+
+                                this.props.setAlertMessage(message, "danger")
+                                this.props.setAlertOpen(true)
+                            })
+                    } else {
                         this.setState({
                             submitApprove: false
                         })
-
-                        let message = "Gagal Mendapatkan Response";
-    
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-
-                        this.props.setAlertMessage(message, "danger")
-                        this.props.setAlertOpen(true)
-                    })
+                    }
+                });
             } else {
                 this.setState({
                     submitApprove: false

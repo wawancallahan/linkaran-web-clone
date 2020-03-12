@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { Bank, FormField, BankEditField, BankEditResult } from '../../../types/admin/bank';
 import { editBankAction, setAlertBankShowAction } from '../../../actions/admin/bank';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
@@ -84,24 +85,33 @@ class Form extends Component<Props> {
                         accountNumber: values.accountNumber
                     }
 
-                    this.props.editBankAction(country, this.props.id)
-                        .then( (response: ApiResponse<BankEditResult>) => {
-                            const data: ApiResponseSuccess<BankEditResult> = response.response!;
-                            this.props.setAlertBankShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<BankEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
-
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editBankAction(country, this.props.id)
+                                    .then( (response: ApiResponse<BankEditResult>) => {
+                                        const data: ApiResponseSuccess<BankEditResult> = response.response!;
+                                        this.props.setAlertBankShowAction('Data Berhasil Diedit', 'success');
+                                        this.props.redirectOnSuccess();
+                                    })
+                                    .catch( (error: ApiResponse<BankEditResult>) => {
+                                        this.props.setAlertOpen(true);
+                                        let message = "Gagal Mendapatkan Response";
+            
+                                        if (error.error) {
+                                            message = error.error.metaData.message;
+                                        }
+                                    
+                                        this.props.setAlertMessage(message);
+            
+                                        action.setSubmitting(false)
+                                    });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

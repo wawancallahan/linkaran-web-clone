@@ -15,6 +15,7 @@ import { Service, FormField, ServiceCreate, ServiceCreateResult } from '../../..
 import { createServiceAction, setAlertServiceShowAction } from '../../../actions/admin/service';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { Paginator } from '../../../types/paginator';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -67,25 +68,34 @@ class Form extends Component<Props> {
                         maxServiceDistanceInKm: values.maxServiceDistanceInKm
                     }
 
-                    this.props.createServiceAction(service)
-                        .then( (response: ApiResponse<ServiceCreateResult>) => {
-                            const data: ApiResponseSuccess<ServiceCreateResult> = response.response!;
-                            this.props.setAlertServiceShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createServiceAction(service)
+                                .then( (response: ApiResponse<ServiceCreateResult>) => {
+                                    const data: ApiResponseSuccess<ServiceCreateResult> = response.response!;
+                                    this.props.setAlertServiceShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
 
-                        })
-                        .catch( (error: ApiResponse<ServiceCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                                })
+                                .catch( (error: ApiResponse<ServiceCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

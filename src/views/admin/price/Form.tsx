@@ -15,6 +15,7 @@ import { Price, FormField, PriceCreate, PriceCreateResult } from '../../../types
 import { createPriceAction, setAlertPriceShowAction } from '../../../actions/admin/price';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { Paginator } from '../../../types/paginator';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     basePrice: Yup.string()
@@ -74,24 +75,33 @@ class Form extends Component<Props> {
                         perKilometer: Number.parseInt(values.perKilometer)
                     }
 
-                    this.props.createPriceAction(price)
-                        .then( (response: ApiResponse<PriceCreateResult>) => {
-                            const data: ApiResponseSuccess<PriceCreateResult> = response.response!;
-                            this.props.setAlertPriceShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<PriceCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createPriceAction(price)
+                                .then( (response: ApiResponse<PriceCreateResult>) => {
+                                    const data: ApiResponseSuccess<PriceCreateResult> = response.response!;
+                                    this.props.setAlertPriceShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<PriceCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                if (error.error) {
+                                    message = error.error.metaData.message;
+                                }
+                            
+                                this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

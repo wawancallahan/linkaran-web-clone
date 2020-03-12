@@ -19,6 +19,7 @@ import {
     createDriverAction
 } from '../../../actions/admin/driver';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 import FormDriver from './FormDriver';
 import FormKendaraan from './FormKendaraan';
@@ -270,24 +271,33 @@ class Form extends Component<Props> {
                         isMeried: values.isMeried
                     }
 
-                    this.props.createDriverAction(driver)
-                    .then( (response: ApiResponse<DriverCreateResult>) => {
-                        const data: ApiResponseSuccess<DriverCreateResult> = response.response!;
-                        this.props.setAlertDriverShowAction('Data Berhasil Ditambah', 'success');
-                        this.props.redirectOnSuccess();
-                    })
-                    .catch( (error: ApiResponse<DriverCreateResult>) => {
-                        this.props.setAlertOpen(true);
-                        
-                        let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createDriverAction(driver)
+                                .then( (response: ApiResponse<DriverCreateResult>) => {
+                                    const data: ApiResponseSuccess<DriverCreateResult> = response.response!;
+                                    this.props.setAlertDriverShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<DriverCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                        action.setSubmitting(false)
                     });
                 }}
                 validationSchema={createSchema}

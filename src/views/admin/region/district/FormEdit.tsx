@@ -19,6 +19,7 @@ import { fetchListProvinceAction } from '../../../../actions/admin/region/provin
 import { ProvinceList } from '../../../../types/admin/region/province';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../../types/paginator';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -113,24 +114,33 @@ class Form extends Component<Props> {
                         }
                     }
 
-                    this.props.editDistrictAction(district, this.props.id)
-                        .then( (response: ApiResponse<DistrictEditResult>) => {
-                            const data: ApiResponseSuccess<DistrictEditResult> = response.response!;
-                            this.props.setAlertDistrictShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<DistrictEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editDistrictAction(district, this.props.id)
+                                .then( (response: ApiResponse<DistrictEditResult>) => {
+                                    const data: ApiResponseSuccess<DistrictEditResult> = response.response!;
+                                    this.props.setAlertDistrictShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<DistrictEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

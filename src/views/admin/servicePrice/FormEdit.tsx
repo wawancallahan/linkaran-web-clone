@@ -24,6 +24,7 @@ import { Service } from "../../../types/admin/service";
 import { fetchListServiceAction } from '../../../actions/admin/service';
 import { fetchListDistrictAction } from '../../../actions/admin/region/district';
 import { DistrictList } from '../../../types/admin/region/district';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     price: Yup.object().shape({
@@ -241,25 +242,34 @@ class Form extends Component<Props> {
                         driverPaymentDeductions: Number.parseInt(values.driverPaymentDeductions)
                     }
 
-                    this.props.editServicePriceAction(servicePrice, this.props.id)
-                        .then( (response: ApiResponse<ServicePriceEditResult>) => {
-                            const data: ApiResponseSuccess<ServicePriceEditResult> = response.response!;
-                            this.props.setAlertServicePriceShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editServicePriceAction(servicePrice, this.props.id)
+                                .then( (response: ApiResponse<ServicePriceEditResult>) => {
+                                    const data: ApiResponseSuccess<ServicePriceEditResult> = response.response!;
+                                    this.props.setAlertServicePriceShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
 
-                        })
-                        .catch( (error: ApiResponse<ServicePriceEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                                })
+                                .catch( (error: ApiResponse<ServicePriceEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >

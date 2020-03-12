@@ -39,6 +39,7 @@ import Dropzone from '../../../components/Dropzone/Dropzone';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import DatePicker from 'react-datepicker';
 import { Paginator } from '../../../types/paginator';
+import swal from 'sweetalert'
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -395,23 +396,32 @@ class Form extends Component<Props> {
                         nomor_asosiasi_warga_negara: values.nomor_asosiasi_warga_negara
                     }
 
-                    this.props.editInvestorAction(investor, this.props.id)
-                    .then( (response: ApiResponse<InvestorEditResult>) => {
-                        const data: ApiResponseSuccess<InvestorEditResult> = response.response!;
-                        this.props.setAlertInvestorShowAction('Data Berhasil Diedit', 'success');
-                        this.props.redirectOnSuccess();
-                    })
-                    .catch( (error: ApiResponse<InvestorEditResult>) => {
-                        this.props.setAlertOpen(true);
-                         let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editInvestorAction(investor, this.props.id)
+                                .then( (response: ApiResponse<InvestorEditResult>) => {
+                                    const data: ApiResponseSuccess<InvestorEditResult> = response.response!;
+                                    this.props.setAlertInvestorShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<InvestorEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                        action.setSubmitting(false)
                     });
                 }}
                 validationSchema={editSchema}

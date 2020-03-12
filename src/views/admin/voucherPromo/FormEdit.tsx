@@ -27,6 +27,7 @@ import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListVoucherTypeAction } from '../../../actions/admin/voucherType';
 import { VoucherType } from '../../../types/admin/voucherType';
 import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/utils';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -258,25 +259,34 @@ class Form extends Component<Props> {
                         service: values.service
                     }
 
-                    this.props.editVoucherPromoAction(voucherPromo, this.props.id)
-                        .then( (response: ApiResponse<VoucherPromoEditResult>) => {
-                            const data: ApiResponseSuccess<VoucherPromoEditResult> = response.response!;
-                            
-                            this.props.setAlertVoucherPromoShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<VoucherPromoEditResult>) => {
-                            this.props.setAlertOpen(true);
-                            let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editVoucherPromoAction(voucherPromo, this.props.id)
+                                .then( (response: ApiResponse<VoucherPromoEditResult>) => {
+                                    const data: ApiResponseSuccess<VoucherPromoEditResult> = response.response!;
+                                    
+                                    this.props.setAlertVoucherPromoShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<VoucherPromoEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                            if (error.error) {
-                                message = error.error.metaData.message;
-                            }
-                        
-                            this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

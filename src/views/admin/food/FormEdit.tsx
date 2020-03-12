@@ -26,6 +26,7 @@ import { Restaurant } from '../../../types/admin/restaurant';
 import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import Dropzone from '../../../components/Dropzone/Dropzone'
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -188,24 +189,33 @@ class Form extends Component<Props> {
                         image: values.image,
                     }
 
-                    this.props.editFoodAction(food, this.props.id)
-                        .then( (response: ApiResponse<FoodEditResult>) => {
-                            const data: ApiResponseSuccess<FoodEditResult> = response.response!;
-                            this.props.setAlertFoodShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<FoodEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editFoodAction(food, this.props.id)
+                                .then( (response: ApiResponse<FoodEditResult>) => {
+                                    const data: ApiResponseSuccess<FoodEditResult> = response.response!;
+                                    this.props.setAlertFoodShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<FoodEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

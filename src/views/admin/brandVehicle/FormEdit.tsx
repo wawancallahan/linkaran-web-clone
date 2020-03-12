@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { BrandVehicle, FormField, BrandVehicleCreate, BrandVehicleEdit, BrandVehicleEditResult } from '../../../types/admin/brandVehicle';
 import { editBrandVehicleAction, setAlertBrandVehicleShowAction } from '../../../actions/admin/brandVehicle';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,24 +53,33 @@ class Form extends Component<Props> {
                         name: values.name
                     }
 
-                    this.props.editBrandVehicleAction(brandVehicle, this.props.id)
-                        .then( (response: ApiResponse<BrandVehicleEditResult>) => {
-                            const data: ApiResponseSuccess<BrandVehicleEditResult> = response.response!;
-                            this.props.setAlertBrandVehicleShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<BrandVehicleEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editBrandVehicleAction(brandVehicle, this.props.id)
+                                .then( (response: ApiResponse<BrandVehicleEditResult>) => {
+                                    const data: ApiResponseSuccess<BrandVehicleEditResult> = response.response!;
+                                    this.props.setAlertBrandVehicleShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<BrandVehicleEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

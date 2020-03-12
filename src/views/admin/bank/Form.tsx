@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { Bank, FormField, BankCreateField, BankCreateResult } from '../../../types/admin/bank';
 import { createBankAction, setAlertBankShowAction } from '../../../actions/admin/bank';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
@@ -84,24 +85,33 @@ class Form extends Component<Props> {
                         accountNumber: values.accountNumber
                     }
 
-                    this.props.createBankAction(bank)
-                        .then( (response: ApiResponse<BankCreateResult>) => {
-                            const data: ApiResponseSuccess<BankCreateResult> = response.response!;
-                            this.props.setAlertBankShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<BankCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                            let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createBankAction(bank)
+                                .then( (response: ApiResponse<BankCreateResult>) => {
+                                    const data: ApiResponseSuccess<BankCreateResult> = response.response!;
+                                    this.props.setAlertBankShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<BankCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                            if (error.error) {
-                                message = error.error.metaData.message;
-                            }
-                        
-                            this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

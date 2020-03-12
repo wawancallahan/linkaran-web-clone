@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { VoucherType, FormField, VoucherTypeCreate, VoucherTypeCreateResult } from '../../../types/admin/voucherType';
 import { createVoucherTypeAction, setAlertVoucherTypeShowAction } from '../../../actions/admin/voucherType';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,24 +53,33 @@ class Form extends Component<Props> {
                         name: values.name
                     }
 
-                    this.props.createVoucherTypeAction(voucherType)
-                        .then( (response: ApiResponse<VoucherTypeCreateResult>) => {
-                            const data: ApiResponseSuccess<VoucherTypeCreateResult> = response.response!;
-                            this.props.setAlertVoucherTypeShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<VoucherTypeCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createVoucherTypeAction(voucherType)
+                                .then( (response: ApiResponse<VoucherTypeCreateResult>) => {
+                                    const data: ApiResponseSuccess<VoucherTypeCreateResult> = response.response!;
+                                    this.props.setAlertVoucherTypeShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<VoucherTypeCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

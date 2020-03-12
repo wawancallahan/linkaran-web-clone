@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { Restaurant, FormField, RestaurantEdit, RestaurantEditResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
 import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
-
+import swal from 'sweetalert'
 import FormInformation from './FormInformation';
 import FormOperational from './FormOperational';
 
@@ -170,25 +170,34 @@ class Form extends Component<Props> {
                         }
                     }
 
-                    this.props.editRestaurantAction(restaurant, this.props.id)
-                        .then( (response: ApiResponse<RestaurantEditResult>) => {
-                            const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
-                            this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<RestaurantEditResult>) => {
-                            this.props.setAlertOpen(true);
-                            
-                            let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editRestaurantAction(restaurant, this.props.id)
+                                .then( (response: ApiResponse<RestaurantEditResult>) => {
+                                    const data: ApiResponseSuccess<RestaurantEditResult> = response.response!;
+                                    this.props.setAlertRestaurantShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<RestaurantEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    
+                                    let message = "Gagal Mendapatkan Response";
 
-                            if (error.error) {
-                                message = error.error.metaData.message;
-                            }
-                
-                            this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                        
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >

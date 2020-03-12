@@ -18,6 +18,7 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../type
 
 import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
+import swal from 'sweetalert'
 
 import "react-datepicker/dist/react-datepicker.css";
 import FormInformation from './FormInformation';
@@ -174,24 +175,33 @@ class Form extends Component<Props> {
                         }
                     }
 
-                    this.props.createRestaurantAction(restaurant)
-                        .then( (response: ApiResponse<RestaurantCreateResult>) => {
-                            const data: ApiResponseSuccess<RestaurantCreateResult> = response.response!;
-                            this.props.setAlertRestaurantShowAction('Data Berhasil Ditambah', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<RestaurantCreateResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan ditambahkan!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willCreated) => {
+                        if (willCreated) {
+                            this.props.createRestaurantAction(restaurant)
+                                .then( (response: ApiResponse<RestaurantCreateResult>) => {
+                                    const data: ApiResponseSuccess<RestaurantCreateResult> = response.response!;
+                                    this.props.setAlertRestaurantShowAction('Data Berhasil Ditambah', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<RestaurantCreateResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
-                        }
-                    
-                        this.props.setAlertMessage(message);
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
 
+                                    action.setSubmitting(false)
+                                });
+                        } else {
                             action.setSubmitting(false)
-                        });
+                        }
+                    });
                 }}
                 validationSchema={createSchema}
             >
