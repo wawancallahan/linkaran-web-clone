@@ -20,6 +20,7 @@ import {
 } from '../../../actions/admin/driver';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 import FormDriver from './FormDriver';
 import FormKendaraan from './FormKendaraan';
@@ -304,33 +305,35 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <h3>Driver</h3>
-                                </FormGroup>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <h3>Driver</h3>
+                                    </FormGroup>
 
-                                <FormDriver FormikProps={FormikProps}/>
+                                    <FormDriver FormikProps={FormikProps}/>
 
-                                <hr/>
+                                    <hr/>
 
-                                <FormGroup>
-                                    <h3>Kendaraan</h3>
-                                </FormGroup>
+                                    <FormGroup>
+                                        <h3>Kendaraan</h3>
+                                    </FormGroup>
 
-                                <FormKendaraan FormikProps={FormikProps}/>  
+                                    <FormKendaraan FormikProps={FormikProps}/>  
 
-                                <FormGroup>
-                                    <h3>Pertanyaan</h3>
-                                </FormGroup>
+                                    <FormGroup>
+                                        <h3>Pertanyaan</h3>
+                                    </FormGroup>
 
-                                <FormPertanyaan FormikProps={FormikProps}/>                            
-                               
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                    <FormPertanyaan FormikProps={FormikProps}/>                            
+                                
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

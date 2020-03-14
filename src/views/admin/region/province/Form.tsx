@@ -20,6 +20,7 @@ import { CountryList } from '../../../../types/admin/region/country';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../../types/paginator';
 import swal from 'sweetalert'
+import BlockUi from '../../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -145,81 +146,83 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-alternativeName"
-                                    >
-                                        Nama Alternatif
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-alternativeName"
-                                    placeholder="Nama Alternatif"
-                                    type="text"
-                                    name="alternativeName"
-                                    maxLength={255}
-                                    value={FormikProps.values.alternativeName}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.alternativeName && FormikProps.errors.alternativeName) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.alternativeName && FormikProps.touched.alternativeName ? FormikProps.errors.alternativeName : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-country"
-                                    >
-                                        Country
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.country}
-                                        loadOptions={this.loadCountryHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('country', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('country', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.country && FormikProps.touched.country ? FormikProps.errors.country.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-alternativeName"
+                                        >
+                                            Nama Alternatif
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-alternativeName"
+                                        placeholder="Nama Alternatif"
+                                        type="text"
+                                        name="alternativeName"
+                                        maxLength={255}
+                                        value={FormikProps.values.alternativeName}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.alternativeName && FormikProps.errors.alternativeName) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.alternativeName && FormikProps.touched.alternativeName ? FormikProps.errors.alternativeName : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-country"
+                                        >
+                                            Country
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.country}
+                                            loadOptions={this.loadCountryHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('country', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('country', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.country && FormikProps.touched.country ? FormikProps.errors.country.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

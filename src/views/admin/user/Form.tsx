@@ -20,6 +20,7 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, Api
 import { Paginator } from '../../../types/paginator';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -155,106 +156,108 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-phoneNumber"
-                                    >
-                                        No Telepon
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-phoneNumber"
-                                    placeholder="No Telepon"
-                                    type="text"
-                                    name="phoneNumber"
-                                    maxLength={255}
-                                    value={FormikProps.values.phoneNumber}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.phoneNumber && FormikProps.errors.phoneNumber) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.phoneNumber && FormikProps.touched.phoneNumber ? FormikProps.errors.phoneNumber : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-email"
-                                    >
-                                        Email
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-email"
-                                    placeholder="Email"
-                                    type="email"
-                                    name="email"
-                                    maxLength={255}
-                                    value={FormikProps.values.email}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.email && FormikProps.errors.email) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.email && FormikProps.touched.email ? FormikProps.errors.email : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-role"
-                                    >
-                                        Role
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.roles}
-                                        loadOptions={this.loadRoleHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('roles', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('roles', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        isMulti
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.roles && FormikProps.touched.roles ? FormikProps.errors.roles : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-phoneNumber"
+                                        >
+                                            No Telepon
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-phoneNumber"
+                                        placeholder="No Telepon"
+                                        type="text"
+                                        name="phoneNumber"
+                                        maxLength={255}
+                                        value={FormikProps.values.phoneNumber}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.phoneNumber && FormikProps.errors.phoneNumber) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.phoneNumber && FormikProps.touched.phoneNumber ? FormikProps.errors.phoneNumber : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-email"
+                                        >
+                                            Email
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-email"
+                                        placeholder="Email"
+                                        type="email"
+                                        name="email"
+                                        maxLength={255}
+                                        value={FormikProps.values.email}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.email && FormikProps.errors.email) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.email && FormikProps.touched.email ? FormikProps.errors.email : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-role"
+                                        >
+                                            Role
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.roles}
+                                            loadOptions={this.loadRoleHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('roles', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('roles', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            isMulti
+                                            />
+                                        <div>
+                                            { FormikProps.errors.roles && FormikProps.touched.roles ? FormikProps.errors.roles : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

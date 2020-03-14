@@ -16,6 +16,8 @@ import { Restaurant, FormField, RestaurantEdit, RestaurantEditResult, OperatingT
 import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
+
 import FormInformation from './FormInformation';
 import FormOperational from './FormOperational';
 
@@ -203,10 +205,12 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST" type="multipart/form-data">
-                            <FormInformation FormikProps={FormikProps} />
-                            <FormOperational FormikProps={FormikProps} />
-                        </FormReactStrap>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST" type="multipart/form-data">
+                                <FormInformation FormikProps={FormikProps} />
+                                <FormOperational FormikProps={FormikProps} />
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

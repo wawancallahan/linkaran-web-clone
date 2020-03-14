@@ -16,6 +16,7 @@ import { createServiceAction, setAlertServiceShowAction } from '../../../actions
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { Paginator } from '../../../types/paginator';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -101,179 +102,181 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-code"
-                                    >
-                                        Kode
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-code"
-                                    placeholder="Kode"
-                                    type="text"
-                                    name="code"
-                                    maxLength={255}
-                                    value={FormikProps.values.code}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.code && FormikProps.errors.code) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.code && FormikProps.touched.code ? FormikProps.errors.code : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-canBeMultiple"
-                                    >
-                                        Dapat Lebih Dari 1
-                                    </label>
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <fieldset>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                defaultChecked
-                                                id="canBeMultiple_no"
-                                                name="canBeMultiple"
-                                                type="radio"
-                                                value="0"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
-                                            />
-                                            <label className="custom-control-label" htmlFor="canBeMultiple_no">
-                                                Tidak
-                                            </label>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-code"
+                                        >
+                                            Kode
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-code"
+                                        placeholder="Kode"
+                                        type="text"
+                                        name="code"
+                                        maxLength={255}
+                                        value={FormikProps.values.code}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.code && FormikProps.errors.code) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.code && FormikProps.touched.code ? FormikProps.errors.code : ''}
                                         </div>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                id="canBeMultiple_yes"
-                                                name="canBeMultiple"
-                                                type="radio"
-                                                value="1"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
-                                            />
-                                            <label className="custom-control-label" htmlFor="canBeMultiple_yes">
-                                                Ya
-                                            </label>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
                                         </div>
-                                    </fieldset>
-                                    <div>
-                                        {FormikProps.errors.canBeMultiple && FormikProps.touched.canBeMultiple ? FormikProps.errors.canBeMultiple : ''}
-                                    </div>
-                                </FormGroup>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-passangerWithDriver"
-                                    >
-                                        Penumpang Dengan Driver
-                                    </label>
-                                </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-canBeMultiple"
+                                        >
+                                            Dapat Lebih Dari 1
+                                        </label>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <fieldset>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                defaultChecked
-                                                id="passangerWithDriver_no"
-                                                name="passangerWithDriver"
-                                                type="radio"
-                                                value="0"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
-                                            />
-                                            <label className="custom-control-label" htmlFor="passangerWithDriver_no">
-                                                Tidak
-                                            </label>
+                                    <FormGroup>
+                                        <fieldset>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    defaultChecked
+                                                    id="canBeMultiple_no"
+                                                    name="canBeMultiple"
+                                                    type="radio"
+                                                    value="0"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="canBeMultiple_no">
+                                                    Tidak
+                                                </label>
+                                            </div>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    id="canBeMultiple_yes"
+                                                    name="canBeMultiple"
+                                                    type="radio"
+                                                    value="1"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="canBeMultiple_yes">
+                                                    Ya
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                        <div>
+                                            {FormikProps.errors.canBeMultiple && FormikProps.touched.canBeMultiple ? FormikProps.errors.canBeMultiple : ''}
                                         </div>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                id="passangerWithDriver_yes"
-                                                name="passangerWithDriver"
-                                                type="radio"
-                                                value="1"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
-                                            />
-                                            <label className="custom-control-label" htmlFor="passangerWithDriver_yes">
-                                                Ya
-                                            </label>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-passangerWithDriver"
+                                        >
+                                            Penumpang Dengan Driver
+                                        </label>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <fieldset>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    defaultChecked
+                                                    id="passangerWithDriver_no"
+                                                    name="passangerWithDriver"
+                                                    type="radio"
+                                                    value="0"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="passangerWithDriver_no">
+                                                    Tidak
+                                                </label>
+                                            </div>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    id="passangerWithDriver_yes"
+                                                    name="passangerWithDriver"
+                                                    type="radio"
+                                                    value="1"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="passangerWithDriver_yes">
+                                                    Ya
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                        <div>
+                                            {FormikProps.errors.passangerWithDriver && FormikProps.touched.passangerWithDriver ? FormikProps.errors.passangerWithDriver : ''}
                                         </div>
-                                    </fieldset>
-                                    <div>
-                                        {FormikProps.errors.passangerWithDriver && FormikProps.touched.passangerWithDriver ? FormikProps.errors.passangerWithDriver : ''}
-                                    </div>
-                                </FormGroup>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-maxServiceDistanceInKm"
-                                    >
-                                        Maksimal Jarak (KM)
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-maxServiceDistanceInKm"
-                                    placeholder=" Maksimal Jarak (KM)"
-                                    type="number"
-                                    name="maxServiceDistanceInKm"
-                                    maxLength={255}
-                                    value={FormikProps.values.maxServiceDistanceInKm}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.maxServiceDistanceInKm && FormikProps.errors.maxServiceDistanceInKm) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.maxServiceDistanceInKm && FormikProps.touched.maxServiceDistanceInKm ? FormikProps.errors.maxServiceDistanceInKm : ''}
-                                    </div>
-                                </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-maxServiceDistanceInKm"
+                                        >
+                                            Maksimal Jarak (KM)
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-maxServiceDistanceInKm"
+                                        placeholder=" Maksimal Jarak (KM)"
+                                        type="number"
+                                        name="maxServiceDistanceInKm"
+                                        maxLength={255}
+                                        value={FormikProps.values.maxServiceDistanceInKm}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.maxServiceDistanceInKm && FormikProps.errors.maxServiceDistanceInKm) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.maxServiceDistanceInKm && FormikProps.touched.maxServiceDistanceInKm ? FormikProps.errors.maxServiceDistanceInKm : ''}
+                                        </div>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

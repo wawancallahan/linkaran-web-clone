@@ -16,6 +16,7 @@ import { Bank, FormField, BankCreateField, BankCreateResult } from '../../../typ
 import { createBankAction, setAlertBankShowAction } from '../../../actions/admin/bank';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
@@ -69,12 +70,10 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
-
     render() {
         return (
             <Formik 
                 initialValues={this.props.form}
-                
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
@@ -117,109 +116,111 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-nama"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-nama"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="nama"
-                                    maxLength={255}
-                                    value={FormikProps.values.nama}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.nama && FormikProps.errors.nama) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.nama && FormikProps.touched.nama ? FormikProps.errors.nama : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-bankName"
-                                    >
-                                        Nama Bank
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-bankName"
-                                    placeholder="Nama Bank"
-                                    type="text"
-                                    name="bankName"
-                                    maxLength={255}
-                                    value={FormikProps.values.bankName}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.bankName && FormikProps.errors.bankName) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.bankName && FormikProps.touched.bankName ? FormikProps.errors.bankName : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-accountName"
-                                    >
-                                        Nama Akun
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-accountName"
-                                    placeholder="Nama Akun"
-                                    type="text"
-                                    name="accountName"
-                                    maxLength={255}
-                                    value={FormikProps.values.accountName}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.accountName && FormikProps.errors.accountName) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.accountName && FormikProps.touched.accountName ? FormikProps.errors.accountName : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-accountNumber"
-                                    >
-                                        Nomor Akun
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-accountNumber"
-                                    placeholder="Nomor Akun"
-                                    type="text"
-                                    name="accountNumber"
-                                    maxLength={255}
-                                    value={FormikProps.values.accountNumber}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.accountNumber && FormikProps.errors.accountNumber) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.accountNumber && FormikProps.touched.accountNumber ? FormikProps.errors.accountNumber : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-nama"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-nama"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="nama"
+                                        maxLength={255}
+                                        value={FormikProps.values.nama}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.nama && FormikProps.errors.nama) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.nama && FormikProps.touched.nama ? FormikProps.errors.nama : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-bankName"
+                                        >
+                                            Nama Bank
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-bankName"
+                                        placeholder="Nama Bank"
+                                        type="text"
+                                        name="bankName"
+                                        maxLength={255}
+                                        value={FormikProps.values.bankName}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.bankName && FormikProps.errors.bankName) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.bankName && FormikProps.touched.bankName ? FormikProps.errors.bankName : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-accountName"
+                                        >
+                                            Nama Akun
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-accountName"
+                                        placeholder="Nama Akun"
+                                        type="text"
+                                        name="accountName"
+                                        maxLength={255}
+                                        value={FormikProps.values.accountName}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.accountName && FormikProps.errors.accountName) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.accountName && FormikProps.touched.accountName ? FormikProps.errors.accountName : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-accountNumber"
+                                        >
+                                            Nomor Akun
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-accountNumber"
+                                        placeholder="Nomor Akun"
+                                        type="text"
+                                        name="accountNumber"
+                                        maxLength={255}
+                                        value={FormikProps.values.accountNumber}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.accountNumber && FormikProps.errors.accountNumber) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.accountNumber && FormikProps.touched.accountNumber ? FormikProps.errors.accountNumber : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

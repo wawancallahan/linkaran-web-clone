@@ -46,7 +46,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    needApprove: number
 }
 
 const TableItem = (props: {
@@ -83,7 +83,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        needApprove: 1
     }
 
     componentDidMount() {
@@ -99,7 +99,7 @@ class List extends Component<Props, State> {
     }
 
     fetchTopUpList = (page: number) => {
-        this.props.fetchTopUpAction(page);
+        this.props.fetchTopUpAction(page, this.state.needApprove);
     }
 
     render() {
@@ -166,7 +166,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchTopUpAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.props.fetchTopUpAction(page, this.state.needApprove)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -192,14 +194,14 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchTopUpAction: (page: number) => void,
+    fetchTopUpAction: (page: number, needApprove: number) => void,
     setAlertTopUpHideAction: () => void,
     setAlertTopUpShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchTopUpAction: (page: number) => dispatch(fetchTopUpAction(page)),
+        fetchTopUpAction: (page: number, needApprove: number) => dispatch(fetchTopUpAction(page, needApprove)),
         setAlertTopUpHideAction: () => dispatch(setAlertTopUpHideAction()),
         setAlertTopUpShowAction: (message: string, color: string) => dispatch(setAlertTopUpShowAction(message, color))
     }
@@ -207,6 +209,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar TopUp")
+                            withTitle(List, "Daftar Top Up")
                     )
                 );

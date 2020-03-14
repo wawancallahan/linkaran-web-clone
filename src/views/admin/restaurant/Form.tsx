@@ -19,6 +19,7 @@ import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../type
 import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 import "react-datepicker/dist/react-datepicker.css";
 import FormInformation from './FormInformation';
@@ -207,10 +208,12 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST" type="multipart/form-data">
-                            <FormInformation FormikProps={FormikProps} />
-                            <FormOperational FormikProps={FormikProps} />
-                        </FormReactStrap>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST" type="multipart/form-data">
+                                <FormInformation FormikProps={FormikProps} />
+                                <FormOperational FormikProps={FormikProps} />
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

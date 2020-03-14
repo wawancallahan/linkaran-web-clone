@@ -23,6 +23,7 @@ import { fetchListBankAction } from '../../../actions/admin/bank';
 import { Driver } from '../../../types/admin/driver';
 import { fetchListDriverApiAction } from '../../../actions/admin/driver';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi' 
 
 const createSchema = Yup.object().shape({
     amount: Yup.string()
@@ -202,95 +203,97 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-amount"
-                                    >
-                                        Jumlah
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-amount"
-                                    placeholder="Jumlah"
-                                    type="text"
-                                    name="amount"
-                                    maxLength={255}
-                                    value={FormikProps.values.amount}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}
-                                    </div>
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-driverProfile"
-                                    >
-                                        Driver
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.driverProfile}
-                                        loadOptions={this.loadDriverHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('driverProfile', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('driverProfile', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-amount"
+                                        >
+                                            Jumlah
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-amount"
+                                        placeholder="Jumlah"
+                                        type="text"
+                                        name="amount"
+                                        maxLength={255}
+                                        value={FormikProps.values.amount}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.driverProfile && FormikProps.touched.driverProfile ? FormikProps.errors.driverProfile.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-bank"
-                                    >
-                                        Bank
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.bank}
-                                        loadOptions={this.loadBankHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('bank', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('bank', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        />
-                                    <div>
-                                        { FormikProps.errors.bank && FormikProps.touched.bank ? FormikProps.errors.bank.value : '' }
-                                    </div>
-                                </FormGroup>
+                                        <div>
+                                            {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}
+                                        </div>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-upload-photo"
-                                    >
-                                        Upload Bukti
-                                    </label>
-                                    <Dropzone onFilesAdded={(files: any[]) => {
-                                        this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
-                                    }} disabled={false} multiple={false} previewUrl={FormikProps.values.image_preview} />
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-driverProfile"
+                                        >
+                                            Driver
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.driverProfile}
+                                            loadOptions={this.loadDriverHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('driverProfile', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('driverProfile', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.driverProfile && FormikProps.touched.driverProfile ? FormikProps.errors.driverProfile.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-bank"
+                                        >
+                                            Bank
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.bank}
+                                            loadOptions={this.loadBankHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('bank', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('bank', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.bank && FormikProps.touched.bank ? FormikProps.errors.bank.value : '' }
+                                        </div>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-upload-photo"
+                                        >
+                                            Upload Bukti
+                                        </label>
+                                        <Dropzone onFilesAdded={(files: any[]) => {
+                                            this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
+                                        }} disabled={false} multiple={false} previewUrl={FormikProps.values.image_preview} />
+                                        
+                                        <div>
+                                            {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
+                                        </div>
+                                    </FormGroup>
                                     
-                                    <div>
-                                        {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
-                                    </div>
-                                </FormGroup>
-                                
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

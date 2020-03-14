@@ -15,6 +15,8 @@ import { connect } from 'react-redux';
 import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryEdit, FoodCategoryEditResult } from '../../../types/admin/foodCategory';
 import { editFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
+import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,60 +54,71 @@ class Form extends Component<Props> {
                         name: values.name
                     }
 
-                    this.props.editFoodCategoryAction(foodCategory, this.props.id)
-                        .then( (response: ApiResponse<FoodCategoryEditResult>) => {
-                            const data: ApiResponseSuccess<FoodCategoryEditResult> = response.response!;
-                            this.props.setAlertFoodCategoryShowAction('Data Berhasil Diedit', 'success');
-                            this.props.redirectOnSuccess();
-                        })
-                        .catch( (error: ApiResponse<FoodCategoryEditResult>) => {
-                            this.props.setAlertOpen(true);
-                             let message = "Gagal Mendapatkan Response";
+                    swal("Apakah anda yakin?", "Data akan diubah!", {
+                        icon: "warning",
+                        buttons: ["Tutup!", true],
+                    }).then((willEdited) => {
+                        if (willEdited) {
+                            this.props.editFoodCategoryAction(foodCategory, this.props.id)
+                                .then( (response: ApiResponse<FoodCategoryEditResult>) => {
+                                    const data: ApiResponseSuccess<FoodCategoryEditResult> = response.response!;
+                                    this.props.setAlertFoodCategoryShowAction('Data Berhasil Diedit', 'success');
+                                    this.props.redirectOnSuccess();
+                                })
+                                .catch( (error: ApiResponse<FoodCategoryEditResult>) => {
+                                    this.props.setAlertOpen(true);
+                                    let message = "Gagal Mendapatkan Response";
 
-                        if (error.error) {
-                            message = error.error.metaData.message;
+                                    if (error.error) {
+                                        message = error.error.metaData.message;
+                                    }
+                                
+                                    this.props.setAlertMessage(message);
+
+                                    action.setSubmitting(false)
+                                });
+                        } else {
+                            action.setSubmitting(false)
                         }
-                    
-                        this.props.setAlertMessage(message);
-
-                             action.setSubmitting(false)
-                        });
+                    });
                 }}
                 validationSchema={createSchema}
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

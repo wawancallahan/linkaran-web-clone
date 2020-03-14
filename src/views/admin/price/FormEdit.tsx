@@ -15,6 +15,7 @@ import { Price, FormField, PriceCreate, PriceEditResult } from '../../../types/a
 import { editPriceAction, setAlertPriceShowAction } from '../../../actions/admin/price';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi' 
 
 const createSchema = Yup.object().shape({
     basePrice: Yup.string()
@@ -108,85 +109,87 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-basePrice"
-                                    >
-                                        Harga Dasar
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-basePrice"
-                                    placeholder="Harga Dasar"
-                                    type="text"
-                                    name="basePrice"
-                                    maxLength={255}
-                                    value={FormikProps.values.basePrice}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.basePrice && FormikProps.errors.basePrice) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.basePrice && FormikProps.touched.basePrice ? FormikProps.errors.basePrice : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-perKilometer"
-                                    >
-                                        Harga Per Kilometer
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-perKilometer"
-                                    placeholder="Harga Per Kilometer"
-                                    type="text"
-                                    name="perKilometer"
-                                    maxLength={255}
-                                    value={FormikProps.values.perKilometer}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.perKilometer && FormikProps.errors.perKilometer) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.perKilometer && FormikProps.touched.perKilometer ? FormikProps.errors.perKilometer : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-minKm"
-                                    >
-                                        Minimal Jarak Tempuh
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-minKm"
-                                    placeholder="Minimal Jarak Tempuh"
-                                    type="text"
-                                    name="minKm"
-                                    maxLength={255}
-                                    value={FormikProps.values.minKm}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.minKm && FormikProps.errors.minKm) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.minKm && FormikProps.touched.minKm ? FormikProps.errors.minKm : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-basePrice"
+                                        >
+                                            Harga Dasar
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-basePrice"
+                                        placeholder="Harga Dasar"
+                                        type="text"
+                                        name="basePrice"
+                                        maxLength={255}
+                                        value={FormikProps.values.basePrice}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.basePrice && FormikProps.errors.basePrice) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.basePrice && FormikProps.touched.basePrice ? FormikProps.errors.basePrice : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-perKilometer"
+                                        >
+                                            Harga Per Kilometer
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-perKilometer"
+                                        placeholder="Harga Per Kilometer"
+                                        type="text"
+                                        name="perKilometer"
+                                        maxLength={255}
+                                        value={FormikProps.values.perKilometer}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.perKilometer && FormikProps.errors.perKilometer) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.perKilometer && FormikProps.touched.perKilometer ? FormikProps.errors.perKilometer : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-minKm"
+                                        >
+                                            Minimal Jarak Tempuh
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-minKm"
+                                        placeholder="Minimal Jarak Tempuh"
+                                        type="text"
+                                        name="minKm"
+                                        maxLength={255}
+                                        value={FormikProps.values.minKm}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.minKm && FormikProps.errors.minKm) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.minKm && FormikProps.touched.minKm ? FormikProps.errors.minKm : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

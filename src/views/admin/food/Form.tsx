@@ -27,6 +27,7 @@ import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import Dropzone from '../../../components/Dropzone/Dropzone'
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -220,166 +221,168 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-price"
-                                    >
-                                        Harga
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-price"
-                                    placeholder="Harga"
-                                    type="number"
-                                    name="price"
-                                    maxLength={255}
-                                    value={FormikProps.values.price}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.price && FormikProps.errors.price) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-rating"
-                                    >
-                                        Rating
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-rating"
-                                    placeholder="Rating"
-                                    type="number"
-                                    name="rating"
-                                    maxLength={255}
-                                    value={FormikProps.values.rating}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.rating && FormikProps.errors.rating) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.rating && FormikProps.touched.rating ? FormikProps.errors.rating : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-description"
-                                    >
-                                        Deskripsi
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-description"
-                                    placeholder="Deskripsi"
-                                    type="textarea"
-                                    name="description"
-                                    maxLength={255}
-                                    value={FormikProps.values.description}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.description && FormikProps.errors.description) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.description && FormikProps.touched.description ? FormikProps.errors.description : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-foodCategory"
-                                    >
-                                        Kategori
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.foodCategory}
-                                        loadOptions={this.loadFoodCategoryHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('foodCategory', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('foodCategory', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.foodCategory && FormikProps.touched.foodCategory ? FormikProps.errors.foodCategory.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-restaurant"
-                                    >
-                                        Restoran
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.restaurant}
-                                        loadOptions={this.loadRestaurantHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('restaurant', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('restaurant', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-price"
+                                        >
+                                            Harga
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-price"
+                                        placeholder="Harga"
+                                        type="number"
+                                        name="price"
+                                        maxLength={255}
+                                        value={FormikProps.values.price}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.price && FormikProps.errors.price) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.restaurant && FormikProps.touched.restaurant ? FormikProps.errors.restaurant.value : '' }
-                                    </div>
-                                </FormGroup>
+                                        <div>
+                                            {FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-rating"
+                                        >
+                                            Rating
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-rating"
+                                        placeholder="Rating"
+                                        type="number"
+                                        name="rating"
+                                        maxLength={255}
+                                        value={FormikProps.values.rating}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.rating && FormikProps.errors.rating) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.rating && FormikProps.touched.rating ? FormikProps.errors.rating : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-description"
+                                        >
+                                            Deskripsi
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-description"
+                                        placeholder="Deskripsi"
+                                        type="textarea"
+                                        name="description"
+                                        maxLength={255}
+                                        value={FormikProps.values.description}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.description && FormikProps.errors.description) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.description && FormikProps.touched.description ? FormikProps.errors.description : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-foodCategory"
+                                        >
+                                            Kategori
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.foodCategory}
+                                            loadOptions={this.loadFoodCategoryHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('foodCategory', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('foodCategory', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.foodCategory && FormikProps.touched.foodCategory ? FormikProps.errors.foodCategory.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-restaurant"
+                                        >
+                                            Restoran
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.restaurant}
+                                            loadOptions={this.loadRestaurantHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('restaurant', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('restaurant', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.restaurant && FormikProps.touched.restaurant ? FormikProps.errors.restaurant.value : '' }
+                                        </div>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-upload-photo"
-                                    >
-                                        Upload Gambar
-                                    </label>
-                                    <Dropzone onFilesAdded={(files: any[]) => {
-                                        this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
-                                    }} disabled={false} multiple={false} />
-                                    
-                                    <div>
-                                        {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
-                                    </div>
-                                </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-upload-photo"
+                                        >
+                                            Upload Gambar
+                                        </label>
+                                        <Dropzone onFilesAdded={(files: any[]) => {
+                                            this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
+                                        }} disabled={false} multiple={false} />
+                                        
+                                        <div>
+                                            {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
+                                        </div>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

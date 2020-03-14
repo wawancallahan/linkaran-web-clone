@@ -28,6 +28,7 @@ import { fetchListVoucherTypeAction } from '../../../actions/admin/voucherType';
 import { VoucherType } from '../../../types/admin/voucherType';
 import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/utils';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -291,337 +292,339 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-type"
-                                    >
-                                        Tipe Voucher
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.type}
-                                        loadOptions={this.loadVoucherTypeHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('type', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('type', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-type"
+                                        >
+                                            Tipe Voucher
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.type}
+                                            loadOptions={this.loadVoucherTypeHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('type', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('type', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.type && FormikProps.touched.type ? FormikProps.errors.type : '' }
+                                        </div>
+                                    </FormGroup> 
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-code"
+                                        >
+                                            Kode
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-code"
+                                        placeholder="Kode"
+                                        type="text"
+                                        name="code"
+                                        maxLength={255}
+                                        value={FormikProps.values.code}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.code && FormikProps.errors.code) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.type && FormikProps.touched.type ? FormikProps.errors.type : '' }
-                                    </div>
-                                </FormGroup> 
+                                        <div>
+                                            {FormikProps.errors.code && FormikProps.touched.code ? FormikProps.errors.code : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                        >
+                                            Nama
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-name"
+                                        placeholder="Nama"
+                                        type="text"
+                                        name="name"
+                                        maxLength={255}
+                                        value={FormikProps.values.name}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-description"
+                                        >
+                                            Deskripsi
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-description"
+                                        placeholder="Deskripsi"
+                                        type="textarea"
+                                        name="description"
+                                        maxLength={255}
+                                        value={FormikProps.values.description}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.description && FormikProps.errors.description) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.description && FormikProps.touched.description ? FormikProps.errors.description : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-amount"
+                                        >
+                                            Nominal Potongan
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-amount"
+                                        placeholder="Nominal Potongan"
+                                        type="text"
+                                        name="amount"
+                                        maxLength={255}
+                                        value={FormikProps.values.amount}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-minimumPurchase"
+                                        >
+                                            Minimal Pembelian
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-minimumPurchase"
+                                        placeholder="Minimal Pembelian"
+                                        type="text"
+                                        name="minimumPurchase"
+                                        maxLength={255}
+                                        value={FormikProps.values.minimumPurchase}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.minimumPurchase && FormikProps.errors.minimumPurchase) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.minimumPurchase && FormikProps.touched.minimumPurchase ? FormikProps.errors.minimumPurchase : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-quota"
+                                        >
+                                            Kouta
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-quota"
+                                        placeholder="Kouta"
+                                        type="text"
+                                        name="quota"
+                                        maxLength={255}
+                                        value={FormikProps.values.quota}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.quota && FormikProps.errors.quota) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.quota && FormikProps.touched.quota ? FormikProps.errors.quota : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-quantity"
+                                        >
+                                            Jumlah Penggunaan
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-quantity"
+                                        placeholder="Jumlah Penggunaan"
+                                        type="text"
+                                        name="quantity"
+                                        maxLength={255}
+                                        value={FormikProps.values.quantity}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.quantity && FormikProps.errors.quantity) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.quantity && FormikProps.touched.quantity ? FormikProps.errors.quantity : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-file-image"
+                                        >
+                                            Gambar
+                                        </label>
+                                        <Dropzone onFilesAdded={(files: any[]) => {
+                                            this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
+                                        }} disabled={false} multiple={false} />
+                                        
+                                        <div>
+                                            {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
+                                        </div>
+                                    </FormGroup>
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-code"
-                                    >
-                                        Kode
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-code"
-                                    placeholder="Kode"
-                                    type="text"
-                                    name="code"
-                                    maxLength={255}
-                                    value={FormikProps.values.code}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.code && FormikProps.errors.code) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.code && FormikProps.touched.code ? FormikProps.errors.code : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-name"
-                                    >
-                                        Nama
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-name"
-                                    placeholder="Nama"
-                                    type="text"
-                                    name="name"
-                                    maxLength={255}
-                                    value={FormikProps.values.name}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.name && FormikProps.errors.name) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.name && FormikProps.touched.name ? FormikProps.errors.name : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-description"
-                                    >
-                                        Deskripsi
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-description"
-                                    placeholder="Deskripsi"
-                                    type="textarea"
-                                    name="description"
-                                    maxLength={255}
-                                    value={FormikProps.values.description}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.description && FormikProps.errors.description) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.description && FormikProps.touched.description ? FormikProps.errors.description : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-amount"
-                                    >
-                                        Nominal Potongan
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-amount"
-                                    placeholder="Nominal Potongan"
-                                    type="text"
-                                    name="amount"
-                                    maxLength={255}
-                                    value={FormikProps.values.amount}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-minimumPurchase"
-                                    >
-                                        Minimal Pembelian
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-minimumPurchase"
-                                    placeholder="Minimal Pembelian"
-                                    type="text"
-                                    name="minimumPurchase"
-                                    maxLength={255}
-                                    value={FormikProps.values.minimumPurchase}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.minimumPurchase && FormikProps.errors.minimumPurchase) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.minimumPurchase && FormikProps.touched.minimumPurchase ? FormikProps.errors.minimumPurchase : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-quota"
-                                    >
-                                        Kouta
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-quota"
-                                    placeholder="Kouta"
-                                    type="text"
-                                    name="quota"
-                                    maxLength={255}
-                                    value={FormikProps.values.quota}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.quota && FormikProps.errors.quota) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.quota && FormikProps.touched.quota ? FormikProps.errors.quota : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-quantity"
-                                    >
-                                        Jumlah Penggunaan
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-quantity"
-                                    placeholder="Jumlah Penggunaan"
-                                    type="text"
-                                    name="quantity"
-                                    maxLength={255}
-                                    value={FormikProps.values.quantity}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.quantity && FormikProps.errors.quantity) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.quantity && FormikProps.touched.quantity ? FormikProps.errors.quantity : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-file-image"
-                                    >
-                                        Gambar
-                                    </label>
-                                    <Dropzone onFilesAdded={(files: any[]) => {
-                                        this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
-                                    }} disabled={false} multiple={false} />
-                                    
-                                    <div>
-                                        {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
-                                    </div>
-                                </FormGroup>
-
-                                <Row>
-                                    <Col>
-                                        <FormGroup>
-                                            <label
-                                            className="form-control-label"
-                                            htmlFor="input-startDateTime"
-                                            >
-                                                Periode Awal
-                                            </label>
-                                            <div className="react-datepicker-w100">
-                                            <DatePicker
-                                                selected={FormikProps.values.startDateTime}
-                                                onChange={date => FormikProps.setFieldValue('startDateTime', date)}
-                                                onBlur={() => FormikProps.setFieldTouched('startDateTime', true)}
-                                                dateFormat="yyyy-MM-dd hh:mm"
-                                                showTimeSelect
-                                                className="form-control form-control-alternative"
-                                                required
-                                                />
-                                            </div>
-                                            <div>
-                                                {FormikProps.errors.startDateTime && FormikProps.touched.startDateTime ? FormikProps.errors.startDateTime : ''}
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <label
-                                            className="form-control-label"
-                                            htmlFor="input-endDateTime"
-                                            >
-                                                Periode Akhir
-                                            </label>
+                                    <Row>
+                                        <Col>
+                                            <FormGroup>
+                                                <label
+                                                className="form-control-label"
+                                                htmlFor="input-startDateTime"
+                                                >
+                                                    Periode Awal
+                                                </label>
                                                 <div className="react-datepicker-w100">
                                                 <DatePicker
-                                                    selected={FormikProps.values.endDateTime}
-                                                    onChange={date => FormikProps.setFieldValue('endDateTime', date)}
-                                                    onBlur={() => FormikProps.setFieldTouched('endDateTime', true)}
+                                                    selected={FormikProps.values.startDateTime}
+                                                    onChange={date => FormikProps.setFieldValue('startDateTime', date)}
+                                                    onBlur={() => FormikProps.setFieldTouched('startDateTime', true)}
                                                     dateFormat="yyyy-MM-dd hh:mm"
                                                     showTimeSelect
                                                     className="form-control form-control-alternative"
                                                     required
                                                     />
                                                 </div>
-                                            <div>
-                                                {FormikProps.errors.endDateTime && FormikProps.touched.endDateTime ? FormikProps.errors.endDateTime : ''}
+                                                <div>
+                                                    {FormikProps.errors.startDateTime && FormikProps.touched.startDateTime ? FormikProps.errors.startDateTime : ''}
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col>
+                                            <FormGroup>
+                                                <label
+                                                className="form-control-label"
+                                                htmlFor="input-endDateTime"
+                                                >
+                                                    Periode Akhir
+                                                </label>
+                                                    <div className="react-datepicker-w100">
+                                                    <DatePicker
+                                                        selected={FormikProps.values.endDateTime}
+                                                        onChange={date => FormikProps.setFieldValue('endDateTime', date)}
+                                                        onBlur={() => FormikProps.setFieldTouched('endDateTime', true)}
+                                                        dateFormat="yyyy-MM-dd hh:mm"
+                                                        showTimeSelect
+                                                        className="form-control form-control-alternative"
+                                                        required
+                                                        />
+                                                    </div>
+                                                <div>
+                                                    {FormikProps.errors.endDateTime && FormikProps.touched.endDateTime ? FormikProps.errors.endDateTime : ''}
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-isLimited"
+                                        >
+                                            Target Penggunaan
+                                        </label>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <fieldset>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    defaultChecked
+                                                    id="isLimited_no"
+                                                    name="isLimited"
+                                                    type="radio"
+                                                    value="0"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="isLimited_no">
+                                                    Public
+                                                </label>
                                             </div>
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-isLimited"
-                                    >
-                                        Target Penggunaan
-                                    </label>
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <fieldset>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                defaultChecked
-                                                id="isLimited_no"
-                                                name="isLimited"
-                                                type="radio"
-                                                value="0"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
-                                            />
-                                            <label className="custom-control-label" htmlFor="isLimited_no">
-                                                Public
-                                            </label>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    id="isLimited_yes"
+                                                    name="isLimited"
+                                                    type="radio"
+                                                    value="1"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="isLimited_yes">
+                                                    Terbatas
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                        <div>
+                                            {FormikProps.errors.isLimited && FormikProps.touched.isLimited ? FormikProps.errors.isLimited : ''}
                                         </div>
-                                        <div className="custom-control custom-radio mb-3">
-                                            <input
-                                                className="custom-control-input"
-                                                id="isLimited_yes"
-                                                name="isLimited"
-                                                type="radio"
-                                                value="1"
-                                                onChange={FormikProps.handleChange}
-                                                onBlur={FormikProps.handleBlur}
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-service"
+                                        >
+                                            Layanan
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.service}
+                                            loadOptions={this.loadServiceHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('service', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('service', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            isMulti
                                             />
-                                            <label className="custom-control-label" htmlFor="isLimited_yes">
-                                                Terbatas
-                                            </label>
+                                        <div>
+                                            { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service : '' }
                                         </div>
-                                    </fieldset>
-                                    <div>
-                                        {FormikProps.errors.isLimited && FormikProps.touched.isLimited ? FormikProps.errors.isLimited : ''}
-                                    </div>
-                                </FormGroup>
+                                    </FormGroup>    
 
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-service"
-                                    >
-                                        Layanan
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.service}
-                                        loadOptions={this.loadServiceHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('service', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('service', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        isMulti
-                                        />
-                                    <div>
-                                        { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service : '' }
-                                    </div>
-                                </FormGroup>    
-
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>

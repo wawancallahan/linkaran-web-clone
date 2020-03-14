@@ -30,6 +30,7 @@ import { Service } from "../../../types/admin/service";
 import { fetchListDistrictAction } from '../../../actions/admin/region/district';
 import { DistrictList } from '../../../types/admin/region/district';
 import swal from 'sweetalert'
+import BlockUi from '../../../components/BlockUi/BlockUi'
 
 const createSchema = Yup.object().shape({
     price: Yup.object().shape({
@@ -289,117 +290,119 @@ class Form extends Component<Props> {
             >
                 {(FormikProps => {
                     return (
-                        <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
-                            <div className="pl-lg-4">
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-price"
-                                    >
-                                        Harga
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.price}
-                                        loadOptions={this.loadPriceHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('price', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('price', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
+                        <BlockUi blocking={FormikProps.isSubmitting}>
+                            <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                <div className="pl-lg-4">
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-price"
+                                        >
+                                            Harga
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.price}
+                                            loadOptions={this.loadPriceHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('price', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('price', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-driverPaymentDeductions"
+                                        >
+                                            Pengurangan Pembayaran driver
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-driverPaymentDeductions"
+                                        placeholder="Pengurangan Pembayaran driver"
+                                        type="text"
+                                        name="driverPaymentDeductions"
+                                        maxLength={255}
+                                        value={FormikProps.values.driverPaymentDeductions}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.driverPaymentDeductions && FormikProps.errors.driverPaymentDeductions) }
                                         />
-                                    <div>
-                                        { FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-driverPaymentDeductions"
-                                    >
-                                        Pengurangan Pembayaran driver
-                                    </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-driverPaymentDeductions"
-                                    placeholder="Pengurangan Pembayaran driver"
-                                    type="text"
-                                    name="driverPaymentDeductions"
-                                    maxLength={255}
-                                    value={FormikProps.values.driverPaymentDeductions}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.driverPaymentDeductions && FormikProps.errors.driverPaymentDeductions) }
-                                    />
-                                    <div>
-                                        {FormikProps.errors.driverPaymentDeductions && FormikProps.touched.driverPaymentDeductions ? FormikProps.errors.driverPaymentDeductions : ''}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-district"
-                                    >
-                                        Wilayah
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.district}
-                                        loadOptions={this.loadRegionDistrictHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('district', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('district', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        />
-                                    <div>
-                                        { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-service"
-                                    >
-                                        Layanan
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.service}
-                                        loadOptions={this.loadServiceHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('service', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('service', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        />
-                                    <div>
-                                        { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service.value : '' }
-                                    </div>
-                                </FormGroup>    
-                                <FormGroup>
-                                    <label
-                                    className="form-control-label"
-                                    htmlFor="input-vehicleType"
-                                    >
-                                        Jenis Kendaraan
-                                    </label>
-                                    <ReactSelectAsyncPaginate 
-                                        value={FormikProps.values.vehicleType}
-                                        loadOptions={this.loadVehicleTypeHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('vehicleType', option)}
-                                        onBlur={() => FormikProps.setFieldTouched('vehicleType', true)}
-                                        additional={{
-                                            page: 1
-                                        }}
-                                        />
-                                    <div>
-                                        { FormikProps.errors.vehicleType && FormikProps.touched.vehicleType ? FormikProps.errors.vehicleType.value : '' }
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
-                                </FormGroup>
-                            </div>
-                        </FormReactStrap>
+                                        <div>
+                                            {FormikProps.errors.driverPaymentDeductions && FormikProps.touched.driverPaymentDeductions ? FormikProps.errors.driverPaymentDeductions : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-district"
+                                        >
+                                            Wilayah
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.district}
+                                            loadOptions={this.loadRegionDistrictHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('district', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('district', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-service"
+                                        >
+                                            Layanan
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.service}
+                                            loadOptions={this.loadServiceHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('service', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('service', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service.value : '' }
+                                        </div>
+                                    </FormGroup>    
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-vehicleType"
+                                        >
+                                            Jenis Kendaraan
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.vehicleType}
+                                            loadOptions={this.loadVehicleTypeHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('vehicleType', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('vehicleType', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.vehicleType && FormikProps.touched.vehicleType ? FormikProps.errors.vehicleType.value : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
+                                    </FormGroup>
+                                </div>
+                            </FormReactStrap>
+                        </BlockUi>
                     );
                 })}
             </Formik>
