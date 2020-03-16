@@ -20,6 +20,7 @@ import Dropzone from '../../../components/Dropzone/Dropzone';
 import DatePicker from 'react-datepicker';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi'
+import { toast, TypeOptions } from 'react-toastify'
 
 import "react-datepicker/dist/react-datepicker.css";
 import FormInformation from './FormInformation';
@@ -64,6 +65,16 @@ type FormProps = {
 type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
+
+    toastNotify = (message: string, type: TypeOptions) => {
+        toast(message, {
+            type: type,
+            position: toast.POSITION.TOP_RIGHT,
+            draggable: false,
+            hideProgressBar: true,
+            closeOnClick: false
+        })
+    }
 
     dayNotClosed = (day: number, isClosed: boolean, dateStart: Date | null, dateEnd: Date | null) : OperationTimeInterface => {
         
@@ -188,14 +199,13 @@ class Form extends Component<Props> {
                                     this.props.redirectOnSuccess();
                                 })
                                 .catch( (error: ApiResponse<RestaurantCreateResult>) => {
-                                    this.props.setAlertOpen(true);
                                     let message = "Gagal Mendapatkan Response";
 
                                     if (error.error) {
                                         message = error.error.metaData.message;
                                     }
-                                
-                                    this.props.setAlertMessage(message);
+
+                                    this.toastNotify(message, "error");
 
                                     action.setSubmitting(false)
                                 });

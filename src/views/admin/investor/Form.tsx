@@ -43,6 +43,7 @@ import swal from 'sweetalert'
 import { Paginator } from '../../../types/paginator';
 import "react-datepicker/dist/react-datepicker.css";
 import BlockUi from '../../../components/BlockUi/BlockUi'
+import { toast, TypeOptions } from 'react-toastify'
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
@@ -121,6 +122,16 @@ type FormProps = {
 type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
+
+    toastNotify = (message: string, type: TypeOptions) => {
+        toast(message, {
+            type: type,
+            position: toast.POSITION.TOP_RIGHT,
+            draggable: false,
+            hideProgressBar: true,
+            closeOnClick: false
+        })
+    }
 
     loadNegaraHandler = (search: string, loadedOption: {}, options: {
         page: number
@@ -394,14 +405,13 @@ class Form extends Component<Props> {
                                     this.props.redirectOnSuccess();
                                 })
                                 .catch( (error: ApiResponse<InvestorCreateResult>) => {
-                                    this.props.setAlertOpen(true);
                                     let message = "Gagal Mendapatkan Response";
 
                                     if (error.error) {
                                         message = error.error.metaData.message;
                                     }
-                                
-                                    this.props.setAlertMessage(message);
+
+                                    this.toastNotify(message, "error");
 
                                     action.setSubmitting(false)
                                 });

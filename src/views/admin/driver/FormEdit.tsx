@@ -21,6 +21,7 @@ import {
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi'
+import { toast, TypeOptions } from 'react-toastify'
 
 import FormDriver from './FormDriver';
 import FormKendaraan from './FormKendaraan';
@@ -169,6 +170,16 @@ type Props = LinkDispatchToProps & FormProps;
 
 class Form extends Component<Props> {
 
+    toastNotify = (message: string, type: TypeOptions) => {
+        toast(message, {
+            type: type,
+            position: toast.POSITION.TOP_RIGHT,
+            draggable: false,
+            hideProgressBar: true,
+            closeOnClick: false
+        })
+    }
+
     getchoiceOfActiveWorkHours = (choiceOfActiveWorkHours: string, custom_interval_jam_kerja_start: Date | null, custom_interval_jam_kerja_end: Date | null) => {
         let activeWorks = "00-00";
         
@@ -285,15 +296,13 @@ class Form extends Component<Props> {
                                     this.props.redirectOnSuccess();
                                 })
                                 .catch( (error: ApiResponse<DriverEditResult>) => {
-                                    this.props.setAlertOpen(true);
-                                    
                                     let message = "Gagal Mendapatkan Response";
 
                                     if (error.error) {
                                         message = error.error.metaData.message;
                                     }
-                                
-                                    this.props.setAlertMessage(message);
+
+                                    this.toastNotify(message, "error");
 
                                     action.setSubmitting(false)
                                 });

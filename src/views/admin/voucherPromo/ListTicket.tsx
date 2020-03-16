@@ -37,6 +37,7 @@ import { ApiResponse, ApiResponseSuccess } from '../../../types/api';
 import { ModalToggleVisible } from '../../../types/modal';
 import { number } from 'prop-types';
 import swal from 'sweetalert'
+import { toast, TypeOptions } from 'react-toastify'
 
 interface ModalState { 
     id: number, 
@@ -317,6 +318,16 @@ class ListTicket extends Component<Props, State> {
         })
     }
 
+    toastNotify = (message: string, type: TypeOptions) => {
+        toast(message, {
+            type: type,
+            position: toast.POSITION.TOP_RIGHT,
+            draggable: false,
+            hideProgressBar: true,
+            closeOnClick: false
+        })
+    }
+
     deleteTicket = (id: number) => {
         swal("Apakah anda yakin?", "Data yang dihapus tidak dapat dikembalikan!", {
             dangerMode: true,
@@ -326,19 +337,17 @@ class ListTicket extends Component<Props, State> {
             if (willDelete) {
                 this.props.deleteTicketAction(id)
                 .then( (response: ApiResponse<Ticket>) => {
-                    this.setAlertMessage('Data Berhasil Dihapus', 'success');
-                    this.setAlertOpen(true);
+                    this.toastNotify('Data Berhasil Dihapus', "success");
                     this.loadTicketVoucherList();
                 })
                 .catch( (error: ApiResponse<Ticket>) => {
                     let message = "Gagal Mendapatkan Response";
-        
+
                     if (error.error) {
                         message = error.error.metaData.message;
                     }
-                
-                    this.setAlertMessage(message, 'danger');
-                    this.setAlertOpen(true);
+
+                    this.toastNotify(message, "error");
                 });
             }
         })
@@ -473,26 +482,24 @@ class ListTicket extends Component<Props, State> {
                                             .then( (response: ApiResponse<TicketCreateResult>) => {
                                                 const data: ApiResponseSuccess<TicketCreateResult> = response.response!;
                                                 
-                                                this.setAlertMessage('Data Berhasil Ditambah', 'success');
-                                                this.setAlertOpen(true);
+                                                this.toastNotify("Data Berhasil Ditambah", "error");
                                                 this.toggleAddModalTicket();
                                                 this.loadTicketVoucherList();
                                             })
                                             .catch( (error: ApiResponse<TicketCreateResult>) => {
                                                 let message = "Gagal Mendapatkan Response";
-    
+
                                                 if (error.error) {
                                                     message = error.error.metaData.message;
                                                 }
-                                            
-                                                this.setAlertMessage(message, 'danger');
-                                                this.setAlertOpen(true);
+
+                                                this.toastNotify(message, "error");
+
                                                 this.toggleAddModalTicket()
                                                 action.setSubmitting(false)
                                             });
                                     } else {
-                                        this.setAlertMessage('Data Gagal Ditambah', 'danger');
-                                        this.setAlertOpen(true);
+                                        this.toastNotify("Data Gagal Ditambah", "error");
                                         this.toggleAddModalTicket()
                                         action.setSubmitting(false)
                                     }
