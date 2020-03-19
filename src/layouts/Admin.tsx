@@ -187,6 +187,12 @@ const routeList: (SidebarRoute | null)[] = [
     roles: ["admin", "super admin"]
   },
   {
+    path: "/admin/telegram-user",
+    name: "Telegram User",
+    icon: "ni ni-circle-08 text-info",
+    roles: ["super admin"]
+  },
+  {
     path: "/admin/topup",
     name: "Top Up",
     icon: "ni ni-credit-card text-danger",

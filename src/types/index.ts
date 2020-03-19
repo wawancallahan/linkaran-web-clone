@@ -21,7 +21,8 @@ import { SubDistrictActionTypes as AdminSubDistrictActionTypes } from './admin/r
 import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/village'
 import { CustomerActionTypes as AdminCustomerActionTypes } from './admin/customer'
 import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
-import { ManualTopUpActionTypes as AdminManualTopUpTypes } from './admin/manualTopup'
+import { ManualTopUpActionTypes as AdminManualTopUpActionTypes } from './admin/manualTopup'
+import { TelegramUserActionTypes as AdminTelegramUserActionTypes } from './admin/telegramUser'
 
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
 
@@ -49,5 +50,6 @@ export type AppActions =
     | AdminVillageActionTypes
     | AdminCustomerActionTypes
     | AdminBankActionTypes
-    | AdminManualTopUpTypes
+    | AdminManualTopUpActionTypes
+    | AdminTelegramUserActionTypes
     | FinancialManagerTopUpActionTypes
