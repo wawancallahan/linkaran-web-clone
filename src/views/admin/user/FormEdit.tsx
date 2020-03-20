@@ -46,6 +46,7 @@ const createSchema = Yup.object().shape({
                         value: Yup.number().notOneOf([0], 'Bidang pilihan role wajib diisi').required('Bidang pilihan role wajib diisi')
                     })
                 ),
+    telegramuser: Yup.string().nullable(true)
 });
 
 type FormProps = {
@@ -132,7 +133,8 @@ class Form extends Component<Props> {
                         email: values.email,
                         name: values.name,
                         phoneNumber: values.phoneNumber,
-                        roles: roles
+                        roles: roles,
+                        telegramuser: values.telegramuser
                     }
 
                     swal("Apakah anda yakin?", "Data akan diubah!", {
@@ -260,6 +262,29 @@ class Form extends Component<Props> {
                                             />
                                         <div>
                                             { FormikProps.errors.roles && FormikProps.touched.roles ? FormikProps.errors.roles : '' }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-telegramuser"
+                                        >
+                                            Telegram User
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-telegramuser"
+                                        placeholder="Telegram User"
+                                        type="text"
+                                        name="telegramuser"
+                                        maxLength={255}
+                                        value={FormikProps.values.telegramuser || ''}
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.telegramuser && FormikProps.errors.telegramuser) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.telegramuser && FormikProps.touched.telegramuser ? FormikProps.errors.telegramuser : ''}
                                         </div>
                                     </FormGroup>
                                     <FormGroup>

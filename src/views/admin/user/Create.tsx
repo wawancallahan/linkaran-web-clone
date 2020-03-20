@@ -45,7 +45,8 @@ class Create extends Component<Props, State> {
             name: '',
             phoneNumber: '',
             email: '',
-            roles: []
+            roles: [],
+            telegramuser: ''
         },
         alert_visible: false,
         alert_message: ''

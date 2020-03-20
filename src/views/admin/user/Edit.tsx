@@ -54,7 +54,8 @@ class Create extends Component<Props, State> {
             name: '',
             phoneNumber: '',
             email: '',
-            roles: []
+            roles: [],
+            telegramuser: ''
         },
         isLoaded: false,
         loadedMessage: '',
@@ -76,6 +77,7 @@ class Create extends Component<Props, State> {
                     form.email =  data.email;
                     form.name = data.name;
                     form.phoneNumber = data.phoneNumber;
+                    form.telegramuser = data.telegramuser
                     form.roles = data.roles.map((value: Role) => {
                         return {
                             value: value.id,

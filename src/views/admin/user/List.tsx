@@ -64,6 +64,7 @@ const TableItem = (props: {
             <td>{props.item.name}</td>
             <td>{props.item.phoneNumber}</td>
             <td>{props.item.email}</td>
+            <td>{props.item.telegramuser}</td>
             <td>
                 <Link to={`/admin/user/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -200,6 +201,7 @@ class List extends Component<Props, State> {
                                             <th>Nama</th>
                                             <th>No Telepon</th>
                                             <th>Email</th>
+                                            <th>Telegram</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>

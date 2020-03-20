@@ -16,7 +16,8 @@ export type FormField = {
     roles: {
         value: number,
         label: string
-    }[]
+    }[],
+    telegramuser: string | null
 }
 
 interface UserField {
@@ -25,7 +26,8 @@ interface UserField {
     email: string,
     roles: {
         id: number
-    }[]
+    }[],
+    telegramuser: string | null 
 }
 
 interface UserList {
@@ -33,12 +35,14 @@ interface UserList {
     phoneNumber: string,
     email: string,
     gUserPhoneVerified: boolean | null,
-    gUserId: string
+    gUserId: string | null
     roles: Role[],
     iat?: number,
     exp?: number,
     linkWithGoogle?: boolean,
-    isActive?: boolean
+    isActive?: boolean,
+    telegramuser: string | null,
+    chatId: number | string | null,
 }
 
 interface UserResult {

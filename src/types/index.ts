@@ -22,7 +22,6 @@ import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/vi
 import { CustomerActionTypes as AdminCustomerActionTypes } from './admin/customer'
 import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
 import { ManualTopUpActionTypes as AdminManualTopUpActionTypes } from './admin/manualTopup'
-import { TelegramUserActionTypes as AdminTelegramUserActionTypes } from './admin/telegramUser'
 
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
 
@@ -51,5 +50,4 @@ export type AppActions =
     | AdminCustomerActionTypes
     | AdminBankActionTypes
     | AdminManualTopUpActionTypes
-    | AdminTelegramUserActionTypes
     | FinancialManagerTopUpActionTypes
