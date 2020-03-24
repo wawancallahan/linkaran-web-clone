@@ -66,10 +66,8 @@ const TableItem = (props: {
             <td>{props.item.minKm}</td>
             <td>{props.item.district.name}</td>
             <td>{props.item.service.name}</td>
+            <td>{props.item.vehicleType.name}</td>
             <td>
-                <Link to={`/admin/service-price/${props.item.id}`} className="btn btn-info btn-sm">
-                    <i className="fa fa-eye"></i>
-                </Link>
                 <Link to={`/admin/service-price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i>
                 </Link>
@@ -206,6 +204,7 @@ class List extends Component<Props, State> {
                                             <th>Minimal Jarak Tempuh (KM)</th>
                                             <th>Wilayah</th>
                                             <th>Layanan</th>
+                                            <th>Jenis Kendaraan</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
