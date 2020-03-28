@@ -50,15 +50,15 @@ const Driver = (props: Props) => {
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>{application.driverInformation.name}</Col>
+                        <Col>{application.driverInformation ? application.driverInformation.name : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">No. Polisi</label></Col>
-                        <Col>{application.driverInformation.policeNumber}</Col>
+                        <Col>{application.driverInformation ? application.driverInformation.policeNumber : ''}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Kendaraan</label></Col>
-                        <Col>{application.driverInformation.vehicleMerk}</Col>
+                        <Col>{application.driverInformation ? application.driverInformation.vehicleMerk : ''}</Col>
                     </Row>
                 </CardBody>
             </Card>

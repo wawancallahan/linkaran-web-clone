@@ -42,19 +42,19 @@ const Service = (props: Props) => {
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Jemput</label></Col>
                         <Col>
-                            <p></p>
+                            <p>{application.transaction.addressOrigin }</p>
                         </Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Tujuan</label></Col>
                         <Col>
-                            <p></p>
+                            <p>{application.transaction.addressDestination}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Deskripsi</label></Col>
                         <Col>
-                            <p></p>
+                            <p>{application.transaction.note}</p>
                         </Col>
                     </Row>
                 </CardBody>

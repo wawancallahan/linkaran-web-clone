@@ -28,7 +28,13 @@ const Feedback = (props: Props) => {
 
     const { application } = props;
 
-    const starFeed = [...Array.from(Array(application.costumerFeedback.rating).keys())].map(() => (
+    let rating = 0;
+
+    if (application.costumerFeedback) {
+        rating = application.costumerFeedback.rating;
+    }
+
+    const starFeed = [...Array.from(Array(rating).keys())].map(() => (
         <img className="d-inline-block img-star-feedback mr-2" src={starImage} />
     ));
 
@@ -52,7 +58,7 @@ const Feedback = (props: Props) => {
                     <Row>
                         <Col><label htmlFor="">Pesan Customer</label></Col>
                         <Col>
-                            <p>{application.costumerFeedback.description}</p>
+                            <p>{application.costumerFeedback ? application.costumerFeedback.description : ''}</p>
                         </Col>
                     </Row>
                 </CardBody>

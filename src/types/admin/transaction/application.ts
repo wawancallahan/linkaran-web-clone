@@ -2,6 +2,7 @@ import { Paginator } from '../../paginator';
 import { Timestamps } from '../../timestamps';
 import { VehicleType } from '../vehicleType';
 import { Service } from '../service';
+import { Restaurant } from '../restaurant';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -31,7 +32,7 @@ export interface Application {
 export type ApplicationList = Application
 
 export type ApplicationShowComplete = {
-    driverId: 2,
+    driverId: number,
     costumer: {
         userInfo: {
             email: string,
@@ -40,7 +41,7 @@ export type ApplicationShowComplete = {
         },
         id: number
     },
-    driverInformation: {
+    driverInformation?: {
         name: string,
         policeNumber: string,
         profileImage: string | null,
@@ -68,19 +69,55 @@ export type ApplicationShowComplete = {
         typePayment: string,
         priceSplit: number[],
         cost: number,
-        status: string
+        status: string,
+        addressDestination?: string,
+        addressOrigin?: string,
+        origin?: {
+            $reql_type$: string,
+            coordinates: number[],
+            type: string
+        },
+        distance: string
     },
-    driverFeedback: {
+    driverFeedback?: {
         rating: number,
         description: string
-    },
-    costumerFeedback: {
+    } | null,
+    costumerFeedback?: {
         rating: number,
         description: string,
         tip: number
-    },
-    foodTransaction: any | null,
-    sendTransaction: any | null
+    } | null,
+    foodTransaction?: {
+        foodCost: number,
+        foods: {
+            id: string,
+            price: number,
+            quantity: number,
+            subPrice: number,
+            note: string,
+            name: string,
+            description: string,
+            image: number
+        }[],
+        freightCost: number,
+        restaurantId: number,
+        restaurant?: Partial<Restaurant>
+    } | null,
+    sendTransaction?: {
+        isFragile: any,
+        stuffSize: any,
+        sender: {
+            name: string,
+            note: string,
+            phoneNumber: string
+        },
+        recipient: {
+            name: string,
+            note: string,
+            phoneNumber: string
+        }
+    } | null
 }
 
 export type ApplicationShowInprogress = {
