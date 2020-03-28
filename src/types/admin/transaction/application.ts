@@ -32,7 +32,7 @@ export interface Application {
 export type ApplicationList = Application
 
 export type ApplicationShowComplete = {
-    driverId: number,
+    driverId: number | null,
     costumer: {
         userInfo: {
             email: string,
