@@ -206,7 +206,15 @@ class Edit extends Component<Props, State> {
                     form.no_polisi = data.vehicle.policeNumber;
                     form.no_rangka = data.vehicle.chassisNumber;
                     form.no_stnk = data.vehicle.stnkNumber;
-                    form.no_telepon = data.phoneNumber;
+
+                    const maskPhoneNumber = data.phoneNumber.substr(0, 2);
+                    let phoneNumber = data.phoneNumber;
+
+                    if (maskPhoneNumber == "628") {
+                        phoneNumber = phoneNumber.substr(2);
+                    }
+
+                    form.no_telepon = phoneNumber;
                    
                     form.rating = 0;
                     form.tanggal_lahir = new Date(data.dateOfBirth);

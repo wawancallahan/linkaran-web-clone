@@ -117,7 +117,11 @@ export type ApplicationShowComplete = {
             note: string,
             phoneNumber: string
         }
-    } | null
+    } | null,
+    cancelFeedback?: {
+        description: string;
+        cancelAt: string;
+    }
 }
 
 export type ApplicationShowInprogress = {
