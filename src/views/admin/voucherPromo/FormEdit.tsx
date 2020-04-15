@@ -321,6 +321,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.type && FormikProps.touched.type ? FormikProps.errors.type : '' }
@@ -624,6 +625,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             isMulti
                                             />
                                         <div>

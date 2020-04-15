@@ -255,6 +255,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.driverProfile && FormikProps.touched.driverProfile ? FormikProps.errors.driverProfile.value : '' }
@@ -275,6 +276,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.bank && FormikProps.touched.bank ? FormikProps.errors.bank.value : '' }

@@ -300,6 +300,7 @@ class FormInformation extends Component<Props> {
                                 additional={{
                                     page: 1
                                 }}
+                                debounceTimeout={250}
                                 />
                             <div>
                                 { FormikProps.errors.province && FormikProps.touched.province ? FormikProps.errors.province.value : '' }
@@ -322,6 +323,7 @@ class FormInformation extends Component<Props> {
                                     page: 1
                                 }}
                                 key={JSON.stringify(FormikProps.values.province.value)}
+                                debounceTimeout={250}
                                 />
                             <div>
                                 { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }

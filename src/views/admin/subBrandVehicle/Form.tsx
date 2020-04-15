@@ -192,6 +192,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.brandVehicle && FormikProps.touched.brandVehicle ? FormikProps.errors.brandVehicle.value : '' }

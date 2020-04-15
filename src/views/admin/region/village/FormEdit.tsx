@@ -189,6 +189,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.subDistrict && FormikProps.touched.subDistrict ? FormikProps.errors.subDistrict.value : '' }

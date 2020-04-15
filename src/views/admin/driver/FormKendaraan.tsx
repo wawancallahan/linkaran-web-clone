@@ -135,6 +135,7 @@ class FormKendaraan extends Component<Props> {
                         additional={{
                             page: 1
                         }}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.tipe_kendaraan && FormikProps.touched.tipe_kendaraan ? FormikProps.errors.tipe_kendaraan.value : '' }
@@ -157,6 +158,7 @@ class FormKendaraan extends Component<Props> {
                         additional={{
                             page: 1
                         }}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.merek && FormikProps.touched.merek ? FormikProps.errors.merek.value : '' }

@@ -304,6 +304,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price.value : '' }
@@ -348,6 +349,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.district && FormikProps.touched.district ? FormikProps.errors.district.value : '' }
@@ -368,6 +370,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service.value : '' }
@@ -388,6 +391,7 @@ class Form extends Component<Props> {
                                             additional={{
                                                 page: 1
                                             }}
+                                            debounceTimeout={250}
                                             />
                                         <div>
                                             { FormikProps.errors.vehicleType && FormikProps.touched.vehicleType ? FormikProps.errors.vehicleType.value : '' }

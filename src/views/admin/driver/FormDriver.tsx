@@ -693,7 +693,7 @@ class FormDriver extends Component<Props> {
                         additional={{
                             page: 1
                         }}
-
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.negara && FormikProps.touched.negara ? FormikProps.errors.negara.value : '' }
@@ -730,6 +730,7 @@ class FormDriver extends Component<Props> {
                             page: 1
                         }}
                         key={JSON.stringify(FormikProps.values.negara.value)}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.provinsi && FormikProps.touched.provinsi ? FormikProps.errors.provinsi.value : '' }
@@ -763,6 +764,7 @@ class FormDriver extends Component<Props> {
                             page: 1
                         }}
                         key={JSON.stringify(FormikProps.values.provinsi.value)}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.kabupaten_kota && FormikProps.touched.kabupaten_kota ? FormikProps.errors.kabupaten_kota.value : '' }
@@ -791,6 +793,7 @@ class FormDriver extends Component<Props> {
                             page: 1
                         }}
                         key={JSON.stringify(FormikProps.values.kabupaten_kota.value)}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.kecamatan && FormikProps.touched.kecamatan ? FormikProps.errors.kecamatan.value : '' }
@@ -813,6 +816,7 @@ class FormDriver extends Component<Props> {
                             page: 1
                         }}
                         key={JSON.stringify(FormikProps.values.kecamatan.value)}
+                        debounceTimeout={250}
                         />
                     <div>
                         { FormikProps.errors.kelurahan && FormikProps.touched.kelurahan ? FormikProps.errors.kelurahan.value : '' }
