@@ -48,6 +48,16 @@ const createSchema = Yup.object().shape({
             return true;
         })
         .required('Bidang isian pengurangan pembayaran driver wajib diisi'),
+    servicePaymentDeductions: Yup.string()
+        .matches(/^[0-9]*$/, "Wajib Diisi dengan angka")
+        .test('len', 'Bidang isian pengurangan pembayaran layanan tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+            if (val) {
+                return val.length <= 255;
+            }
+
+            return true;
+        })
+        .required('Bidang isian pengurangan pembayaran layanan wajib diisi'),
     district: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan wilayah wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan wilayah wajib diisi').required("Bidang pilihan wilayah wajib diisi")
@@ -265,7 +275,8 @@ class Form extends Component<Props> {
                         vehicleType: {
                             id: values.vehicleType.value
                         },
-                        driverPaymentDeductions: Number.parseInt(values.driverPaymentDeductions)
+                        driverPaymentDeductions: Number.parseInt(values.driverPaymentDeductions),
+                        servicePaymentDeductions: Number.parseInt(values.servicePaymentDeductions)
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {
@@ -346,6 +357,30 @@ class Form extends Component<Props> {
                                         />
                                         <div>
                                             {FormikProps.errors.driverPaymentDeductions && FormikProps.touched.driverPaymentDeductions ? FormikProps.errors.driverPaymentDeductions : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-servicePaymentDeductions"
+                                        >
+                                            Pengurangan Pembayaran Layanan
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-servicePaymentDeductions"
+                                        placeholder="Pengurangan Pembayaran Layanan"
+                                        type="text"
+                                        name="servicePaymentDeductions"
+                                        maxLength={255}
+                                        value={FormikProps.values.servicePaymentDeductions}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.servicePaymentDeductions && FormikProps.errors.servicePaymentDeductions) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.servicePaymentDeductions && FormikProps.touched.servicePaymentDeductions ? FormikProps.errors.servicePaymentDeductions : ''}
                                         </div>
                                     </FormGroup>
                                     <FormGroup>

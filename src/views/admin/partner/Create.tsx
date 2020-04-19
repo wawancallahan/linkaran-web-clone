@@ -22,9 +22,9 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { ServicePrice, FormField } from '../../../types/admin/servicePrice';
+import { Partner, FormField } from '../../../types/admin/partner';
 
-import FormServicePrice from './Form';
+import FormPartner from './Form';
 
 type CreateProps = RouteComponentProps & {
 
@@ -42,24 +42,14 @@ class Create extends Component<Props, State> {
 
     state = {
         form: {
-            price: {
-                value: 0,
-                label: ''
-            },
-            district: {
-                value: 0,
-                label: ''
-            },
-            service: {
-                value: 0,
-                label: ''
-            },
-            vehicleType: {
-                value: 0,
-                label: ''
-            },
-            driverPaymentDeductions: "",
-            servicePaymentDeductions: ""
+            name: '',
+            email: '',
+            phoneNumber: '',
+            companyName: '',
+            secret: '',
+            startWorkingTogether: null,
+            endWorkingTogether: null,
+            ips: []
         },
         alert_visible: false,
         alert_message: ''
@@ -78,7 +68,7 @@ class Create extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/service-price');
+        this.props.history.push('/admin/partner');
     }
     
     render() {
@@ -99,13 +89,13 @@ class Create extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Tambah Harga Layanan</h3>
+                                    <h3 className="mb-0">Tambah Partner</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
                         <CardBody>
                             {showAlertError}
-                            <FormServicePrice form={this.state.form} 
+                            <FormPartner form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
@@ -140,6 +130,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Tambah Harga Layanan")
+        withTitle(Create, "Tambah Partner")
     )
 );

@@ -56,6 +56,12 @@ export const typeTransactionFormat = (status?: string) => {
     return type;
 }
 
+export const parseDateFormat = (date: string) => {
+    const dateParse = moment(date);
+
+    return dateParse.format('DD MMMM YYYY');
+}
+
 export const parseDateTimeFormat = (date: string) => {
     const dateParse = moment(new Date(date))
 
@@ -76,6 +82,10 @@ export const booleanToString = (data: boolean) => {
 
 export const booleanToIndonesiaText = (data: boolean) => {
     return data ? "Ya" : "Tidak"
+}
+
+export const booleanToActiveStatus = (data: boolean) => {
+    return data ? "Aktif" : "Tidak Aktif";
 }
 
 export const midnightDate = () => {

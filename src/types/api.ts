@@ -39,3 +39,5 @@ export type ApiResponseList<T> = {
     response: ApiResponseSuccessList<T> | null,
     error: ApiResponseError | null
 }
+
+export type NonResult = null;

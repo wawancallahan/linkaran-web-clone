@@ -22,18 +22,19 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { ServicePrice, FormField } from '../../../types/admin/servicePrice';
+import { PartnerShow, FormField } from '../../../types/admin/partner';
+import {
+    findPartnerAction
+} from '../../../actions/admin/partner';
 
-import FormServicePrice from './FormEdit';
+import FormPartner from './FormEdit';
 import { ApiResponse } from '../../../types/api';
-import { findServicePriceAction } from '../../../actions/admin/servicePrice';
 
 type EditProps = RouteComponentProps<{
     id: string
 }> & {
 
 }
-
 
 type Props = EditProps & LinkStateToProps & LinkDispatchToProps;
 
@@ -45,28 +46,18 @@ type State = {
     alert_message: string
 }
 
-class Edit extends Component<Props, State> {
+class Create extends Component<Props, State> {
 
     state = {
         form: {
-            price: {
-                value: 0,
-                label: ''
-            },
-            district: {
-                value: 0,
-                label: ''
-            },
-            service: {
-                value: 0,
-                label: ''
-            },
-            vehicleType: {
-                value: 0,
-                label: ''
-            },
-            driverPaymentDeductions: "",
-            servicePaymentDeductions: ""
+            name: '',
+            email: '',
+            phoneNumber: '',
+            companyName: '',
+            secret: '',
+            startWorkingTogether: null,
+            endWorkingTogether: null,
+            ips: []
         },
         isLoaded: false,
         loadedMessage: '',
@@ -77,41 +68,21 @@ class Edit extends Component<Props, State> {
     componentDidMount() {
         const id = +this.props.match.params.id;
 
-        this.props.findServicePriceAction(id)
-                .then((response: ApiResponse<ServicePrice>) => {
+        this.props.findPartnerAction(id)
+                .then((response: ApiResponse<PartnerShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: ServicePrice = response.response!.result;
+                    const data: PartnerShow = response.response!.result;
 
-                    form.price = {
-                        value: data.priceId,
-                        label: data.basePrice.toString()
-                    }
-
-                    form.district = {
-                        value: data.district.id,
-                        label: data.district.name
-                    }
-
-                    form.service = {
-                        value: data.service.id,
-                        label: data.service.name
-                    }
-
-                    form.vehicleType = {
-                        value: data.vehicleType.id,
-                        label: data.vehicleType.name || ''
-                    }
-
-                    if (data.driverPaymentDeductions) {
-                        form.driverPaymentDeductions = data.driverPaymentDeductions.toString()
-                    }
-
-                    if (data.servicePaymentDeductions) {
-                        form.servicePaymentDeductions = data.servicePaymentDeductions.toString()
-                    }
+                    form.name = data.user.name ? data.user.name : ''
+                    form.email = data.user.email ? data.user.email : ''
+                    form.phoneNumber = data.user.phoneNumber ? data.user.phoneNumber : ''
+                    form.companyName = data.companyName
+                    form.startWorkingTogether = new Date(data.startWorkingTogether)
+                    form.endWorkingTogether = new Date(data.endWorkingTogether)
+                    form.ips = data.ips
 
                     this.setState({
                         form: form,
@@ -119,20 +90,12 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ServicePrice>) => {
-
-                    let message = "Gagal Mendapatkan Response";
-
-                    if (response.error) {
-                        message = response.error.metaData.message;
-                    }
-
+                .catch((response: ApiResponse<PartnerShow>) => {
                     this.setState({
-                        loadedMessage: message
+                        loadedMessage: response.error!.metaData.message
                     })
                 })
     }
-
 
     setAlertMessage = (message: string) => {
         this.setState({
@@ -147,7 +110,7 @@ class Edit extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/service-price');
+        this.props.history.push('/admin/partner');
     }
     
     render() {
@@ -168,7 +131,7 @@ class Edit extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Edit Harga Layanan</h3>
+                                    <h3 className="mb-0">Edit Partner</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
@@ -176,7 +139,7 @@ class Edit extends Component<Props, State> {
                             {showAlertError}
                             {this.state.isLoaded ? 
                                 (
-                                    <FormServicePrice form={this.state.form} 
+                                    <FormPartner form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
@@ -203,17 +166,17 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>
+    findPartnerAction: (id: number) => Promise<ApiResponse<PartnerShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
     return {
-        findServicePriceAction: (id: number) => dispatch(findServicePriceAction(id))
+        findPartnerAction: (id: number) => dispatch(findPartnerAction(id))
     }
 }
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Edit, "Edit Harga Layanan")
+        withTitle(Create, "Edit Partner")
     )
 );
