@@ -14,8 +14,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: remote server
-        uses: appleboy/ssh-action@master
-        if: steps.extract_branch.outputs.branch == "dev_2"
+        if: steps.extract_branch.outputs.branch == 'dev_2'
         env:
           PROJECT_PATH: /home/server/www/fe_linkaran
         with:
@@ -30,7 +29,7 @@ jobs:
             yarn build
       - name: remote server
         uses: appleboy/ssh-action@master
-        if: steps.extract_branch.outputs.branch == " release"
+        if: steps.extract_branch.outputs.branch == 'release'
         env:
           PROJECT_PATH: /home/server/www/admin_linkaran
         with:
