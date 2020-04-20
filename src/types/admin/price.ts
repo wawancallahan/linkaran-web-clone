@@ -4,6 +4,8 @@ export const FETCH_PRICE = "FETCH_PRICE";
 export const FETCH_PRICE_SUCCESS = "FETCH_PRICE_SUCCESS";
 export const FETCH_PRICE_ERROR = "FETCH_PRICE_ERROR";
 export const SET_PAGINATOR_PRICE = "SET_PAGINATOR_PRICE";
+export const SET_FILTER_PRICE = "SET_FILTER_PRICE";
+export const CLEAR_FILTER_PRICE = "CLEAR_FILTER_PRICE";
 
 export const ALERT_PRICE_SHOW = "ALERT_PRICE_SHOW";
 export const ALERT_PRICE_HIDE = "ALERT_PRICE_HIDE";
@@ -71,6 +73,21 @@ export interface AlertPriceShowActionType {
     color: string
 }
 
+export interface Filter {
+    basePrice: string,
+    perKilometer: string,
+    minKm: string
+}
+
+export interface SetFilterPriceActionType {
+    type: typeof SET_FILTER_PRICE,
+    filter: Filter
+}
+
+export interface ClearFilterPriceActionType {
+    type: typeof CLEAR_FILTER_PRICE
+}
+
 export type PriceActionTypes =
     | FetchPriceActionType
     | FetchPriceSuccessActionType
@@ -78,3 +95,5 @@ export type PriceActionTypes =
     | AlertPriceHideActionType
     | AlertPriceShowActionType
     | SetPaginatorPriceActionType
+    | SetFilterPriceActionType
+    | ClearFilterPriceActionType

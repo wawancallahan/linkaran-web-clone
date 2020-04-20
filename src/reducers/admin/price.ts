@@ -12,7 +12,12 @@ import {
     AlertPriceShowActionType,
     AlertPriceHideActionType,
     ALERT_PRICE_HIDE,
-    ALERT_PRICE_SHOW
+    ALERT_PRICE_SHOW,
+    SET_FILTER_PRICE,
+    Filter,
+    SetFilterPriceActionType,
+    ClearFilterPriceActionType,
+    CLEAR_FILTER_PRICE
 } from '../../types/admin/price';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: Price[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,13 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        basePrice: '',
+        minKm: '',
+        perKilometer: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertPriceHideActionType) => {
@@ -84,6 +97,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorPriceAct
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterPriceActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterPriceActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: PriceActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_PRICE: return setPaginator(state, action);
@@ -91,6 +124,8 @@ const reducer = (state = initialState, action: PriceActionTypes) => {
         case FETCH_PRICE_ERROR: return fetchError(state, action);
         case ALERT_PRICE_HIDE: return alertHide(state, action);
         case ALERT_PRICE_SHOW: return alertShow(state, action);
+        case SET_FILTER_PRICE: return setFilter(state, action);
+        case CLEAR_FILTER_PRICE: return clearFilter(state, action);
         default:
             return state;
     }

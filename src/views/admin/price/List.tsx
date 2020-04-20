@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchPriceAction,
     deletePriceAction,
     setAlertPriceHideAction,
-    setAlertPriceShowAction
+    setAlertPriceShowAction,
+    clearFilterAction
 } from '../../../actions/admin/price';
 import { Price } from '../../../types/admin/price';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,8 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -98,6 +102,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertPriceHideAction();
+        this.props.clearFilterPriceAction();
     }
 
     fetchPriceList = (page: number) => {
@@ -191,6 +196,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -243,7 +253,8 @@ interface LinkDispatchToProps {
     fetchPriceAction: (page: number) => Promise<Boolean>,
     deletePriceAction: (id: number) => Promise<ApiResponse<Price>>,
     setAlertPriceHideAction: () => void,
-    setAlertPriceShowAction: (message: string, color: string) => void
+    setAlertPriceShowAction: (message: string, color: string) => void,
+    clearFilterPriceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -251,7 +262,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchPriceAction: (page: number) => dispatch(fetchPriceAction(page)),
         deletePriceAction: (id: number) => dispatch(deletePriceAction(id)),
         setAlertPriceHideAction: () => dispatch(setAlertPriceHideAction()),
-        setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
+        setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color)),
+        clearFilterPriceAction: () => dispatch(clearFilterAction())
     }
 }
 
