@@ -28,6 +28,7 @@ jobs:
           host: ${{ secrets.SSH_SERVER}}
           envs: PROJECT_PATH
           script: |
+            echo "deploy from branch $DEPLOY_BRANCH"
             case "$DEPLOY_BRANCH" in 
               "dev_2") cd $PROJECT_PATH ;;
               "release") cd $PROJECT_PATH_ADMIN ;;
