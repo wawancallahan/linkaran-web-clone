@@ -17,7 +17,7 @@ jobs:
         id: extract_branch
       - name: deploy server from branch ${{ matrix.branch_name}}
         uses: appleboy/ssh-action@master
-        if: steps.extract_branch.outputs.branch == matrix.branch_name
+        # if: steps.extract_branch.outputs.branch == matrix.branch_name
         env:
           PROJECT_PATH: /home/server/www/fe_linkaran
           PROJECT_PATH_ADMIN: /home/server/www/admin_linkaran
@@ -31,9 +31,11 @@ jobs:
             echo "deploy from branch $DEPLOY_BRANCH"
             case "$DEPLOY_BRANCH" in 
               "dev_2") echo "change dir to $PROJECT_PATH"
+                PUBLIC_URL=https://linkaran-fe.thortech.asia
                 cd $PROJECT_PATH ;;
               "release") "change dir to $PROJECT_PATH_ADMIN"
-              cd $PROJECT_PATH_ADMIN ;;
+                PUBLIC_URL=https://admin.linkaran.co.id
+                cd $PROJECT_PATH_ADMIN ;;
             esac
             git pull origin $DEPLOY_BRANCH
             yarn 
