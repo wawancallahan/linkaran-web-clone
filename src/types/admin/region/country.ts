@@ -5,6 +5,8 @@ export const FETCH_COUNTRY = "FETCH_COUNTRY";
 export const FETCH_COUNTRY_SUCCESS = "FETCH_COUNTRY_SUCCESS";
 export const FETCH_COUNTRY_ERROR = "FETCH_COUNTRY_ERROR";
 export const SET_PAGINATOR_COUNTRY = "SET_PAGINATOR_COUNTRY";
+export const SET_FILTER_COUNTRY = "SET_FILTER_COUNTRY";
+export const CLEAR_FILTER_COUNTRY = "CLEAR_FILTER_COUNTRY";
 
 export const ALERT_COUNTRY_SHOW = "ALERT_COUNTRY_SHOW";
 export const ALERT_COUNTRY_HIDE = "ALERT_COUNTRY_HIDE";
@@ -62,6 +64,19 @@ export interface AlertCountryShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string
+}
+
+export interface SetFilterCountryActionType {
+    type: typeof SET_FILTER_COUNTRY,
+    filter: Filter
+}
+
+export interface ClearFilterCountryActionType {
+    type: typeof CLEAR_FILTER_COUNTRY
+}
+
 export type CountryActionTypes =
     | FetchCountryActionType
     | FetchCountrySuccessActionType
@@ -69,3 +84,5 @@ export type CountryActionTypes =
     | AlertCountryHideActionType
     | AlertCountryShowActionType
     | SetPaginatorCountryActionType
+    | SetFilterCountryActionType
+    | ClearFilterCountryActionType

@@ -93,8 +93,8 @@ export const fetchPriceFilteredAction = (filter: Filter) : ThunkResult<Promise<B
 export const fetchPriceAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        const filterState : Filter | {} = getState().food.filtered
-                ? getState().food.filter
+        const filterState : Filter | {} = getState().price.filtered
+                ? getState().price.filter
                 : filter;
 
         let paramsObject: OptionObjectString = {

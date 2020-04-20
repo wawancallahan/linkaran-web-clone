@@ -12,7 +12,12 @@ import {
     AlertSubDistrictShowActionType,
     AlertSubDistrictHideActionType,
     ALERT_SUB_DISTRICT_HIDE,
-    ALERT_SUB_DISTRICT_SHOW
+    ALERT_SUB_DISTRICT_SHOW,
+    SET_FILTER_SUB_DISTRICT,
+    Filter,
+    SetFilterSubDistrictActionType,
+    ClearFilterSubDistrictActionType,
+    CLEAR_FILTER_SUB_DISTRICT
 } from '../../../types/admin/region/subDistrict';
 
 import { Paginator } from '../../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../../types/alert';
 interface initialStateInterface {
     list: SubDistrictList[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,12 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: '',
+        districtName: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertSubDistrictHideActionType) => {
@@ -84,6 +96,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorSubDistr
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterSubDistrictActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterSubDistrictActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: SubDistrictActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_SUB_DISTRICT: return setPaginator(state, action);
@@ -91,6 +123,8 @@ const reducer = (state = initialState, action: SubDistrictActionTypes) => {
         case FETCH_SUB_DISTRICT_ERROR: return fetchError(state, action);
         case ALERT_SUB_DISTRICT_HIDE: return alertHide(state, action);
         case ALERT_SUB_DISTRICT_SHOW: return alertShow(state, action);
+        case SET_FILTER_SUB_DISTRICT: return setFilter(state, action);
+        case CLEAR_FILTER_SUB_DISTRICT: return clearFilter(state, action);
         default:
             return state;
     }

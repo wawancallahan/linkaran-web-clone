@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchDistrictAction,
     deleteDistrictAction,
     setAlertDistrictHideAction,
-    setAlertDistrictShowAction
+    setAlertDistrictShowAction,
+    clearFilterAction
 } from '../../../../actions/admin/region/district';
 import { District, DistrictList } from '../../../../types/admin/region/district';
 import { Paginator } from '../../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../../types/alert';
 import Spinner from '../../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertDistrictHideAction();
+        this.props.clearFilterDistrictAction();
     }
 
     fetchDistrictList = (page: number) => {
@@ -189,6 +193,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -239,7 +248,8 @@ interface LinkDispatchToProps {
     fetchDistrictAction: (page: number) => Promise<Boolean>,
     deleteDistrictAction: (id: number) => Promise<ApiResponse<District>>,
     setAlertDistrictHideAction: () => void,
-    setAlertDistrictShowAction: (message: string, color: string) => void
+    setAlertDistrictShowAction: (message: string, color: string) => void,
+    clearFilterDistrictAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,7 +257,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchDistrictAction: (page: number) => dispatch(fetchDistrictAction(page)),
         deleteDistrictAction: (id: number) => dispatch(deleteDistrictAction(id)),
         setAlertDistrictHideAction: () => dispatch(setAlertDistrictHideAction()),
-        setAlertDistrictShowAction: (message: string, color: string) => dispatch(setAlertDistrictShowAction(message, color))
+        setAlertDistrictShowAction: (message: string, color: string) => dispatch(setAlertDistrictShowAction(message, color)),
+        clearFilterDistrictAction: () => dispatch(clearFilterAction())
     }
 }
 

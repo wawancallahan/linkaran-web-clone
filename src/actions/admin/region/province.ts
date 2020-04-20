@@ -20,13 +20,20 @@ import {
     ProvinceEditResult,
     ProvinceCreateResult,
     ProvinceList,
-    ProvinceShow
+    ProvinceShow,
+    Filter,
+    SetFilterProvinceActionType,
+    SET_FILTER_PROVINCE,
+    ClearFilterProvinceActionType,
+    CLEAR_FILTER_PROVINCE
 } from '../../../types/admin/region/province';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorProvinceActionType => {
@@ -63,10 +70,44 @@ export const setAlertProvinceShowAction = (message: string, color: string): Aler
     };
 }
 
+export const clearFilterAction = () : ClearFilterProvinceActionType => {
+    return {
+        type: CLEAR_FILTER_PROVINCE
+    }
+} 
 
-export const fetchProvinceAction = (page: number): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterProvinceActionType => {
+    return {
+        type: SET_FILTER_PROVINCE,
+        filter: filter
+    }
+}
+
+export const fetchProvinceFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchProvinceAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+
+export const fetchProvinceAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-province?page=${page}`)
+
+        const filterState : Filter | {} = getState().province.filtered
+            ? getState().province.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-province`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ProvinceList> = response.data;
 

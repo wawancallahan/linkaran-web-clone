@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchCountryAction,
     deleteCountryAction,
     setAlertCountryHideAction,
-    setAlertCountryShowAction
+    setAlertCountryShowAction,
+    clearFilterAction
 } from '../../../../actions/admin/region/country';
 import { Country, CountryList } from '../../../../types/admin/region/country';
 import { Paginator } from '../../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../../types/alert';
 import Spinner from '../../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertCountryHideAction();
+        this.props.clearFilterCountryAction();
     }
 
     fetchCountryList = (page: number) => {
@@ -189,6 +193,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -239,7 +248,8 @@ interface LinkDispatchToProps {
     fetchCountryAction: (page: number) => Promise<Boolean>,
     deleteCountryAction: (id: number) => Promise<ApiResponse<Country>>,
     setAlertCountryHideAction: () => void,
-    setAlertCountryShowAction: (message: string, color: string) => void
+    setAlertCountryShowAction: (message: string, color: string) => void,
+    clearFilterCountryAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,7 +257,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchCountryAction: (page: number) => dispatch(fetchCountryAction(page)),
         deleteCountryAction: (id: number) => dispatch(deleteCountryAction(id)),
         setAlertCountryHideAction: () => dispatch(setAlertCountryHideAction()),
-        setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color))
+        setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color)),
+        clearFilterCountryAction: () => dispatch(clearFilterAction())
     }
 }
 
