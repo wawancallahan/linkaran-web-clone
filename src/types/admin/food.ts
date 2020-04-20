@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Restaurant } from './restaurant';
 
 export const FETCH_FOOD = "FETCH_FOOD";
 export const FETCH_FOOD_SUCCESS = "FETCH_FOOD_SUCCESS";
@@ -52,10 +53,7 @@ interface FoodList {
         id: number,
         name: string
     },
-    restaurant: {
-        id: number,
-        name: string
-    }
+    restaurant: Partial<Restaurant>
 }
 
 interface FoodList2 {

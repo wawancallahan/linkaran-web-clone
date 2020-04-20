@@ -90,10 +90,12 @@ class Create extends Component<Props, State> {
                     }
                     form.price = data.price;
                     form.rating = data.rating;
+
                     form.restaurant = {
-                        value: data.restaurant.id,
-                        label: data.restaurant.name
+                        value: data.restaurant.id ? data.restaurant.id : 0,
+                        label: data.restaurant.name ? data.restaurant.name : ''
                     }
+                    
                     form.image_preview = data.image ? data.image : '';
 
                     this.setState({

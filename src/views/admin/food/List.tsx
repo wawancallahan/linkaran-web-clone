@@ -70,6 +70,7 @@ const TableItem = (props: {
             <td>{props.item.rating}</td>
             <td>{props.item.foodCategory.name}</td>
             <td>{props.item.restaurant.name}</td>
+            <td>{props.item.restaurant.district ? props.item.restaurant.district.name : ''}</td>
             <td>
                 <Link to={`/admin/food/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -214,6 +215,7 @@ class List extends Component<Props, State> {
                                             <th>Rating</th>
                                             <th>Kategori</th>
                                             <th>Restoran</th>
+                                            <th>Kota</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
