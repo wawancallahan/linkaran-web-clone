@@ -6,6 +6,8 @@ export const FETCH_RESTAURANT = "FETCH_RESTAURANT";
 export const FETCH_RESTAURANT_SUCCESS = "FETCH_RESTAURANT_SUCCESS";
 export const FETCH_RESTAURANT_ERROR = "FETCH_RESTAURANT_ERROR";
 export const SET_PAGINATOR_RESTAURANT = "SET_PAGINATOR_RESTAURANT";
+export const SET_FILTER_RESTAURANT = "SET_FILTER_RESTAURANT";
+export const CLEAR_FILTER_RESTAURANT = "CLEAR_FILTER_RESTAURANT";
 
 export const ALERT_RESTAURANT_SHOW = "ALERT_RESTAURANT_SHOW";
 export const ALERT_RESTAURANT_HIDE = "ALERT_RESTAURANT_HIDE";
@@ -165,6 +167,21 @@ export interface SetPaginatorRestaurantActionType {
     paginate: Paginator
 }
 
+export interface Filter {
+    name: string,
+    provinceName: string,
+    districtName: string
+}
+
+export interface SetFilterRestaurantActionType {
+    type: typeof SET_FILTER_RESTAURANT,
+    filter: Filter
+}
+
+export interface ClearFilterRestaurantActionType {
+    type: typeof CLEAR_FILTER_RESTAURANT
+}
+
 export interface AlertRestaurantHideActionType {
     type: typeof ALERT_RESTAURANT_HIDE
 }
@@ -182,3 +199,5 @@ export type RestaurantActionTypes =
     | AlertRestaurantHideActionType
     | AlertRestaurantShowActionType
     | SetPaginatorRestaurantActionType
+    | SetFilterRestaurantActionType
+    | ClearFilterRestaurantActionType

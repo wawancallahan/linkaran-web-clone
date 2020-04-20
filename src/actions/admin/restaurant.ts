@@ -20,13 +20,20 @@ import {
     RestaurantEditResult,
     RestaurantCreateResult,
     OperatingTime,
-    RestaurantDetailResult
+    RestaurantDetailResult,
+    Filter,
+    SetFilterRestaurantActionType,
+    SET_FILTER_RESTAURANT,
+    ClearFilterRestaurantActionType,
+    CLEAR_FILTER_RESTAURANT
 } from '../../types/admin/restaurant';
 import Axios, { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 import { booleanToString, OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
@@ -63,9 +70,43 @@ export const setAlertRestaurantShowAction = (message: string, color: string): Al
     };
 }
 
-export const fetchRestaurantAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const clearFilterAction = () : ClearFilterRestaurantActionType => {
+    return {
+        type: CLEAR_FILTER_RESTAURANT
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterRestaurantActionType => {
+    return {
+        type: SET_FILTER_RESTAURANT,
+        filter: filter
+    }
+}
+
+export const fetchRestaurantFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchRestaurantAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+export const fetchRestaurantAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant?page=${page}`)
+        
+        const filterState : Filter | {} = getState().restaurant.filtered
+            ? getState().restaurant.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 
@@ -109,7 +150,9 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 
         const params = objectToParamsUrl(paramsObject)
 
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant?${params}`)
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant`, {
+                params: params
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
 

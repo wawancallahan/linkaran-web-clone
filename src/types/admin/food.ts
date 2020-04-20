@@ -4,6 +4,8 @@ export const FETCH_FOOD = "FETCH_FOOD";
 export const FETCH_FOOD_SUCCESS = "FETCH_FOOD_SUCCESS";
 export const FETCH_FOOD_ERROR = "FETCH_FOOD_ERROR";
 export const SET_PAGINATOR_FOOD = "SET_PAGINATOR_FOOD";
+export const SET_FILTER_FOOD = "SET_FILTER_FOOD";
+export const CLEAR_FILTER_FOOD = "CLEAR_FILTER_FOOD";
 
 export const ALERT_FOOD_SHOW = "ALERT_FOOD_SHOW";
 export const ALERT_FOOD_HIDE = "ALERT_FOOD_HIDE";
@@ -115,6 +117,22 @@ export interface AlertFoodShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    provinceName: string,
+    districtName: string,
+    restaurantName: string
+}
+
+export interface SetFilterFoodActionType {
+    type: typeof SET_FILTER_FOOD,
+    filter: Filter
+}
+
+export interface ClearFilterFoodActionType {
+    type: typeof CLEAR_FILTER_FOOD
+}
+
 export type FoodActionTypes =
     | FetchFoodActionType
     | FetchFoodSuccessActionType
@@ -122,3 +140,5 @@ export type FoodActionTypes =
     | AlertFoodHideActionType
     | AlertFoodShowActionType
     | SetPaginatorFoodActionType
+    | SetFilterFoodActionType
+    | ClearFilterFoodActionType

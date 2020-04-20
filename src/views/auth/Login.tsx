@@ -119,7 +119,7 @@ class Login extends React.Component<Props, State> {
         });
     }
 
-    inputHandlerChange = (e: React.FormEvent<HTMLInputElement>) => {
+    handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.id;
     
@@ -132,7 +132,7 @@ class Login extends React.Component<Props, State> {
         });
     }
 
-    formSubmit = () => {
+    handleOnSubmit = () => {
 
         this.setState({
             isSubmitting: true
@@ -304,7 +304,7 @@ class Login extends React.Component<Props, State> {
                                         onSubmit={e => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            this.formSubmit();
+                                            this.handleOnSubmit();
                                         }}>
 
                                         <FormGroup className="mb-3">
@@ -352,7 +352,7 @@ class Login extends React.Component<Props, State> {
                                                 placeholder="Email"
                                                 disabled={this.state.isEmailSubmited}
                                                 type="text"
-                                                onChange={this.inputHandlerChange}
+                                                onChange={this.handleOnChange}
                                                 id="email"
                                                 />
                                             </InputGroup>
@@ -370,7 +370,7 @@ class Login extends React.Component<Props, State> {
                                                 <Input
                                                     placeholder="Pin"
                                                     type="text"
-                                                    onChange={this.inputHandlerChange}
+                                                    onChange={this.handleOnChange}
                                                     id="pin"
                                                 />
                                                 </InputGroup>
@@ -395,7 +395,7 @@ class Login extends React.Component<Props, State> {
                                                         className=""
                                                         color="primary"
                                                         type="button"
-                                                        onClick={this.formSubmit}
+                                                        onClick={this.handleOnSubmit}
                                                         disabled={this.state.isSubmitting}>
                                                         Next
                                                     </Button>

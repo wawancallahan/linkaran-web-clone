@@ -12,7 +12,12 @@ import {
     AlertRestaurantShowActionType,
     AlertRestaurantHideActionType,
     ALERT_RESTAURANT_HIDE,
-    ALERT_RESTAURANT_SHOW
+    ALERT_RESTAURANT_SHOW,
+    SET_FILTER_RESTAURANT,
+    Filter,
+    SetFilterRestaurantActionType,
+    ClearFilterRestaurantActionType,
+    CLEAR_FILTER_RESTAURANT
 } from '../../types/admin/restaurant';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: Restaurant[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,13 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: '',
+        provinceName: '',
+        districtName: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertRestaurantHideActionType) => {
@@ -84,6 +97,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorRestaura
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterRestaurantActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterRestaurantActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: RestaurantActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_RESTAURANT: return setPaginator(state, action);
@@ -91,6 +124,8 @@ const reducer = (state = initialState, action: RestaurantActionTypes) => {
         case FETCH_RESTAURANT_ERROR: return fetchError(state, action);
         case ALERT_RESTAURANT_HIDE: return alertHide(state, action);
         case ALERT_RESTAURANT_SHOW: return alertShow(state, action);
+        case SET_FILTER_RESTAURANT: return setFilter(state, action);
+        case CLEAR_FILTER_RESTAURANT: return clearFilter(state, action);
         default:
             return state;
     }

@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchRestaurantAction,
     deleteRestaurantAction,
     setAlertRestaurantHideAction,
-    setAlertRestaurantShowAction
+    setAlertRestaurantShowAction,
+    clearFilterAction
 } from '../../../actions/admin/restaurant';
 import { Restaurant } from '../../../types/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -99,6 +102,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertRestaurantHideAction();
+        this.props.clearFilterRestaurantAction();
     }
 
     fetchRestaurantList = (page: number) => {
@@ -182,15 +186,20 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Restaurant</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/restaurant/create">
-                                            <Button
-                                                color="primary"
-                                                size="sm"
-                                            >
-                                                Tambah Restaurant
-                                            </Button>
-                                        </Link>
+                                            <Link to="/admin/restaurant/create">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Restaurant
+                                                </Button>
+                                            </Link>
                                         </div>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -245,7 +254,8 @@ interface LinkDispatchToProps {
     fetchRestaurantAction: (page: number) => Promise<Boolean>,
     deleteRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>,
     setAlertRestaurantHideAction: () => void,
-    setAlertRestaurantShowAction: (message: string, color: string) => void
+    setAlertRestaurantShowAction: (message: string, color: string) => void,
+    clearFilterRestaurantAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -253,7 +263,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchRestaurantAction: (page: number) => dispatch(fetchRestaurantAction(page)),
         deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id)),
         setAlertRestaurantHideAction: () => dispatch(setAlertRestaurantHideAction()),
-        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
+        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color)),
+        clearFilterRestaurantAction: () => dispatch(clearFilterAction())
     }
 }
 

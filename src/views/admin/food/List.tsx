@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchFoodAction,
     deleteFoodAction,
     setAlertFoodHideAction,
-    setAlertFoodShowAction
+    setAlertFoodShowAction,
+    clearFilterAction
 } from '../../../actions/admin/food';
 import { Food } from '../../../types/admin/food';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,8 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -100,6 +104,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertFoodHideAction();
+        this.props.clearFilterFoodAction();
     }
 
     fetchFoodList = (page: number) => {
@@ -193,6 +198,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -247,7 +257,8 @@ interface LinkDispatchToProps {
     fetchFoodAction: (page: number) => Promise<Boolean>,
     deleteFoodAction: (id: number) => Promise<ApiResponse<Food>>,
     setAlertFoodHideAction: () => void,
-    setAlertFoodShowAction: (message: string, color: string) => void
+    setAlertFoodShowAction: (message: string, color: string) => void,
+    clearFilterFoodAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -255,7 +266,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchFoodAction: (page: number) => dispatch(fetchFoodAction(page)),
         deleteFoodAction: (id: number) => dispatch(deleteFoodAction(id)),
         setAlertFoodHideAction: () => dispatch(setAlertFoodHideAction()),
-        setAlertFoodShowAction: (message: string, color: string) => dispatch(setAlertFoodShowAction(message, color))
+        setAlertFoodShowAction: (message: string, color: string) => dispatch(setAlertFoodShowAction(message, color)),
+        clearFilterFoodAction: () => dispatch(clearFilterAction())
     }
 }
 

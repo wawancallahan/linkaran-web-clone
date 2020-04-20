@@ -18,12 +18,20 @@ import {
     AlertFoodShowActionType,
     ALERT_FOOD_SHOW,
     FoodCreateResult,
-    FoodEditResult
+    FoodEditResult,
+    Filter,
+    SetFilterFoodActionType,
+    SET_FILTER_FOOD,
+    ClearFilterFoodActionType,
+    CLEAR_FILTER_FOOD
 } from '../../types/admin/food';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
+import { ThunkDispatch } from 'redux-thunk';
+import { OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
+import { AppActions } from '../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorFoodActionType => {
@@ -60,9 +68,43 @@ export const setAlertFoodShowAction = (message: string, color: string): AlertFoo
     };
 }
 
-export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const clearFilterAction = () : ClearFilterFoodActionType => {
+    return {
+        type: CLEAR_FILTER_FOOD
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterFoodActionType => {
+    return {
+        type: SET_FILTER_FOOD,
+        filter: filter
+    }
+}
+
+export const fetchFoodFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchFoodAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+export const fetchFoodAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/food?page=${page}`)
+
+        const filterState : Filter | {} = getState().food.filtered
+            ? getState().food.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/food`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Food> = response.data;
 
@@ -288,7 +330,6 @@ export const editFoodAction = (food: FoodEdit, id: number): ThunkResult<Promise<
             })
     }
 }
-
 
 export const deleteFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
