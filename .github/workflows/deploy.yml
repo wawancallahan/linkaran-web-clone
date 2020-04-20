@@ -26,15 +26,14 @@ jobs:
           username: server
           key: ${{ secrets.SSH_PRIVATE_KEY}}
           host: ${{ secrets.SSH_SERVER}}
-          envs: |
-            PROJECT_PATH
-            PROJECT_PATH_ADMIN
-            DEPLOY_BRANCH
+          envs: PROJECT_PATH,PROJECT_PATH_ADMIN,DEPLOY_BRANCH
           script: |
             echo "deploy from branch $DEPLOY_BRANCH"
             case "$DEPLOY_BRANCH" in 
-              "dev_2") cd $PROJECT_PATH ;;
-              "release") cd $PROJECT_PATH_ADMIN ;;
+              "dev_2") echo "change dir to $PROJECT_PATH"
+                cd $PROJECT_PATH ;;
+              "release") "change dir to $PROJECT_PATH_ADMIN"
+              cd $PROJECT_PATH_ADMIN ;;
             esac
             git pull origin $DEPLOY_BRANCH
             yarn 
