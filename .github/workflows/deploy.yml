@@ -21,12 +21,15 @@ jobs:
         env:
           PROJECT_PATH: /home/server/www/fe_linkaran
           PROJECT_PATH_ADMIN: /home/server/www/admin_linkaran
-          DEPLOY_BRANCH: ${{ steps.extract_branch.outputs.branch }}
+          DEPLOY_BRANCH: ${{ matrix.branch_name }}
         with:
           username: server
           key: ${{ secrets.SSH_PRIVATE_KEY}}
           host: ${{ secrets.SSH_SERVER}}
-          envs: PROJECT_PATH
+          envs: |
+            PROJECT_PATH
+            PROJECT_PATH_ADMIN
+            DEPLOY_BRANCH
           script: |
             echo "deploy from branch $DEPLOY_BRANCH"
             case "$DEPLOY_BRANCH" in 
