@@ -1,10 +1,10 @@
 name: Deploy Server
 on:
   push:
-    branches:
-      - dev_2
+    branches: dev_2
 jobs:
   deploy:
+    if: "contains(github.event.head_commit.message, '[deploy]')"
     strategy:
       matrix:
         target: [dev_2, release]
@@ -16,7 +16,6 @@ jobs:
         id: extract_branch
       - name: deploy server from branch ${{ matrix.target}}
         uses: appleboy/ssh-action@master
-        # if: steps.extract_branch.outputs.branch == matrix.target
         env:
           PROJECT_PATH: /home/server/www/fe_linkaran
           PROJECT_PATH_ADMIN: /home/server/www/admin_linkaran
