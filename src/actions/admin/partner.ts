@@ -20,13 +20,20 @@ import {
     PartnerEditResult,
     PartnerCreateResult,
     PartnerList,
-    PartnerShow
+    PartnerShow,
+    Filter,
+    SetFilterPartnerActionType,
+    SET_FILTER_PARTNER,
+    ClearFilterPartnerActionType,
+    CLEAR_FILTER_PARTNER
 } from '../../types/admin/partner';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
-import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString, getOnlyDateFromDateNull } from '../../helpers/utils';
+import { AppActions } from '../../types';
+import { ThunkDispatch } from 'redux-thunk';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorPartnerActionType => {
@@ -63,10 +70,56 @@ export const setAlertPartnerShowAction = (message: string, color: string): Alert
     };
 }
 
+export const clearFilterAction = () : ClearFilterPartnerActionType => {
+    return {
+        type: CLEAR_FILTER_PARTNER
+    }
+} 
 
-export const fetchPartnerAction = (page: number): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterPartnerActionType => {
+    return {
+        type: SET_FILTER_PARTNER,
+        filter: filter
+    }
+}
+
+export const fetchPartnerFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchPartnerAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/partner?page=${page}`)
+
+        const filterState : Filter | {} = getState().food.filtered
+            ? getState().food.filter
+            : filter;
+
+        let startWorkingTogether = '';
+        if (Object.keys(filterState).length !== 0) {
+            startWorkingTogether = getOnlyDateFromDateNull((filterState as Filter).startWorkingTogether)
+        }
+
+        let endWorkingTogether = '';
+
+        if (Object.keys(filterState).length !== 0) {
+            endWorkingTogether = getOnlyDateFromDateNull((filterState as Filter).endWorkingTogether)
+        }
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState,
+            startWorkingTogether: startWorkingTogether,
+            endWorkingTogether: endWorkingTogether,
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/partner`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<PartnerList> = response.data;
 

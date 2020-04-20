@@ -67,6 +67,13 @@ export const parseDateTimeFormat = (date: string) => {
 
     return dateParse.format('D MMMM YYYY hh:mm');
 }
+export const getOnlyDateFromDateNull = (date: Date | null) => {
+    if (date) {
+        return `${date.getFullYear()}-${addZeroOnNumber(date.getMonth() + 1)}-${addZeroOnNumber(date.getDate())}`
+    }
+    
+    return '';
+}
 
 export const getOnlyDateFromDate = (date: Date) => {
     return `${date.getFullYear()}-${addZeroOnNumber(date.getMonth() + 1)}-${addZeroOnNumber(date.getDate())}`

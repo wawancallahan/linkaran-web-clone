@@ -6,6 +6,8 @@ export const FETCH_PARTNER = "FETCH_PARTNER";
 export const FETCH_PARTNER_SUCCESS = "FETCH_PARTNER_SUCCESS";
 export const FETCH_PARTNER_ERROR = "FETCH_PARTNER_ERROR";
 export const SET_PAGINATOR_PARTNER = "SET_PAGINATOR_PARTNER";
+export const SET_FILTER_PARTNER = "SET_FILTER_PARTNER";
+export const CLEAR_FILTER_PARTNER = "CLEAR_FILTER_PARTNER";
 
 export const ALERT_PARTNER_SHOW = "ALERT_PARTNER_SHOW";
 export const ALERT_PARTNER_HIDE = "ALERT_PARTNER_HIDE";
@@ -85,6 +87,24 @@ export interface AlertPartnerShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    companyName: string,
+    startWorkingTogether: Date | null,
+    endWorkingTogether: Date | null,
+    email: string,
+    phoneNumber: string,
+}
+
+export interface SetFilterPartnerActionType {
+    type: typeof SET_FILTER_PARTNER,
+    filter: Filter
+}
+
+export interface ClearFilterPartnerActionType {
+    type: typeof CLEAR_FILTER_PARTNER
+}
+
 export type PartnerActionTypes =
     | FetchPartnerActionType
     | FetchPartnerSuccessActionType
@@ -92,3 +112,5 @@ export type PartnerActionTypes =
     | AlertPartnerHideActionType
     | AlertPartnerShowActionType
     | SetPaginatorPartnerActionType
+    | SetFilterPartnerActionType
+    | ClearFilterPartnerActionType

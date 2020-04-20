@@ -12,7 +12,12 @@ import {
     AlertPartnerShowActionType,
     AlertPartnerHideActionType,
     ALERT_PARTNER_HIDE,
-    ALERT_PARTNER_SHOW
+    ALERT_PARTNER_SHOW,
+    SET_FILTER_PARTNER,
+    Filter,
+    SetFilterPartnerActionType,
+    ClearFilterPartnerActionType,
+    CLEAR_FILTER_PARTNER
 } from '../../types/admin/partner';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: PartnerList[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,16 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: '',
+        companyName: '',
+        startWorkingTogether: null,
+        endWorkingTogether: null,
+        email: '',
+        phoneNumber: '',
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertPartnerHideActionType) => {
@@ -84,6 +100,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorPartnerA
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterPartnerActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterPartnerActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: PartnerActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_PARTNER: return setPaginator(state, action);
@@ -91,6 +127,8 @@ const reducer = (state = initialState, action: PartnerActionTypes) => {
         case FETCH_PARTNER_ERROR: return fetchError(state, action);
         case ALERT_PARTNER_HIDE: return alertHide(state, action);
         case ALERT_PARTNER_SHOW: return alertShow(state, action);
+        case SET_FILTER_PARTNER: return setFilter(state, action);
+        case CLEAR_FILTER_PARTNER: return clearFilter(state, action);
         default:
             return state;
     }

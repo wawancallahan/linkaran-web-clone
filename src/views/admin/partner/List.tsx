@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -35,7 +36,8 @@ import {
     activePartnerAction,
     deactivePartnerAction,
     setAlertPartnerHideAction,
-    setAlertPartnerShowAction
+    setAlertPartnerShowAction,
+    clearFilterAction
 } from '../../../actions/admin/partner';
 import { Partner, PartnerList } from '../../../types/admin/partner';
 import { Paginator } from '../../../types/paginator';
@@ -44,6 +46,7 @@ import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
 import { parseDateFormat, booleanToActiveStatus } from '../../../helpers/utils';
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -116,6 +119,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertPartnerHideAction();
+        this.props.clearFilterPartnerAction();
     }
 
     fetchPartnerList = (page: number) => {
@@ -251,6 +255,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -307,7 +316,8 @@ interface LinkDispatchToProps {
     activePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
     deactivePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
     setAlertPartnerHideAction: () => void,
-    setAlertPartnerShowAction: (message: string, color: string) => void
+    setAlertPartnerShowAction: (message: string, color: string) => void,
+    clearFilterPartnerAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -317,7 +327,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         activePartnerAction: (id: number) => dispatch(activePartnerAction(id)),
         deactivePartnerAction: (id: number) => dispatch(deactivePartnerAction(id)),
         setAlertPartnerHideAction: () => dispatch(setAlertPartnerHideAction()),
-        setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color))
+        setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color)),
+        clearFilterPartnerAction: () => dispatch(clearFilterAction())
     }
 }
 
