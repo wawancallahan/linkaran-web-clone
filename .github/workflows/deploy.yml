@@ -1,0 +1,43 @@
+name: Deploy Server
+on:
+  push:
+    branches: dev_2
+jobs:
+  deploy:
+    if: "contains(github.event.head_commit.message, '[deploy]')"
+    strategy:
+      matrix:
+        target: [dev_2, release]
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: deploy server from branch ${{ matrix.target}}
+        uses: appleboy/ssh-action@master
+        env:
+          PROJECT_PATH: /home/server/www/fe_linkaran
+          PROJECT_PATH_ADMIN: /home/server/www/admin_linkaran
+          TARGET: ${{ matrix.target }}
+        with:
+          username: server
+          key: ${{ secrets.SSH_PRIVATE_KEY}}
+          host: ${{ secrets.SSH_SERVER}}
+          envs: PROJECT_PATH,PROJECT_PATH_ADMIN,TARGET
+          script: |
+            echo "target deploy $TARGET"
+            case "$TARGET" in 
+              "dev_2") echo "change dir to $PROJECT_PATH"
+                PUBLIC_URL=https://linkaran-fe.thortech.asia
+                TARGET_PATH=$PROJECT_PATH ;;
+              "release") "change dir to $PROJECT_PATH_ADMIN"
+                PUBLIC_URL=https://admin.linkaran.co.id
+                TARGET_PATH=$PROJECT_PATH_ADMIN ;;
+            esac
+            cd $TARGET_PATH
+            echo "target path $TARGET_PATH"
+            git pull origin ${{ steps.extract_branch.outputs.branch }}
+            yarn 
+            yarn build
+            echo "deployed to $PUBLIC_URL"
