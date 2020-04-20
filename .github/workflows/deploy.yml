@@ -4,13 +4,13 @@ on:
     branches: dev_2
 jobs:
   deploy:
-    # if: "contains(github.event.head_commit.message, '[deploy]')"
+    if: "contains(github.event.head_commit.message, 'deploy')"
     strategy:
       matrix:
         target: [dev_2, release]
     runs-on: [ubuntu-latest]
     steps:
-      - run: echo ${{ github.event.head_commit.message }}
+      - run: echo deploy message "${{ github.event.head_commit.message }}"
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
