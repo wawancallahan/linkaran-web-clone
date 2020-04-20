@@ -40,3 +40,4 @@ jobs:
             git pull origin ${{ steps.extract_branch.outputs.branch }}
             yarn 
             yarn build
+            echo "deployed to $PUBLIC_URL"
