@@ -36,6 +36,7 @@ jobs:
                 PUBLIC_URL=https://admin.linkaran.co.id
                 TARGET_PATH=$PROJECT_PATH_ADMIN ;;
             esac
+            cd $TARGET_PATH
             echo "target path $TARGET_PATH"
             git pull origin ${{ steps.extract_branch.outputs.branch }}
             yarn 
