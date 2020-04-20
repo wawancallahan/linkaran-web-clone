@@ -2,25 +2,44 @@ name: Deploy Server
 on:
   push:
     branches:
-      - master
+      - release
       - dev_2
 jobs:
   deploy:
     # needs: [build, release]
     runs-on: [ubuntu-latest]
     steps:
-      # - name: remote server
-      #   uses: appleboy/ssh-action@master
-      #   env:
-      #     PROJECT_PATH: /root/www/backend_linkaran
-      #   with:
-      #     username: root
-      #     key: ${{ secrets.SSH_PRIVATE_KEY}}
-      #     host: ${{ secrets.SSH_SERVER}}
-      #     envs: PROJECT_PATH
-      #     script: |
-      #       cd $PROJECT_PATH
-      #       cp -rf ~/artifacts/linkaran .
-      #       ~/.nvm/versions/node/v12.13.0/bin/npm install
-      #       NODE_ENV=production yarn typeorm:sync
-      #       pm2 start ecosystem.config.js --env=production
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: remote server
+        uses: appleboy/ssh-action@master
+        if: steps.extract_branch.outputs.branch == "dev_2"
+        env:
+          PROJECT_PATH: /home/server/www/fe_linkaran
+        with:
+          username: server
+          key: ${{ secrets.SSH_PRIVATE_KEY}}
+          host: ${{ secrets.SSH_SERVER}}
+          envs: PROJECT_PATH
+          script: |
+            cd $PROJECT_PATH
+            git pull origin ${{ steps.extract_branch.outputs.branch }}
+            yarn 
+            yarn build
+      - name: remote server
+        uses: appleboy/ssh-action@master
+        if: steps.extract_branch.outputs.branch == " release"
+        env:
+          PROJECT_PATH: /home/server/www/admin_linkaran
+        with:
+          username: server
+          key: ${{ secrets.SSH_PRIVATE_KEY}}
+          host: ${{ secrets.SSH_SERVER}}
+          envs: PROJECT_PATH
+          script: |
+            cd $PROJECT_PATH
+            git pull origin ${{ steps.extract_branch.outputs.branch }}
+            yarn 
+            yarn build
