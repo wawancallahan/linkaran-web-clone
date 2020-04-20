@@ -20,13 +20,20 @@ import {
     CountryEditResult,
     CountryCreateResult,
     CountryList,
-    CountryShow
+    CountryShow,
+    Filter,
+    SetFilterCountryActionType,
+    SET_FILTER_COUNTRY,
+    ClearFilterCountryActionType,
+    CLEAR_FILTER_COUNTRY
 } from '../../../types/admin/region/country';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorCountryActionType => {
@@ -63,10 +70,44 @@ export const setAlertCountryShowAction = (message: string, color: string): Alert
     };
 }
 
+export const clearFilterAction = () : ClearFilterCountryActionType => {
+    return {
+        type: CLEAR_FILTER_COUNTRY
+    }
+} 
 
-export const fetchCountryAction = (page: number): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterCountryActionType => {
+    return {
+        type: SET_FILTER_COUNTRY,
+        filter: filter
+    }
+}
+
+export const fetchCountryFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchCountryAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+
+export const fetchCountryAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-country?page=${page}`)
+
+        const filterState : Filter | {} = getState().country.filtered
+            ? getState().country.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-country`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<CountryList> = response.data;
 

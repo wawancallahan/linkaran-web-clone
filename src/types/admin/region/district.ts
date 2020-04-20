@@ -6,6 +6,8 @@ export const FETCH_DISTRICT = "FETCH_DISTRICT";
 export const FETCH_DISTRICT_SUCCESS = "FETCH_DISTRICT_SUCCESS";
 export const FETCH_DISTRICT_ERROR = "FETCH_DISTRICT_ERROR";
 export const SET_PAGINATOR_DISTRICT = "SET_PAGINATOR_DISTRICT";
+export const SET_FILTER_DISTRICT = "SET_FILTER_DISTRICT";
+export const CLEAR_FILTER_DISTRICT = "CLEAR_FILTER_DISTRICT";
 
 export const ALERT_DISTRICT_SHOW = "ALERT_DISTRICT_SHOW";
 export const ALERT_DISTRICT_HIDE = "ALERT_DISTRICT_HIDE";
@@ -81,6 +83,20 @@ export interface AlertDistrictShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    provinceName: string
+}
+
+export interface SetFilterDistrictActionType {
+    type: typeof SET_FILTER_DISTRICT,
+    filter: Filter
+}
+
+export interface ClearFilterDistrictActionType {
+    type: typeof CLEAR_FILTER_DISTRICT
+}
+
 export type DistrictActionTypes =
     | FetchDistrictActionType
     | FetchDistrictSuccessActionType
@@ -88,3 +104,5 @@ export type DistrictActionTypes =
     | AlertDistrictHideActionType
     | AlertDistrictShowActionType
     | SetPaginatorDistrictActionType
+    | SetFilterDistrictActionType
+    | ClearFilterDistrictActionType

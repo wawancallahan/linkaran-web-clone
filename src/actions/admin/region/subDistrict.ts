@@ -20,13 +20,20 @@ import {
     SubDistrictEditResult,
     SubDistrictCreateResult,
     SubDistrictList,
-    SubDistrictShow
+    SubDistrictShow,
+    Filter,
+    SetFilterSubDistrictActionType,
+    SET_FILTER_SUB_DISTRICT,
+    ClearFilterSubDistrictActionType,
+    CLEAR_FILTER_SUB_DISTRICT
 } from '../../../types/admin/region/subDistrict';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../../helpers/utils';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorSubDistrictActionType => {
@@ -63,10 +70,44 @@ export const setAlertSubDistrictShowAction = (message: string, color: string): A
     };
 }
 
+export const clearFilterAction = () : ClearFilterSubDistrictActionType => {
+    return {
+        type: CLEAR_FILTER_SUB_DISTRICT
+    }
+} 
 
-export const fetchSubDistrictAction = (page: number): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterSubDistrictActionType => {
+    return {
+        type: SET_FILTER_SUB_DISTRICT,
+        filter: filter
+    }
+}
+
+export const fetchSubDistrictFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchSubDistrictAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+
+export const fetchSubDistrictAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-sub-district?page=${page}`)
+
+        const filterState : Filter | {} = getState().subDistrict.filtered
+            ? getState().subDistrict.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-sub-district`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<SubDistrictList> = response.data;
 

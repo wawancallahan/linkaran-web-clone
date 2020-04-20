@@ -95,8 +95,8 @@ export const fetchPartnerFilteredAction = (filter: Filter) : ThunkResult<Promise
 export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        const filterState : Filter | {} = getState().food.filtered
-            ? getState().food.filter
+        const filterState : Filter | {} = getState().partner.filtered
+            ? getState().partner.filter
             : filter;
 
         let startWorkingTogether = '';

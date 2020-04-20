@@ -6,6 +6,8 @@ export const FETCH_VILLAGE = "FETCH_VILLAGE";
 export const FETCH_VILLAGE_SUCCESS = "FETCH_VILLAGE_SUCCESS";
 export const FETCH_VILLAGE_ERROR = "FETCH_VILLAGE_ERROR";
 export const SET_PAGINATOR_VILLAGE = "SET_PAGINATOR_VILLAGE";
+export const SET_FILTER_VILLAGE = "SET_FILTER_VILLAGE";
+export const CLEAR_FILTER_VILLAGE = "CLEAR_FILTER_VILLAGE";
 
 export const ALERT_VILLAGE_SHOW = "ALERT_VILLAGE_SHOW";
 export const ALERT_VILLAGE_HIDE = "ALERT_VILLAGE_HIDE";
@@ -78,6 +80,20 @@ export interface AlertVillageShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    subDistrictName: string
+}
+
+export interface SetFilterVillageActionType {
+    type: typeof SET_FILTER_VILLAGE,
+    filter: Filter
+}
+
+export interface ClearFilterVillageActionType {
+    type: typeof CLEAR_FILTER_VILLAGE
+}
+
 export type VillageActionTypes =
     | FetchVillageActionType
     | FetchVillageSuccessActionType
@@ -85,3 +101,5 @@ export type VillageActionTypes =
     | AlertVillageHideActionType
     | AlertVillageShowActionType
     | SetPaginatorVillageActionType
+    | SetFilterVillageActionType
+    | ClearFilterVillageActionType

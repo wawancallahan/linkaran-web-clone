@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchVillageAction,
     deleteVillageAction,
     setAlertVillageHideAction,
-    setAlertVillageShowAction
+    setAlertVillageShowAction,
+    clearFilterAction
 } from '../../../../actions/admin/region/village';
 import { Village, VillageList } from '../../../../types/admin/region/village';
 import { Paginator } from '../../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../../types/alert';
 import Spinner from '../../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertVillageHideAction();
+        this.props.clearFilterVillageAction();
     }
 
     fetchVillageList = (page: number) => {
@@ -189,6 +193,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -239,7 +248,8 @@ interface LinkDispatchToProps {
     fetchVillageAction: (page: number) => Promise<Boolean>,
     deleteVillageAction: (id: number) => Promise<ApiResponse<Village>>,
     setAlertVillageHideAction: () => void,
-    setAlertVillageShowAction: (message: string, color: string) => void
+    setAlertVillageShowAction: (message: string, color: string) => void,
+    clearFilterVillageAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,7 +257,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchVillageAction: (page: number) => dispatch(fetchVillageAction(page)),
         deleteVillageAction: (id: number) => dispatch(deleteVillageAction(id)),
         setAlertVillageHideAction: () => dispatch(setAlertVillageHideAction()),
-        setAlertVillageShowAction: (message: string, color: string) => dispatch(setAlertVillageShowAction(message, color))
+        setAlertVillageShowAction: (message: string, color: string) => dispatch(setAlertVillageShowAction(message, color)),
+        clearFilterVillageAction: () => dispatch(clearFilterAction())
     }
 }
 
