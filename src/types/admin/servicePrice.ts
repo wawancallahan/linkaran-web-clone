@@ -6,6 +6,8 @@ export const FETCH_SERVICE_PRICE = "FETCH_SERVICE_PRICE";
 export const FETCH_SERVICE_PRICE_SUCCESS = "FETCH_SERVICE_PRICE_SUCCESS";
 export const FETCH_SERVICE_PRICE_ERROR = "FETCH_SERVICE_PRICE_ERROR";
 export const SET_PAGINATOR_SERVICE_PRICE = "SET_PAGINATOR_SERVICE_PRICE";
+export const SET_FILTER_SERVICE_PRICE = "SET_FILTER_SERVICE_PRICE";
+export const CLEAR_FILTER_SERVICE_PRICE = "CLEAR_FILTER_SERVICE_PRICE";
 
 export const ALERT_SERVICE_PRICE_SHOW = "ALERT_SERVICE_PRICE_SHOW";
 export const ALERT_SERVICE_PRICE_HIDE = "ALERT_SERVICE_PRICE_HIDE";
@@ -126,6 +128,31 @@ export interface AlertServicePriceShowActionType {
     color: string
 }
 
+export interface Filter {
+    districtName: string,
+    price: {
+        value: number;
+        label: string;
+    },
+    service: {
+        value: number;
+        label: string;
+    },
+    vehicleType: {
+        value: number;
+        label: string;
+    },
+}
+
+export interface SetFilterServicePriceActionType {
+    type: typeof SET_FILTER_SERVICE_PRICE,
+    filter: Filter
+}
+
+export interface ClearFilterServicePriceActionType {
+    type: typeof CLEAR_FILTER_SERVICE_PRICE
+}
+
 export type ServicePriceActionTypes =
     | FetchServicePriceActionType
     | FetchServicePriceSuccessActionType
@@ -133,3 +160,5 @@ export type ServicePriceActionTypes =
     | AlertServicePriceHideActionType
     | AlertServicePriceShowActionType
     | SetPaginatorServicePriceActionType
+    | SetFilterServicePriceActionType
+    | ClearFilterServicePriceActionType

@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchServicePriceAction,
     deleteServicePriceAction,
     setAlertServicePriceHideAction,
-    setAlertServicePriceShowAction
+    setAlertServicePriceShowAction,
+    clearFilterAction
 } from '../../../actions/admin/servicePrice';
 import { ServicePrice } from '../../../types/admin/servicePrice';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -101,6 +104,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertServicePriceHideAction();
+        this.props.clearFilterServicePriceAction();
     }
 
     fetchServicePriceList = (page: number) => {
@@ -193,6 +197,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -248,7 +257,8 @@ interface LinkDispatchToProps {
     fetchServicePriceAction: (page: number) => Promise<Boolean>,
     deleteServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>,
     setAlertServicePriceHideAction: () => void,
-    setAlertServicePriceShowAction: (message: string, color: string) => void
+    setAlertServicePriceShowAction: (message: string, color: string) => void,
+    clearFilterServicePriceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -256,7 +266,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchServicePriceAction: (page: number) => dispatch(fetchServicePriceAction(page)),
         deleteServicePriceAction: (id: number) => dispatch(deleteServicePriceAction(id)),
         setAlertServicePriceHideAction: () => dispatch(setAlertServicePriceHideAction()),
-        setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color))
+        setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
+        clearFilterServicePriceAction: () => dispatch(clearFilterAction())
     }
 }
 

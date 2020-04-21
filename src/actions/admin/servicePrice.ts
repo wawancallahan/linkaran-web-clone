@@ -18,12 +18,20 @@ import {
     AlertServicePriceShowActionType,
     ALERT_SERVICE_PRICE_SHOW,
     ServicePriceEditResult,
-    ServicePriceCreateResult
+    ServicePriceCreateResult,
+    Filter,
+    SetFilterServicePriceActionType,
+    SET_FILTER_SERVICE_PRICE,
+    ClearFilterServicePriceActionType,
+    CLEAR_FILTER_SERVICE_PRICE
 } from '../../types/admin/servicePrice';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
+import { OptionObjectString } from '../../helpers/utils';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../types';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorServicePriceActionType => {
@@ -60,9 +68,43 @@ export const setAlertServicePriceShowAction = (message: string, color: string): 
     };
 }
 
-export const fetchServicePriceAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const clearFilterAction = () : ClearFilterServicePriceActionType => {
+    return {
+        type: CLEAR_FILTER_SERVICE_PRICE
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterServicePriceActionType => {
+    return {
+        type: SET_FILTER_SERVICE_PRICE,
+        filter: filter
+    }
+}
+
+export const fetchServicePriceFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
+    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
+        dispatch(setFilterAction(filter));
+        dispatch(fetchServicePriceAction(1, filter));
+        
+        return Promise.resolve(true);
+    }
+}
+
+export const fetchServicePriceAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price?page=${page}`)
+
+        const filterState : Filter | {} = getState().servicePrice.filtered
+            ? getState().servicePrice.filter
+            : filter;
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterState
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ServicePrice> = response.data;
 
