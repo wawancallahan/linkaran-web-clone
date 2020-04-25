@@ -59,7 +59,8 @@ class Create extends Component<Props, State> {
                 label: ''
             },
             driverPaymentDeductions: "",
-            servicePaymentDeductions: ""
+            servicePaymentDeductions: "",
+            maxDriverDistanceRadius: ""
         },
         alert_visible: false,
         alert_message: ''

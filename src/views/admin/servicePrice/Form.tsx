@@ -58,6 +58,16 @@ const createSchema = Yup.object().shape({
             return true;
         })
         .required('Bidang isian pengurangan pembayaran layanan wajib diisi'),
+    maxDriverDistanceRadius: Yup.string()
+        .matches(/^[0-9]*$/, "Wajib Diisi dengan angka")
+        .test('len', 'Bidang isian radius maksimal jarak driver tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+            if (val) {
+                return val.length <= 255;
+            }
+
+            return true;
+        })
+        .required('Bidang isian radius maksimal jarak driver wajib diisi'),
     district: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan wilayah wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan wilayah wajib diisi').required("Bidang pilihan wilayah wajib diisi")
@@ -276,7 +286,8 @@ class Form extends Component<Props> {
                             id: values.vehicleType.value
                         },
                         driverPaymentDeductions: Number.parseInt(values.driverPaymentDeductions),
-                        servicePaymentDeductions: Number.parseInt(values.servicePaymentDeductions)
+                        servicePaymentDeductions: Number.parseInt(values.servicePaymentDeductions),
+                        maxDriverDistanceRadius: Number.parseInt(values.maxDriverDistanceRadius),
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {
@@ -381,6 +392,30 @@ class Form extends Component<Props> {
                                         />
                                         <div>
                                             {FormikProps.errors.servicePaymentDeductions && FormikProps.touched.servicePaymentDeductions ? FormikProps.errors.servicePaymentDeductions : ''}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-maxDriverDistanceRadius"
+                                        >
+                                            Radius Maksimal Jarak Driver
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-maxDriverDistanceRadius"
+                                        placeholder="Radius Maksimal Jarak Driver"
+                                        type="text"
+                                        name="maxDriverDistanceRadius"
+                                        maxLength={255}
+                                        value={FormikProps.values.maxDriverDistanceRadius}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.maxDriverDistanceRadius && FormikProps.errors.maxDriverDistanceRadius) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.maxDriverDistanceRadius && FormikProps.touched.maxDriverDistanceRadius ? FormikProps.errors.maxDriverDistanceRadius : ''}
                                         </div>
                                     </FormGroup>
                                     <FormGroup>

@@ -66,7 +66,8 @@ class Edit extends Component<Props, State> {
                 label: ''
             },
             driverPaymentDeductions: "",
-            servicePaymentDeductions: ""
+            servicePaymentDeductions: "",
+            maxDriverDistanceRadius: ""
         },
         isLoaded: false,
         loadedMessage: '',
@@ -111,6 +112,10 @@ class Edit extends Component<Props, State> {
 
                     if (data.servicePaymentDeductions) {
                         form.servicePaymentDeductions = data.servicePaymentDeductions.toString()
+                    }
+
+                    if (data.maxDriverDistanceRadius) {
+                        form.maxDriverDistanceRadius = data.maxDriverDistanceRadius.toString()
                     }
 
                     this.setState({

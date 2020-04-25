@@ -30,7 +30,8 @@ export type FormField = {
         label: string
     },
     driverPaymentDeductions: string,
-    servicePaymentDeductions: string
+    servicePaymentDeductions: string,
+    maxDriverDistanceRadius: string
 }
 
 interface ServicePriceField {
@@ -47,7 +48,8 @@ interface ServicePriceField {
         id: number
     },
     driverPaymentDeductions: number,
-    servicePaymentDeductions: number
+    servicePaymentDeductions: number,
+    maxDriverDistanceRadius: number
 }
 
 interface ServicePriceList {
@@ -63,7 +65,8 @@ interface ServicePriceList {
     service: Service,
     vehicleType: VehicleType,
     driverPaymentDeductions?: number,
-    servicePaymentDeductions?: number
+    servicePaymentDeductions?: number,
+    maxDriverDistanceRadius?: number
 }
 
 interface ServicePriceResult {
@@ -87,7 +90,8 @@ type ServicePriceStoreResponse = ServicePriceResult & {
         id: number
     },
     driverPaymentDeductions?: number,
-    servicePaymentDeductions?: number
+    servicePaymentDeductions?: number,
+    maxDriverDistanceRadius?: number
 }
 
 export type ServicePrice = ServicePriceResult & ServicePriceList;
