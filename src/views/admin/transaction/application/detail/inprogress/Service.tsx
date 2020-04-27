@@ -13,11 +13,11 @@ import {
 import {
     Link
 } from 'react-router-dom';
-import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
+import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 
 type Props = {
     className?: string,
-    application: ApplicationShowComplete
+    application: ApplicationShowInprogress
 }
 
 const Service = (props: Props) => {
@@ -42,19 +42,19 @@ const Service = (props: Props) => {
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Jemput</label></Col>
                         <Col>
-                            <p>{application.transaction.addressOrigin }</p>
+                            <p>{application.transaction ? application.transaction.addressOrigin : ''}</p>
                         </Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Tujuan</label></Col>
                         <Col>
-                            <p>{application.transaction.addressDestination}</p>
+                            <p>{application.transaction ? application.transaction.addressDestination : ''}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Deskripsi</label></Col>
                         <Col>
-                            <p>{application.transaction.note}</p>
+                            <p>{application.transaction ? application.transaction.note : ''}</p>
                         </Col>
                     </Row>
                 </CardBody>

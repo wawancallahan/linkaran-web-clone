@@ -13,14 +13,15 @@ import {
 import {
     Link
 } from 'react-router-dom';
-import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
+import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
 type Props = {
     className?: string,
     application: ApplicationShowComplete
 }
 
-const Driver = (props: Props) => {
+const Customer = (props: Props) => {
+
     const { application } = props;
 
     return (
@@ -29,7 +30,7 @@ const Driver = (props: Props) => {
                 <CardHeader>
                     <Row className="align-items-center">
                         <Col>
-                            <h3 className="mb-0">Driver</h3>
+                            <h3 className="mb-0">Customer</h3>
                         </Col>
                         <Col className="text-right">
                             <Link to="">
@@ -46,19 +47,11 @@ const Driver = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>{application.driverId}</Col>
-                    </Row>
-                    <Row className="mb-2">
-                        <Col><label htmlFor="">Nama</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.name : ''}</Col>
-                    </Row>
-                    <Row className="mb-2">
-                        <Col><label htmlFor="">No. Polisi</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.policeNumber : ''}</Col>
+                        <Col>{application.costumer.id}</Col>
                     </Row>
                     <Row>
-                        <Col><label htmlFor="">Kendaraan</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.vehicleMerk : ''}</Col>
+                        <Col><label htmlFor="">Nama</label></Col>
+                        <Col>{application.costumer.userInfo.name}</Col>
                     </Row>
                 </CardBody>
             </Card>
@@ -66,4 +59,4 @@ const Driver = (props: Props) => {
     )
 }
 
-export default Driver;
+export default Customer;

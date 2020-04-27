@@ -34,6 +34,7 @@ import queryString from 'query-string';
 import { ApiResponse } from '../../../../types/api';
 import { findApplicationAction } from '../../../../actions/admin/transaction/application';
 import DetailComplete from './DetailComplete';
+import DetailInprogress from './DetailInprogress';
 
 type DetailProps = RouteComponentProps<{
     type: string,
@@ -110,6 +111,7 @@ class Detail extends Component<Props, State> {
                     detailTransaction = <DetailComplete application={data} />
                 break;
                 case "inprogress":
+                    detailTransaction = <DetailInprogress application={data} />
                 break;
             }
         }

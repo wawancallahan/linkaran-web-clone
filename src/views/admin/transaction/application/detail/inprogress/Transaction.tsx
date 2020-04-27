@@ -14,11 +14,11 @@ import {
 import {
     Link
 } from 'react-router-dom';
-import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
+import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 
 type Props = {
     className?: string,
-    application: ApplicationShowComplete
+    application: ApplicationShowInprogress
 }
 
 const Transaction = (props: Props) => {

@@ -43,12 +43,17 @@
 }
 
 .img-ico-transaction-link {
-    width: 100%;
+    max-width: 80%;
+    min-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
     position: relative;
+    text-align: center;
 }
 
 .img-ico-transaction-link img {
-    width: inherit;
+    max-width: inherit;
+    min-width: inherit;
     height: inherit;
 }
 

@@ -3,6 +3,8 @@ import { Timestamps } from '../../timestamps';
 import { VehicleType } from '../vehicleType';
 import { Service } from '../service';
 import { Restaurant } from '../restaurant';
+import { User } from '../user';
+import { Partner } from '../partner';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -127,13 +129,8 @@ export type ApplicationShowComplete = {
 export type ApplicationShowInprogress = {
     costumer: {
         id: number,
-        userInfo: {
-            email: string,
-            isActive: boolean,
-            linkWithGoogle: boolean,
-            name: string,
-            phoneNumber: string,
-            tokenFCM: string[]
+        userInfo: Partial<User> & {
+            partner?: Partial<Partner>
         }
     },
     id: string,
@@ -150,7 +147,7 @@ export type ApplicationShowInprogress = {
         },
         distance: string,
         driverPaymentDeductions: number,
-        foodFee: number,
+        foodFee?: number,
         note: string,
         origin: {
             $reql_type$: string,

@@ -16,8 +16,8 @@ import {
 
 import {
     starImage
-} from '../../../../../helpers/Assets'
-import { ApplicationShowComplete } from '../../../../../types/admin/transaction/application';
+} from '../../../../../../helpers/Assets'
+import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
 type Props = {
     className?: string,

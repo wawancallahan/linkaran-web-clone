@@ -40,7 +40,8 @@ export interface Partner {
     startWorkingTogether: string,
     endWorkingTogether: string,
     active: boolean,
-    ips: string[]
+    ips: string[],
+    secret?: string
 }
 
 export type PartnerList = Partner & {
