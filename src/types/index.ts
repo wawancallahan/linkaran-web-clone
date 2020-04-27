@@ -22,9 +22,11 @@ import { VillageActionTypes as AdminVillageActionTypes } from './admin/region/vi
 import { CustomerActionTypes as AdminCustomerActionTypes } from './admin/customer'
 import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
 import { ManualTopUpActionTypes as AdminManualTopUpActionTypes } from './admin/manualTopup'
+import { ManualWithDrawActionTypes as AdminManualWithDrawActionTypes } from './admin/manualWithdraw'
 import { PartnerActionTypes as AdminPartnerActionTypes } from './admin/partner'
 
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
+import { WithDrawActionTypes as FinancialManagerWithDrawActionTypes } from './financialManager/withdraw'
 
 export type AppActions = 
     | AdminUserActionTypes
@@ -51,5 +53,7 @@ export type AppActions =
     | AdminCustomerActionTypes
     | AdminBankActionTypes
     | AdminManualTopUpActionTypes
+    | AdminManualWithDrawActionTypes
     | AdminPartnerActionTypes
     | FinancialManagerTopUpActionTypes
+    | FinancialManagerWithDrawActionTypes

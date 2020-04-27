@@ -187,6 +187,12 @@ const routeList: (SidebarRoute | null)[] = [
     roles: ["admin", "super admin"]
   },
   {
+    path: "/admin/manual-withdraw",
+    name: "Manual With Draw",
+    icon: "ni ni-credit-card text-info",
+    roles: ["admin", "super admin"]
+  },
+  {
     path: "/admin/partner",
     name: "Partner",
     icon: "ni ni-circle-08 text-success",
@@ -196,6 +202,12 @@ const routeList: (SidebarRoute | null)[] = [
     path: "/admin/topup",
     name: "Top Up",
     icon: "ni ni-credit-card text-danger",
+    roles: ["financial manager"]
+  },
+  {
+    path: "/admin/withdraw",
+    name: "With Draw",
+    icon: "ni ni-credit-card text-info",
     roles: ["financial manager"]
   }
 ];

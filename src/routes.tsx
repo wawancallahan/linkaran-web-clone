@@ -19,9 +19,11 @@ import AdminRegionRoutes from './views/admin/region/Index'
 import AdminCustomerRoutes from './views/admin/customer/Index'
 import AdminBankRoutes from './views/admin/bank/Index'
 import AdminManualTopupRoutes from './views/admin/manualTopup/Index'
+import AdminManualWithdrawRoutes from './views/admin/manualWithdraw/Index'
 import AdmiPartnerRoutes from './views/admin/partner/Index'
 
 import FinancialManagerTopUpRoutes from './views/financialManager/topup/Index'
+import FinancialManagerWithDrawRoutes from './views/financialManager/withdraw/Index'
 
 export interface Route {
     exact: boolean,
@@ -52,8 +54,10 @@ const routes: Route[] = [
     ...AdminCustomerRoutes,
     ...AdminBankRoutes,
     ...AdminManualTopupRoutes,
+    ...AdminManualWithdrawRoutes,
     ...AdmiPartnerRoutes,
     ...FinancialManagerTopUpRoutes,
+    ...FinancialManagerWithDrawRoutes,
 ]
 
 export default routes;

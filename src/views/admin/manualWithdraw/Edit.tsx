@@ -22,12 +22,12 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { ManualTopUpShow, FormField } from '../../../types/admin/manualTopup';
+import { ManualWithDrawShow, FormField } from '../../../types/admin/manualWithdraw';
 import {
-    findManualTopUpAction
-} from '../../../actions/admin/manualTopup';
+    findManualWithDrawAction
+} from '../../../actions/admin/manualWithdraw';
 
-import FormManualTopUp from './FormEdit';
+import FormManualWithDraw from './FormEdit';
 import { ApiResponse } from '../../../types/api';
 
 type EditProps = RouteComponentProps<{
@@ -59,8 +59,8 @@ class Edit extends Component<Props, State> {
                 label: '',
                 value: 0
             },
-            image: null,
-            image_preview: ''
+            accountNumber: '',
+            accountName: ''
         },
         isLoaded: false,
         loadedMessage: '',
@@ -71,15 +71,13 @@ class Edit extends Component<Props, State> {
     componentDidMount() {
         const id = +this.props.match.params.id;
 
-        this.props.findManualTopUpAction(id)
-                .then((response: ApiResponse<ManualTopUpShow>) => {
+        this.props.findManualWithDrawAction(id)
+                .then((response: ApiResponse<ManualWithDrawShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: ManualTopUpShow =response.response!.result;
-
-                    form.amount = data.request ? data.request.uniqueCodeWithAmount.toString() : '';
+                    const data: ManualWithDrawShow =response.response!.result;
 
                     if (data.request && data.request.driverProfile && data.request.driverProfile.user) {
                         form.driverProfile = {
@@ -95,7 +93,8 @@ class Edit extends Component<Props, State> {
                         }
                     }
 
-                    form.image_preview = data.evidance || ''
+                    form.accountName = data.request ? data.request.accountName : '';
+                    form.accountNumber = data.request ? data.request.accountNumber : '';
 
                     this.setState({
                         form: form,
@@ -103,7 +102,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ManualTopUpShow>) => {
+                .catch((response: ApiResponse<ManualWithDrawShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -123,7 +122,7 @@ class Edit extends Component<Props, State> {
     }
 
     redirectOnSuccess = () => {
-        this.props.history.push('/admin/manual-topup');
+        this.props.history.push('/admin/manual-withdraw');
     }
     
     render() {
@@ -144,7 +143,7 @@ class Edit extends Component<Props, State> {
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col>
-                                    <h3 className="mb-0">Edit Manual Top Up</h3>
+                                    <h3 className="mb-0">Edit Manual Penarikan</h3>
                                 </Col>
                             </Row>
                         </CardHeader>
@@ -152,7 +151,7 @@ class Edit extends Component<Props, State> {
                             {showAlertError}
                             {this.state.isLoaded ? 
                                 (
-                                    <FormManualTopUp form={this.state.form} 
+                                    <FormManualWithDraw form={this.state.form} 
                                           setAlertMessage={this.setAlertMessage}
                                           setAlertOpen={this.setAlertOpen}
                                           redirectOnSuccess={this.redirectOnSuccess}
@@ -179,17 +178,17 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUpShow>>
+    findManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDrawShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
     return {
-        findManualTopUpAction: (id: number) => dispatch(findManualTopUpAction(id))
+        findManualWithDrawAction: (id: number) => dispatch(findManualWithDrawAction(id))
     }
 }
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Edit, "Edit Manual Top Up")
+        withTitle(Edit, "Edit Manual Penarikan")
     )
 );

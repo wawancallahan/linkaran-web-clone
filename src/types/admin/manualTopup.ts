@@ -1,6 +1,5 @@
 import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
-import { TopUpApprovedBy } from '../financialManager/topup';
 import { User } from './user';
 import { Bank } from './bank';
 
@@ -50,7 +49,7 @@ export interface ManualTopUp {
 }
 
 export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
-    approvedBy?: Partial<TopUpApprovedBy>,
+    approvedBy?: Partial<User>,
     userMakerTopup?: Partial<User> | null,
     request?: {
         id: number,
@@ -67,7 +66,7 @@ export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
 }
 
 export type ManualTopUpShow = ManualTopUp & Partial<Timestamps> & {
-    approvedBy?: Partial<TopUpApprovedBy>,
+    approvedBy?: Partial<User>,
     userMakerTopup?: Partial<User> | null,
     request?: {
         id: number,

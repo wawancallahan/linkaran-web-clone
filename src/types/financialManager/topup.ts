@@ -20,18 +20,6 @@ interface TopUpField {
     name: string
 }
 
-export interface TopUpApprovedBy {
-    id: number,
-    name: string,
-    phoneNumber: string,
-    email: string,
-    isActive: boolean,
-    linkWithGoogle: boolean,
-    tokenFCM: TokenFCM[],
-    iat: number,
-    exp: number
-}
-
 export interface TopUp {
     id: number,
     evidance: string | null,
@@ -44,7 +32,7 @@ export interface TopUp {
 export type TopUpApprove = Partial<TopUp> & Partial<Timestamps>
 
 export type TopUpList = TopUp & {
-    approvedBy?: Partial<TopUpApprovedBy> | null,
+    approvedBy?: Partial<User> | null,
     userMakerTopup?: Partial<User> | null,
     request?: {
         bankName: string,
@@ -60,7 +48,7 @@ export type TopUpList = TopUp & {
 }
 
 export type TopUpShow = TopUp & {
-    approvedBy?: Partial<TopUpApprovedBy> | null,
+    approvedBy?: Partial<User> | null,
     userMakerTopup?: Partial<User> | null,
     request?: {
         bankName: string,
