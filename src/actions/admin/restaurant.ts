@@ -148,10 +148,8 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
             name: search
         }
 
-        const params = objectToParamsUrl(paramsObject)
-
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant`, {
-                params: params
+                params: paramsObject
             })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Restaurant> = response.data;
