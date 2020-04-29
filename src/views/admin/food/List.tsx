@@ -117,7 +117,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteFood = (id: number) => {
@@ -230,7 +235,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchFoodAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchFoodList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>

@@ -12,6 +12,10 @@ export interface OptionObjectNumber {
     [key: string]: number
 }
 
+export interface OptionObjectAny {
+    [key: string]: any
+}
+
 export const addZeroOnNumber = (number: number) => {
     let parseNumber = number.toString()
     if (number < 10) {
@@ -126,10 +130,10 @@ export const objectToParamsUrl = (params: OptionObjectString | OptionObjectNumbe
 
 export const icoLinkImage = (code: string): string => {
     const icoLink: OptionObjectString = {
-        "linkride": icoLinkRide,
-        "linkcar": icoLinkCar,
-        "linksend": icoLinkBox,
-        "linkfood": icoLinkFood
+        linkride: icoLinkRide,
+        linkcar: icoLinkCar,
+        linksend: icoLinkBox,
+        linkfood: icoLinkFood
     }
 
     if (code in icoLink) {
@@ -137,4 +141,20 @@ export const icoLinkImage = (code: string): string => {
     }
 
     return '';
+}
+
+export const getKeyValue = <U extends keyof T, T extends object>(key: U) => (obj: T) => obj[key];
+
+export const setUrlParams = <U extends keyof T, T extends object>(objParams: T, addObjParams: OptionObjectAny = {}) => {
+    let currentUrlParams = new URLSearchParams(window.location.search);
+
+    Object.keys(objParams).forEach((obj: string, index: number) => {
+        currentUrlParams.set(obj, getKeyValue<keyof T, T>(obj as U)(objParams) as any);
+    });
+
+    Object.keys(addObjParams).forEach((obj: string, index: number) => {
+        currentUrlParams.set(obj, addObjParams[obj]);
+    });
+
+    return window.location.pathname + "?" + currentUrlParams.toString();
 }

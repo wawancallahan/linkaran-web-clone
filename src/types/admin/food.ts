@@ -122,6 +122,8 @@ export interface Filter {
     restaurantName: string
 }
 
+export type FilterKeys = keyof Filter;
+
 export interface SetFilterFoodActionType {
     type: typeof SET_FILTER_FOOD,
     filter: Filter
