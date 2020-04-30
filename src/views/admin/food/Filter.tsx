@@ -69,8 +69,8 @@ class Filter extends Component<Props, State> {
 
     clearFilter = () => {
         this.props.history.push(`${window.location.pathname}`);
-        this.props.clearFilterFoodAction();
         this.props.fetchFoodAction(1);
+        this.props.clearFilterFoodAction();
     }
 
     modalOnChange = (status: boolean) => {

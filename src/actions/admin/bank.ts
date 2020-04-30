@@ -20,7 +20,12 @@ import {
     BankEditResult,
     BankCreateResult,
     BankList,
-    BankShow
+    BankShow,
+    Filter,
+    SetFilterBankActionType,
+    SET_FILTER_BANK,
+    ClearFilterBankActionType,
+    CLEAR_FILTER_BANK
 } from '../../types/admin/bank';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -28,6 +33,7 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorBankActionType => {
     return {
@@ -63,10 +69,38 @@ export const setAlertBankShowAction = (message: string, color: string): AlertBan
     };
 }
 
+export const clearFilterAction = () : ClearFilterBankActionType => {
+    return {
+        type: CLEAR_FILTER_BANK
+    }
+} 
 
-export const fetchBankAction = (page: number): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterBankActionType => {
+    return {
+        type: SET_FILTER_BANK,
+        filter: filter
+    }
+}
+
+export const fetchBankAction = (page: number, clearFilter = false): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/bank?page=${page}`)
+
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            nama: (querySearch.nama as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/bank`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<BankList> = response.data;
 

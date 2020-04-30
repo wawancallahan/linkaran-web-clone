@@ -5,6 +5,8 @@ export const FETCH_BANK = "FETCH_BANK";
 export const FETCH_BANK_SUCCESS = "FETCH_BANK_SUCCESS";
 export const FETCH_BANK_ERROR = "FETCH_BANK_ERROR";
 export const SET_PAGINATOR_BANK = "SET_PAGINATOR_BANK";
+export const SET_FILTER_BANK = "SET_FILTER_BANK";
+export const CLEAR_FILTER_BANK = "CLEAR_FILTER_BANK";
 
 export const ALERT_BANK_SHOW = "ALERT_BANK_SHOW";
 export const ALERT_BANK_HIDE = "ALERT_BANK_HIDE";
@@ -71,6 +73,21 @@ export interface AlertBankShowActionType {
     color: string
 }
 
+export interface Filter {
+    nama: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterBankActionType {
+    type: typeof SET_FILTER_BANK,
+    filter: Filter
+}
+
+export interface ClearFilterBankActionType {
+    type: typeof CLEAR_FILTER_BANK
+}
+
 export type BankActionTypes =
     | FetchBankActionType
     | FetchBankSuccessActionType
@@ -78,3 +95,5 @@ export type BankActionTypes =
     | AlertBankHideActionType
     | AlertBankShowActionType
     | SetPaginatorBankActionType
+    | SetFilterBankActionType
+    | ClearFilterBankActionType
