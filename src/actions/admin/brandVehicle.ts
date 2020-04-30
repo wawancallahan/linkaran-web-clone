@@ -18,13 +18,20 @@ import {
     AlertBrandVehicleShowActionType,
     ALERT_BRAND_VEHICLE_SHOW,
     BrandVehicleCreateResult,
-    BrandVehicleEditResult
+    BrandVehicleEditResult,
+    Filter,
+    SetFilterBrandVehicleActionType,
+    SET_FILTER_BRAND_VEHICLE,
+    ClearFilterBrandVehicleActionType,
+    CLEAR_FILTER_BRAND_VEHICLE
 } from '../../types/admin/brandVehicle';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import queryString from 'query-string'
+import { OptionObjectString } from '../../helpers/utils';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorBrandVehicleActionType => {
     return {
@@ -60,9 +67,38 @@ export const setAlertBrandVehicleShowAction = (message: string, color: string): 
     };
 }
 
+export const clearFilterAction = () : ClearFilterBrandVehicleActionType => {
+    return {
+        type: CLEAR_FILTER_BRAND_VEHICLE
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterBrandVehicleActionType => {
+    return {
+        type: SET_FILTER_BRAND_VEHICLE,
+        filter: filter
+    }
+}
+
 export const fetchBrandVehicleAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+       
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<BrandVehicle> = response.data;
 

@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchBrandVehicleAction,
     deleteBrandVehicleAction,
     setAlertBrandVehicleHideAction,
-    setAlertBrandVehicleShowAction
+    setAlertBrandVehicleShowAction,
+    clearFilterAction
 } from '../../../actions/admin/brandVehicle';
 import { BrandVehicle } from '../../../types/admin/brandVehicle';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertBrandVehicleHideAction();
+        this.props.clearFilterBrandVehicleAction();
     }
 
     fetchBrandVehicleList = (page: number) => {
@@ -107,7 +111,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteBrandVehicle = (id: number) => {
@@ -179,15 +188,20 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Merek Kendaraan</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/brand-vehicle/create">
-                                            <Button
-                                                color="primary"
-                                                size="sm"
-                                            >
-                                                Tambah Merek Kendaraan
-                                            </Button>
-                                        </Link>
+                                            <Link to="/admin/brand-vehicle/create">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Merek Kendaraan
+                                                </Button>
+                                            </Link>
                                         </div>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -210,7 +224,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchBrandVehicleAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchBrandVehicleList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -239,7 +255,8 @@ interface LinkDispatchToProps {
     fetchBrandVehicleAction: (page: number) => Promise<Boolean>,
     deleteBrandVehicleAction: (id: number) => Promise<ApiResponse<BrandVehicle>>,
     setAlertBrandVehicleHideAction: () => void,
-    setAlertBrandVehicleShowAction: (message: string, color: string) => void
+    setAlertBrandVehicleShowAction: (message: string, color: string) => void,
+    clearFilterBrandVehicleAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,7 +264,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchBrandVehicleAction: (page: number) => dispatch(fetchBrandVehicleAction(page)),
         deleteBrandVehicleAction: (id: number) => dispatch(deleteBrandVehicleAction(id)),
         setAlertBrandVehicleHideAction: () => dispatch(setAlertBrandVehicleHideAction()),
-        setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color))
+        setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color)),
+        clearFilterBrandVehicleAction: () => dispatch(clearFilterAction())
     }
 }
 

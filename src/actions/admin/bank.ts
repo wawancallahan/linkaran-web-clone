@@ -82,7 +82,7 @@ export const setFilterAction = (filter: Filter) : SetFilterBankActionType => {
     }
 }
 
-export const fetchBankAction = (page: number, clearFilter = false): ThunkResult<Promise<Boolean>> => {
+export const fetchBankAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
         const querySearch = queryString.parse(window.location.search);

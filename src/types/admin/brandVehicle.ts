@@ -4,6 +4,8 @@ export const FETCH_BRAND_VEHICLE = "FETCH_BRAND_VEHICLE";
 export const FETCH_BRAND_VEHICLE_SUCCESS = "FETCH_BRAND_VEHICLE_SUCCESS";
 export const FETCH_BRAND_VEHICLE_ERROR = "FETCH_BRAND_VEHICLE_ERROR";
 export const SET_PAGINATOR_BRAND_VEHICLE = "SET_PAGINATOR_BRAND_VEHICLE";
+export const SET_FILTER_BRAND_VEHICLE = "SET_FILTER_BRAND_VEHICLE";
+export const CLEAR_FILTER_BRAND_VEHICLE = "CLEAR_FILTER_BRAND_VEHICLE";
 
 export const ALERT_BRAND_VEHICLE_SHOW = "ALERT_BRAND_VEHICLE_SHOW";
 export const ALERT_BRAND_VEHICLE_HIDE = "ALERT_BRAND_VEHICLE_HIDE";
@@ -64,6 +66,21 @@ export interface AlertBrandVehicleShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterBrandVehicleActionType {
+    type: typeof SET_FILTER_BRAND_VEHICLE,
+    filter: Filter
+}
+
+export interface ClearFilterBrandVehicleActionType {
+    type: typeof CLEAR_FILTER_BRAND_VEHICLE
+}
+
 export type BrandVehicleActionTypes =
     | FetchBrandVehicleActionType
     | FetchBrandVehicleSuccessActionType
@@ -71,3 +88,5 @@ export type BrandVehicleActionTypes =
     | AlertBrandVehicleHideActionType
     | AlertBrandVehicleShowActionType
     | SetPaginatorBrandVehicleActionType
+    | SetFilterBrandVehicleActionType
+    | ClearFilterBrandVehicleActionType
