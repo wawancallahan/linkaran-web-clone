@@ -97,6 +97,13 @@ export interface Filter {
     phoneNumber: string,
 }
 
+export type FilterOmit = Omit<Filter, 'startWorkingTogether' | 'endWorkingTogether'> & { 
+    startWorkingTogether: string,
+    endWorkingTogether: string
+}
+
+export type FilterKeys = keyof Filter;
+
 export interface SetFilterPartnerActionType {
     type: typeof SET_FILTER_PARTNER,
     filter: Filter

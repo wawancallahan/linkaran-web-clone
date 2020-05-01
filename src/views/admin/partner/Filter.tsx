@@ -13,38 +13,31 @@ import {
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { fetchPartnerFilteredAction } from '../../../actions/admin/partner';
-import { Filter as IFilter } from '../../../types/admin/partner';
+import { fetchPartnerAction, setFilterAction, clearFilterAction } from '../../../actions/admin/partner';
+import { Filter as IFilter, FilterKeys, FilterOmit } from '../../../types/admin/partner';
+import {
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
+import moment from 'moment'
 
-type FilterProps = {
+type FilterProps = RouteComponentProps & {
 
 }
 
-type Props = LinkDispatchToProps;
+type Props = FilterProps & LinkDispatchToProps & LinkStateToProps;
 
 type State = {
-    name: string,
-    companyName: string,
-    startWorkingTogether: Date | null,
-    endWorkingTogether: Date | null,
-    email: string,
-    phoneNumber: string,
-    filtered: boolean,
     modal_visible: boolean
 }
 
 class Filter extends Component<Props, State> {
 
     state = {
-        name: '',
-        companyName: '',
-        startWorkingTogether: null,
-        endWorkingTogether: null,
-        email: '',
-        phoneNumber: '',
-        filtered: false,
         modal_visible: false
     }
 
@@ -52,72 +45,58 @@ class Filter extends Component<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        let filter: IFilter = {
-            name: '',
-            companyName: '',
-            startWorkingTogether: null,
-            endWorkingTogether: null,
-            email: '',
-            phoneNumber: '',
+        let filter = this.props.filter as IFilter;
+
+        const startWorkingTogether = filter.startWorkingTogether ? (
+            moment(filter.startWorkingTogether).format("YYYY-MM-DD")
+        ) : ''
+
+        const endWorkingTogether = filter.endWorkingTogether ? (
+            moment(filter.endWorkingTogether).format("YYYY-MM-DD")
+        ) : ''
+
+        let newFilter = {
+            ...filter,
+            startWorkingTogether: startWorkingTogether,
+            endWorkingTogether: endWorkingTogether
         }
 
-        if (this.state.modal_visible) {
+        let filterOmit = newFilter as FilterOmit;
 
-            filter = {
-                ...filter,
-                name: this.state.name,
-                companyName: this.state.companyName,
-                startWorkingTogether: this.state.startWorkingTogether,
-                endWorkingTogether: this.state.endWorkingTogether,
-                email: this.state.email,
-                phoneNumber: this.state.phoneNumber,
-            }
-        } else {
-            filter = {
-                ...filter,
-                companyName: this.state.companyName
-            }
-        }
+        let currentUrlParams = new URLSearchParams(window.location.search);
 
-        this.props.fetchPartnerFilteredAction(filter).then(() => {
-            this.setState({
-                filtered: true,
-                modal_visible: false
-            })
+        Object.keys(filterOmit).forEach((obj: string, index: number) => {
+            currentUrlParams.set(obj, getKeyValue<FilterKeys, FilterOmit>(obj as FilterKeys)(filterOmit));
         });
+
+        this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
+
+        this.props.fetchPartnerAction(1);
+
+        this.modalOnChange(false);
     }
 
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        this.setState({
-            ...this.state,
+        this.props.setFilterAction({
+            ...this.props.filter,
             [id]: value
-        });
+        } as IFilter);
+    }
+
+    handleOnDateChange = (date: Date | null, id: string) => {
+        this.props.setFilterAction({
+            ...this.props.filter,
+            [id]: date
+        } as IFilter);
     }
 
     clearFilter = () => {
-        let filter: IFilter = {
-            name: '',
-            companyName: '',
-            startWorkingTogether: null,
-            endWorkingTogether: null,
-            email: '',
-            phoneNumber: '',
-        }
-
-        this.props.fetchPartnerFilteredAction(filter).then(() => {
-            this.setState({
-                name: '',
-                companyName: '',
-                startWorkingTogether: null,
-                endWorkingTogether: null,
-                email: '',
-                phoneNumber: '',
-                filtered: false
-            })
-        });
+        this.props.history.push(`${window.location.pathname}`);
+        this.props.fetchPartnerAction(1);
+        this.props.clearFilterPartnerAction();
     }
 
     modalOnChange = (status: boolean) => {
@@ -145,7 +124,7 @@ class Filter extends Component<Props, State> {
                                     type="text"
                                     name="companyName"
                                     maxLength={255}
-                                    value={this.state.companyName}
+                                    value={this.props.filter.companyName}
                                     onChange={this.handleOnChange}
                                     bsSize="sm"
                                 />
@@ -153,7 +132,7 @@ class Filter extends Component<Props, State> {
                                     <Button type="submit" color="primary" size="sm">
                                         <i className="fa fa-search" /> Cari
                                     </Button>
-                                    { this.state.filtered ? (
+                                    { this.props.filtered ? (
                                         <Button
                                             type="button"
                                             color="danger"
@@ -203,7 +182,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="companyName"
                                 maxLength={255}
-                                value={this.state.companyName}
+                                value={this.props.filter.companyName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -222,7 +201,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="email"
                                 maxLength={255}
-                                value={this.state.email}
+                                value={this.props.filter.email}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -241,7 +220,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="name"
                                 maxLength={255}
-                                value={this.state.name}
+                                value={this.props.filter.name}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -260,7 +239,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="phoneNumber"
                                 maxLength={255}
-                                value={this.state.phoneNumber}
+                                value={this.props.filter.phoneNumber}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -273,16 +252,10 @@ class Filter extends Component<Props, State> {
                                 </label>
                                 <div>
                                     <DatePicker
-                                        selected={this.state.startWorkingTogether}
-                                        onChange={date => {
-                                            this.setState({
-                                                ...this.state,
-                                                startWorkingTogether: date
-                                            })
-                                        }}
+                                        selected={this.props.filter.startWorkingTogether}
+                                        onChange={(date) => this.handleOnDateChange(date, 'startWorkingTogether')}
                                         dateFormat="yyyy-MM-dd"
                                         className="form-control form-control-alternative"
-                                        required
                                         />
                                 </div>
                             </FormGroup>
@@ -295,16 +268,10 @@ class Filter extends Component<Props, State> {
                                 </label>
                                 <div>
                                     <DatePicker
-                                        selected={this.state.endWorkingTogether}
-                                        onChange={date => {
-                                            this.setState({
-                                                ...this.state,
-                                                endWorkingTogether: date
-                                            })
-                                        }}
+                                        selected={this.props.filter.endWorkingTogether}
+                                        onChange={(date) => this.handleOnDateChange(date, 'endWorkingTogether')}
                                         dateFormat="yyyy-MM-dd"
                                         className="form-control form-control-alternative"
-                                        required
                                         />
                                 </div>
                             </FormGroup>
@@ -329,14 +296,30 @@ class Filter extends Component<Props, State> {
     }
 }
 
+interface LinkStateToProps {
+    filter: IFilter,
+    filtered: boolean
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        filter: state.partner.filter,
+        filtered: state.partner.filtered
+    }
+}
+
 interface LinkDispatchToProps {
-    fetchPartnerFilteredAction: (filter: IFilter) => Promise<Boolean>,
+    fetchPartnerAction: (page: number) => Promise<Boolean>,
+    setFilterAction: (filter: IFilter) => void,
+    clearFilterPartnerAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchPartnerFilteredAction: (filter: IFilter) => dispatch(fetchPartnerFilteredAction(filter)),
+        fetchPartnerAction: (page: number) => dispatch(fetchPartnerAction(page)),
+        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
+        clearFilterPartnerAction: () => dispatch(clearFilterAction())
     }
 }
 
-export default connect(null, mapDispatchToProps)(Filter);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));

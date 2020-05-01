@@ -25,7 +25,8 @@ import {
     SetFilterPartnerActionType,
     SET_FILTER_PARTNER,
     ClearFilterPartnerActionType,
-    CLEAR_FILTER_PARTNER
+    CLEAR_FILTER_PARTNER,
+    FilterOmit
 } from '../../types/admin/partner';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -35,6 +36,8 @@ import { OptionObjectNumber, objectToParamsUrl, OptionObjectString, getOnlyDateF
 import { AppActions } from '../../types';
 import { ThunkDispatch } from 'redux-thunk';
 dotenv.config();
+import queryString from 'query-string'
+import moment from 'moment';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorPartnerActionType => {
     return {
@@ -95,27 +98,37 @@ export const fetchPartnerFilteredAction = (filter: Filter) : ThunkResult<Promise
 export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        const filterState : Filter | {} = getState().partner.filtered
-            ? getState().partner.filter
-            : filter;
+        const querySearch = queryString.parse(window.location.search);
 
-        let startWorkingTogether = '';
-        if (Object.keys(filterState).length !== 0) {
-            startWorkingTogether = getOnlyDateFromDateNull((filterState as Filter).startWorkingTogether)
+        let startWorkingTogetherQuery = (querySearch.startWorkingTogether as string) || '';
+        let endWorkingTogetherQuery = (querySearch.endWorkingTogether as string) || '';
+
+        const startWorkingTogether = moment(startWorkingTogetherQuery, "YYYY-MM-DD", true);
+        const endWorkingTogether = moment(endWorkingTogetherQuery, "YYYY-MM-DD", true);
+
+        const filterOmit: FilterOmit = {
+            name: (querySearch.name as string) || '',
+            companyName: (querySearch.companyName as string) || '',
+            email: (querySearch.email as string) || '',
+            endWorkingTogether: endWorkingTogether.isValid() ? endWorkingTogether.format("YYYY-MM-DD") : '',
+            phoneNumber: (querySearch.phoneNumber as string) || '',
+            startWorkingTogether: startWorkingTogether.isValid() ? startWorkingTogether.format("YYYY-MM-DD") : ''
         }
 
-        let endWorkingTogether = '';
-
-        if (Object.keys(filterState).length !== 0) {
-            endWorkingTogether = getOnlyDateFromDateNull((filterState as Filter).endWorkingTogether)
+        const filter: Filter = {
+            ...filterOmit,
+            endWorkingTogether: endWorkingTogether.isValid() ? endWorkingTogether.toDate() : null,
+            startWorkingTogether: startWorkingTogether.isValid() ? startWorkingTogether.toDate() : null
         }
+
+        dispatch(setFilterAction(filter));
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),
-            ...filterState,
-            startWorkingTogether: startWorkingTogether,
-            endWorkingTogether: endWorkingTogether,
+            ...filterOmit
         }
+
+        console.log(paramsObject);
 
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/partner`, {
                 params: paramsObject
