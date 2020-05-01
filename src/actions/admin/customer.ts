@@ -20,13 +20,20 @@ import {
     CustomerEditResult,
     CustomerCreateResult,
     CustomerList,
-    CustomerShow
+    CustomerShow,
+    Filter,
+    SetFilterCustomerActionType,
+    SET_FILTER_CUSTOMER,
+    ClearFilterCustomerActionType,
+    CLEAR_FILTER_CUSTOMER
 } from '../../types/admin/customer';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 dotenv.config();
+import queryString from 'query-string'
+import { OptionObjectString } from '../../helpers/utils';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorCustomerActionType => {
     return {
@@ -62,10 +69,40 @@ export const setAlertCustomerShowAction = (message: string, color: string): Aler
     };
 }
 
+export const clearFilterAction = () : ClearFilterCustomerActionType => {
+    return {
+        type: CLEAR_FILTER_CUSTOMER
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterCustomerActionType => {
+    return {
+        type: SET_FILTER_CUSTOMER,
+        filter: filter
+    }
+}
 
 export const fetchCustomerAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/costumer?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || '',
+            email: (querySearch.email as string) || '',
+            phoneNumber: (querySearch.phoneNumber as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/costumer`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<CustomerList> = response.data;
 

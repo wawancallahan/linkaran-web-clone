@@ -12,7 +12,12 @@ import {
     AlertCustomerShowActionType,
     AlertCustomerHideActionType,
     ALERT_CUSTOMER_HIDE,
-    ALERT_CUSTOMER_SHOW
+    ALERT_CUSTOMER_SHOW,
+    SET_FILTER_CUSTOMER,
+    Filter,
+    SetFilterCustomerActionType,
+    ClearFilterCustomerActionType,
+    CLEAR_FILTER_CUSTOMER
 } from '../../types/admin/customer';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: CustomerList[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,13 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: '',
+        email: '',
+        phoneNumber: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertCustomerHideActionType) => {
@@ -84,6 +97,27 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorCustomer
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterCustomerActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterCustomerActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
+
 const reducer = (state = initialState, action: CustomerActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_CUSTOMER: return setPaginator(state, action);
@@ -91,6 +125,8 @@ const reducer = (state = initialState, action: CustomerActionTypes) => {
         case FETCH_CUSTOMER_ERROR: return fetchError(state, action);
         case ALERT_CUSTOMER_HIDE: return alertHide(state, action);
         case ALERT_CUSTOMER_SHOW: return alertShow(state, action);
+        case SET_FILTER_CUSTOMER: return setFilter(state, action);
+        case CLEAR_FILTER_CUSTOMER: return clearFilter(state, action);
         default:
             return state;
     }

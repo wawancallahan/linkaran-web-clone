@@ -12,7 +12,8 @@ import {
     Table,
     Alert,
     Progress,
-    Badge
+    Badge,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -34,7 +35,8 @@ import queryString from 'query-string';
 import {
     fetchCustomerAction,
     setAlertCustomerHideAction,
-    setAlertCustomerShowAction
+    setAlertCustomerShowAction,
+    clearFilterAction
 } from '../../../actions/admin/customer';
 import { Customer } from '../../../types/admin/customer';
 import { Paginator } from '../../../types/paginator';
@@ -46,6 +48,7 @@ import {
 } from '../../../helpers/Assets'
 import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -102,6 +105,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertCustomerHideAction();
+        this.props.clearFilterCustomerAction();
     }
 
     fetchCustomerList = (page: number) => {
@@ -113,7 +117,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     render() {
@@ -163,6 +172,11 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Customer</h3>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -187,7 +201,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchCustomerAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchCustomerList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -215,14 +231,16 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 interface LinkDispatchToProps {
     fetchCustomerAction: (page: number) => Promise<Boolean>,
     setAlertCustomerHideAction: () => void,
-    setAlertCustomerShowAction: (message: string, color: string) => void
+    setAlertCustomerShowAction: (message: string, color: string) => void,
+    clearFilterCustomerAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchCustomerAction: (page: number) => dispatch(fetchCustomerAction(page)),
         setAlertCustomerHideAction: () => dispatch(setAlertCustomerHideAction()),
-        setAlertCustomerShowAction: (message: string, color: string) => dispatch(setAlertCustomerShowAction(message, color))
+        setAlertCustomerShowAction: (message: string, color: string) => dispatch(setAlertCustomerShowAction(message, color)),
+        clearFilterCustomerAction: () => dispatch(clearFilterAction())
     }
 }
 

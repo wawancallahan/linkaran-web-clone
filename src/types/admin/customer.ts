@@ -6,6 +6,8 @@ export const FETCH_CUSTOMER = "FETCH_CUSTOMER";
 export const FETCH_CUSTOMER_SUCCESS = "FETCH_CUSTOMER_SUCCESS";
 export const FETCH_CUSTOMER_ERROR = "FETCH_CUSTOMER_ERROR";
 export const SET_PAGINATOR_CUSTOMER = "SET_PAGINATOR_CUSTOMER";
+export const SET_FILTER_CUSTOMER = "SET_FILTER_CUSTOMER";
+export const CLEAR_FILTER_CUSTOMER = "CLEAR_FILTER_CUSTOMER";
 
 export const ALERT_CUSTOMER_SHOW = "ALERT_CUSTOMER_SHOW";
 export const ALERT_CUSTOMER_HIDE = "ALERT_CUSTOMER_HIDE";
@@ -68,6 +70,23 @@ export interface AlertCustomerShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    email: string,
+    phoneNumber: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterCustomerActionType {
+    type: typeof SET_FILTER_CUSTOMER,
+    filter: Filter
+}
+
+export interface ClearFilterCustomerActionType {
+    type: typeof CLEAR_FILTER_CUSTOMER
+}
+
 export type CustomerActionTypes =
     | FetchCustomerActionType
     | FetchCustomerSuccessActionType
@@ -75,3 +94,5 @@ export type CustomerActionTypes =
     | AlertCustomerHideActionType
     | AlertCustomerShowActionType
     | SetPaginatorCustomerActionType
+    | SetFilterCustomerActionType
+    | ClearFilterCustomerActionType
