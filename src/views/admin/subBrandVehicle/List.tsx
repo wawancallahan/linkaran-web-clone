@@ -176,7 +176,7 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Sub Brand Vehicle</h3>
+                                            <h3 className="mb-0">Daftar Merek Kendaraan</h3>
                                         </div>
                                         <div className="col text-right">
                                         <Link to="/admin/sub-brand-vehicle/create">
@@ -184,7 +184,7 @@ class List extends Component<Props, State> {
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Sub Brand Vehicle
+                                                Tambah Merek Kendaraan
                                             </Button>
                                         </Link>
                                         </div>
@@ -254,6 +254,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Sub Brand Vehicle")
+                            withTitle(List, "Daftar Merek Kendaraan")
                     )
                 );

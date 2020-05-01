@@ -38,13 +38,13 @@ const routeList: (SidebarRoute | null)[] = [
   },
   {
       path: "/admin/brand-vehicle",
-      name: "Merek Kendaraan",
+      name: "Model Kendaraan",
       icon: "ni ni-app text-warning",
       roles: ["super admin", "admin"]
   },
   {
       path: "/admin/sub-brand-vehicle",
-      name: "Model Kendaraan",
+      name: "Merek Kendaraan",
       icon: "ni ni-briefcase-24 text-info",
       roles: ["super admin", "admin"]
   },
