@@ -35,6 +35,7 @@ import { booleanToString, OptionObjectString, objectToParamsUrl } from '../../he
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../types';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorRestaurantActionType => {
     return {
@@ -83,25 +84,22 @@ export const setFilterAction = (filter: Filter) : SetFilterRestaurantActionType 
     }
 }
 
-export const fetchRestaurantFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
-    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
-        dispatch(setFilterAction(filter));
-        dispatch(fetchRestaurantAction(1, filter));
-        
-        return Promise.resolve(true);
-    }
-}
-
 export const fetchRestaurantAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         
-        const filterState : Filter | {} = getState().restaurant.filtered
-            ? getState().restaurant.filter
-            : filter;
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            districtName: (querySearch.districtName as string) || '',
+            name: (querySearch.name as string) || '',
+            provinceName: (querySearch.provinceName as string) || '',
+        }
+
+        dispatch(setFilterAction(filter));
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),
-            ...filterState
+            ...filter
         }
 
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant`, {

@@ -173,6 +173,8 @@ export interface Filter {
     districtName: string
 }
 
+export type FilterKeys = keyof Filter
+
 export interface SetFilterRestaurantActionType {
     type: typeof SET_FILTER_RESTAURANT,
     filter: Filter
