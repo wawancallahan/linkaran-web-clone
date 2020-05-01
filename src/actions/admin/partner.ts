@@ -128,8 +128,6 @@ export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): Thun
             ...filterOmit
         }
 
-        console.log(paramsObject);
-
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/partner`, {
                 params: paramsObject
             })
