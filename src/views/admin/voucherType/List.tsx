@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchVoucherTypeAction,
     deleteVoucherTypeAction,
     setAlertVoucherTypeHideAction,
-    setAlertVoucherTypeShowAction
+    setAlertVoucherTypeShowAction,
+    clearFilterAction
 } from '../../../actions/admin/voucherType';
 import { VoucherType } from '../../../types/admin/voucherType';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertVoucherTypeHideAction();
+        this.props.clearFilterVoucherTypeAction();
     }
 
     fetchVoucherTypeList = (page: number) => {
@@ -107,7 +111,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteVoucherType = (id: number) => {
@@ -176,7 +185,7 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Voucher Type</h3>
+                                            <h3 className="mb-0">Daftar Tipe Voucher</h3>
                                         </div>
                                         <div className="col text-right">
                                         <Link to="/admin/voucher-type/create">
@@ -184,10 +193,15 @@ class List extends Component<Props, State> {
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Voucher Type
+                                                Tambah Tipe Voucher
                                             </Button>
                                         </Link>
                                         </div>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -210,7 +224,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchVoucherTypeAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchVoucherTypeList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -239,7 +255,8 @@ interface LinkDispatchToProps {
     fetchVoucherTypeAction: (page: number) => Promise<Boolean>,
     deleteVoucherTypeAction: (id: number) => Promise<ApiResponse<VoucherType>>,
     setAlertVoucherTypeHideAction: () => void,
-    setAlertVoucherTypeShowAction: (message: string, color: string) => void
+    setAlertVoucherTypeShowAction: (message: string, color: string) => void,
+    clearFilterVoucherTypeAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,12 +264,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchVoucherTypeAction: (page: number) => dispatch(fetchVoucherTypeAction(page)),
         deleteVoucherTypeAction: (id: number) => dispatch(deleteVoucherTypeAction(id)),
         setAlertVoucherTypeHideAction: () => dispatch(setAlertVoucherTypeHideAction()),
-        setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color))
+        setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color)),
+        clearFilterVoucherTypeAction: () => dispatch(clearFilterAction())
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Voucher Type")
+                            withTitle(List, "Daftar Tipe Voucher")
                     )
                 );

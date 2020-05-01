@@ -18,13 +18,20 @@ import {
     AlertUserShowActionType,
     ALERT_USER_SHOW,
     UserEditResult,
-    UserCreateResult
+    UserCreateResult,
+    Filter,
+    SetFilterUserActionType,
+    SET_FILTER_USER,
+    ClearFilterUserActionType,
+    CLEAR_FILTER_USER
 } from '../../types/admin/user';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
+import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorUserActionType => {
     return {
@@ -60,9 +67,38 @@ export const setAlertUserShowAction = (message: string, color: string): AlertUse
     };
 }
 
+export const clearFilterAction = () : ClearFilterUserActionType => {
+    return {
+        type: CLEAR_FILTER_USER
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterUserActionType => {
+    return {
+        type: SET_FILTER_USER,
+        filter: filter
+    }
+}
+
 export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/user?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+        
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/user`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<User> = response.data;
 

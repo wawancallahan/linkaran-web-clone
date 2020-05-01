@@ -4,6 +4,8 @@ export const FETCH_VOUCHER_TYPE = "FETCH_VOUCHER_TYPE";
 export const FETCH_VOUCHER_TYPE_SUCCESS = "FETCH_VOUCHER_TYPE_SUCCESS";
 export const FETCH_VOUCHER_TYPE_ERROR = "FETCH_VOUCHER_TYPE_ERROR";
 export const SET_PAGINATOR_VOUCHER_TYPE = "SET_PAGINATOR_VOUCHER_TYPE";
+export const SET_FILTER_VOUCHER_TYPE = "SET_FILTER_VOUCHER_TYPE";
+export const CLEAR_FILTER_VOUCHER_TYPE = "CLEAR_FILTER_VOUCHER_TYPE";
 
 export const ALERT_VOUCHER_TYPE_SHOW = "ALERT_VOUCHER_TYPE_SHOW";
 export const ALERT_VOUCHER_TYPE_HIDE = "ALERT_VOUCHER_TYPE_HIDE";
@@ -65,6 +67,21 @@ export interface AlertVoucherTypeShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterVoucherTypeActionType {
+    type: typeof SET_FILTER_VOUCHER_TYPE,
+    filter: Filter
+}
+
+export interface ClearFilterVoucherTypeActionType {
+    type: typeof CLEAR_FILTER_VOUCHER_TYPE
+}
+
 export type VoucherTypeActionTypes =
     | FetchVoucherTypeActionType
     | FetchVoucherTypeSuccessActionType
@@ -72,3 +89,5 @@ export type VoucherTypeActionTypes =
     | AlertVoucherTypeHideActionType
     | AlertVoucherTypeShowActionType
     | SetPaginatorVoucherTypeActionType
+    | SetFilterVoucherTypeActionType
+    | ClearFilterVoucherTypeActionType

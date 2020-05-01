@@ -219,7 +219,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchProvinceAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchProvinceList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>

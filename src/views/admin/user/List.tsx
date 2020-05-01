@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchUserAction,
     deleteUserAction,
     setAlertUserShowAction,
-    setAlertUserHideAction
+    setAlertUserHideAction,
+    clearFilterAction
 } from '../../../actions/admin/user';
 import { User } from '../../../types/admin/user';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -99,8 +102,10 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertUserHideAction();
+        this.props.clearFilterUserAction();
     }
 
+   
     fetchUserList = (page: number) => {
         this.setState({
             loader: true
@@ -110,7 +115,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteUser = (id: number) => {
@@ -192,6 +202,11 @@ class List extends Component<Props, State> {
                                             </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -216,7 +231,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchUserAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchUserList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -245,7 +262,8 @@ interface LinkDispatchToProps {
     fetchUserAction: (page: number) => Promise<Boolean>,
     deleteUserAction: (id: number) => Promise<ApiResponse<User>>,
     setAlertUserHideAction: () => void,
-    setAlertUserShowAction: (message: string, color: string) => void
+    setAlertUserShowAction: (message: string, color: string) => void,
+    clearFilterUserAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -253,7 +271,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchUserAction: (page: number) => dispatch(fetchUserAction(page)),
         deleteUserAction: (id: number) => dispatch(deleteUserAction(id)),
         setAlertUserHideAction: () => dispatch(setAlertUserHideAction()),
-        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color))
+        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color)),
+        clearFilterUserAction: () => dispatch(clearFilterAction())
     }
 }
 

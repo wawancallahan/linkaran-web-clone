@@ -18,13 +18,20 @@ import {
     AlertVoucherTypeShowActionType,
     ALERT_VOUCHER_TYPE_SHOW,
     VoucherTypeCreateResult,
-    VoucherTypeEditResult
+    VoucherTypeEditResult,
+    Filter,
+    SetFilterVoucherTypeActionType,
+    SET_FILTER_VOUCHER_TYPE,
+    ClearFilterVoucherTypeActionType,
+    CLEAR_FILTER_VOUCHER_TYPE
 } from '../../types/admin/voucherType';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import queryString from 'query-string'
+import { OptionObjectString } from '../../helpers/utils';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorVoucherTypeActionType => {
     return {
@@ -60,9 +67,38 @@ export const setAlertVoucherTypeShowAction = (message: string, color: string): A
     };
 }
 
+export const clearFilterAction = () : ClearFilterVoucherTypeActionType => {
+    return {
+        type: CLEAR_FILTER_VOUCHER_TYPE
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterVoucherTypeActionType => {
+    return {
+        type: SET_FILTER_VOUCHER_TYPE,
+        filter: filter
+    }
+}
+
 export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+        
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VoucherType> = response.data;
 

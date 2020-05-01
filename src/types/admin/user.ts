@@ -5,6 +5,8 @@ export const FETCH_USER = "FETCH_USER";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
 export const FETCH_USER_ERROR = "FETCH_USER_ERROR";
 export const SET_PAGINATOR_USER = "SET_PAGINATOR_USER";
+export const SET_FILTER_USER = "SET_FILTER_USER";
+export const CLEAR_FILTER_USER = "CLEAR_FILTER_USER";
 
 export const ALERT_USER_SHOW = "ALERT_USER_SHOW";
 export const ALERT_USER_HIDE = "ALERT_USER_HIDE";
@@ -90,6 +92,21 @@ export interface AlertUserShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterUserActionType {
+    type: typeof SET_FILTER_USER,
+    filter: Filter
+}
+
+export interface ClearFilterUserActionType {
+    type: typeof CLEAR_FILTER_USER
+}
+
 export type UserActionTypes =
     | FetchUserActionType
     | FetchUserSuccessActionType
@@ -97,3 +114,5 @@ export type UserActionTypes =
     | AlertUserHideActionType
     | AlertUserShowActionType
     | SetPaginatorUserActionType
+    | SetFilterUserActionType
+    | ClearFilterUserActionType

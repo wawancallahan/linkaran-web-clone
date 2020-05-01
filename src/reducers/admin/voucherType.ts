@@ -12,7 +12,12 @@ import {
     AlertVoucherTypeShowActionType,
     AlertVoucherTypeHideActionType,
     ALERT_VOUCHER_TYPE_HIDE,
-    ALERT_VOUCHER_TYPE_SHOW
+    ALERT_VOUCHER_TYPE_SHOW,
+    SET_FILTER_VOUCHER_TYPE,
+    Filter,
+    SetFilterVoucherTypeActionType,
+    ClearFilterVoucherTypeActionType,
+    CLEAR_FILTER_VOUCHER_TYPE
 } from '../../types/admin/voucherType';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: VoucherType[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,11 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertVoucherTypeHideActionType) => {
@@ -84,6 +95,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorVoucherT
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterVoucherTypeActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterVoucherTypeActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: VoucherTypeActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_VOUCHER_TYPE: return setPaginator(state, action);
@@ -91,6 +122,8 @@ const reducer = (state = initialState, action: VoucherTypeActionTypes) => {
         case FETCH_VOUCHER_TYPE_ERROR: return fetchError(state, action);
         case ALERT_VOUCHER_TYPE_HIDE: return alertHide(state, action);
         case ALERT_VOUCHER_TYPE_SHOW: return alertShow(state, action);
+        case SET_FILTER_VOUCHER_TYPE: return setFilter(state, action);
+        case CLEAR_FILTER_VOUCHER_TYPE: return clearFilter(state, action);
         default:
             return state;
     }

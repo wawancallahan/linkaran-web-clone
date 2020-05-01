@@ -12,7 +12,12 @@ import {
     AlertUserShowActionType,
     AlertUserHideActionType,
     ALERT_USER_HIDE,
-    ALERT_USER_SHOW
+    ALERT_USER_SHOW,
+    SET_FILTER_USER,
+    Filter,
+    SetFilterUserActionType,
+    ClearFilterUserActionType,
+    CLEAR_FILTER_USER
 } from '../../types/admin/user';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: User[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,11 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertUserHideActionType) => {
@@ -84,6 +95,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorUserActi
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterUserActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterUserActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: UserActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_USER: return setPaginator(state, action);
@@ -91,6 +122,8 @@ const reducer = (state = initialState, action: UserActionTypes) => {
         case FETCH_USER_ERROR: return fetchError(state, action);
         case ALERT_USER_HIDE: return alertHide(state, action);
         case ALERT_USER_SHOW: return alertShow(state, action);
+        case SET_FILTER_USER: return setFilter(state, action);
+        case CLEAR_FILTER_USER: return clearFilter(state, action);
         default:
             return state;
     }
