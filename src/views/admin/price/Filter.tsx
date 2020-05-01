@@ -13,30 +13,27 @@ import {
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { fetchPriceFilteredAction } from '../../../actions/admin/price';
-import { Filter as IFilter } from '../../../types/admin/price';
+import { setFilterAction, clearFilterAction, fetchPriceAction } from '../../../actions/admin/price';
+import { Filter as IFilter, FilterKeys } from '../../../types/admin/price';
+import {
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
 
-type FilterProps = {
+type FilterProps = RouteComponentProps & {
 
 }
 
-type Props = LinkDispatchToProps;
+type Props = FilterProps & LinkDispatchToProps & LinkStateToProps;
 
 type State = {
-    basePrice: string,
-    perKilometer: string,
-    minKm: string,
-    filtered: boolean,
     modal_visible: boolean
 }
-
 class Filter extends Component<Props, State> {
 
     state = {
-        basePrice: '',
-        perKilometer: '',
-        minKm: '',
-        filtered: false,
         modal_visible: false
     }
 
@@ -44,59 +41,35 @@ class Filter extends Component<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        let filter: IFilter = {
-            basePrice: '',
-            perKilometer: '',
-            minKm: '',
-        }
+        let filter = this.props.filter as IFilter;
 
-        if (this.state.modal_visible) {
-            filter = {
-                ...filter,
-                basePrice: this.state.basePrice,
-                perKilometer: this.state.perKilometer,
-                minKm: this.state.minKm,
-            }
-        } else {
-            filter = {
-                ...filter,
-                basePrice: this.state.basePrice
-            }
-        }
+        let currentUrlParams = new URLSearchParams(window.location.search);
 
-        this.props.fetchPriceFilteredAction(filter).then(() => {
-            this.setState({
-                filtered: true,
-                modal_visible: false
-            })
+        Object.keys(filter).forEach((obj: string, index: number) => {
+            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
         });
+
+        this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
+
+        this.props.fetchPriceAction(1);
+
+        this.modalOnChange(false);
     }
 
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        this.setState({
-            ...this.state,
+        this.props.setFilterAction({
+            ...this.props.filter,
             [id]: value
-        });
+        } as IFilter);
     }
 
     clearFilter = () => {
-        let filter: IFilter = {
-            basePrice: '',
-            perKilometer: '',
-            minKm: '',
-        }
-
-        this.props.fetchPriceFilteredAction(filter).then(() => {
-            this.setState({
-                basePrice: '',
-                perKilometer: '',
-                minKm: '',
-                filtered: false
-            })
-        });
+        this.props.history.push(`${window.location.pathname}`);
+        this.props.fetchPriceAction(1);
+        this.props.clearFilterPriceAction();
     }
 
     modalOnChange = (status: boolean) => {
@@ -124,7 +97,7 @@ class Filter extends Component<Props, State> {
                                     type="text"
                                     name="basePrice"
                                     maxLength={255}
-                                    value={this.state.basePrice}
+                                    value={this.props.filter.basePrice}
                                     onChange={this.handleOnChange}
                                     bsSize="sm"
                                 />
@@ -132,7 +105,7 @@ class Filter extends Component<Props, State> {
                                     <Button type="submit" color="primary" size="sm">
                                         <i className="fa fa-search" /> Cari
                                     </Button>
-                                    { this.state.filtered ? (
+                                    { this.props.filtered ? (
                                         <Button
                                             type="button"
                                             color="danger"
@@ -182,7 +155,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="basePrice"
                                 maxLength={255}
-                                value={this.state.basePrice}
+                                value={this.props.filter.basePrice}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -201,7 +174,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="perKilometer"
                                 maxLength={255}
-                                value={this.state.perKilometer}
+                                value={this.props.filter.perKilometer}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -220,7 +193,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="minKm"
                                 maxLength={255}
-                                value={this.state.minKm}
+                                value={this.props.filter.minKm}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -245,14 +218,30 @@ class Filter extends Component<Props, State> {
     }
 }
 
+interface LinkStateToProps {
+    filter: IFilter,
+    filtered: boolean
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        filter: state.price.filter,
+        filtered: state.price.filtered
+    }
+}
+
 interface LinkDispatchToProps {
-    fetchPriceFilteredAction: (filter: IFilter) => Promise<Boolean>,
+    fetchPriceAction: (page: number) => Promise<Boolean>,
+    setFilterAction: (filter: IFilter) => void,
+    clearFilterPriceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchPriceFilteredAction: (filter: IFilter) => dispatch(fetchPriceFilteredAction(filter)),
+        fetchPriceAction: (page: number) => dispatch(fetchPriceAction(page)),
+        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
+        clearFilterPriceAction: () => dispatch(clearFilterAction())
     }
 }
 
-export default connect(null, mapDispatchToProps)(Filter);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));

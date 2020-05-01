@@ -85,6 +85,8 @@ export interface Filter {
     districtName: string
 }
 
+export type FilterKeys = keyof Filter
+
 export interface SetFilterSubDistrictActionType {
     type: typeof SET_FILTER_SUB_DISTRICT,
     filter: Filter

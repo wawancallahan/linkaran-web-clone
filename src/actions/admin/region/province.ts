@@ -35,6 +35,7 @@ import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../..
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorProvinceActionType => {
     return {
@@ -83,26 +84,21 @@ export const setFilterAction = (filter: Filter) : SetFilterProvinceActionType =>
     }
 }
 
-export const fetchProvinceFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
-    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
-        dispatch(setFilterAction(filter));
-        dispatch(fetchProvinceAction(1, filter));
-        
-        return Promise.resolve(true);
-    }
-}
-
-
-export const fetchProvinceAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
+export const fetchProvinceAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        const filterState : Filter | {} = getState().province.filtered
-            ? getState().province.filter
-            : filter;
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || '',
+            countryName: (querySearch.countryName as string) || '',
+        }
+
+        dispatch(setFilterAction(filter));
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),
-            ...filterState
+            ...filter
         }
 
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/region-province`, {

@@ -79,6 +79,8 @@ export interface Filter {
     minKm: string
 }
 
+export type FilterKeys = keyof Filter
+
 export interface SetFilterPriceActionType {
     type: typeof SET_FILTER_PRICE,
     filter: Filter

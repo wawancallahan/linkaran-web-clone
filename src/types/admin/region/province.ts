@@ -88,6 +88,8 @@ export interface Filter {
     countryName: string
 }
 
+export type FilterKeys = keyof Filter
+
 export interface SetFilterProvinceActionType {
     type: typeof SET_FILTER_PROVINCE,
     filter: Filter

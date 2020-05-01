@@ -33,6 +33,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../types';
 import { OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorPriceActionType => {
     return {
@@ -81,25 +82,21 @@ export const setFilterAction = (filter: Filter) : SetFilterPriceActionType => {
     }
 }
 
-export const fetchPriceFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
-    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
-        dispatch(setFilterAction(filter));
-        dispatch(fetchPriceAction(1, filter));
-        
-        return Promise.resolve(true);
-    }
-}
-
-export const fetchPriceAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
+export const fetchPriceAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
+        const querySearch = queryString.parse(window.location.search);
 
-        const filterState : Filter | {} = getState().price.filtered
-                ? getState().price.filter
-                : filter;
+        const filter: Filter = {
+            basePrice: (querySearch.basePrice as string) || '',
+            minKm: (querySearch.minKm as string) || '',
+            perKilometer: (querySearch.perKilometer as string) || '',
+        }
+
+        dispatch(setFilterAction(filter));
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),
-            ...filterState
+            ...filter
         }
 
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/price`, {

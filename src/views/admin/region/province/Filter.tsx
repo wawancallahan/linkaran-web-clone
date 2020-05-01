@@ -13,28 +13,28 @@ import {
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../../types';
-import { fetchProvinceFilteredAction } from '../../../../actions/admin/region/province';
-import { Filter as IFilter } from '../../../../types/admin/region/province';
+import { setFilterAction, clearFilterAction, fetchProvinceAction } from '../../../../actions/admin/region/province';
+import { Filter as IFilter, FilterKeys } from '../../../../types/admin/region/province';
+import {
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../../helpers/utils';
+import { AppState } from '../../../../store/configureStore';
 
-type FilterProps = {
+type FilterProps = RouteComponentProps & {
 
 }
 
-type Props = LinkDispatchToProps;
+type Props = FilterProps & LinkDispatchToProps & LinkStateToProps;
 
 type State = {
-    name: string,
-    countryName: string,
-    filtered: boolean,
     modal_visible: boolean
 }
 
 class Filter extends Component<Props, State> {
 
     state = {
-        name: '',
-        countryName: '',
-        filtered: false,
         modal_visible: false
     }
 
@@ -42,55 +42,35 @@ class Filter extends Component<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        let filter: IFilter = {
-            name: '',
-            countryName: '',
-        }
+        let filter = this.props.filter as IFilter;
 
-        if (this.state.modal_visible) {
-            filter = {
-                ...filter,
-                name: this.state.name,
-                countryName: this.state.countryName
-            }
-        } else {
-            filter = {
-                ...filter,
-                name: this.state.name
-            }
-        }
+        let currentUrlParams = new URLSearchParams(window.location.search);
 
-        this.props.fetchProvinceFilteredAction(filter).then(() => {
-            this.setState({
-                filtered: true,
-                modal_visible: false
-            })
+        Object.keys(filter).forEach((obj: string, index: number) => {
+            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
         });
+
+        this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
+
+        this.props.fetchProvinceAction(1);
+
+        this.modalOnChange(false);
     }
 
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        this.setState({
-            ...this.state,
+        this.props.setFilterAction({
+            ...this.props.filter,
             [id]: value
-        });
+        } as IFilter);
     }
 
     clearFilter = () => {
-        let filter: IFilter = {
-            name: '',
-            countryName: '',
-        }
-
-        this.props.fetchProvinceFilteredAction(filter).then(() => {
-            this.setState({
-                name: '',
-                countryName: '',
-                filtered: false
-            })
-        });
+        this.props.history.push(`${window.location.pathname}`);
+        this.props.fetchProvinceAction(1);
+        this.props.clearFilterProvinceAction();
     }
 
     modalOnChange = (status: boolean) => {
@@ -118,7 +98,7 @@ class Filter extends Component<Props, State> {
                                     type="text"
                                     name="name"
                                     maxLength={255}
-                                    value={this.state.name}
+                                    value={this.props.filter.name}
                                     onChange={this.handleOnChange}
                                     bsSize="sm"
                                 />
@@ -126,7 +106,7 @@ class Filter extends Component<Props, State> {
                                     <Button type="submit" color="primary" size="sm">
                                         <i className="fa fa-search" /> Cari
                                     </Button>
-                                    { this.state.filtered ? (
+                                    { this.props.filtered ? (
                                         <Button
                                             type="button"
                                             color="danger"
@@ -176,7 +156,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="name"
                                 maxLength={255}
-                                value={this.state.name}
+                                value={this.props.filter.name}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -195,7 +175,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="countryName"
                                 maxLength={255}
-                                value={this.state.countryName}
+                                value={this.props.filter.countryName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -220,14 +200,30 @@ class Filter extends Component<Props, State> {
     }
 }
 
+interface LinkStateToProps {
+    filter: IFilter,
+    filtered: boolean
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        filter: state.province.filter,
+        filtered: state.province.filtered
+    }
+}
+
 interface LinkDispatchToProps {
-    fetchProvinceFilteredAction: (filter: IFilter) => Promise<Boolean>,
+    fetchProvinceAction: (page: number) => Promise<Boolean>,
+    setFilterAction: (filter: IFilter) => void,
+    clearFilterProvinceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchProvinceFilteredAction: (filter: IFilter) => dispatch(fetchProvinceFilteredAction(filter)),
+        fetchProvinceAction: (page: number) => dispatch(fetchProvinceAction(page)),
+        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
+        clearFilterProvinceAction: () => dispatch(clearFilterAction())
     }
 }
 
-export default connect(null, mapDispatchToProps)(Filter);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
