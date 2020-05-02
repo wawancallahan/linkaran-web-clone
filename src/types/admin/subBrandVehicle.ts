@@ -4,6 +4,8 @@ export const FETCH_SUB_BRAND_VEHICLE = "FETCH_SUB_BRAND_VEHICLE";
 export const FETCH_SUB_BRAND_VEHICLE_SUCCESS = "FETCH_SUB_BRAND_VEHICLE_SUCCESS";
 export const FETCH_SUB_BRAND_VEHICLE_ERROR = "FETCH_SUB_BRAND_VEHICLE_ERROR";
 export const SET_PAGINATOR_SUB_BRAND_VEHICLE = "SET_PAGINATOR_SUB_BRAND_VEHICLE";
+export const SET_FILTER_SUB_BRAND_VEHICLE = "SET_FILTER_SUB_BRAND_VEHICLE";
+export const CLEAR_FILTER_SUB_BRAND_VEHICLE = "CLEAR_FILTER_SUB_BRAND_VEHICLE";
 
 export const ALERT_SUB_BRAND_VEHICLE_SHOW = "ALERT_SUB_BRAND_VEHICLE_SHOW";
 export const ALERT_SUB_BRAND_VEHICLE_HIDE = "ALERT_SUB_BRAND_VEHICLE_HIDE";
@@ -83,6 +85,22 @@ export interface AlertSubBrandVehicleShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    brandName: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterSubBrandVehicleActionType {
+    type: typeof SET_FILTER_SUB_BRAND_VEHICLE,
+    filter: Filter
+}
+
+export interface ClearFilterSubBrandVehicleActionType {
+    type: typeof CLEAR_FILTER_SUB_BRAND_VEHICLE
+}
+
 export type SubBrandVehicleActionTypes =
     | FetchSubBrandVehicleActionType
     | FetchSubBrandVehicleSuccessActionType
@@ -90,3 +108,5 @@ export type SubBrandVehicleActionTypes =
     | AlertSubBrandVehicleHideActionType
     | AlertSubBrandVehicleShowActionType
     | SetPaginatorSubBrandVehicleActionType
+    | SetFilterSubBrandVehicleActionType
+    | ClearFilterSubBrandVehicleActionType

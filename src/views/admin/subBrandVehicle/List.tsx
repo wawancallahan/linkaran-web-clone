@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchSubBrandVehicleAction,
     deleteSubBrandVehicleAction,
     setAlertSubBrandVehicleHideAction,
-    setAlertSubBrandVehicleShowAction
+    setAlertSubBrandVehicleShowAction,
+    clearFilterAction
 } from '../../../actions/admin/subBrandVehicle';
 import { SubBrandVehicle } from '../../../types/admin/subBrandVehicle';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -97,6 +100,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertSubBrandVehicleHideAction();
+        this.props.clearFilterSubBrandVehicleAction();
     }
 
     fetchSubBrandVehicleList = (page: number) => {
@@ -108,7 +112,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteSubBrandVehicle = (id: number) => {
@@ -189,6 +198,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -211,7 +225,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchSubBrandVehicleAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchSubBrandVehicleList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -240,7 +256,8 @@ interface LinkDispatchToProps {
     fetchSubBrandVehicleAction: (page: number) => Promise<Boolean>,
     deleteSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicle>>,
     setAlertSubBrandVehicleHideAction: () => void,
-    setAlertSubBrandVehicleShowAction: (message: string, color: string) => void
+    setAlertSubBrandVehicleShowAction: (message: string, color: string) => void,
+    clearFilterSubBrandVehicleAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -248,7 +265,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchSubBrandVehicleAction: (page: number) => dispatch(fetchSubBrandVehicleAction(page)),
         deleteSubBrandVehicleAction: (id: number) => dispatch(deleteSubBrandVehicleAction(id)),
         setAlertSubBrandVehicleHideAction: () => dispatch(setAlertSubBrandVehicleHideAction()),
-        setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color))
+        setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color)),
+        clearFilterSubBrandVehicleAction: () => dispatch(clearFilterAction())
     }
 }
 
