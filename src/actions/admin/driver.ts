@@ -20,7 +20,12 @@ import {
     DriverEditResult,
     FetchDriverErrorActionType,
     FetchDriverSuccessActionType,
-    DriverDetail
+    DriverDetail,
+    Filter,
+    SetFilterDriverActionType,
+    SET_FILTER_DRIVER,
+    ClearFilterDriverActionType,
+    CLEAR_FILTER_DRIVER
 } from '../../types/admin/driver';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -28,6 +33,7 @@ import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 import { booleanToString, OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorDriverActionType => {
     return {
@@ -70,9 +76,41 @@ export const setAlertDriverShowAction = (message: string, color: string): AlertD
     };
 }
 
-export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const clearFilterAction = () : ClearFilterDriverActionType => {
+    return {
+        type: CLEAR_FILTER_DRIVER
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterDriverActionType => {
+    return {
+        type: SET_FILTER_DRIVER,
+        filter: filter
+    }
+}
+
+export const fetchDriverAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || '',
+            address: (querySearch.address as string) || '',
+            email: (querySearch.email as string) || '',
+            phoneNumber: (querySearch.phoneNumber as string) || '',
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+        
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<Driver> = response.data;
 
@@ -106,7 +144,7 @@ export const fetchDriverApiAction = (page: number) : ThunkResult<Promise<Boolean
     }
 }
 
-export const fetchListDriverApiAction = (search: string, page: number) : ThunkResult<Promise<ApiResponseList<Driver>>> => {
+export const fetchListDriverAction = (search: string, page: number) : ThunkResult<Promise<ApiResponseList<Driver>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         let paramsObject: OptionObjectString = {
             page: page.toString(),

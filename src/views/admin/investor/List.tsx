@@ -30,7 +30,7 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchInvestorApiAction,
+    fetchInvestorAction,
     setAlertInvestorHideAction,
     setAlertInvestorShowAction,
     deleteInvestorAction
@@ -107,7 +107,7 @@ class List extends Component<Props, State> {
         this.setState({
             loader: true
         }, () => {
-            this.props.fetchInvestorApiAction(page).then(() => {
+            this.props.fetchInvestorAction(page).then(() => {
                 this.setState({
                     loader: false
                 })
@@ -220,7 +220,7 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchInvestorApiAction} />
+                                                    itemClicked={this.props.fetchInvestorAction} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -246,7 +246,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchInvestorApiAction: (page: number) =>  Promise<Boolean>,
+    fetchInvestorAction: (page: number) =>  Promise<Boolean>,
     setAlertInvestorHideAction: () => void,
     setAlertInvestorShowAction: (message: string, color: string) => void,
     deleteInvestorAction: (id: number) => Promise<ApiResponse<Investor>>,
@@ -254,7 +254,7 @@ interface LinkDispatchToProps {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchInvestorApiAction: (page: number) => dispatch(fetchInvestorApiAction(page)),
+        fetchInvestorAction: (page: number) => dispatch(fetchInvestorAction(page)),
         setAlertInvestorHideAction: () => dispatch(setAlertInvestorHideAction()),
         setAlertInvestorShowAction: (message: string, color: string) => dispatch(setAlertInvestorShowAction(message, color)),
         deleteInvestorAction: (id: number) => dispatch(deleteInvestorAction(id)),
