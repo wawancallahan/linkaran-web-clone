@@ -187,6 +187,30 @@ class FormInformation extends Component<Props> {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-phoneNumber"
+                            >
+                                No Telepon
+                            </label>
+                            <Input
+                                className="form-control-alternative"
+                                id="input-phoneNumber"
+                                placeholder="No Telepon"
+                                type="text"
+                                name="phoneNumber"
+                                maxLength={255}
+                                value={FormikProps.values.phoneNumber}
+                                required
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
+                                invalid={ !!(FormikProps.touched.phoneNumber && FormikProps.errors.phoneNumber) }
+                                />
+                            <div>
+                                {FormikProps.errors.phoneNumber && FormikProps.touched.phoneNumber ? FormikProps.errors.phoneNumber : ''}
+                            </div>
+                        </FormGroup>
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-address"
                             >
                                 Alamat

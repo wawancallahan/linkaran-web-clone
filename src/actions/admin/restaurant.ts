@@ -214,6 +214,7 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
         data.set('point.lng', restaurant.point.lng)
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
+        data.set('phoneNumber', restaurant.phoneNumber)
 
         for (var i = 0; i < restaurant.operatingTime.length; i++) {
             data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);
@@ -346,6 +347,7 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
         data.set('point.lng', restaurant.point.lng)
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
+        data.set('phoneNumber', restaurant.phoneNumber)
 
         for (var i = 0; i < restaurant.operatingTime.length; i++) {
             data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);

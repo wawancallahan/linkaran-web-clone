@@ -53,6 +53,16 @@ const createSchema = Yup.object().shape({
                 label: Yup.string().required("Bidang pilihan district wajib diisi"),
                 value: Yup.number().notOneOf([0], 'Bidang pilihan district wajib diisi').required("Bidang pilihan district wajib diisi")
             }),
+    phoneNumber: Yup.string()
+            .matches(/^[0-9]*$/, "Wajib Diisi dengan angka")
+            .test('len', 'Bidang isian no telepon tidak boleh lebih dari 16 karakter', (val: any): boolean => {
+                if (val) {
+                    return val.length <= 16;
+                }
+
+                return true;
+            })
+            .required('Bidang isian no telepon wajib diisi'),
 });
 
 type FormProps = {
@@ -184,7 +194,8 @@ class Form extends Component<Props> {
                         operatingTime: operatingTime,
                         district: {
                             id: values.district.value
-                        }
+                        },
+                        phoneNumber: values.phoneNumber
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {

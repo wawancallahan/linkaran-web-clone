@@ -65,6 +65,7 @@ const TableItem = (props: {
         <tr>
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
+            <td>{props.item.phoneNumber}</td>
             <td>{props.item.point ? (props.item.point.lat + "," + props.item.point.lng) : ''}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.address}</td>
@@ -208,6 +209,7 @@ class List extends Component<Props, State> {
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
+                                            <th>No Telepon</th>
                                             <th>Point</th>
                                             <th>Rating</th>
                                             <th>Alamat</th>
