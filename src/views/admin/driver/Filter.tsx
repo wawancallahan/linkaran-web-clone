@@ -215,7 +215,7 @@ class Filter extends Component<Props, State> {
                                 name="address"
                                 maxLength={255}
                                 value={this.props.filter.address}
-                                onChange={this.handleChange}
+                                onChange={this.handleOnChange}
                                 />
                             </FormGroup>
                         </div>
