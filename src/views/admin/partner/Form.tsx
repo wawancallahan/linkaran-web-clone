@@ -340,7 +340,7 @@ class Form extends Component<Props> {
                                                                     <Input
                                                                         className="form-control-alternative"
                                                                         id={`input-ips.${index}`}
-                                                                        placeholder="IPS"
+                                                                        placeholder="IP"
                                                                         type="text"
                                                                         name={`ips.${index}`}
                                                                         maxLength={255}
