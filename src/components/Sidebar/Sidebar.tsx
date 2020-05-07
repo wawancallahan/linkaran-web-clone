@@ -1,63 +1,29 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
-import React from "react";
-import { NavLink as NavLinkRRD, Link, RouteComponentProps } from "react-router-dom";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-
-// reactstrap components
+import React from "react"
+import { Link, RouteComponentProps } from "react-router-dom"
+import PropTypes from "prop-types"
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Media,
   NavbarBrand,
   Navbar,
   NavItem,
-  NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col
-} from "reactstrap";
-
+} from "reactstrap"
 import { name as authName} from '../../services/auth'
+import { profileImage } from "../../helpers/Assets"
+import DropdownLink from "./DropdownLunk"
+import SingleLink from "./SingleLink"
 
 import './Sidebar.css';
-import { profileImage } from "../../helpers/Assets";
 
-export interface SidebarRoute {
+export type SidebarRoute = {
   path: string,
   name: string,
   icon: string,
@@ -65,87 +31,19 @@ export interface SidebarRoute {
   child?: (SidebarRoute | null)[]
 }
 
-interface logoInterface {
+export type SidebarDropdown = {
+  index: string,
+  collapseOpen: boolean,
+} 
+
+export type logoInterface = {
   innerLink?: string,
   outterLink?: string,
   imgAlt?: string,
   imgSrc?: string
 }
 
-interface SidebarDropdown {
-  index: string,
-  collapseOpen: boolean,
-} 
-
-const CreateDropdownLink = (props: {
-  key: string,
-  index: number,
-  item: SidebarRoute,
-  SidebarDropdown: SidebarDropdown[],
-  closeCollapse: () => void,
-  toggleCollapseSidebar: (index: number, key: string) => void,
-}) => {
-
-  const collapseSidebarDropdown: SidebarDropdown[] = {
-    ...props.SidebarDropdown
-  };
-
-  let isOpen = false;
-
-  if (collapseSidebarDropdown[props.index]) {
-    isOpen = collapseSidebarDropdown[props.index].collapseOpen;
-  }
-
-  return (
-    <>
-      <NavLink
-        onClick={() => props.toggleCollapseSidebar(props.index, `nav_dropdown_${props.index}`)}
-        id={`nav_dropdown_${props.index}`}
-        className={`SidebarDropdown ${isOpen ? 'ActiveDropdown' : ''}`}
-      >
-        <i className={props.item.icon} />
-        {props.item.name}
-        <span className="dropdown-icon">
-          <i className="fa fa-angle-right"></i>
-        </span>
-      </NavLink>
-      <Collapse isOpen={isOpen}>
-          {props.item.child ? props.item.child.map((item: any, index: number) => {
-              return <CreateSingleLink key={`nav_dropdown_${props.index}_${index}`}
-                                index={index}
-                                path={item.path}
-                                closeCollapse={props.closeCollapse}
-                                icon={item.icon}
-                                name={item.name}
-                                isChild={true} />
-            }) : null}
-      </Collapse>
-    </>
-  );
-}
-
-const CreateSingleLink = (props: {
-  key: string,
-  index: number,
-  path: string,
-  closeCollapse: () => void,
-  icon: string,
-  name: string,
-  isChild: boolean
-}) => (
-  <NavLink
-    to={props.path}
-    tag={NavLinkRRD}
-    onClick={props.closeCollapse}
-    activeClassName="active"
-    className={`${props.isChild ? 'nav-link-child' : ''}`}
-  >
-    <i className={props.icon} />
-    {props.name}
-  </NavLink>
-);
-
-type SidebarProps = RouteComponentProps & {
+export type SidebarProps = RouteComponentProps & {
   bgColor?: string;
   routes: (SidebarRoute | null)[];
   logo?: logoInterface;
@@ -247,14 +145,14 @@ class Sidebar extends React.Component<Props, State> {
         {
           item ? (
             item.child ? (
-              <CreateDropdownLink key={`${key}`}
+              <DropdownLink key={`${key}`}
                                   index={key}
                                   item={item}
                                   SidebarDropdown={this.state.collapseSidebarDropdown}
                                   closeCollapse={this.closeCollapse}
                                   toggleCollapseSidebar={this.toggleCollapseSidebar} />
             ) : (
-              <CreateSingleLink key={`${key}`}
+              <SingleLink key={`${key}`}
                                 index={key}
                                 path={item.path}
                                 closeCollapse={this.closeCollapse}
