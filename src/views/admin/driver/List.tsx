@@ -70,7 +70,8 @@ const TableItem = (props: {
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
-            <td></td>
+            <td>{}</td>
+            <td>{}</td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
@@ -228,6 +229,7 @@ class List extends Component<Props, State> {
                                             <th>Jenis Kelamin</th>
                                             <th>Tanggal Lahir</th>
                                             <th>Saldo</th>
+                                            <th>Tanggal Didaftarkan</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>

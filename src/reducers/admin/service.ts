@@ -12,7 +12,12 @@ import {
     AlertServiceShowActionType,
     AlertServiceHideActionType,
     ALERT_SERVICE_HIDE,
-    ALERT_SERVICE_SHOW
+    ALERT_SERVICE_SHOW,
+    SET_FILTER_SERVICE,
+    Filter,
+    SetFilterServiceActionType,
+    ClearFilterServiceActionType,
+    CLEAR_FILTER_SERVICE
 } from '../../types/admin/service';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: Service[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,14 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: '',
+        canBeMultiple: '0',
+        code: '',
+        passangerWithDriver: '0'
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertServiceHideActionType) => {
@@ -84,6 +98,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorServiceA
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterServiceActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterServiceActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: ServiceActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_SERVICE: return setPaginator(state, action);
@@ -91,6 +125,8 @@ const reducer = (state = initialState, action: ServiceActionTypes) => {
         case FETCH_SERVICE_ERROR: return fetchError(state, action);
         case ALERT_SERVICE_HIDE: return alertHide(state, action);
         case ALERT_SERVICE_SHOW: return alertShow(state, action);
+        case SET_FILTER_SERVICE: return setFilter(state, action);
+        case CLEAR_FILTER_SERVICE: return clearFilter(state, action);
         default:
             return state;
     }

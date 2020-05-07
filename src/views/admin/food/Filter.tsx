@@ -164,6 +164,25 @@ class Filter extends Component<Props, State> {
                             <FormGroup>
                                 <label
                                 className="form-control-label"
+                                htmlFor="input-restaurantName"
+                                >
+                                    Restoran
+                                </label>
+                                <Input
+                                className="form-control-alternative"
+                                id="input-restaurantName"
+                                placeholder="Restoran"
+                                type="text"
+                                name="restaurantName"
+                                maxLength={255}
+                                value={this.props.filter.restaurantName}
+                                onChange={this.handleOnChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
                                 htmlFor="input-provinceName"
                                 >
                                     Nama Provinsi
@@ -195,25 +214,6 @@ class Filter extends Component<Props, State> {
                                 name="districtName"
                                 maxLength={255}
                                 value={this.props.filter.districtName}
-                                onChange={this.handleOnChange}
-                                />
-                            </FormGroup>
-
-                            <FormGroup>
-                                <label
-                                className="form-control-label"
-                                htmlFor="input-restaurantName"
-                                >
-                                    Restoran
-                                </label>
-                                <Input
-                                className="form-control-alternative"
-                                id="input-restaurantName"
-                                placeholder="Restoran"
-                                type="text"
-                                name="restaurantName"
-                                maxLength={255}
-                                value={this.props.filter.restaurantName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>

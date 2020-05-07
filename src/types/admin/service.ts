@@ -4,6 +4,8 @@ export const FETCH_SERVICE = "FETCH_SERVICE";
 export const FETCH_SERVICE_SUCCESS = "FETCH_SERVICE_SUCCESS";
 export const FETCH_SERVICE_ERROR = "FETCH_SERVICE_ERROR";
 export const SET_PAGINATOR_SERVICE = "SET_PAGINATOR_SERVICE";
+export const SET_FILTER_SERVICE = "SET_FILTER_SERVICE";
+export const CLEAR_FILTER_SERVICE = "CLEAR_FILTER_SERVICE";
 
 export const ALERT_SERVICE_SHOW = "ALERT_SERVICE_SHOW";
 export const ALERT_SERVICE_HIDE = "ALERT_SERVICE_HIDE";
@@ -83,6 +85,24 @@ export interface AlertServiceShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    code: string,
+    canBeMultiple: string,
+    passangerWithDriver: string,
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterServiceActionType {
+    type: typeof SET_FILTER_SERVICE,
+    filter: Filter
+}
+
+export interface ClearFilterServiceActionType {
+    type: typeof CLEAR_FILTER_SERVICE
+}
+
 export type ServiceActionTypes =
     | FetchServiceActionType
     | FetchServiceSuccessActionType
@@ -90,3 +110,5 @@ export type ServiceActionTypes =
     | AlertServiceHideActionType
     | AlertServiceShowActionType
     | SetPaginatorServiceActionType
+    | SetFilterServiceActionType
+    | ClearFilterServiceActionType
