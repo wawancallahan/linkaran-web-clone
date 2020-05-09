@@ -44,6 +44,9 @@ import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
 import Filter from './Filter'
+import { parseDateFormat } from '../../../helpers/utils';
+import _ from 'lodash'
+import { EMoneyUser } from '../../../types/admin/user';
 
 type ListProps = RouteComponentProps & {
 
@@ -70,8 +73,10 @@ const TableItem = (props: {
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
-            <td>{}</td>
-            <td>{}</td>
+            <td>{props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? 'Rp.' + _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: EMoneyUser) => {
+                return sum + eMoneyUser.balance;
+            }, 0) : '-'}</td>
+            <td>{parseDateFormat(props.item.createdAt)}</td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
