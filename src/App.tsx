@@ -6,7 +6,7 @@ import AdminLayout from './layouts/Admin'
 
 import routes, { Route as RouteInterface } from './routes'
 import authRoutes from './views/auth/Index'
-import { rolesToArray, accessToken } from './services/auth';
+import { rolesToArray, accessToken, roles } from './services/auth';
 
 type AppProps = RouteComponentProps
 
@@ -31,10 +31,19 @@ class App extends Component<Props> {
                     if ( ! accessToken()) {
                         return <Redirect to="/login" />
                     } else {
-                        return (
-                            <AdminLayout {...this.props} />
-                        )
+                        if (rolesToArray().includes('admin') || rolesToArray().includes('super admin')) {
+                            return <AdminLayout {...this.props} />
+                        }
+
+                        return '403';
                     }
+                }} />
+                <Route path="/partner" render={() => {
+                    if (rolesToArray().includes('partner')) {
+                        return <AdminLayout {...this.props} />
+                    }
+
+                    return '403';
                 }} />
                 <Redirect from="/" to="/login" exact />
                 <Route render={() => <Redirect to="/" />} />
