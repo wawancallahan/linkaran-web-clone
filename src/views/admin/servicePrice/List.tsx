@@ -44,6 +44,7 @@ import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
 import Filter from './Filter'
+import NumberFormat from 'react-number-format';
 
 type ListProps = RouteComponentProps & {
 
@@ -64,8 +65,8 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.basePrice}</td>
-            <td>{props.item.pricePerKm}</td>
+            <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.basePrice} /></td>
+            <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.pricePerKm} /></td>
             <td>{props.item.minKm}</td>
             <td>{props.item.district.name}</td>
             <td>{props.item.service.name}</td>

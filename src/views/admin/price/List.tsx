@@ -45,6 +45,7 @@ import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
 
 import Filter from './Filter'
+import NumberFormat from 'react-number-format';
 
 type ListProps = RouteComponentProps & {
 
@@ -65,8 +66,8 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.basePrice}</td>
-            <td>{props.item.perKilometer}</td>
+            <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.basePrice} /></td>
+            <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.perKilometer} /></td>
             <td>{props.item.minKm}</td>
             <td>
                 <Link to={`/admin/price/${props.item.id}/edit`} className="btn btn-warning btn-sm">

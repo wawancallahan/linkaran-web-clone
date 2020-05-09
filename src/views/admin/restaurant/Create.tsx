@@ -151,6 +151,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
 
 export default withRouter(
     connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(Create, "Tambah Restaurant")
+        withTitle(Create, "Tambah Restoran")
     )
 );
