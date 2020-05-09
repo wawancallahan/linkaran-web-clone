@@ -67,9 +67,10 @@ class FormDay extends Component<Props> {
                                 onBlur={() => FormikProps.setFieldTouched(FormikSetValuesDateStart, true)}
                                 showTimeSelect
                                 showTimeSelectOnly
-                                timeIntervals={1}
+                                timeIntervals={5}
                                 timeCaption="Time"
                                 dateFormat="HH:mm"
+                                timeFormat="HH:mm"
                                 className="form-control form-control-alternative"
                                 placeholderText="Waktu Buka"
                                 disabled={FormikPropsValuesIsClosed}
@@ -85,9 +86,10 @@ class FormDay extends Component<Props> {
                                 onBlur={() => FormikProps.setFieldTouched(FormikSetValuesDateEnd, true)}
                                 showTimeSelect
                                 showTimeSelectOnly
-                                timeIntervals={1}
+                                timeIntervals={5}
                                 timeCaption="Time"
                                 dateFormat="HH:mm"
+                                timeFormat="HH:mm"
                                 className="form-control form-control-alternative"
                                 placeholderText="Waktu Tutup"
                                 disabled={FormikPropsValuesIsClosed}
