@@ -21,7 +21,7 @@ import { BankList } from '../../../types/admin/bank';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListBankAction } from '../../../actions/admin/bank';
 import { Driver } from '../../../types/admin/driver';
-import { fetchListDriverApiAction } from '../../../actions/admin/driver';
+import { fetchListDriverAction } from '../../../actions/admin/driver';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi' 
 import { toast, TypeOptions } from 'react-toastify'
@@ -324,7 +324,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         createManualTopUpAction: (manualTopup: ManualTopUpCreateField) => dispatch(createManualTopUpAction(manualTopup)),
         setAlertManualTopUpShowAction: (message: string, color: string) => dispatch(setAlertManualTopUpShowAction(message, color)),
         fetchListBankAction: (search: string, page: number) => dispatch(fetchListBankAction(search, page)),
-        fetchListDriverAction: (search: string, page: number) => dispatch(fetchListDriverApiAction(search, page))
+        fetchListDriverAction: (search: string, page: number) => dispatch(fetchListDriverAction(search, page))
     }
 }
 

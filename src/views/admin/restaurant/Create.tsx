@@ -80,7 +80,8 @@ class Create extends Component<Props, State> {
             province: {
                 value: 0,
                 label: ''
-            }
+            },
+            phoneNumber: ''
         },
         alert_visible: false,
         alert_message: ''

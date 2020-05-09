@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchServiceAction,
     deleteServiceAction,
     setAlertServiceHideAction,
-    setAlertServiceShowAction
+    setAlertServiceShowAction,
+    clearFilterAction
 } from '../../../actions/admin/service';
 import { Service } from '../../../types/admin/service';
 import { Paginator } from '../../../types/paginator';
@@ -42,6 +44,7 @@ import { Alert as IAlert } from '../../../types/alert';
 import { booleanToIndonesiaText } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -101,6 +104,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertServiceHideAction();
+        this.props.clearFilterServiceAction();
     }
 
     fetchServiceList = (page: number) => {
@@ -112,7 +116,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteService = (id: number) => {
@@ -194,6 +203,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -219,7 +233,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchServiceAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchServiceList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -248,7 +264,8 @@ interface LinkDispatchToProps {
     fetchServiceAction: (page: number) => Promise<Boolean>,
     deleteServiceAction: (id: number) => Promise<ApiResponse<Service>>,
     setAlertServiceHideAction: () => void,
-    setAlertServiceShowAction: (message: string, color: string) => void
+    setAlertServiceShowAction: (message: string, color: string) => void,
+    clearFilterServiceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -256,7 +273,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchServiceAction: (page: number) => dispatch(fetchServiceAction(page)),
         deleteServiceAction: (id: number) => dispatch(deleteServiceAction(id)),
         setAlertServiceHideAction: () => dispatch(setAlertServiceHideAction()),
-        setAlertServiceShowAction: (message: string, color: string) => dispatch(setAlertServiceShowAction(message, color))
+        setAlertServiceShowAction: (message: string, color: string) => dispatch(setAlertServiceShowAction(message, color)),
+        clearFilterServiceAction: () => dispatch(clearFilterAction())
     }
 }
 

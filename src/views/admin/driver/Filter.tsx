@@ -12,15 +12,15 @@ import {
     FormGroup
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../types';
-import { setFilterAction, clearFilterAction, fetchVillageAction } from '../../../../actions/admin/region/village';
-import { Filter as IFilter, FilterKeys } from '../../../../types/admin/region/village';
+import { AppActions } from '../../../types';
+import { fetchDriverAction, setFilterAction, clearFilterAction } from '../../../actions/admin/driver';
+import { Filter as IFilter, FilterKeys } from '../../../types/admin/driver';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { OptionObjectString, getKeyValue, setUrlParams } from '../../../../helpers/utils';
-import { AppState } from '../../../../store/configureStore';
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
 
 type FilterProps = RouteComponentProps & {
 
@@ -42,7 +42,7 @@ class Filter extends Component<Props, State> {
     handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-       
+
         let filter = this.props.filter as IFilter;
 
         let currentUrlParams = new URLSearchParams(window.location.search);
@@ -53,12 +53,11 @@ class Filter extends Component<Props, State> {
 
         this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
 
-        this.props.fetchVillageAction(1);
+        this.props.fetchDriverAction(1);
 
         this.modalOnChange(false);
     }
 
-    
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
@@ -71,8 +70,8 @@ class Filter extends Component<Props, State> {
 
     clearFilter = () => {
         this.props.history.push(`${window.location.pathname}`);
-        this.props.fetchVillageAction(1);
-        this.props.clearFilterVillageAction();
+        this.props.fetchDriverAction(1);
+        this.props.clearFilterDriverAction();
     }
 
     modalOnChange = (status: boolean) => {
@@ -166,18 +165,56 @@ class Filter extends Component<Props, State> {
                             <FormGroup>
                                 <label
                                 className="form-control-label"
-                                htmlFor="input-subDistrictName"
+                                htmlFor="input-email"
                                 >
-                                    Nama Kecamatan
+                                    Email
                                 </label>
                                 <Input
                                 className="form-control-alternative"
-                                id="input-subDistrictName"
-                                placeholder="Kecamatan"
+                                id="input-email"
+                                placeholder="Email"
                                 type="text"
-                                name="subDistrictName"
+                                name="email"
                                 maxLength={255}
-                                value={this.props.filter.subDistrictName}
+                                value={this.props.filter.email}
+                                onChange={this.handleOnChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
+                                htmlFor="input-phoneNumber"
+                                >
+                                    No. Telepon
+                                </label>
+                                <Input
+                                className="form-control-alternative"
+                                id="input-phoneNumber"
+                                placeholder="No. Telepon"
+                                type="text"
+                                name="phoneNumber"
+                                maxLength={255}
+                                value={this.props.filter.phoneNumber}
+                                onChange={this.handleOnChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                                >
+                                    Alamat
+                                </label>
+                                <Input
+                                className="form-control-alternative"
+                                id="input-address"
+                                placeholder="Alamat"
+                                type="textarea"
+                                name="address"
+                                maxLength={255}
+                                value={this.props.filter.address}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -209,22 +246,22 @@ interface LinkStateToProps {
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        filter: state.village.filter,
-        filtered: state.village.filtered
+        filter: state.driver.filter,
+        filtered: state.driver.filtered
     }
 }
 
 interface LinkDispatchToProps {
-    fetchVillageAction: (page: number) => Promise<Boolean>,
+    fetchDriverAction: (page: number) => Promise<Boolean>,
     setFilterAction: (filter: IFilter) => void,
-    clearFilterVillageAction: () => void
+    clearFilterDriverAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchVillageAction: (page: number) => dispatch(fetchVillageAction(page)),
+        fetchDriverAction: (page: number) => dispatch(fetchDriverAction(page)),
         setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterVillageAction: () => dispatch(clearFilterAction())
+        clearFilterDriverAction: () => dispatch(clearFilterAction())
     }
 }
 

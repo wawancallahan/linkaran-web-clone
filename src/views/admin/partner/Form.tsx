@@ -319,7 +319,7 @@ class Form extends Component<Props> {
                                         className="form-control-label"
                                         htmlFor="input-ips"
                                         >
-                                            IPS
+                                            IP
                                         </label>
                                         <FieldArray
                                             name="ips" 
@@ -330,7 +330,7 @@ class Form extends Component<Props> {
                                                             type="button"
                                                             color="primary"
                                                             onClick={() => arrayHelpers.push('')}>
-                                                            Tambah IPS
+                                                            Tambah IP
                                                         </Button>
                                                     </FormGroup>
                                                     {FormikProps.values.ips && FormikProps.values.ips.length > 0 ? (
@@ -340,7 +340,7 @@ class Form extends Component<Props> {
                                                                     <Input
                                                                         className="form-control-alternative"
                                                                         id={`input-ips.${index}`}
-                                                                        placeholder="IPS"
+                                                                        placeholder="IP"
                                                                         type="text"
                                                                         name={`ips.${index}`}
                                                                         maxLength={255}

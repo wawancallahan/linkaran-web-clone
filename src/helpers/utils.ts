@@ -61,15 +61,23 @@ export const typeTransactionFormat = (status?: string) => {
 }
 
 export const parseDateFormat = (date: string) => {
-    const dateParse = moment(date);
+    if (date !== '') {
+        const dateParse = moment(date);
 
-    return dateParse.format('DD MMMM YYYY');
+        return dateParse.format('DD MMMM YYYY');
+    }
+    
+    return null;
 }
 
 export const parseDateTimeFormat = (date: string) => {
-    const dateParse = moment(new Date(date))
+    if (date !== '') {
+        const dateParse = moment(date)
 
-    return dateParse.format('D MMMM YYYY hh:mm');
+        return dateParse.format('D MMMM YYYY hh:mm');
+    }
+    
+    return null;
 }
 export const getOnlyDateFromDateNull = (date: Date | null) => {
     if (date) {

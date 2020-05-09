@@ -88,7 +88,8 @@ class Edit extends Component<Props, State> {
             province: {
                 value: 0,
                 label: ''
-            }
+            },
+            phoneNumber: ''
         },
         isLoaded: false,
         loadedMessage: '',
@@ -131,6 +132,7 @@ class Edit extends Component<Props, State> {
                     }
                     form.rating = data.rating;
                     form.photo_preview = data.image ? data.image : '';
+                    form.phoneNumber = data.phoneNumber ? data.phoneNumber : '';;
 
                     if (data.district) {
                         if (data.district.province) {

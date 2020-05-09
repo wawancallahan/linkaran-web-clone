@@ -7,11 +7,16 @@ import { Province } from './region/province';
 import { District } from './region/district';
 import { Village } from './region/village';
 import { SubDistrict } from './region/subDistrict';
+import { User } from './user';
+import { SubBrandVehicle } from './subBrandVehicle';
+import { BrandVehicle } from './brandVehicle';
 
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const FETCH_DRIVER_SUCCESS = "FETCH_DRIVER_SUCCESS";
 export const FETCH_DRIVER_ERROR = "FETCH_DRIVER_ERROR";
 export const SET_PAGINATOR_DRIVER = "SET_PAGINATOR_DRIVER";
+export const SET_FILTER_DRIVER = "SET_FILTER_DRIVER";
+export const CLEAR_FILTER_DRIVER = "CLEAR_FILTER_DRIVER";
 
 export const ALERT_DRIVER_SHOW = "ALERT_DRIVER_SHOW";
 export const ALERT_DRIVER_HIDE = "ALERT_DRIVER_HIDE";
@@ -159,26 +164,14 @@ interface DriverList {
         id: number,
         name: string
     },
-    user: {
-        id: number,
-        name: string,
-        phoneNumber: string,
-        email: string,
-        vehicle: Vehicle & {
-            vehicleType: {
-                id: number,
-                name: string
-            },
-            subBrandVehicle: {
-                id: number,
-                name: string,
-                brandVehicle: {
-                    id: number,
-                    name: string
-                }
-            }
-        }
-    },
+    user: Partial<User & {
+        vehicle: Partial<Vehicle & {
+            subBrandVehicle: Partial<SubBrandVehicle & {
+                brandVehicle: Partial<BrandVehicle>
+            }>,
+            vehicleType: VehicleType
+        }>
+    }>,
     wasOnceAnOnlineDriver: boolean,
     isActivelyBecomingAnotherOnlineDriver: boolean,
     isJoiningTheDriverCommunity: boolean,
@@ -314,6 +307,25 @@ export interface AlertDriverShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    phoneNumber: string,
+    email: string,
+    address: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterDriverActionType {
+    type: typeof SET_FILTER_DRIVER,
+    filter: Filter
+}
+
+export interface ClearFilterDriverActionType {
+    type: typeof CLEAR_FILTER_DRIVER
+}
+
+
 export type DriverActionTypes =
     | FetchDriverActionType
     | FetchDriverSuccessActionType
@@ -321,3 +333,5 @@ export type DriverActionTypes =
     | AlertDriverHideActionType
     | AlertDriverShowActionType
     | SetPaginatorDriverActionType
+    | SetFilterDriverActionType
+    | ClearFilterDriverActionType

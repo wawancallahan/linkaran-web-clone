@@ -68,7 +68,7 @@ export const setAlertInvestorShowAction = (message: string, color: string): Aler
     };
 }
 
-export const fetchInvestorApiAction = (page: number) : ThunkResult<Promise<Boolean>> => {
+export const fetchInvestorAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {

@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -30,10 +31,11 @@ import { AxiosResponse } from 'axios';
 import Pagination from '../../../components/Pagination/Pagination';
 import queryString from 'query-string';
 import {
-    fetchDriverApiAction,
+    fetchDriverAction,
     setAlertDriverHideAction,
     setAlertDriverShowAction,
-    deleteDriverAction
+    deleteDriverAction,
+    clearFilterAction
 } from '../../../actions/admin/driver';
 import { Driver } from '../../../types/admin/driver';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,10 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
+import { parseDateFormat } from '../../../helpers/utils';
+import _ from 'lodash'
+import { EMoneyUser } from '../../../types/admin/user';
 
 type ListProps = RouteComponentProps & {
 
@@ -67,7 +73,10 @@ const TableItem = (props: {
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
-            <td></td>
+            <td>{props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? 'Rp.' + _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: EMoneyUser) => {
+                return sum + eMoneyUser.balance;
+            }, 0) : '-'}</td>
+            <td>{parseDateFormat(props.item.createdAt)}</td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
@@ -108,18 +117,24 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertDriverHideAction();
+        this.props.clearFilterDriverAction();
     }
 
-    fetchDriverList(page: number) {
+    fetchDriverList = (page: number) => {
         this.setState({
             loader: true
         }, () => {
-            this.props.fetchDriverApiAction(page).then(() => {
+            this.props.fetchDriverAction(page).then(() => {
                 this.setState({
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteDriver = (id: number) => {
@@ -201,6 +216,11 @@ class List extends Component<Props, State> {
                                         </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -214,6 +234,7 @@ class List extends Component<Props, State> {
                                             <th>Jenis Kelamin</th>
                                             <th>Tanggal Lahir</th>
                                             <th>Saldo</th>
+                                            <th>Tanggal Didaftarkan</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
@@ -228,7 +249,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchDriverApiAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchDriverList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -254,18 +277,20 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchDriverApiAction: (page: number) => Promise<Boolean>,
+    fetchDriverAction: (page: number) => Promise<Boolean>,
     setAlertDriverHideAction: () => void,
     setAlertDriverShowAction: (message: string, color: string) => void,
     deleteDriverAction: (id: number) => Promise<ApiResponse<Driver>>,
+    clearFilterDriverAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchDriverApiAction: (page: number) => dispatch(fetchDriverApiAction(page)),
+        fetchDriverAction: (page: number) => dispatch(fetchDriverAction(page)),
         setAlertDriverHideAction: () => dispatch(setAlertDriverHideAction()),
         setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
         deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
+        clearFilterDriverAction: () => dispatch(clearFilterAction())
     }
 }
 

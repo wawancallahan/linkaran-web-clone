@@ -32,6 +32,13 @@ interface UserField {
     telegramuser: string | null 
 }
 
+export type EMoneyUser = {
+    id: number,
+    name: string,
+    accountNumber: string,
+    balance: number
+}
+
 interface UserList {
     name: string
     phoneNumber: string,
@@ -45,6 +52,7 @@ interface UserList {
     isActive?: boolean,
     telegramuser: string | null,
     chatId: number | string | null,
+    eMoneyUser?: EMoneyUser[]
 }
 
 interface UserResult {

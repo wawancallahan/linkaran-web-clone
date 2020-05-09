@@ -50,7 +50,8 @@ export type FormField = {
     district: {
         label: string,
         value: number
-    }
+    },
+    phoneNumber: string
 }
 
 export interface OperatingTime {
@@ -73,7 +74,8 @@ interface RestaurantField {
     operatingTime: OperatingTime[],
     district: {
         id: number
-    }
+    },
+    phoneNumber: string
 }
 interface RestaurantList {
     name: string,
@@ -83,7 +85,8 @@ interface RestaurantList {
         lng: string
     },
     rating: number,
-    image: string | null
+    image: string | null,
+    phoneNumber?: string
 }
 interface RestaurantResult {
     id: number,
@@ -101,6 +104,7 @@ interface RestaurantModel {
         lat: string,
         lng: string
     },
+    phoneNumber?: string
 }
 
 export interface OperatingTimeModel {

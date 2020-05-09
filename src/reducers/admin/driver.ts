@@ -12,7 +12,12 @@ import {
     FETCH_DRIVER_SUCCESS,
     FETCH_DRIVER_ERROR,
     FetchDriverErrorActionType,
-    FetchDriverSuccessActionType
+    FetchDriverSuccessActionType,
+    SET_FILTER_DRIVER,
+    Filter,
+    SetFilterDriverActionType,
+    ClearFilterDriverActionType,
+    CLEAR_FILTER_DRIVER
 } from '../../types/admin/driver';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: Driver[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,14 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        address: '',
+        email: '',
+        name: '',
+        phoneNumber: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertDriverHideActionType) => {
@@ -93,6 +107,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorDriverAc
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterDriverActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterDriverActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: DriverActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_DRIVER: return setPaginator(state, action);
@@ -101,6 +135,8 @@ const reducer = (state = initialState, action: DriverActionTypes) => {
         case FETCH_DRIVER_ERROR: return fetchError(state, action);
         case ALERT_DRIVER_HIDE: return alertHide(state, action);
         case ALERT_DRIVER_SHOW: return alertShow(state, action);
+        case SET_FILTER_DRIVER: return setFilter(state, action);
+        case CLEAR_FILTER_DRIVER: return clearFilter(state, action);
         default:
             return state;
     }

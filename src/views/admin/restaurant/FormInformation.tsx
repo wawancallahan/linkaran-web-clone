@@ -187,6 +187,30 @@ class FormInformation extends Component<Props> {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-phoneNumber"
+                            >
+                                No Telepon
+                            </label>
+                            <Input
+                                className="form-control-alternative"
+                                id="input-phoneNumber"
+                                placeholder="No Telepon"
+                                type="text"
+                                name="phoneNumber"
+                                maxLength={255}
+                                value={FormikProps.values.phoneNumber}
+                                required
+                                onChange={FormikProps.handleChange}
+                                onBlur={FormikProps.handleBlur}
+                                invalid={ !!(FormikProps.touched.phoneNumber && FormikProps.errors.phoneNumber) }
+                                />
+                            <div>
+                                {FormikProps.errors.phoneNumber && FormikProps.touched.phoneNumber ? FormikProps.errors.phoneNumber : ''}
+                            </div>
+                        </FormGroup>
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-address"
                             >
                                 Alamat
@@ -365,7 +389,10 @@ class FormInformation extends Component<Props> {
                             </label>
                             <Dropzone onFilesAdded={(files: any[]) => {
                                 this.onFilesAdded(files, FormikProps, 'photo_preview', 'photo');
-                            }} disabled={false} multiple={false} previewUrl={FormikProps.values.photo_preview} />
+                            }} disabled={false} multiple={false} previewUrl={FormikProps.values.photo_preview} removeFile={true} onClickRemove={(file, index) => {
+                                FormikProps.setFieldValue('image_preview', '');
+                                FormikProps.setFieldValue('image', null)
+                            }} />
                             
                             <div>
                                 {FormikProps.errors.photo_preview && FormikProps.touched.photo_preview ? FormikProps.errors.photo_preview : ''}

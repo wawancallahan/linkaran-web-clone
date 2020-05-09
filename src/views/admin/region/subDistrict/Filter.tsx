@@ -167,7 +167,7 @@ class Filter extends Component<Props, State> {
                                 className="form-control-label"
                                 htmlFor="input-districtName"
                                 >
-                                    Kota/Kabupaten
+                                    Nama Kota/Kabupaten
                                 </label>
                                 <Input
                                 className="form-control-alternative"

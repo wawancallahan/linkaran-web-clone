@@ -18,7 +18,12 @@ import {
     AlertSubBrandVehicleShowActionType,
     ALERT_SUB_BRAND_VEHICLE_SHOW,
     SubBrandVehicleCreateResult,
-    SubBrandVehicleEditResult
+    SubBrandVehicleEditResult,
+    Filter,
+    SetFilterSubBrandVehicleActionType,
+    SET_FILTER_SUB_BRAND_VEHICLE,
+    ClearFilterSubBrandVehicleActionType,
+    CLEAR_FILTER_SUB_BRAND_VEHICLE
 } from '../../types/admin/subBrandVehicle';
 import { VehicleTypeList } from '../../types/admin/vehicleType';
 import { AxiosResponse, AxiosError } from 'axios';
@@ -27,6 +32,7 @@ import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
 import { OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorSubBrandVehicleActionType => {
     return {
@@ -62,9 +68,39 @@ export const setAlertSubBrandVehicleShowAction = (message: string, color: string
     };
 }
 
+export const clearFilterAction = () : ClearFilterSubBrandVehicleActionType => {
+    return {
+        type: CLEAR_FILTER_SUB_BRAND_VEHICLE
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterSubBrandVehicleActionType => {
+    return {
+        type: SET_FILTER_SUB_BRAND_VEHICLE,
+        filter: filter
+    }
+}
+
 export const fetchSubBrandVehicleAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || '',
+            brandName: (querySearch.brandName as string) || '',
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+        
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
 

@@ -12,7 +12,7 @@ type AppProps = RouteComponentProps
 
 type Props = AppProps;
 class App extends Component<Props> {
-
+    
     getAuthRoutes = (routes: RouteInterface[]) => {
         return routes.map((prop: RouteInterface, key: number) => {
             return <Route exact={prop.exact}

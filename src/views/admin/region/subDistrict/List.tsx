@@ -111,7 +111,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteSubDistrict = (id: number) => {

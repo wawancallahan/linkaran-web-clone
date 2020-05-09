@@ -12,15 +12,15 @@ import {
     FormGroup
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../types';
-import { setFilterAction, clearFilterAction, fetchVillageAction } from '../../../../actions/admin/region/village';
-import { Filter as IFilter, FilterKeys } from '../../../../types/admin/region/village';
+import { AppActions } from '../../../types';
+import { fetchSubBrandVehicleAction, setFilterAction, clearFilterAction } from '../../../actions/admin/subBrandVehicle';
+import { Filter as IFilter, FilterKeys } from '../../../types/admin/subBrandVehicle';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { OptionObjectString, getKeyValue, setUrlParams } from '../../../../helpers/utils';
-import { AppState } from '../../../../store/configureStore';
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
 
 type FilterProps = RouteComponentProps & {
 
@@ -32,7 +32,6 @@ type State = {
     modal_visible: boolean
 }
 
-
 class Filter extends Component<Props, State> {
 
     state = {
@@ -42,7 +41,7 @@ class Filter extends Component<Props, State> {
     handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-       
+
         let filter = this.props.filter as IFilter;
 
         let currentUrlParams = new URLSearchParams(window.location.search);
@@ -53,12 +52,11 @@ class Filter extends Component<Props, State> {
 
         this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
 
-        this.props.fetchVillageAction(1);
+        this.props.fetchSubBrandVehicleAction(1);
 
         this.modalOnChange(false);
     }
 
-    
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
@@ -71,8 +69,8 @@ class Filter extends Component<Props, State> {
 
     clearFilter = () => {
         this.props.history.push(`${window.location.pathname}`);
-        this.props.fetchVillageAction(1);
-        this.props.clearFilterVillageAction();
+        this.props.fetchSubBrandVehicleAction(1);
+        this.props.clearFilterSubBrandVehicleAction();
     }
 
     modalOnChange = (status: boolean) => {
@@ -166,18 +164,18 @@ class Filter extends Component<Props, State> {
                             <FormGroup>
                                 <label
                                 className="form-control-label"
-                                htmlFor="input-subDistrictName"
+                                htmlFor="input-brandName"
                                 >
-                                    Nama Kecamatan
+                                    Model Kendaraan
                                 </label>
                                 <Input
                                 className="form-control-alternative"
-                                id="input-subDistrictName"
-                                placeholder="Kecamatan"
+                                id="input-brandName"
+                                placeholder="Model Kendaraan"
                                 type="text"
-                                name="subDistrictName"
+                                name="brandName"
                                 maxLength={255}
-                                value={this.props.filter.subDistrictName}
+                                value={this.props.filter.brandName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -209,22 +207,22 @@ interface LinkStateToProps {
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        filter: state.village.filter,
-        filtered: state.village.filtered
+        filter: state.subBrandVehicle.filter,
+        filtered: state.subBrandVehicle.filtered
     }
 }
 
 interface LinkDispatchToProps {
-    fetchVillageAction: (page: number) => Promise<Boolean>,
+    fetchSubBrandVehicleAction: (page: number) => Promise<Boolean>,
     setFilterAction: (filter: IFilter) => void,
-    clearFilterVillageAction: () => void
+    clearFilterSubBrandVehicleAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchVillageAction: (page: number) => dispatch(fetchVillageAction(page)),
+        fetchSubBrandVehicleAction: (page: number) => dispatch(fetchSubBrandVehicleAction(page)),
         setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterVillageAction: () => dispatch(clearFilterAction())
+        clearFilterSubBrandVehicleAction: () => dispatch(clearFilterAction())
     }
 }
 

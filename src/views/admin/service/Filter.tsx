@@ -12,15 +12,16 @@ import {
     FormGroup
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../types';
-import { setFilterAction, clearFilterAction, fetchVillageAction } from '../../../../actions/admin/region/village';
-import { Filter as IFilter, FilterKeys } from '../../../../types/admin/region/village';
+import { AppActions } from '../../../types';
+import { setFilterAction, clearFilterAction, fetchServiceAction } from '../../../actions/admin/service';
+import { Filter as IFilter, FilterKeys } from '../../../types/admin/service';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { OptionObjectString, getKeyValue, setUrlParams } from '../../../../helpers/utils';
-import { AppState } from '../../../../store/configureStore';
+import { OptionObjectString, getKeyValue, setUrlParams } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
+import ReactSelect, { OptionsType, ValueType } from 'react-select'
 
 type FilterProps = RouteComponentProps & {
 
@@ -53,7 +54,7 @@ class Filter extends Component<Props, State> {
 
         this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
 
-        this.props.fetchVillageAction(1);
+        this.props.fetchServiceAction(1);
 
         this.modalOnChange(false);
     }
@@ -69,16 +70,45 @@ class Filter extends Component<Props, State> {
         } as IFilter);
     }
 
+    handleOnChangeSelect = (option: {
+        value: string,
+        label: string
+    }, id: string) => {
+        this.props.setFilterAction({
+            ...this.props.filter,
+            [id]: option.value
+        } as IFilter);
+    }
+
     clearFilter = () => {
         this.props.history.push(`${window.location.pathname}`);
-        this.props.fetchVillageAction(1);
-        this.props.clearFilterVillageAction();
+        this.props.fetchServiceAction(1);
+        this.props.clearFilterServiceAction();
     }
 
     modalOnChange = (status: boolean) => {
         this.setState({
             modal_visible: status
         })
+    }
+
+    updateToOptionSelect = (value: string) => {
+        let label = ''
+
+        if (value !== '') {
+            switch (value) {
+                case '1': label = 'Ya'; break
+                case '0': label = 'Tidak'; break
+            }
+        }
+        
+        return {
+            value: value,
+            label: label
+        } as ValueType<{
+            value: string,
+            label: string
+        }>
     }
 
     render() {
@@ -131,7 +161,7 @@ class Filter extends Component<Props, State> {
                     <Form onSubmit={this.handleOnSubmit}>
                         <div className="modal-header">
                             <h5 className="modal-title" id="exampleModalLabel">
-                            Filter
+                                Filter
                             </h5>
                             <button
                                 aria-label="Close"
@@ -166,20 +196,70 @@ class Filter extends Component<Props, State> {
                             <FormGroup>
                                 <label
                                 className="form-control-label"
-                                htmlFor="input-subDistrictName"
+                                htmlFor="input-code"
                                 >
-                                    Nama Kecamatan
+                                    Kode
                                 </label>
                                 <Input
                                 className="form-control-alternative"
-                                id="input-subDistrictName"
-                                placeholder="Kecamatan"
+                                id="input-code"
+                                placeholder="Kode"
                                 type="text"
-                                name="subDistrictName"
+                                name="code"
                                 maxLength={255}
-                                value={this.props.filter.subDistrictName}
+                                value={this.props.filter.code}
                                 onChange={this.handleOnChange}
                                 />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
+                                htmlFor="input-canBeMultiple"
+                                >
+                                    Dapat Lebih Dari 1
+                                </label>
+                                <ReactSelect 
+                                    options={[
+                                        {value: '1', label: 'Ya'},
+                                        {value: '0', label: 'Tidak'}
+                                    ]}
+                                    defaultValue={this.updateToOptionSelect(this.props.filter.canBeMultiple)}
+                                    onChange={(option) => {
+
+                                        const optionSelected = option as {
+                                            value: string,
+                                            label: string
+                                        };
+
+                                        this.handleOnChangeSelect(optionSelected, 'canBeMultiple')
+                                    }}  
+                                    />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
+                                htmlFor="input-passangerWithDriver"
+                                >
+                                    Penumpang Dengan Driver
+                                </label>
+                                <ReactSelect 
+                                    options={[
+                                        {value: '1', label: 'Ya'},
+                                        {value: '0', label: 'Tidak'}
+                                    ]}
+                                    defaultValue={this.updateToOptionSelect(this.props.filter.passangerWithDriver)}
+                                    onChange={(option) => {
+
+                                        const optionSelected = option as {
+                                            value: string,
+                                            label: string
+                                        };
+
+                                        this.handleOnChangeSelect(optionSelected, 'passangerWithDriver')
+                                    }}  
+                                    />
                             </FormGroup>
                         </div>
                         <div className="modal-footer">
@@ -209,22 +289,22 @@ interface LinkStateToProps {
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        filter: state.village.filter,
-        filtered: state.village.filtered
+        filter: state.service.filter,
+        filtered: state.service.filtered
     }
 }
 
 interface LinkDispatchToProps {
-    fetchVillageAction: (page: number) => Promise<Boolean>,
+    fetchServiceAction: (page: number) => Promise<Boolean>,
     setFilterAction: (filter: IFilter) => void,
-    clearFilterVillageAction: () => void
+    clearFilterServiceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchVillageAction: (page: number) => dispatch(fetchVillageAction(page)),
+        fetchServiceAction: (page: number) => dispatch(fetchServiceAction(page)),
         setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterVillageAction: () => dispatch(clearFilterAction())
+        clearFilterServiceAction: () => dispatch(clearFilterAction())
     }
 }
 
