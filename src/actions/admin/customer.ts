@@ -402,3 +402,110 @@ export const deleteCustomerAction = (id: number): ThunkResult<Promise<ApiRespons
             })
     }
 }
+
+
+export const activeCustomerAction = (id: number): ThunkResult<Promise<ApiResponse<Customer>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/customer/toggle/${id}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<Customer> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const deactiveCustomerAction = (id: number): ThunkResult<Promise<ApiResponse<Customer>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/customer/toggle/${id}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<Customer> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
