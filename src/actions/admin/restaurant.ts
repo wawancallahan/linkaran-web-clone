@@ -237,7 +237,6 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
                 });
             })
             .catch( (error: AxiosError) => {
-                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {

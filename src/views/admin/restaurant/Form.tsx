@@ -47,8 +47,7 @@ const createSchema = Yup.object().shape({
     rating: Yup.number()
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
              .required('Bidang isian rating wajib diiisi'),
-    photo_preview: Yup.string()
-             .required('Bidang upload foto wajib diisi'),
+    photo_preview: Yup.string().nullable(),
     district: Yup.object().shape({
                 label: Yup.string().required("Bidang pilihan district wajib diisi"),
                 value: Yup.number().notOneOf([0], 'Bidang pilihan district wajib diisi').required("Bidang pilihan district wajib diisi")

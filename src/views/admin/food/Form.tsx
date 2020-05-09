@@ -57,8 +57,7 @@ const createSchema = Yup.object().shape({
         label: Yup.string().required("Bidang pilihan restaurant wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan restaurant wajib diisi').required("Bidang pilihan restaurant wajib diisi")
     }),
-    image_preview: Yup.string()
-             .required('Bidang upload foto wajib diisi')
+    image_preview: Yup.string().nullable()
 });
 
 type FormProps = {
@@ -380,10 +379,14 @@ class Form extends Component<Props> {
                                         >
                                             Upload Gambar
                                         </label>
+
                                         <Dropzone onFilesAdded={(files: any[]) => {
                                             this.onFilesAdded(files, FormikProps, 'image_preview', 'image');
-                                        }} disabled={false} multiple={false} />
-                                        
+                                        }} disabled={false} multiple={false} removeFile={true} onClickRemove={(file, index) => {
+                                            FormikProps.setFieldValue('image_preview', '');
+                                            FormikProps.setFieldValue('image', null)
+                                        }}/>
+
                                         <div>
                                             {FormikProps.errors.image_preview && FormikProps.touched.image_preview ? FormikProps.errors.image_preview : ''}
                                         </div>

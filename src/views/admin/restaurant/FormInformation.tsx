@@ -389,7 +389,10 @@ class FormInformation extends Component<Props> {
                             </label>
                             <Dropzone onFilesAdded={(files: any[]) => {
                                 this.onFilesAdded(files, FormikProps, 'photo_preview', 'photo');
-                            }} disabled={false} multiple={false} previewUrl={FormikProps.values.photo_preview} />
+                            }} disabled={false} multiple={false} previewUrl={FormikProps.values.photo_preview} removeFile={true} onClickRemove={(file, index) => {
+                                FormikProps.setFieldValue('image_preview', '');
+                                FormikProps.setFieldValue('image', null)
+                            }} />
                             
                             <div>
                                 {FormikProps.errors.photo_preview && FormikProps.touched.photo_preview ? FormikProps.errors.photo_preview : ''}

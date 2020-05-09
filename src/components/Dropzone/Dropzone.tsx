@@ -1,5 +1,6 @@
 import React, { Component, createRef } from "react";
 import "./Dropzone.css";
+import { Button } from "reactstrap";
 
 interface DropzoneProps {
     disabled: boolean,
@@ -8,7 +9,11 @@ interface DropzoneProps {
 }
 
 type Props = DropzoneProps & {
-    previewUrl?: string
+    previewUrl?: string,
+    removeFile?: boolean
+    onClickRemove?: (file: File & {
+        preview: string
+    }, index: number) => void
 };
 
 type State = {
@@ -40,11 +45,11 @@ class Dropzone extends Component<Props, State> {
     const files = e.currentTarget.files;
     
     if (this.props.onFilesAdded) {
-        const array = this.fileListToArray(files);
+        const fileList = this.fileListToArray(files);
 
-        this.props.onFilesAdded(array);
+        this.props.onFilesAdded(fileList);
         this.setState({
-            files: array,
+            files: fileList,
             firstRender: false
         });
     }
@@ -81,7 +86,26 @@ class Dropzone extends Component<Props, State> {
     this.setState({ hightlight: false });
   }
 
-  
+  removeSelectedFile(file: File) {
+
+    console.log('remove');
+
+    this.setState(prevState => {
+        const index = prevState.files.indexOf(file);
+        const files = prevState.files.slice(0);
+        files.splice(index, 1);
+        return {
+            files
+        }; 
+    });
+  }
+
+  removeAllFile = () => {
+    this.setState({
+        files: [],
+        firstRender: false
+    });
+  }
 
   fileListToArray = (list: FileList | null) => {
     const array = [];
@@ -107,22 +131,39 @@ class Dropzone extends Component<Props, State> {
         previewImage = (
             <>
                 <h3>Previews</h3>
-                {this.state.files.map((file: {
-                    lastModified: number,
-                    name: string,
-                    preview: string,
-                    size: number,
-                    type: string
-                }) => (
-                    <div className="thumb" key={file.name}>
-                        <div className="thumbInner">
-                            <img
-                                src={file.preview}
-                                className="imgPreview"
-                            />
+                {this.state.files.map((file: File & {
+                    preview: string
+                }, index: number) => {
+
+                    const removeFileButton = this.props.removeFile && this.props.removeFile === true ? 
+                    (
+                        <Button type="button" color="danger" size="sm" onClick={() => {
+                            if (this.props.onClickRemove) {
+                                this.props.onClickRemove(file, index);
+                            }
+                            this.removeSelectedFile(file);
+                        }}>
+                            <i className="fa fa-trash"></i> Hapus Upload Gambar
+                        </Button>
+                    ) : null;
+                    
+                    return (
+                        <div key={index}>
+                            <div className="thumb">
+                                <div className="thumbInner">
+                                    <img
+                                        src={file.preview}
+                                        className="imgPreview"
+                                    />
+                                </div>
+                            </div>
+
+                            {removeFileButton}
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
+
+                
             </>
         );
     } else if (this.props.previewUrl && this.state.firstRender) {
