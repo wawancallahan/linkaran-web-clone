@@ -1,7 +1,8 @@
 import React, { Component, createRef } from "react";
 import "./Dropzone.css";
 import { Button } from "reactstrap";
-
+import '../../react-lazyload.d.ts'
+import LazyLoad from 'react-lazyload'
 interface DropzoneProps {
     disabled: boolean,
     onFilesAdded: ([]: any[]) => void,
@@ -172,10 +173,12 @@ class Dropzone extends Component<Props, State> {
                 <h3>Previews</h3>
                 <div className="thumb">
                     <div className="thumbInner">
-                        <img
-                            src={this.props.previewUrl}
-                            className="imgPreview"
-                        />
+                        <LazyLoad debounce={250}>
+                            <img
+                                src={this.props.previewUrl}
+                                className="imgPreview"
+                            />
+                        </LazyLoad>
                     </div>
                 </div>
             </>
