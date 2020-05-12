@@ -170,7 +170,8 @@ class Form extends Component<Props> {
                         district: {
                             id: values.district.value
                         },
-                        phoneNumber: values.phoneNumber
+                        phoneNumber: values.phoneNumber,
+                        registered: values.registered == '1'
                     }
 
                     swal("Apakah anda yakin?", "Data akan diubah!", {
