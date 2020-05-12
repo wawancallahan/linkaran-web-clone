@@ -13,277 +13,74 @@ import {
 } from 'reactstrap'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { fetchServicePriceFilteredAction } from '../../../actions/admin/servicePrice';
-import { Filter as IFilter } from '../../../types/admin/servicePrice';
-import { fetchListPriceAction } from '../../../actions/admin/price';
-import { fetchListServiceAction } from '../../../actions/admin/service';
-import { Price } from '../../../types/admin/price';
-import { Service } from "../../../types/admin/service";
-import { VehicleTypeList } from '../../../types/admin/vehicleType';
-import { fetchListVehicleTypeAction } from '../../../actions/admin/subBrandVehicle';
-import { OptionsType } from 'react-select'
-import ReactSelectAsyncPaginate from 'react-select-async-paginate';
-import { Paginator } from '../../../types/paginator';
-import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
+import {
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+import { 
+    fetchServicePriceAction, 
+    setFilterAction, 
+    clearFilterAction 
+} from '../../../actions/admin/servicePrice';
+import { Filter as IFilter, FilterKeys} from '../../../types/admin/servicePrice';
+import { getKeyValue } from '../../../helpers/utils';
+import { AppState } from '../../../store/configureStore';
 
-type FilterProps = {
+type FilterProps = RouteComponentProps & {
 
 }
 
-type Props = LinkDispatchToProps;
+type Props = FilterProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    districtName: string,
-    price: {
-        value: number;
-        label: string;
-    },
-    service: {
-        value: number;
-        label: string;
-    },
-    vehicleType: {
-        value: number;
-        label: string;
-    },
-    filtered: boolean,
     modal_visible: boolean
 }
 
 class Filter extends Component<Props, State> {
 
     state = {
-        districtName: '',
-        service: {
-            value: 0,
-            label: ''
-        },
-        vehicleType: {
-            value: 0,
-            label: ''
-        },
-        price: {
-            value: 0,
-            label: ''
-        },
-        filtered: false,
         modal_visible: false
     }
 
     handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
+       
+        let filter = this.props.filter as IFilter;
 
-        let filter: IFilter = {
-            districtName: '',
-            service: {
-                value: 0,
-                label: ''
-            },
-            vehicleType: {
-                value: 0,
-                label: ''
-            },
-            price: {
-                value: 0,
-                label: ''
-            },
-        }
+        let currentUrlParams = new URLSearchParams(window.location.search);
 
-        if (this.state.modal_visible) {
-            filter = {
-                ...filter,
-                districtName: this.state.districtName,
-                service: this.state.service,
-                vehicleType: this.state.vehicleType,
-                price: this.state.price
-            }
-        } else {
-            filter = {
-                ...filter,
-                districtName: this.state.districtName
-            }
-        }
-
-        this.props.fetchServicePriceFilteredAction(filter).then(() => {
-            this.setState({
-                filtered: true,
-                modal_visible: false
-            })
+        Object.keys(filter).forEach((obj: string, index: number) => {
+            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
         });
+
+        this.props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
+
+        this.props.fetchServicePriceAction(1);
+
+        this.modalOnChange(false);
     }
 
     handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        this.setState({
-            ...this.state,
+        this.props.setFilterAction({
+            ...this.props.filter,
             [id]: value
-        });
+        } as IFilter);
     }
 
     clearFilter = () => {
-        let filter: IFilter = {
-            districtName: '',
-            service: {
-                value: 0,
-                label: ''
-            },
-            vehicleType: {
-                value: 0,
-                label: ''
-            },
-            price: {
-                value: 0,
-                label: ''
-            },
-        }
-
-        this.props.fetchServicePriceFilteredAction(filter).then(() => {
-            this.setState({
-                districtName: '',
-                service: {
-                    value: 0,
-                    label: ''
-                },
-                vehicleType: {
-                    value: 0,
-                    label: ''
-                },
-                price: {
-                    value: 0,
-                    label: ''
-                },
-                filtered: false
-            })
-        });
+        this.props.history.push(`${window.location.pathname}`);
+        this.props.fetchServicePriceAction(1);
+        this.props.clearFilterServicePriceAction();
     }
 
     modalOnChange = (status: boolean) => {
         this.setState({
             modal_visible: status
         })
-    }
-
-    loadServiceHandler = (search: string, loadedOption: {}, options: {
-        page: number
-    }) => {
-        return this.props.fetchListServiceAction(search, options.page)
-            .then((response: ApiResponseList<Service>) => {
-
-                const data: ApiResponseSuccessList<Service> = response.response!;
-
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
-
-                let hasMore = false;
-
-                if ( ! data.metaData.isError) {
-
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
-                    }
-
-                    result = data.result.map((item: Service) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
-
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
-    }
-
-    loadPriceHandler = (search: string, loadedOption: {}, options: {
-        page: number
-    }) => {
-        return this.props.fetchListPriceAction(search, options.page)
-            .then((response: ApiResponseList<Price>) => {
-
-                const data: ApiResponseSuccessList<Price> = response.response!;
-
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
-
-                let hasMore = false;
-
-                if ( ! data.metaData.isError) {
-
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
-                    }
-
-                    result = data.result.map((item: Price) => {
-                        return {
-                            value: item.id,
-                            label: `${item.basePrice}`
-                        };
-                    });
-                }
-
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
-    }
-
-    loadVehicleTypeHandler = (search: string, loadedOption: {}, options: {
-        page: number
-    }) => {
-        return this.props.fetchListVehicleTypeAction(search, options.page)
-            .then((response: ApiResponseList<VehicleTypeList>) => {
-
-                const data: ApiResponseSuccessList<VehicleTypeList> = response.response!;
-
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
-
-                let hasMore = false;
-
-                if ( ! data.metaData.isError) {
-
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
-                    }
-
-                    result = data.result.map((item: VehicleTypeList) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
-
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
     }
 
     render() {
@@ -305,7 +102,7 @@ class Filter extends Component<Props, State> {
                                     type="text"
                                     name="districtName"
                                     maxLength={255}
-                                    value={this.state.districtName}
+                                    value={this.props.filter.districtName}
                                     onChange={this.handleOnChange}
                                     bsSize="sm"
                                 />
@@ -313,7 +110,7 @@ class Filter extends Component<Props, State> {
                                     <Button type="submit" color="primary" size="sm">
                                         <i className="fa fa-search" /> Cari
                                     </Button>
-                                    { this.state.filtered ? (
+                                    { this.props.filtered ? (
                                         <Button
                                             type="button"
                                             color="danger"
@@ -363,42 +160,12 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="districtName"
                                 maxLength={255}
-                                value={this.state.districtName}
+                                value={this.props.filter.districtName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
 
-                            <FormGroup>
-                                <label
-                                className="form-control-label"
-                                htmlFor="input-provinceName"
-                                >
-                                    Harga
-                                </label>
-                                <ReactSelectAsyncPaginate 
-                                    value={this.state.price}
-                                    loadOptions={this.loadPriceHandler}
-                                    onChange={(option) => {
-                                        if (option) {
-                                            this.setState({
-                                                vehicleType: {
-                                                    ...this.state.vehicleType,
-                                                    ...(option as OptionsType<{
-                                                        value: number;
-                                                        label: string;
-                                                    }>)
-                                                }
-                                            })
-                                        }
-                                    }}
-                                    additional={{
-                                        page: 1
-                                    }}
-                                    debounceTimeout={250}
-                                />
-                            </FormGroup>
-
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <label
                                 className="form-control-label"
                                 htmlFor="input-service"
@@ -426,37 +193,7 @@ class Filter extends Component<Props, State> {
                                     }}
                                     debounceTimeout={250}
                                 />
-                            </FormGroup>
-
-                            <FormGroup>
-                                <label
-                                className="form-control-label"
-                                htmlFor="input-vehicleType"
-                                >
-                                    Jenis Kendaraan
-                                </label>
-                                <ReactSelectAsyncPaginate 
-                                    value={this.state.vehicleType}
-                                    loadOptions={this.loadVehicleTypeHandler}
-                                    onChange={(option) => {
-                                        if (option) {
-                                            this.setState({
-                                                vehicleType: {
-                                                    ...this.state.vehicleType,
-                                                    ...(option as OptionsType<{
-                                                        value: number;
-                                                        label: string;
-                                                    }>)
-                                                }
-                                            })
-                                        }
-                                    }}
-                                    additional={{
-                                        page: 1
-                                    }}
-                                    debounceTimeout={250}
-                                />
-                            </FormGroup>
+                            </FormGroup> */}
                         </div>
                         <div className="modal-footer">
                             <Button
@@ -478,20 +215,30 @@ class Filter extends Component<Props, State> {
     }
 }
 
+interface LinkStateToProps {
+    filter: IFilter,
+    filtered: boolean
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        filter: state.servicePrice.filter,
+        filtered: state.servicePrice.filtered
+    }
+}
+
 interface LinkDispatchToProps {
-    fetchServicePriceFilteredAction: (filter: IFilter) => Promise<Boolean>,
-    fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>,
-    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
+    fetchServicePriceAction: (page: number) => Promise<Boolean>,
+    setFilterAction: (filter: IFilter) => void,
+    clearFilterServicePriceAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchServicePriceFilteredAction: (filter: IFilter) => dispatch(fetchServicePriceFilteredAction(filter)),
-        fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
-        fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
-        fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
+        fetchServicePriceAction: (page: number) => dispatch(fetchServicePriceAction(page)),
+        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
+        clearFilterServicePriceAction: () => dispatch(clearFilterAction())
     }
 }
 
-export default connect(null, mapDispatchToProps)(Filter);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));

@@ -133,20 +133,10 @@ export interface AlertServicePriceShowActionType {
 }
 
 export interface Filter {
-    districtName: string,
-    price: {
-        value: number;
-        label: string;
-    },
-    service: {
-        value: number;
-        label: string;
-    },
-    vehicleType: {
-        value: number;
-        label: string;
-    },
+    districtName: string
 }
+
+export type FilterKeys = keyof Filter;
 
 export interface SetFilterServicePriceActionType {
     type: typeof SET_FILTER_SERVICE_PRICE,
