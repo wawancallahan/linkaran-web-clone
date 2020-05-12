@@ -15,7 +15,8 @@ import {
 import { FormikProps } from 'formik'
 import { FormField } from '../../../types/admin/restaurant'
 
-import FormDay from './FormDay'
+import FormTimePicker from './FormTimePicker'
+import FormTimeManual from './FormTimeManual'
 
 type FormOperationalProps = {
     FormikProps: FormikProps<FormField>,
@@ -38,8 +39,7 @@ class FormOperational extends Component<Props> {
                     </Row>
                 </CardHeader>
                 <CardBody>
-
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.monday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.monday_end}
                             FormikSetValuesDateStart={'monday_start'}
@@ -49,7 +49,7 @@ class FormOperational extends Component<Props> {
                             name={'Senin'}
                             id={1} />
 
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.tuesday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.tuesday_end}
                             FormikSetValuesDateStart={'tuesday_start'}
@@ -59,7 +59,7 @@ class FormOperational extends Component<Props> {
                             name={'Selasa'}
                             id={2} />
 
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.wednesday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.wednesday_end}
                             FormikSetValuesDateStart={'wednesday_start'}
@@ -69,7 +69,7 @@ class FormOperational extends Component<Props> {
                             name={'Rabu'}
                             id={3} />
 
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.thursday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.thursday_end}
                             FormikSetValuesDateStart={'thursday_start'}
@@ -79,7 +79,7 @@ class FormOperational extends Component<Props> {
                             name={'Kamis'}
                             id={4} />
                             
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.friday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.friday_end}
                             FormikSetValuesDateStart={'friday_start'}
@@ -89,7 +89,7 @@ class FormOperational extends Component<Props> {
                             name={'Jumat'}
                             id={5} />
 
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.saturday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.saturday_end}
                             FormikSetValuesDateStart={'saturday_start'}
@@ -99,7 +99,7 @@ class FormOperational extends Component<Props> {
                             name={'Sabtu'}
                             id={6} />
 
-                    <FormDay FormikProps={FormikProps} 
+                    <FormTimeManual FormikProps={FormikProps} 
                             FormikPropsValuesDateStart={FormikProps.values.sunday_start}
                             FormikPropsValuesDateEnd={FormikProps.values.sunday_end}
                             FormikSetValuesDateStart={'sunday_start'}

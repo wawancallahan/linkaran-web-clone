@@ -14,7 +14,7 @@ import { FormikProps } from 'formik'
 import { FormField } from '../../../types/admin/restaurant'
 import { midnightDate } from '../../../helpers/utils';
 
-type FormDayProps = {
+type FormTimePickerProps = {
     FormikProps: FormikProps<FormField>,
     FormikPropsValuesDateStart: Date | null,
     FormikPropsValuesDateEnd: Date | null,
@@ -26,9 +26,9 @@ type FormDayProps = {
     id: number
 };
 
-type Props = FormDayProps;
+type Props = FormTimePickerProps;
 
-class FormDay extends Component<Props> {
+class FormTimePicker extends Component<Props> {
 
     toggleDateClose = (FormikProps: FormikProps<FormField>, field: string, prevValues: boolean, fieldDateStart: string, fieldDateEnd: string) => {
         FormikProps.setFieldValue(field, ! prevValues)
@@ -121,4 +121,4 @@ class FormDay extends Component<Props> {
     }
 }
 
-export default FormDay
+export default FormTimePicker

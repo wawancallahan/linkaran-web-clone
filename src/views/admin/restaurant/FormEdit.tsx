@@ -82,7 +82,7 @@ class Form extends Component<Props> {
         })
     }
 
-    dayNotClosed = (day: number, isClosed: boolean, dateStart: Date | null, dateEnd: Date | null) : OperationTimeInterface => {
+    dayNotClosed = (day: number, isClosed: boolean, dateStart: string | null, dateEnd: string | null) : OperationTimeInterface => {
         
         let openTime = "00:00"
         let closeTime = "00:00"
@@ -90,33 +90,13 @@ class Form extends Component<Props> {
         if ( ! isClosed) {
 
             if (dateStart) {
-                let hours = dateStart.getHours().toString();
-
-                if (Number.parseInt(hours) < 10) {
-                    hours = `0${hours}`
-                }
-
-                let minutes = dateStart.getMinutes().toString();
-            
-                if (Number.parseInt(minutes) < 10) {
-                    minutes = `0${minutes}`
-                }
+                const [hours, minutes] = dateStart.split(":")
 
                 openTime = `${hours}:${minutes}`
             }
 
             if (dateEnd) {
-                let hours = dateEnd.getHours().toString();
-                
-                if (Number.parseInt(hours) < 10) {
-                    hours = `0${hours}`
-                }
-
-                let minutes = dateEnd.getMinutes().toString();
-            
-                if (Number.parseInt(minutes) < 10) {
-                    minutes = `0${minutes}`
-                }
+                const [hours, minutes] = dateEnd.split(":")
 
                 closeTime = `${hours}:${minutes}`
             }
