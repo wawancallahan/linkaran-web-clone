@@ -45,6 +45,7 @@ import { Alert as IAlert } from '../../../../types/alert';
 
 import { typeOfTransaction, colorStatusFormat, typeTransactionFormat } from '../../../../helpers/utils';
 import { amountFormat } from '../../../../helpers/number';
+import NumberFormat from 'react-number-format'
 
 type ListProps = RouteComponentProps<{
     type?: string
@@ -74,7 +75,7 @@ const TableItem = (props: {
             <td>
                 <Badge color="success">{props.item.service}</Badge>
             </td>
-                <td>Rp. {props.item.totalCost}</td>
+                <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.totalCost} /></td>
             <td>
                 <Badge color={colorStatusFormat(props.item.status)}>{props.item.status}</Badge>
             </td>

@@ -47,6 +47,7 @@ import Filter from './Filter'
 import { parseDateFormat } from '../../../helpers/utils';
 import _ from 'lodash'
 import { EMoneyUser } from '../../../types/admin/user';
+import NumberFormat from 'react-number-format'
 
 type ListProps = RouteComponentProps & {
 
@@ -64,6 +65,16 @@ const TableItem = (props: {
     key: number,
     deleteDriver: (id: number) => void
 }) => {
+
+    let saldo = 0;
+
+    if (props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0) {
+        saldo = _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: EMoneyUser) => {
+            return sum + eMoneyUser.balance;
+        }, 0);
+    }
+    
+
     return (
         <tr>
             <td>{props.index + 1}</td>
@@ -73,9 +84,7 @@ const TableItem = (props: {
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
-            <td>{props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? 'Rp.' + _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: EMoneyUser) => {
-                return sum + eMoneyUser.balance;
-            }, 0) : '-'}</td>
+            <td>{props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? (<NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={saldo} />)  : '-'}</td>
             <td>{parseDateFormat(props.item.createdAt)}</td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">

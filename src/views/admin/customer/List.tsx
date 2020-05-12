@@ -36,7 +36,9 @@ import {
     fetchCustomerAction,
     setAlertCustomerHideAction,
     setAlertCustomerShowAction,
-    clearFilterAction
+    clearFilterAction,
+    activeCustomerAction,
+    deactiveCustomerAction,
 } from '../../../actions/admin/customer';
 import { Customer } from '../../../types/admin/customer';
 import { Paginator } from '../../../types/paginator';
@@ -49,6 +51,7 @@ import {
 import { parseDateTimeFormat, voucherUsedFormat } from '../../../helpers/utils';
 import Spinner from '../../../components/Loader/Spinner'
 import Filter from './Filter'
+import swal from 'sweetalert'
 
 type ListProps = RouteComponentProps & {
 
@@ -63,7 +66,9 @@ type State = {
 const TableItem = (props: {
     index: number,
     item: Customer,
-    key: number
+    key: number,
+    activeCustomer: (id: number) => void,
+    deactiveCustomer: (id: number) => void
 }) => {
     return (
         <tr>
@@ -78,6 +83,17 @@ const TableItem = (props: {
                 <Link to={`/admin/customer/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
                 </Link>
+                {
+                    props.item.isActive ? (
+                        <Button color="danger" size="sm" onClick={() => props.deactiveCustomer(props.item.id)}>
+                            <i className="fa fa-times"></i> Non Aktif
+                        </Button>
+                    ) : (
+                        <Button color="info" size="sm" onClick={() => props.activeCustomer(props.item.id)}>
+                            <i className="fa fa-check"></i> Aktifkan
+                        </Button>
+                    )
+                }
             </td>
         </tr>
     )
@@ -125,6 +141,46 @@ class List extends Component<Props, State> {
         });
     }
 
+    activeCustomer = (id: number) => {
+        swal("Apakah anda yakin?", "Mengaktifkan Data Customer ini!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.activeCustomerAction(id)
+                .then( (response: ApiResponse<Customer>) => {
+                    this.fetchCustomerList(1);
+
+                    this.props.setAlertCustomerShowAction("Berhasil Mengaktifkan Customer", 'success');
+                })
+                .catch( (response: ApiResponse<Customer>) => {
+                    this.props.setAlertCustomerShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
+    }
+
+    deactiveCustomer = (id: number) => {
+        swal("Apakah anda yakin?", "Menonaktifkan Data Customer ini!", {
+            dangerMode: true,
+            buttons: ["Tutup!", true],
+            icon: "warning",
+        }).then((willDelete) => {
+            if (willDelete) {
+                this.props.deactiveCustomerAction(id)
+                .then( (response: ApiResponse<Customer>) => {
+                    this.fetchCustomerList(1);
+
+                    this.props.setAlertCustomerShowAction("Berhasil Menonaktifkan Customer", 'success');
+                })
+                .catch( (response: ApiResponse<Customer>) => {
+                    this.props.setAlertCustomerShowAction(response.error!.metaData.message, 'danger');
+                });
+            }
+        })
+    }
+
     render() {
 
         let customerList: any = null
@@ -141,6 +197,8 @@ class List extends Component<Props, State> {
                     <TableItem key={index}
                                item={item}
                                index={index}
+                               activeCustomer={this.activeCustomer}
+                               deactiveCustomer={this.deactiveCustomer}
                                />
                 ));
             } else {
@@ -232,7 +290,9 @@ interface LinkDispatchToProps {
     fetchCustomerAction: (page: number) => Promise<Boolean>,
     setAlertCustomerHideAction: () => void,
     setAlertCustomerShowAction: (message: string, color: string) => void,
-    clearFilterCustomerAction: () => void
+    clearFilterCustomerAction: () => void,
+    activeCustomerAction: (id: number) => Promise<ApiResponse<Customer>>,
+    deactiveCustomerAction: (id: number) => Promise<ApiResponse<Customer>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -240,7 +300,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchCustomerAction: (page: number) => dispatch(fetchCustomerAction(page)),
         setAlertCustomerHideAction: () => dispatch(setAlertCustomerHideAction()),
         setAlertCustomerShowAction: (message: string, color: string) => dispatch(setAlertCustomerShowAction(message, color)),
-        clearFilterCustomerAction: () => dispatch(clearFilterAction())
+        clearFilterCustomerAction: () => dispatch(clearFilterAction()),
+        activeCustomerAction: (id: number) => dispatch(activeCustomerAction(id)),
+        deactiveCustomerAction: (id: number) => dispatch(deactiveCustomerAction(id)),
     }
 }
 

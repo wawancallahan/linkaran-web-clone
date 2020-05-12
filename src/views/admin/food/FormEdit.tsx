@@ -237,6 +237,50 @@ class Form extends Component<Props> {
                                     <FormGroup>
                                         <label
                                         className="form-control-label"
+                                        htmlFor="input-restaurant"
+                                        >
+                                            Restoran
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.restaurant}
+                                            loadOptions={this.loadRestaurantHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('restaurant', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('restaurant', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            debounceTimeout={250}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.restaurant && FormikProps.touched.restaurant ? FormikProps.errors.restaurant.value : '' }
+                                        </div>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-foodCategory"
+                                        >
+                                            Kategori
+                                        </label>
+                                        <ReactSelectAsyncPaginate 
+                                            value={FormikProps.values.foodCategory}
+                                            loadOptions={this.loadFoodCategoryHandler}
+                                            onChange={(option) => FormikProps.setFieldValue('foodCategory', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('foodCategory', true)}
+                                            additional={{
+                                                page: 1
+                                            }}
+                                            debounceTimeout={250}
+                                            />
+                                        <div>
+                                            { FormikProps.errors.foodCategory && FormikProps.touched.foodCategory ? FormikProps.errors.foodCategory.value : '' }
+                                        </div>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
                                         htmlFor="input-name"
                                         >
                                             Nama
@@ -328,48 +372,6 @@ class Form extends Component<Props> {
                                         />
                                         <div>
                                             {FormikProps.errors.description && FormikProps.touched.description ? FormikProps.errors.description : ''}
-                                        </div>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <label
-                                        className="form-control-label"
-                                        htmlFor="input-foodCategory"
-                                        >
-                                            Kategori
-                                        </label>
-                                        <ReactSelectAsyncPaginate 
-                                            value={FormikProps.values.foodCategory}
-                                            loadOptions={this.loadFoodCategoryHandler}
-                                            onChange={(option) => FormikProps.setFieldValue('foodCategory', option)}
-                                            onBlur={() => FormikProps.setFieldTouched('foodCategory', true)}
-                                            additional={{
-                                                page: 1
-                                            }}
-                                            debounceTimeout={250}
-                                            />
-                                        <div>
-                                            { FormikProps.errors.foodCategory && FormikProps.touched.foodCategory ? FormikProps.errors.foodCategory.value : '' }
-                                        </div>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <label
-                                        className="form-control-label"
-                                        htmlFor="input-restaurant"
-                                        >
-                                            Restoran
-                                        </label>
-                                        <ReactSelectAsyncPaginate 
-                                            value={FormikProps.values.restaurant}
-                                            loadOptions={this.loadRestaurantHandler}
-                                            onChange={(option) => FormikProps.setFieldValue('restaurant', option)}
-                                            onBlur={() => FormikProps.setFieldTouched('restaurant', true)}
-                                            additional={{
-                                                page: 1
-                                            }}
-                                            debounceTimeout={250}
-                                            />
-                                        <div>
-                                            { FormikProps.errors.restaurant && FormikProps.touched.restaurant ? FormikProps.errors.restaurant.value : '' }
                                         </div>
                                     </FormGroup>
 
