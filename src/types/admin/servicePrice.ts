@@ -1,6 +1,7 @@
 import { Paginator } from '../paginator';
 import { Service } from './service';
 import { VehicleType } from './vehicleType';
+import { SelectType } from '../select';
 
 export const FETCH_SERVICE_PRICE = "FETCH_SERVICE_PRICE";
 export const FETCH_SERVICE_PRICE_SUCCESS = "FETCH_SERVICE_PRICE_SUCCESS";
@@ -13,22 +14,10 @@ export const ALERT_SERVICE_PRICE_SHOW = "ALERT_SERVICE_PRICE_SHOW";
 export const ALERT_SERVICE_PRICE_HIDE = "ALERT_SERVICE_PRICE_HIDE";
 
 export type FormField = {
-    price: {
-        value: number,
-        label: string
-    },
-    district: {
-        value: number,
-        label: string
-    },
-    service: {
-        value: number,
-        label: string
-    },
-    vehicleType: {
-        value: number,
-        label: string
-    },
+    price: SelectType,
+    district: SelectType,
+    service: SelectType,
+    vehicleType: SelectType,
     driverPaymentDeductions: string,
     servicePaymentDeductions: string,
     maxDriverDistanceRadius: string

@@ -3,11 +3,14 @@ import { Service } from './service'
 import { VoucherType } from './voucherType';
 import { User } from './user';
 import { Transaction } from './tansaction';
+import { SelectType } from '../select';
 
 export const FETCH_VOUCHER_PROMO = "FETCH_VOUCHER_PROMO";
 export const FETCH_VOUCHER_PROMO_SUCCESS = "FETCH_VOUCHER_PROMO_SUCCESS";
 export const FETCH_VOUCHER_PROMO_ERROR = "FETCH_VOUCHER_PROMO_ERROR";
 export const SET_PAGINATOR_VOUCHER_PROMO = "SET_PAGINATOR_VOUCHER_PROMO";
+export const SET_FILTER_VOUCHER_PROMO = "SET_FILTER_VOUCHER_PROMO";
+export const CLEAR_FILTER_VOUCHER_PROMO = "CLEAR_FILTER_VOUCHER_PROMO";
 
 export const ALERT_VOUCHER_PROMO_SHOW = "ALERT_VOUCHER_PROMO_SHOW";
 export const ALERT_VOUCHER_PROMO_HIDE = "ALERT_VOUCHER_PROMO_HIDE";
@@ -16,11 +19,6 @@ export const FETCH_VOUCHER_PROMO_USER_USED = "FETCH_VOUCHER_PROMO_USER_USED";
 export const FETCH_VOUCHER_PROMO_USER_USED_SUCCESS = "FETCH_VOUCHER_PROMO_USER_USED_SUCCESS";
 export const FETCH_VOUCHER_PROMO_USER_USED_ERROR = "FETCH_VOUCHER_PROMO_USER_USED_ERROR";
 export const SET_PAGINATOR_VOUCHER_PROMO_USER_USED = "SET_PAGINATOR_VOUCHER_PROMO_USER_USED";
-
-export type ServiceSelect = {
-    value: number,
-    label: string
-}
 
 export type FormField = {
     name: string,
@@ -31,11 +29,8 @@ export type FormField = {
     isLimited: string,
     quantity: string,
     description: string,
-    service: ServiceSelect[],
-    type: {
-        value: number,
-        label: string
-    },
+    service: SelectType[],
+    type: SelectType,
     startDateTime: Date | null,
     endDateTime: Date | null,
     image: File | null,
@@ -51,11 +46,8 @@ interface VoucherPromoField {
     isLimited: boolean,
     quantity: string,
     description: string,
-    service: ServiceSelect[],
-    type: {
-        value: number,
-        label: string
-    },
+    service: SelectType[],
+    type: SelectType,
     startDateTime: string,
     endDateTime: string,
     image: File | null,
@@ -151,6 +143,27 @@ export interface AlertVoucherPromoShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    code: string,
+    amount: string,
+    quota: string,
+    minimumPurchase: string,
+    isLimited: string,
+    quantity: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterVoucherPromoActionType {
+    type: typeof SET_FILTER_VOUCHER_PROMO,
+    filter: Filter
+}
+
+export interface ClearFilterVoucherPromoActionType {
+    type: typeof CLEAR_FILTER_VOUCHER_PROMO
+}
+
 export type VoucherPromoActionTypes =
     | FetchVoucherPromoActionType
     | FetchVoucherPromoSuccessActionType
@@ -162,3 +175,5 @@ export type VoucherPromoActionTypes =
     | FetchVoucherPromoUserUsedSuccessActionType
     | FetchVoucherPromoUserUsedErrorActionType
     | SetPaginatorVoucherPromoUserUsedActionType
+    | SetFilterVoucherPromoActionType
+    | ClearFilterVoucherPromoActionType

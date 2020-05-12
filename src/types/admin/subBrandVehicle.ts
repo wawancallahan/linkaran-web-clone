@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { SelectType } from '../select';
 
 export const FETCH_SUB_BRAND_VEHICLE = "FETCH_SUB_BRAND_VEHICLE";
 export const FETCH_SUB_BRAND_VEHICLE_SUCCESS = "FETCH_SUB_BRAND_VEHICLE_SUCCESS";
@@ -12,10 +13,7 @@ export const ALERT_SUB_BRAND_VEHICLE_HIDE = "ALERT_SUB_BRAND_VEHICLE_HIDE";
 
 export type FormField = {
     name: string,
-    brandVehicle: {
-        value: number,
-        label: string
-    }
+    brandVehicle: SelectType
 }
 
 interface SubBrandVehicleField {

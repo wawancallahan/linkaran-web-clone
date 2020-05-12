@@ -1,5 +1,6 @@
 import { Paginator } from '../paginator';
 import { Restaurant } from './restaurant';
+import { SelectType } from '../select';
 
 export const FETCH_FOOD = "FETCH_FOOD";
 export const FETCH_FOOD_SUCCESS = "FETCH_FOOD_SUCCESS";
@@ -18,14 +19,8 @@ export type FormField = {
     rating: number,
     image: File | null,
     image_preview: string,
-    foodCategory: {
-        value: number,
-        label: string
-    },
-    restaurant: {
-        value: number,
-        label: string
-    }
+    foodCategory: SelectType,
+    restaurant: SelectType
 }
 
 interface FoodField {

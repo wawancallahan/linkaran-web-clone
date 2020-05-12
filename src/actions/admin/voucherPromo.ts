@@ -19,7 +19,6 @@ import {
     ALERT_VOUCHER_PROMO_SHOW,
     VoucherPromoEditResult,
     VoucherPromoCreateResult,
-    ServiceSelect,
     FETCH_VOUCHER_PROMO_USER_USED,
     FETCH_VOUCHER_PROMO_USER_USED_ERROR,
     FETCH_VOUCHER_PROMO_USER_USED_SUCCESS,
@@ -27,14 +26,21 @@ import {
     SetPaginatorVoucherPromoUserUsedActionType,
     VoucherPromoUserUsed,
     FetchVoucherPromoUserUsedErrorActionType,
-    FetchVoucherPromoUserUsedSuccessActionType
+    FetchVoucherPromoUserUsedSuccessActionType,
+    Filter,
+    SetFilterVoucherPromoActionType,
+    SET_FILTER_VOUCHER_PROMO,
+    ClearFilterVoucherPromoActionType,
+    CLEAR_FILTER_VOUCHER_PROMO
 } from '../../types/admin/voucherPromo';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
-import { booleanToString } from '../../helpers/utils';
+import { booleanToString, OptionObjectString } from '../../helpers/utils';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import queryString from 'query-string'
+import { SelectType } from '../../types/select';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorVoucherPromoActionType => {
     return {
@@ -90,9 +96,44 @@ export const setAlertVoucherPromoShowAction = (message: string, color: string): 
     };
 }
 
+export const clearFilterAction = () : ClearFilterVoucherPromoActionType => {
+    return {
+        type: CLEAR_FILTER_VOUCHER_PROMO
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterVoucherPromoActionType => {
+    return {
+        type: SET_FILTER_VOUCHER_PROMO,
+        filter: filter
+    }
+}
+
 export const fetchVoucherPromoAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher?page=${page}`)
+
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            amount: (querySearch.amount as string) || '',
+            code: (querySearch.code as string) || '',
+            isLimited: (querySearch.isLimited as string) || '',
+            minimumPurchase: (querySearch.minimumPurchase as string) || '',
+            name: (querySearch.name as string) || '',
+            quantity: (querySearch.quantity as string) || '',
+            quota: (querySearch.quota as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VoucherPromo> = response.data;
 
@@ -237,7 +278,7 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): Thun
 
         data.set('type.id', voucherPromo.type.value.toString())
 
-        voucherPromo.service.forEach((value: ServiceSelect, index: number) => {
+        voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())
         })
 
@@ -371,7 +412,7 @@ export const editVoucherPromoAction = (voucherPromo: VoucherPromoEdit, id: numbe
 
         data.set('type.id', voucherPromo.type.value.toString())
 
-        voucherPromo.service.forEach((value: ServiceSelect, index: number) => {
+        voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())
         })
 
