@@ -201,7 +201,7 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 
 export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-
+        
         const data = new FormData;
 
         if (restaurant.photo) {
