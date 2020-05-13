@@ -31,7 +31,7 @@ class App extends Component<Props> {
                     if ( ! accessToken()) {
                         return <Redirect to="/login" />
                     } else {
-                        if (rolesToArray().includes('admin') || rolesToArray().includes('super admin')) {
+                        if (rolesToArray().includes('admin') || rolesToArray().includes('super admin') || rolesToArray().includes('financial manager')) {
                             return <AdminLayout {...this.props} />
                         }
 
