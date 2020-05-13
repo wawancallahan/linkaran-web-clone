@@ -24,6 +24,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
+import { OptionObjectString } from '../../helpers/utils';
 dotenv.config();
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorFoodCategoryActionType => {
@@ -98,7 +99,15 @@ export const fetchFoodCategoryAction = (page: number) : ThunkResult<Promise<Bool
 
 export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category?page=${page}`)
+        
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+        
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
