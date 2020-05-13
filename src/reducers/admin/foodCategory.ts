@@ -12,7 +12,12 @@ import {
     AlertFoodCategoryShowActionType,
     AlertFoodCategoryHideActionType,
     ALERT_FOOD_CATEGORY_HIDE,
-    ALERT_FOOD_CATEGORY_SHOW
+    ALERT_FOOD_CATEGORY_SHOW,
+    SET_FILTER_FOOD_CATEGORY,
+    Filter,
+    SetFilterFoodCategoryActionType,
+    ClearFilterFoodCategoryActionType,
+    CLEAR_FILTER_FOOD_CATEGORY
 } from '../../types/admin/foodCategory';
 
 import { Paginator } from '../../types/paginator';
@@ -21,7 +26,9 @@ import { Alert } from '../../types/alert';
 interface initialStateInterface {
     list: FoodCategory[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +43,11 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        name: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertFoodCategoryHideActionType) => {
@@ -84,6 +95,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorFoodCate
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterFoodCategoryActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterFoodCategoryActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: FoodCategoryActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_FOOD_CATEGORY: return setPaginator(state, action);
@@ -91,6 +122,8 @@ const reducer = (state = initialState, action: FoodCategoryActionTypes) => {
         case FETCH_FOOD_CATEGORY_ERROR: return fetchError(state, action);
         case ALERT_FOOD_CATEGORY_HIDE: return alertHide(state, action);
         case ALERT_FOOD_CATEGORY_SHOW: return alertShow(state, action);
+        case SET_FILTER_FOOD_CATEGORY: return setFilter(state, action);
+        case CLEAR_FILTER_FOOD_CATEGORY: return clearFilter(state, action);
         default:
             return state;
     }

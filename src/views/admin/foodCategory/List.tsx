@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,7 +34,8 @@ import {
     fetchFoodCategoryAction,
     deleteFoodCategoryAction,
     setAlertFoodCategoryHideAction,
-    setAlertFoodCategoryShowAction
+    setAlertFoodCategoryShowAction,
+    clearFilterAction
 } from '../../../actions/admin/foodCategory';
 import { FoodCategory } from '../../../types/admin/foodCategory';
 import { Paginator } from '../../../types/paginator';
@@ -41,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import Spinner from '../../../components/Loader/Spinner'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -96,6 +99,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertFoodCategoryHideAction();
+        this.props.clearFilterFoodCategoryAction();
     }
 
     fetchFoodCategoryList = (page: number) => {
@@ -107,7 +111,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteFoodCategory = (id: number) => {
@@ -176,7 +185,7 @@ class List extends Component<Props, State> {
                                     </Row>
                                     <Row className="align-items-center">
                                         <div className="col">
-                                            <h3 className="mb-0">Daftar Food Category</h3>
+                                            <h3 className="mb-0">Daftar Kategori Makanan</h3>
                                         </div>
                                         <div className="col text-right">
                                         <Link to="/admin/food-category/create">
@@ -184,10 +193,15 @@ class List extends Component<Props, State> {
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                Tambah Food Category
+                                                Tambah Kategori Makanan
                                             </Button>
                                         </Link>
                                         </div>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -210,7 +224,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchFoodCategoryAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchFoodCategoryList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -239,7 +255,8 @@ interface LinkDispatchToProps {
     fetchFoodCategoryAction: (page: number) =>  Promise<Boolean>,
     deleteFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategory>>,
     setAlertFoodCategoryHideAction: () => void,
-    setAlertFoodCategoryShowAction: (message: string, color: string) => void
+    setAlertFoodCategoryShowAction: (message: string, color: string) => void,
+    clearFilterFoodCategoryAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -247,12 +264,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchFoodCategoryAction: (page: number) => dispatch(fetchFoodCategoryAction(page)),
         deleteFoodCategoryAction: (id: number) => dispatch(deleteFoodCategoryAction(id)),
         setAlertFoodCategoryHideAction: () => dispatch(setAlertFoodCategoryHideAction()),
-        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
+        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color)),
+        clearFilterFoodCategoryAction: () => dispatch(clearFilterAction())
     }
 }
 
 export default  withRouter(
                     connect(mapStateToProps, mapDispatchToProps)(
-                            withTitle(List, "Daftar Food Category")
+                            withTitle(List, "Daftar Kategori Makanan")
                     )
                 );

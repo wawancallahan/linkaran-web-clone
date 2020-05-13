@@ -50,8 +50,8 @@ const createSchema = Yup.object().shape({
                 .max(100, 'Bidang isian rating tidak boleh lebih dari 100')
                 .required('Bidang isian rating wajib diisi'),
     foodCategory: Yup.object().shape({
-        label: Yup.string().required("Bidang pilihan food category wajib diisi"),
-        value: Yup.number().notOneOf([0], 'Bidang pilihan food category wajib diisi').required("Bidang pilihan food category wajib diisi")
+        label: Yup.string().required("Bidang pilihan kategori makanan wajib diisi"),
+        value: Yup.number().notOneOf([0], 'Bidang pilihan kategori makanan wajib diisi').required("Bidang pilihan kategori makanan wajib diisi")
     }),
     restaurant: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan restaurant wajib diisi"),
