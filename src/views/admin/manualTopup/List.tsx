@@ -43,6 +43,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { Alert as IAlert } from '../../../types/alert';
 import swal from 'sweetalert'
 import Filter from './Filter'
+import Spinner from '../../../components/Loader/Spinner';
 
 type ListProps = RouteComponentProps & {
 
@@ -51,7 +52,7 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -92,7 +93,7 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-
+        loader: true
     }
 
     componentDidMount() {
@@ -148,6 +149,12 @@ class List extends Component<Props, State> {
     render() {
 
         let manualTopup: any = <TableItemEmpty />;
+
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
 
         if (this.props.manualTopup.length > 0) {
             manualTopup = this.props.manualTopup.map((item: ManualTopUpList, index: number) => (
@@ -220,6 +227,8 @@ class List extends Component<Props, State> {
                                         {manualTopup}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}

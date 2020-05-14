@@ -166,7 +166,6 @@ export interface ClearFilterManualWithDrawActionType {
     type: typeof CLEAR_FILTER_MANUAL_WITHDRAW
 }
 
-
 export type ManualWithDrawActionTypes =
     | FetchManualWithDrawActionType
     | FetchManualWithDrawSuccessActionType

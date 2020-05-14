@@ -21,7 +21,12 @@ import {
     WithDrawCreateResult,
     WithDrawList,
     WithDrawShow,
-    WithDrawApprove
+    WithDrawApprove,
+    Filter,
+    SetFilterWithDrawActionType,
+    SET_FILTER_WITHDRAW,
+    ClearFilterWithDrawActionType,
+    CLEAR_FILTER_WITHDRAW
 } from '../../types/financialManager/withdraw';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -29,6 +34,7 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorWithDrawActionType => {
     return {
@@ -64,18 +70,42 @@ export const setAlertWithDrawShowAction = (message: string, color: string): Aler
     };
 }
 
+export const clearFilterAction = () : ClearFilterWithDrawActionType => {
+    return {
+        type: CLEAR_FILTER_WITHDRAW
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterWithDrawActionType => {
+    return {
+        type: SET_FILTER_WITHDRAW,
+        filter: filter
+    }
+}
 
 export const fetchWithDrawAction = (page: number, needApproved: number = 1): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        let paramsObject: OptionObjectString = {
-            page: page.toString(),
-            needApproved: needApproved.toString()
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            accountNumber: (querySearch.accountNumber as string) || '',
+            name: (querySearch.name as string) || '',
+            bankName: (querySearch.bankName as string) || '',
+            isManual: (querySearch.isManual as string) || '',
+            isDecline: (querySearch.isDecline as string) || '',
         }
 
-        const params = objectToParamsUrl(paramsObject)
+        dispatch(setFilterAction(filter));
 
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/list?${params}`)
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/list`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<WithDrawList> = response.data;
 

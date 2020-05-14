@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -32,12 +33,15 @@ import queryString from 'query-string';
 import {
     fetchWithDrawAction,
     setAlertWithDrawHideAction,
-    setAlertWithDrawShowAction
+    setAlertWithDrawShowAction,
+    clearFilterAction
 } from '../../../actions/financialManager/withdraw';
 import { WithDrawList } from '../../../types/financialManager/withdraw';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
+import Filter from './Filter'
+import Spinner from '../../../components/Loader/Spinner';
 
 type ListProps = RouteComponentProps & {
 
@@ -46,8 +50,10 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    needApprove: number
+    needApprove: number,
+    loader: boolean
 }
+
 
 const TableItem = (props: {
     index: number,
@@ -82,7 +88,8 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-        needApprove: 1
+        needApprove: 1,
+        loader: true
     }
 
     componentDidMount() {
@@ -95,15 +102,35 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertWithDrawHideAction();
+        this.props.clearFilterWithDrawAction();
     }
 
     fetchWithDrawList = (page: number) => {
-        this.props.fetchWithDrawAction(page, this.state.needApprove);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchWithDrawAction(page, this.state.needApprove).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     render() {
 
         let withdraw: any = <TableItemEmpty />;
+
+        let loaderSpinner = <Spinner type="Puff"
+                                    color="#00BFFF"
+                                    height={150}
+                                    width={150}
+                                    visible={this.state.loader} />
 
         if (this.props.withdraw.length > 0) {
             withdraw = this.props.withdraw.map((item: WithDrawList, index: number) => (
@@ -139,6 +166,11 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar WithDraw</h3>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -159,6 +191,8 @@ class List extends Component<Props, State> {
                                         {withdraw}
                                     </tbody>
                                 </Table>
+                                
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
@@ -192,16 +226,18 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchWithDrawAction: (page: number, needApprove: number) => void,
+    fetchWithDrawAction: (page: number, needApprove: number) => Promise<Boolean>,
     setAlertWithDrawHideAction: () => void,
-    setAlertWithDrawShowAction: (message: string, color: string) => void
+    setAlertWithDrawShowAction: (message: string, color: string) => void,
+    clearFilterWithDrawAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
         fetchWithDrawAction: (page: number, needApprove: number) => dispatch(fetchWithDrawAction(page, needApprove)),
         setAlertWithDrawHideAction: () => dispatch(setAlertWithDrawHideAction()),
-        setAlertWithDrawShowAction: (message: string, color: string) => dispatch(setAlertWithDrawShowAction(message, color))
+        setAlertWithDrawShowAction: (message: string, color: string) => dispatch(setAlertWithDrawShowAction(message, color)),
+        clearFilterWithDrawAction: () => dispatch(clearFilterAction())
     }
 }
 

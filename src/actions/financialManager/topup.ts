@@ -21,7 +21,12 @@ import {
     TopUpCreateResult,
     TopUpList,
     TopUpShow,
-    TopUpApprove
+    TopUpApprove,
+    Filter,
+    SetFilterTopUpActionType,
+    SET_FILTER_TOPUP,
+    ClearFilterTopUpActionType,
+    CLEAR_FILTER_TOPUP
 } from '../../types/financialManager/topup';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -29,6 +34,7 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorTopUpActionType => {
     return {
@@ -64,18 +70,41 @@ export const setAlertTopUpShowAction = (message: string, color: string): AlertTo
     };
 }
 
+export const clearFilterAction = () : ClearFilterTopUpActionType => {
+    return {
+        type: CLEAR_FILTER_TOPUP
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterTopUpActionType => {
+    return {
+        type: SET_FILTER_TOPUP,
+        filter: filter
+    }
+}
 
 export const fetchTopUpAction = (page: number, needApproved: number = 1): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        let paramsObject: OptionObjectString = {
-            page: page.toString(),
-            needApproved: needApproved.toString()
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            accountNumber: (querySearch.accountNumber as string) || '',
+            name: (querySearch.name as string) || '',
+            bankName: (querySearch.bankName as string) || '',
+            isManual: (querySearch.isManual as string) || '',
         }
 
-        const params = objectToParamsUrl(paramsObject)
+        dispatch(setFilterAction(filter));
 
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/list?${params}`)
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/financial-manager/topup/list`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<TopUpList> = response.data;
 

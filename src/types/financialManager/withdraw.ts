@@ -8,6 +8,8 @@ export const FETCH_WITHDRAW = "FETCH_WITHDRAW";
 export const FETCH_WITHDRAW_SUCCESS = "FETCH_WITHDRAW_SUCCESS";
 export const FETCH_WITHDRAW_ERROR = "FETCH_WITHDRAW_ERROR";
 export const SET_PAGINATOR_WITHDRAW = "SET_PAGINATOR_WITHDRAW";
+export const SET_FILTER_WITHDRAW = "SET_FILTER_WITHDRAW";
+export const CLEAR_FILTER_WITHDRAW = "CLEAR_FILTER_WITHDRAW";
 
 export const ALERT_WITHDRAW_SHOW = "ALERT_WITHDRAW_SHOW";
 export const ALERT_WITHDRAW_HIDE = "ALERT_WITHDRAW_HIDE";
@@ -100,6 +102,25 @@ export interface AlertWithDrawShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    accountNumber: string,
+    bankName: string,
+    isManual: string,
+    isDecline: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterWithDrawActionType {
+    type: typeof SET_FILTER_WITHDRAW,
+    filter: Filter
+}
+
+export interface ClearFilterWithDrawActionType {
+    type: typeof CLEAR_FILTER_WITHDRAW
+}
+
 export type WithDrawActionTypes =
     | FetchWithDrawActionType
     | FetchWithDrawSuccessActionType
@@ -107,3 +128,5 @@ export type WithDrawActionTypes =
     | AlertWithDrawHideActionType
     | AlertWithDrawShowActionType
     | SetPaginatorWithDrawActionType
+    | SetFilterWithDrawActionType
+    | ClearFilterWithDrawActionType

@@ -8,6 +8,8 @@ export const FETCH_TOPUP = "FETCH_TOPUP";
 export const FETCH_TOPUP_SUCCESS = "FETCH_TOPUP_SUCCESS";
 export const FETCH_TOPUP_ERROR = "FETCH_TOPUP_ERROR";
 export const SET_PAGINATOR_TOPUP = "SET_PAGINATOR_TOPUP";
+export const SET_FILTER_TOPUP = "SET_FILTER_TOPUP";
+export const CLEAR_FILTER_TOPUP = "CLEAR_FILTER_TOPUP";
 
 export const ALERT_TOPUP_SHOW = "ALERT_TOPUP_SHOW";
 export const ALERT_TOPUP_HIDE = "ALERT_TOPUP_HIDE";
@@ -99,6 +101,24 @@ export interface AlertTopUpShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string,
+    accountNumber: string,
+    bankName: string,
+    isManual: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterTopUpActionType {
+    type: typeof SET_FILTER_TOPUP,
+    filter: Filter
+}
+
+export interface ClearFilterTopUpActionType {
+    type: typeof CLEAR_FILTER_TOPUP
+}
+
 export type TopUpActionTypes =
     | FetchTopUpActionType
     | FetchTopUpSuccessActionType
@@ -106,3 +126,5 @@ export type TopUpActionTypes =
     | AlertTopUpHideActionType
     | AlertTopUpShowActionType
     | SetPaginatorTopUpActionType
+    | SetFilterTopUpActionType
+    | ClearFilterTopUpActionType
