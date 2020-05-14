@@ -21,6 +21,11 @@ import {
     ManualWithDrawCreateResult,
     ManualWithDrawList,
     ManualWithDrawShow,
+    Filter,
+    SetFilterManualWithDrawActionType,
+    SET_FILTER_MANUAL_WITHDRAW,
+    ClearFilterManualWithDrawActionType,
+    CLEAR_FILTER_MANUAL_WITHDRAW
 } from '../../types/admin/manualWithdraw';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -28,6 +33,7 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorManualWithDrawActionType => {
     return {
@@ -63,17 +69,41 @@ export const setAlertManualWithDrawShowAction = (message: string, color: string)
     };
 }
 
+export const clearFilterAction = () : ClearFilterManualWithDrawActionType => {
+    return {
+        type: CLEAR_FILTER_MANUAL_WITHDRAW
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterManualWithDrawActionType => {
+    return {
+        type: SET_FILTER_MANUAL_WITHDRAW,
+        filter: filter
+    }
+}
 
 export const fetchManualWithDrawAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        let paramsObject: OptionObjectString = {
-            page: page.toString()
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            accountNumber: (querySearch.accountNumber as string) || '',
+            accountName: (querySearch.accountName as string) || '',
+            bankName: (querySearch.bankName as string) || '',
+            isManual: (querySearch.isManual as string) || '',
         }
 
-        const params = objectToParamsUrl(paramsObject)
+        dispatch(setFilterAction(filter));
 
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/withdraw-manual-driver?${params}`)
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/withdraw-manual-driver`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ManualWithDrawList> = response.data;
 
