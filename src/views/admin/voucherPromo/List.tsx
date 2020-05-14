@@ -12,7 +12,8 @@ import {
     Table,
     Alert,
     Progress,
-    Badge
+    Badge,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -35,7 +36,8 @@ import {
     fetchVoucherPromoAction,
     deleteVoucherPromoAction,
     setAlertVoucherPromoHideAction,
-    setAlertVoucherPromoShowAction
+    setAlertVoucherPromoShowAction,
+    clearFilterAction
 } from '../../../actions/admin/voucherPromo';
 import { VoucherPromo } from '../../../types/admin/voucherPromo';
 import { Paginator } from '../../../types/paginator';
@@ -50,6 +52,7 @@ import Spinner from '../../../components/Loader/Spinner'
 import '../../../react-modal-image.d.ts'
 import ModalImage from 'react-modal-image'
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -202,6 +205,7 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertVoucherPromoHideAction();
+        this.props.clearFilterVoucherPromoAction();
     }
 
     fetchVoucherPromoList = (page: number) => {
@@ -213,7 +217,12 @@ class List extends Component<Props, State> {
                     loader: false
                 })
             });
-        })
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteVoucherPromo = (id: number) => {
@@ -284,15 +293,20 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Voucher Promo</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/voucher-promo/create">
-                                            <Button
-                                                color="primary"
-                                                size="sm"
-                                            >
-                                                Tambah Voucher Promo
-                                            </Button>
-                                        </Link>
+                                            <Link to="/admin/voucher-promo/create">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Voucher Promo
+                                                </Button>
+                                            </Link>
                                         </div>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -318,7 +332,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchVoucherPromoAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchVoucherPromoList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -347,7 +363,8 @@ interface LinkDispatchToProps {
     fetchVoucherPromoAction: (page: number) => Promise<Boolean>,
     deleteVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromo>>,
     setAlertVoucherPromoHideAction: () => void,
-    setAlertVoucherPromoShowAction: (message: string, color: string) => void
+    setAlertVoucherPromoShowAction: (message: string, color: string) => void,
+    clearFilterVoucherPromoAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -355,7 +372,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchVoucherPromoAction: (page: number) => dispatch(fetchVoucherPromoAction(page)),
         deleteVoucherPromoAction: (id: number) => dispatch(deleteVoucherPromoAction(id)),
         setAlertVoucherPromoHideAction: () => dispatch(setAlertVoucherPromoHideAction()),
-        setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color))
+        setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
+        clearFilterVoucherPromoAction: () => dispatch(clearFilterAction())
     }
 }
 

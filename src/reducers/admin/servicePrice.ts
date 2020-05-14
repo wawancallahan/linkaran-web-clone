@@ -45,19 +45,7 @@ const initialState: initialStateInterface = {
         visible: false
     },
     filter: {
-        districtName: '',
-        service: {
-            value: 0,
-            label: ''
-        },
-        vehicleType: {
-            value: 0,
-            label: ''
-        },
-        price: {
-            value: 0,
-            label: ''
-        },
+        districtName: ''
     },
     filtered: false
 }

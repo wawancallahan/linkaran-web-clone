@@ -4,6 +4,8 @@ export const FETCH_FOOD_CATEGORY = "FETCH_FOOD_CATEGORY";
 export const FETCH_FOOD_CATEGORY_SUCCESS = "FETCH_FOOD_CATEGORY_SUCCESS";
 export const FETCH_FOOD_CATEGORY_ERROR = "FETCH_FOOD_CATEGORY_ERROR";
 export const SET_PAGINATOR_FOOD_CATEGORY = "SET_PAGINATOR_FOOD_CATEGORY";
+export const SET_FILTER_FOOD_CATEGORY = "SET_FILTER_FOOD_CATEGORY";
+export const CLEAR_FILTER_FOOD_CATEGORY = "CLEAR_FILTER_FOOD_CATEGORY";
 
 export const ALERT_FOOD_CATEGORY_SHOW = "ALERT_FOOD_CATEGORY_SHOW";
 export const ALERT_FOOD_CATEGORY_HIDE = "ALERT_FOOD_CATEGORY_HIDE";
@@ -63,6 +65,21 @@ export interface AlertFoodCategoryShowActionType {
     color: string
 }
 
+export interface Filter {
+    name: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterFoodCategoryActionType {
+    type: typeof SET_FILTER_FOOD_CATEGORY,
+    filter: Filter
+}
+
+export interface ClearFilterFoodCategoryActionType {
+    type: typeof CLEAR_FILTER_FOOD_CATEGORY
+}
+
 export type FoodCategoryActionTypes =
     | FetchFoodCategoryActionType
     | FetchFoodCategorySuccessActionType
@@ -70,3 +87,5 @@ export type FoodCategoryActionTypes =
     | AlertFoodCategoryHideActionType
     | AlertFoodCategoryShowActionType
     | SetPaginatorFoodCategoryActionType
+    | SetFilterFoodCategoryActionType
+    | ClearFilterFoodCategoryActionType

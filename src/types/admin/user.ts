@@ -1,5 +1,6 @@
 import { Paginator } from '../paginator';
 import { Role } from './role'
+import { SelectType } from '../select';
 
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
@@ -15,10 +16,7 @@ export type FormField = {
     name: string,
     phoneNumber: string,
     email: string,
-    roles: {
-        value: number,
-        label: string
-    }[],
+    roles: SelectType[],
     telegramuser: string | null
 }
 

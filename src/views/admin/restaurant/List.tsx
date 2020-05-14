@@ -69,6 +69,7 @@ const TableItem = (props: {
             <td>{props.item.point ? (props.item.point.lat + "," + props.item.point.lng) : ''}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.address}</td>
+            <td>{props.item.registered ? 'Ya' : 'Tidak'}</td>
             <td>
                 <Link to={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -218,6 +219,7 @@ class List extends Component<Props, State> {
                                             <th>Point</th>
                                             <th>Rating</th>
                                             <th>Alamat</th>
+                                            <th>Registrasi</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>

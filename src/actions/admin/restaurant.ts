@@ -201,7 +201,7 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
 
 export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-
+        
         const data = new FormData;
 
         if (restaurant.photo) {
@@ -215,6 +215,7 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
         data.set('phoneNumber', restaurant.phoneNumber)
+        data.set('registered', booleanToString(restaurant.registered))
 
         for (var i = 0; i < restaurant.operatingTime.length; i++) {
             data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);
@@ -347,6 +348,7 @@ export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): Th
         data.set('rating', restaurant.rating.toString())
         data.set('district.id', restaurant.district.id.toString())
         data.set('phoneNumber', restaurant.phoneNumber)
+        data.set('registered', booleanToString(restaurant.registered))
 
         for (var i = 0; i < restaurant.operatingTime.length; i++) {
             data.set(`operatingTime.${i}.openTime`, restaurant.operatingTime[i].openTime);

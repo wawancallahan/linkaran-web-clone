@@ -89,7 +89,8 @@ class Edit extends Component<Props, State> {
                 value: 0,
                 label: ''
             },
-            phoneNumber: ''
+            phoneNumber: '',
+            registered: '0'
         },
         isLoaded: false,
         loadedMessage: '',

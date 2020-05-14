@@ -383,6 +383,53 @@ class FormInformation extends Component<Props> {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-registered"
+                            >
+                                Registrasi
+                            </label>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <fieldset>
+                                <div className="custom-control custom-radio mb-3">
+                                    <input
+                                        className="custom-control-input"
+                                        defaultChecked={FormikProps.values.registered == '0'}
+                                        id="registered_no"
+                                        name="registered"
+                                        type="radio"
+                                        value="0"
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                    />
+                                    <label className="custom-control-label" htmlFor="registered_no">
+                                        Tidak
+                                    </label>
+                                </div>
+                                <div className="custom-control custom-radio mb-3">
+                                    <input
+                                        className="custom-control-input"
+                                        defaultChecked={FormikProps.values.registered == '1'}
+                                        id="registered_yes"
+                                        name="registered"
+                                        type="radio"
+                                        value="1"
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                    />
+                                    <label className="custom-control-label" htmlFor="registered_yes">
+                                        Ya
+                                    </label>
+                                </div>
+                            </fieldset>
+                            <div>
+                                {FormikProps.errors.registered && FormikProps.touched.registered ? FormikProps.errors.registered : ''}
+                            </div>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-upload-photo"
                             >
                                 Upload Gambar

@@ -18,13 +18,20 @@ import {
     AlertFoodCategoryShowActionType,
     ALERT_FOOD_CATEGORY_SHOW,
     FoodCategoryEditResult,
-    FoodCategoryCreateResult
+    FoodCategoryCreateResult,
+    Filter,
+    SetFilterFoodCategoryActionType,
+    SET_FILTER_FOOD_CATEGORY,
+    ClearFilterFoodCategoryActionType,
+    CLEAR_FILTER_FOOD_CATEGORY
 } from '../../types/admin/foodCategory';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
 import * as dotenv from 'dotenv';
+import { OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorFoodCategoryActionType => {
     return {
@@ -60,9 +67,38 @@ export const setAlertFoodCategoryShowAction = (message: string, color: string): 
     };
 }
 
+export const clearFilterAction = () : ClearFilterFoodCategoryActionType => {
+    return {
+        type: CLEAR_FILTER_FOOD_CATEGORY
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterFoodCategoryActionType => {
+    return {
+        type: SET_FILTER_FOOD_CATEGORY,
+        filter: filter
+    }
+}
+
 export const fetchFoodCategoryAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category?page=${page}`)
+        
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            name: (querySearch.name as string) || ''
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+        
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
@@ -98,7 +134,15 @@ export const fetchFoodCategoryAction = (page: number) : ThunkResult<Promise<Bool
 
 export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category?page=${page}`)
+        
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+        
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<FoodCategory> = response.data;
 
