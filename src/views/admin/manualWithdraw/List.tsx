@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,13 +34,15 @@ import {
     fetchManualWithDrawAction,
     setAlertManualWithDrawHideAction,
     setAlertManualWithDrawShowAction,
-    deleteManualWithDrawAction
+    deleteManualWithDrawAction,
+    clearFilterAction
 } from '../../../actions/admin/manualWithdraw';
 import { ManualWithDrawList, ManualWithDraw } from '../../../types/admin/manualWithdraw';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -101,10 +104,24 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertManualWithDrawHideAction();
+        this.props.clearFilterManualWithDrawAction();
     }
 
     fetchManualWithDrawList = (page: number) => {
-        this.props.fetchManualWithDrawAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchManualWithDrawAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteManualWithDraw = (id: number) => {
@@ -176,6 +193,11 @@ class List extends Component<Props, State> {
                                             </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -201,7 +223,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchManualWithDrawAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchManualWithDrawList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -227,10 +251,11 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchManualWithDrawAction: (page: number) => void,
+    fetchManualWithDrawAction: (page: number) => Promise<Boolean>,
     setAlertManualWithDrawHideAction: () => void,
     setAlertManualWithDrawShowAction: (message: string, color: string) => void,
-    deleteManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDraw>>
+    deleteManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDraw>>,
+    clearFilterManualWithDrawAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -238,7 +263,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchManualWithDrawAction: (page: number) => dispatch(fetchManualWithDrawAction(page)),
         setAlertManualWithDrawHideAction: () => dispatch(setAlertManualWithDrawHideAction()),
         setAlertManualWithDrawShowAction: (message: string, color: string) => dispatch(setAlertManualWithDrawShowAction(message, color)),
-        deleteManualWithDrawAction: (id: number) => dispatch(deleteManualWithDrawAction(id))
+        deleteManualWithDrawAction: (id: number) => dispatch(deleteManualWithDrawAction(id)),
+        clearFilterManualWithDrawAction: () => dispatch(clearFilterAction())
     }
 }
 

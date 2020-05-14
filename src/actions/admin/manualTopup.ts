@@ -21,6 +21,11 @@ import {
     ManualTopUpCreateResult,
     ManualTopUpList,
     ManualTopUpShow,
+    Filter,
+    SetFilterManualTopUpActionType,
+    SET_FILTER_MANUAL_TOPUP,
+    ClearFilterManualTopUpActionType,
+    CLEAR_FILTER_MANUAL_TOPUP
 } from '../../types/admin/manualTopup';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -28,6 +33,7 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString } from '../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorManualTopUpActionType => {
     return {
@@ -63,17 +69,40 @@ export const setAlertManualTopUpShowAction = (message: string, color: string): A
     };
 }
 
+export const clearFilterAction = () : ClearFilterManualTopUpActionType => {
+    return {
+        type: CLEAR_FILTER_MANUAL_TOPUP
+    }
+} 
+
+export const setFilterAction = (filter: Filter) : SetFilterManualTopUpActionType => {
+    return {
+        type: SET_FILTER_MANUAL_TOPUP,
+        filter: filter
+    }
+}
 
 export const fetchManualTopUpAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
-        let paramsObject: OptionObjectString = {
-            page: page.toString()
+        const querySearch = queryString.parse(window.location.search);
+
+        const filter: Filter = {
+            accountNumber: (querySearch.accountNumber as string) || '',
+            accountName: (querySearch.accountName as string) || '',
+            bankName: (querySearch.bankName as string) || '',
         }
 
-        const params = objectToParamsUrl(paramsObject)
+        dispatch(setFilterAction(filter));
 
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/topup-manual-driver?${params}`)
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filter
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/topup-manual-driver`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ManualTopUpList> = response.data;
 

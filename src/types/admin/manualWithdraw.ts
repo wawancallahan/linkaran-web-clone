@@ -7,6 +7,8 @@ export const FETCH_MANUAL_WITHDRAW = "FETCH_MANUAL_WITHDRAW";
 export const FETCH_MANUAL_WITHDRAW_SUCCESS = "FETCH_MANUAL_WITHDRAW_SUCCESS";
 export const FETCH_MANUAL_WITHDRAW_ERROR = "FETCH_MANUAL_WITHDRAW_ERROR";
 export const SET_PAGINATOR_MANUAL_WITHDRAW = "SET_PAGINATOR_MANUAL_WITHDRAW";
+export const SET_FILTER_MANUAL_WITHDRAW = "SET_FILTER_MANUAL_WITHDRAW";
+export const CLEAR_FILTER_MANUAL_WITHDRAW = "CLEAR_FILTER_MANUAL_WITHDRAW";
 
 export const ALERT_MANUAL_WITHDRAW_SHOW = "ALERT_MANUAL_WITHDRAW_SHOW";
 export const ALERT_MANUAL_WITHDRAW_HIDE = "ALERT_MANUAL_WITHDRAW_HIDE";
@@ -146,6 +148,25 @@ export interface AlertManualWithDrawShowActionType {
     color: string
 }
 
+export interface Filter {
+    accountName: string,
+    accountNumber: string,
+    bankName: string,
+    isManual: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterManualWithDrawActionType {
+    type: typeof SET_FILTER_MANUAL_WITHDRAW,
+    filter: Filter
+}
+
+export interface ClearFilterManualWithDrawActionType {
+    type: typeof CLEAR_FILTER_MANUAL_WITHDRAW
+}
+
+
 export type ManualWithDrawActionTypes =
     | FetchManualWithDrawActionType
     | FetchManualWithDrawSuccessActionType
@@ -153,3 +174,5 @@ export type ManualWithDrawActionTypes =
     | AlertManualWithDrawHideActionType
     | AlertManualWithDrawShowActionType
     | SetPaginatorManualWithDrawActionType
+    | SetFilterManualWithDrawActionType
+    | ClearFilterManualWithDrawActionType

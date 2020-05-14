@@ -10,7 +10,8 @@ import {
     CardFooter,
     Button,
     Table,
-    Alert
+    Alert,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -33,13 +34,15 @@ import {
     fetchManualTopUpAction,
     setAlertManualTopUpHideAction,
     setAlertManualTopUpShowAction,
-    deleteManualTopUpAction
+    deleteManualTopUpAction,
+    clearFilterAction
 } from '../../../actions/admin/manualTopup';
 import { ManualTopUpList, ManualTopUp } from '../../../types/admin/manualTopup';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
 import swal from 'sweetalert'
+import Filter from './Filter'
 
 type ListProps = RouteComponentProps & {
 
@@ -102,10 +105,24 @@ class List extends Component<Props, State> {
 
     componentWillUnmount() {
         this.props.setAlertManualTopUpHideAction();
+        this.props.clearFilterManualTopUpAction();
     }
 
     fetchManualTopUpList = (page: number) => {
-        this.props.fetchManualTopUpAction(page);
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchManualTopUpAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
     deleteManualTopUp = (id: number) => {
@@ -177,6 +194,11 @@ class List extends Component<Props, State> {
                                             </Link>
                                         </div>
                                     </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
+                                    </Row>
                                 </CardHeader>
 
                                 <Table className="align-items-center table-flush" responsive>
@@ -203,7 +225,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchManualTopUpAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchManualTopUpList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -229,10 +253,11 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchManualTopUpAction: (page: number) => void,
+    fetchManualTopUpAction: (page: number) => Promise<Boolean>,
     setAlertManualTopUpHideAction: () => void,
     setAlertManualTopUpShowAction: (message: string, color: string) => void,
-    deleteManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUp>>
+    deleteManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUp>>,
+    clearFilterManualTopUpAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
@@ -240,7 +265,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchManualTopUpAction: (page: number) => dispatch(fetchManualTopUpAction(page)),
         setAlertManualTopUpHideAction: () => dispatch(setAlertManualTopUpHideAction()),
         setAlertManualTopUpShowAction: (message: string, color: string) => dispatch(setAlertManualTopUpShowAction(message, color)),
-        deleteManualTopUpAction: (id: number) => dispatch(deleteManualTopUpAction(id))
+        deleteManualTopUpAction: (id: number) => dispatch(deleteManualTopUpAction(id)),
+        clearFilterManualTopUpAction: () => dispatch(clearFilterAction())
     }
 }
 
