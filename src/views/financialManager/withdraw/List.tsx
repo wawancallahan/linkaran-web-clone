@@ -50,7 +50,6 @@ type ListProps = RouteComponentProps & {
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    needApprove: number,
     loader: boolean
 }
 
@@ -88,7 +87,6 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-        needApprove: 1,
         loader: true
     }
 
@@ -109,7 +107,7 @@ class List extends Component<Props, State> {
         this.setState({
             loader: true
         }, () => {
-            this.props.fetchWithDrawAction(page, this.state.needApprove).then(() => {
+            this.props.fetchWithDrawAction(page).then(() => {
                 this.setState({
                     loader: false
                 })
@@ -199,7 +197,7 @@ class List extends Component<Props, State> {
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
                                                     itemClicked={(page: number) => {
-                                                        this.props.fetchWithDrawAction(page, this.state.needApprove)
+                                                        this.props.fetchWithDrawAction(page)
                                                     }} />
                                 </CardFooter>
                             </Card>
@@ -226,7 +224,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    fetchWithDrawAction: (page: number, needApprove: number) => Promise<Boolean>,
+    fetchWithDrawAction: (page: number) => Promise<Boolean>,
     setAlertWithDrawHideAction: () => void,
     setAlertWithDrawShowAction: (message: string, color: string) => void,
     clearFilterWithDrawAction: () => void
@@ -234,7 +232,7 @@ interface LinkDispatchToProps {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchWithDrawAction: (page: number, needApprove: number) => dispatch(fetchWithDrawAction(page, needApprove)),
+        fetchWithDrawAction: (page: number) => dispatch(fetchWithDrawAction(page)),
         setAlertWithDrawHideAction: () => dispatch(setAlertWithDrawHideAction()),
         setAlertWithDrawShowAction: (message: string, color: string) => dispatch(setAlertWithDrawShowAction(message, color)),
         clearFilterWithDrawAction: () => dispatch(clearFilterAction())

@@ -48,6 +48,7 @@ const initialState: initialStateInterface = {
         name: '',
         accountNumber: '',
         bankName: '',
+        needApproved: '0',
         isManual: '0',
         isDecline: '0'
     },

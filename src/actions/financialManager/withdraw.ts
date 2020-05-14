@@ -92,6 +92,7 @@ export const fetchWithDrawAction = (page: number, needApproved: number = 1): Thu
             accountNumber: (querySearch.accountNumber as string) || '',
             name: (querySearch.name as string) || '',
             bankName: (querySearch.bankName as string) || '',
+            needApproved: (querySearch.needApproved as string) || '',
             isManual: (querySearch.isManual as string) || '',
             isDecline: (querySearch.isDecline as string) || '',
         }

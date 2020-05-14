@@ -232,6 +232,31 @@ class Filter extends Component<Props, State> {
                             <FormGroup>
                                 <label
                                 className="form-control-label"
+                                htmlFor="input-needApproved"
+                                >
+                                    Butuh Persetujuan
+                                </label>
+                                <ReactSelect 
+                                    options={[
+                                        {value: '1', label: 'Ya'},
+                                        {value: '0', label: 'Tidak'}
+                                    ]}
+                                    defaultValue={this.updateToOptionSelect(this.props.filter.needApproved)}
+                                    onChange={(option) => {
+
+                                        const optionSelected = option as {
+                                            value: string,
+                                            label: string
+                                        };
+
+                                        this.handleOnChangeSelect(optionSelected, 'needApproved')
+                                    }}  
+                                    />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label
+                                className="form-control-label"
                                 htmlFor="input-isManual"
                                 >
                                     Manual

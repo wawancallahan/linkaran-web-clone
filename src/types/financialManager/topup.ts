@@ -105,6 +105,7 @@ export interface Filter {
     name: string,
     accountNumber: string,
     bankName: string,
+    needApproved: string,
     isManual: string
 }
 
