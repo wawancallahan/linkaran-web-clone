@@ -10,6 +10,8 @@ export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
 export const FETCH_APPLICATION_ERROR = "FETCH_APPLICATION_ERROR";
 export const SET_PAGINATOR_APPLICATION = "SET_PAGINATOR_APPLICATION";
+export const SET_FILTER_APPLICATION = "SET_FILTER_APPLICATION";
+export const CLEAR_FILTER_APPLICATION = "CLEAR_FILTER_APPLICATION";
 
 export const ALERT_APPLICATION_SHOW = "ALERT_APPLICATION_SHOW";
 export const ALERT_APPLICATION_HIDE = "ALERT_APPLICATION_HIDE";
@@ -207,6 +209,31 @@ export interface AlertApplicationShowActionType {
     color: string
 }
 
+export interface Filter {
+    numberTransaction: string,
+    userName: string,
+    date: Date | null,
+    type: string,
+    serviceCode: string,
+    statusOrder: string,
+    driverName: string
+}
+
+export type FilterOmit = Omit<Filter, 'date'> & { 
+    date: string
+}
+
+export type FilterKeys = keyof Filter;
+
+export interface SetFilterApplicationActionType {
+    type: typeof SET_FILTER_APPLICATION,
+    filter: Filter
+}
+
+export interface ClearFilterApplicationActionType {
+    type: typeof CLEAR_FILTER_APPLICATION
+}
+
 export type ApplicationActionTypes =
     | FetchApplicationActionType
     | FetchApplicationSuccessActionType
@@ -214,3 +241,5 @@ export type ApplicationActionTypes =
     | AlertApplicationHideActionType
     | AlertApplicationShowActionType
     | SetPaginatorApplicationActionType
+    | SetFilterApplicationActionType
+    | ClearFilterApplicationActionType

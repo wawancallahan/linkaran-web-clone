@@ -22,7 +22,13 @@ import {
     ApplicationList,
     ApplicationShow,
     ApplicationShowComplete,
-    ApplicationShowInprogress
+    ApplicationShowInprogress,
+    Filter,
+    SetFilterApplicationActionType,
+    SET_FILTER_APPLICATION,
+    ClearFilterApplicationActionType,
+    CLEAR_FILTER_APPLICATION,
+    FilterOmit
 } from '../../../types/admin/transaction/application';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList, MetaDataSuccess } from '../../../types/api';
@@ -30,6 +36,8 @@ import * as dotenv from 'dotenv';
 import { ThunkResult } from '../../../types/thunk'
 import { OptionObjectNumber, objectToParamsUrl, OptionObjectString, typeTransactionFormat } from '../../../helpers/utils';
 dotenv.config();
+import queryString from 'query-string'
+import moment from 'moment';
 
 export const setPaginateAction = (paginate: Paginator): SetPaginatorApplicationActionType => {
     return {
@@ -65,10 +73,53 @@ export const setAlertApplicationShowAction = (message: string, color: string): A
     };
 }
 
+export const clearFilterAction = () : ClearFilterApplicationActionType => {
+    return {
+        type: CLEAR_FILTER_APPLICATION
+    }
+} 
 
-export const fetchApplicationAction = (page: number, type: string): ThunkResult<Promise<Boolean>> => {
+export const setFilterAction = (filter: Filter) : SetFilterApplicationActionType => {
+    return {
+        type: SET_FILTER_APPLICATION,
+        filter: filter
+    }
+}
+
+export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction?page=${page}&type=${type}`)
+
+        const querySearch = queryString.parse(window.location.search);
+
+        let dateQuery = (querySearch.date as string) || '';
+
+        const date = moment(dateQuery, "YYYY-MM-DD", true);
+
+        const filterOmit: FilterOmit = {
+            driverName: (querySearch.driverName as string) || '',
+            date: date.isValid() ? date.format("YYYY-MM-DD") : '',
+            numberTransaction: (querySearch.numberTransaction as string) || '',
+            serviceCode: (querySearch.serviceCode as string) || '',
+            statusOrder: (querySearch.statusOrder as string) || '',
+            type: (querySearch.type as string) || 'complete',
+            userName: (querySearch.userName as string) || '',
+        }
+
+        const filter: Filter = {
+            ...filterOmit,
+            date: date.isValid() ? date.toDate() : null
+        }
+
+        dispatch(setFilterAction(filter));
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            ...filterOmit
+        }
+
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ApplicationList> = response.data;
 

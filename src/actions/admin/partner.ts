@@ -86,15 +86,6 @@ export const setFilterAction = (filter: Filter) : SetFilterPartnerActionType => 
     }
 }
 
-export const fetchPartnerFilteredAction = (filter: Filter) : ThunkResult<Promise<Boolean>> => {
-    return (dispatch: ThunkDispatch<any, any, AppActions>, getState: () => AppState) => {
-        dispatch(setFilterAction(filter));
-        dispatch(fetchPartnerAction(1, filter));
-        
-        return Promise.resolve(true);
-    }
-}
-
 export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 

@@ -47,11 +47,11 @@ class Filter extends Component<Props, State> {
 
         let filter = this.props.filter as IFilter;
 
-        const startWorkingTogether = filter.startWorkingTogether ? (
+        const startWorkingTogether = filter.startWorkingTogether && moment(filter.startWorkingTogether).isValid() ? (
             moment(filter.startWorkingTogether).format("YYYY-MM-DD")
         ) : ''
 
-        const endWorkingTogether = filter.endWorkingTogether ? (
+        const endWorkingTogether = filter.endWorkingTogether && moment(filter.endWorkingTogether).isValid() ? (
             moment(filter.endWorkingTogether).format("YYYY-MM-DD")
         ) : ''
 

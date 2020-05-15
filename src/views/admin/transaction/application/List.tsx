@@ -15,7 +15,8 @@ import {
     Dropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
+    Col
 } from 'reactstrap';
 import {
     Link,
@@ -34,7 +35,8 @@ import { AxiosResponse } from 'axios';
 import {
     fetchApplicationAction,
     setAlertApplicationHideAction,
-    setAlertApplicationShowAction
+    setAlertApplicationShowAction,
+    clearFilterAction
 } from '../../../../actions/admin/transaction/application';
 import { Application } from '../../../../types/admin/transaction/application';
 import Pagination from '../../../../components/Pagination/Pagination';
@@ -46,6 +48,8 @@ import { Alert as IAlert } from '../../../../types/alert';
 import { typeOfTransaction, colorStatusFormat, typeTransactionFormat } from '../../../../helpers/utils';
 import { amountFormat } from '../../../../helpers/number';
 import NumberFormat from 'react-number-format'
+import Filter from './Filter'
+import Spinner from '../../../../components/Loader/Spinner';
 
 type ListProps = RouteComponentProps<{
     type?: string
@@ -56,7 +60,7 @@ type ListProps = RouteComponentProps<{
 type Props = ListProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    dropdownVisible: boolean
+    loader: boolean
 }
 
 const TableItem = (props: {
@@ -97,70 +101,69 @@ const TableItemEmpty = () => (
 class List extends Component<Props, State> {
 
     state = {
-        dropdownVisible: false
+        loader: true
     }
 
     componentDidMount() {
-        this.loadApplicationList();
-    }
-
-    loadApplicationList = (typeParams?: string) => {
         const queryStringValue = queryString.parse(this.props.location.search);
     
         const page = + (queryStringValue.page || 1);
 
-        let type = this.typeTransaction();
-
-        if (typeParams) {
-            type = typeParams
-        }
-
-        this.fetchApplicationList(page, type);
-    }
-
-    typeTransaction = () => {
-        const typeParams = this.props.match.params.type;
-
-        const type = typeTransactionFormat(typeParams)
-
-        return type;
+        this.fetchApplicationList(page);
     }
 
     componentWillUnmount() {
         this.props.setAlertApplicationHideAction();
+        this.props.clearFilterApplicationAction();
     }
 
-    fetchApplicationList = (page: number, type: string) => {
-        this.props.fetchApplicationAction(page, type);
+    fetchApplicationList = (page: number) => {
+        this.setState({
+            loader: true
+        }, () => {
+            this.props.fetchApplicationAction(page).then(() => {
+                this.setState({
+                    loader: false
+                })
+            });
+
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('page', page.toString());
+
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        });
     }
 
-    goToTransactionRoute = (type: string) => {
-        this.props.history.push(`/admin/transaction/application/${type}`)
-        this.loadApplicationList(type);
-    }
+    getTypeQuery = () => {
+        const queryStringValue = queryString.parse(this.props.location.search);
+    
+        const typeQuery = queryStringValue.type as string || undefined;
 
-    dropdownToggle = () => {
-        this.setState(prevState => {
-            return {
-                dropdownVisible: ! prevState.dropdownVisible
-            }
-        })
+        return typeTransactionFormat(typeQuery)
     }
 
     render() {
 
-        let transactionApplication: any = <TableItemEmpty />;
+        let transactionApplicationList: any = null;
 
-        const type = typeTransactionFormat(this.props.match.params.type);
+        let loaderSpinner = <Spinner type="Puff"
+                                color="#00BFFF"
+                                height={150}
+                                width={150}
+                                visible={this.state.loader} />
 
-        if (this.props.transactionApplication.length > 0) {
-            transactionApplication = this.props.transactionApplication.map((item: Application, index: number) => (
-                <TableItem key={index}
-                           item={item}
-                           index={index}
-                           type={type}
-                           />
-            ));
+        if ( ! this.state.loader) {
+            if (this.props.transactionApplicationList.length > 0) {
+                transactionApplicationList = this.props.transactionApplicationList.map((item: Application, index: number) => (
+                    <TableItem key={index}
+                               item={item}
+                               index={index}
+                               type={this.getTypeQuery()}
+                               />
+                ));
+            } else {
+                transactionApplicationList = <TableItemEmpty />;
+            }
         }
 
         const CAlert = (
@@ -188,25 +191,10 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Transaksi Aplikasi</h3>
                                         </div>
                                     </Row>
-                                    <Row>
-                                        <Dropdown isOpen={this.state.dropdownVisible} toggle={this.dropdownToggle}>
-                                            <DropdownToggle caret>
-                                                {this.typeTransaction()}
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem onClick={() => {
-                                                    this.goToTransactionRoute('complete')
-                                                }}>
-                                                    Complete
-                                                </DropdownItem>
-
-                                                <DropdownItem onClick={() => {
-                                                    this.goToTransactionRoute('inprogress')
-                                                }}>
-                                                    In Progress
-                                                </DropdownItem>
-                                            </DropdownMenu>
-                                        </Dropdown>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Filter />
+                                        </Col>
                                     </Row>
                                 </CardHeader>
 
@@ -225,15 +213,19 @@ class List extends Component<Props, State> {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactionApplication}
+                                        {transactionApplicationList}
                                     </tbody>
                                 </Table>
+
+                                {loaderSpinner}
                                 
                                 <CardFooter className="py-4">
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={(page: number) => this.props.fetchApplicationAction(page, type)} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchApplicationList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -245,30 +237,32 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    transactionApplication: Application[],
+    transactionApplicationList: Application[],
     paginate: Paginator,
     transactionApplicationAlert: IAlert
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        transactionApplication: state.transactionApplication.list,
+        transactionApplicationList: state.transactionApplication.list,
         paginate: state.transactionApplication.paginate,
         transactionApplicationAlert: state.transactionApplication.alert
     }
 }
 
 interface LinkDispatchToProps {
-    fetchApplicationAction: (page: number, type: string) => void,
+    fetchApplicationAction: (page: number) => Promise<Boolean>,
     setAlertApplicationHideAction: () => void,
-    setAlertApplicationShowAction: (message: string, color: string) => void
+    setAlertApplicationShowAction: (message: string, color: string) => void,
+    clearFilterApplicationAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListProps): LinkDispatchToProps => {
     return {
-        fetchApplicationAction: (page: number, type: string = 'complete') => dispatch(fetchApplicationAction(page, type)),
+        fetchApplicationAction: (page: number) => dispatch(fetchApplicationAction(page)),
         setAlertApplicationHideAction: () => dispatch(setAlertApplicationHideAction()),
-        setAlertApplicationShowAction: (message: string, color: string) => dispatch(setAlertApplicationShowAction(message, color))
+        setAlertApplicationShowAction: (message: string, color: string) => dispatch(setAlertApplicationShowAction(message, color)),
+        clearFilterApplicationAction: () => dispatch(clearFilterAction())
     }
 }
 
