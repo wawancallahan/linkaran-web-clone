@@ -28,7 +28,7 @@ import {
     SET_FILTER_APPLICATION,
     ClearFilterApplicationActionType,
     CLEAR_FILTER_APPLICATION,
-    FilterOmit
+    FilterOmit,
 } from '../../../types/admin/transaction/application';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList, MetaDataSuccess } from '../../../types/api';
@@ -91,26 +91,55 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
 
         const querySearch = queryString.parse(window.location.search);
 
-        let dateQuery = (querySearch.date as string) || '';
-
-        const date = moment(dateQuery, "YYYY-MM-DD", true);
-
-        const filterOmit: FilterOmit = {
-            driverName: (querySearch.driverName as string) || '',
-            date: date.isValid() ? date.format("YYYY-MM-DD") : '',
-            numberTransaction: (querySearch.numberTransaction as string) || '',
-            serviceCode: (querySearch.serviceCode as string) || '',
-            statusOrder: (querySearch.statusOrder as string) || '',
-            type: (querySearch.type as string) || 'complete',
-            userName: (querySearch.userName as string) || '',
+        let filterOmit: { [key: string]: string } = {
+            type: (querySearch.type as string) || 'complete'
         }
 
-        const filter: Filter = {
-            ...filterOmit,
-            date: date.isValid() ? date.toDate() : null
+        if (querySearch.driverName) {
+            filterOmit = {
+                ...filterOmit,
+                driverName: (querySearch.driverName as string) || '',
+            }
         }
 
-        dispatch(setFilterAction(filter));
+        if (querySearch.date) {
+            const dateQuery = (querySearch.date as string) || '';
+
+            const date = moment(dateQuery, "YYYY-MM-DD", true);
+
+            filterOmit = {
+                ...filterOmit,
+                date: date.isValid() ? date.format("YYYY-MM-DD") : '',
+            }
+        }
+
+        if (querySearch.numberTransaction) {
+            filterOmit = {
+                ...filterOmit,
+                numberTransaction: (querySearch.numberTransaction as string) || '',
+            }
+        }
+
+        if (querySearch.serviceCode) {
+            filterOmit = {
+                ...filterOmit,
+                serviceCode: (querySearch.serviceCode as string) || '',
+            }
+        }
+
+        if (querySearch.statusOrder) {
+            filterOmit = {
+                ...filterOmit,
+                statusOrder: (querySearch.statusOrder as string) || '',
+            }
+        }
+
+        if (querySearch.userName) {
+            filterOmit = {
+                ...filterOmit,
+                userName: (querySearch.userName as string) || '',
+            }
+        }
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),

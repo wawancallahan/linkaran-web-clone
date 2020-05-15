@@ -34,15 +34,25 @@ type FilterProps = RouteComponentProps & {
 
 }
 
-type Props = FilterProps & LinkStateToProps & LinkDispatchToProps;
+type Props = FilterProps & LinkDispatchToProps;
 
 type State = {
+    filter: IFilter,
     modal_visible: boolean
 }
 
 class Filter extends Component<Props, State> {
 
     state = {
+        filter: {
+            date: null,
+            numberTransaction: '',
+            serviceCode: '',
+            statusOrder: '',
+            type: 'complete',
+            userName: '',
+            driverName: '',
+        },
         modal_visible: false
     }
 
@@ -50,7 +60,7 @@ class Filter extends Component<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        let filter = this.props.filter as IFilter;
+        const filter = this.state.filter as IFilter;
 
         const date = filter.date && moment(filter.date).isValid() ? (
             moment(filter.date).format("YYYY-MM-DD")
@@ -80,33 +90,58 @@ class Filter extends Component<Props, State> {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        this.props.setFilterAction({
-            ...this.props.filter,
-            [id]: value
-        } as IFilter);
+        this.setState(prevState => {
+            return {
+                filter: {
+                    ...prevState.filter,
+                    [id]: value
+                }
+            }
+        });
     }
 
     handleOnChangeSelect = (option: {
         value: string,
         label: string
     }, id: string) => {
-        this.props.setFilterAction({
-            ...this.props.filter,
-            [id]: option.value
-        } as IFilter);
+        this.setState(prevState => {
+            return {
+                filter: {
+                    ...prevState.filter,
+                    [id]: option.value
+                }
+            }
+        });
     }
 
     handleOnDateChange = (date: Date | null, id: string) => {
-        this.props.setFilterAction({
-            ...this.props.filter,
-            [id]: date
-        } as IFilter);
+        this.setState(prevState => {
+            return {
+                filter: {
+                    ...prevState.filter,
+                    [id]: date
+                }
+            }
+        });
     }
 
     clearFilter = () => {
         this.props.history.push(`${window.location.pathname}`);
-        this.props.fetchApplicationAction(1);
-        this.props.clearFilterApplicationAction();
+        this.setState(prevState => {
+            return {
+                filter: {
+                    date: null,
+                    numberTransaction: '',
+                    serviceCode: '',
+                    statusOrder: '',
+                    type: 'complete',
+                    userName: '',
+                    driverName: '',
+                }
+            }
+        }, () => {
+            this.props.fetchApplicationAction(1);
+        });
     }
 
     modalOnChange = (status: boolean) => {
@@ -198,7 +233,7 @@ class Filter extends Component<Props, State> {
                                     type="text"
                                     name="numberTransaction"
                                     maxLength={255}
-                                    value={this.props.filter.numberTransaction}
+                                    value={this.state.filter.numberTransaction}
                                     onChange={this.handleOnChange}
                                     bsSize="sm"
                                 />
@@ -206,16 +241,14 @@ class Filter extends Component<Props, State> {
                                     <Button type="submit" color="primary" size="sm">
                                         <i className="fa fa-search" /> Cari
                                     </Button>
-                                    { this.props.filtered ? (
-                                        <Button
-                                            type="button"
-                                            color="danger"
-                                            size="sm"
-                                            onClick={this.clearFilter}
-                                            >
-                                            <i className="fa fa-times" /> Reset
-                                        </Button> ) : null
-                                    }
+                                    <Button
+                                        type="button"
+                                        color="danger"
+                                        size="sm"
+                                        onClick={this.clearFilter}
+                                        >
+                                        <i className="fa fa-times" /> Reset
+                                    </Button>
                                 </InputGroupAddon>
                             </InputGroup>
                         </Col>
@@ -256,7 +289,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="numberTransaction"
                                 maxLength={255}
-                                value={this.props.filter.numberTransaction}
+                                value={this.state.filter.numberTransaction}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -270,7 +303,7 @@ class Filter extends Component<Props, State> {
                                 </label>
                                 <div>
                                     <DatePicker
-                                        selected={this.props.filter.date}
+                                        selected={this.state.filter.date}
                                         onChange={(date) => this.handleOnDateChange(date, 'date')}
                                         dateFormat="yyyy-MM-dd"
                                         className="form-control form-control-alternative"
@@ -292,7 +325,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="userName"
                                 maxLength={255}
-                                value={this.props.filter.userName}
+                                value={this.state.filter.userName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -311,7 +344,7 @@ class Filter extends Component<Props, State> {
                                 type="text"
                                 name="driverName"
                                 maxLength={255}
-                                value={this.props.filter.driverName}
+                                value={this.state.filter.driverName}
                                 onChange={this.handleOnChange}
                                 />
                             </FormGroup>
@@ -328,7 +361,7 @@ class Filter extends Component<Props, State> {
                                         {value: 'complete', label: 'Complete'},
                                         {value: 'inorder', label: 'In Order'},
                                     ]}
-                                    defaultValue={this.updateToOptionSelectType(this.props.filter.type)}
+                                    defaultValue={this.updateToOptionSelectType(this.state.filter.type)}
                                     onChange={(option) => {
 
                                         const optionSelected = option as {
@@ -355,7 +388,7 @@ class Filter extends Component<Props, State> {
                                         {value: 'link-food', label: 'Link Food'},
                                         {value: 'link-send', label: 'Link Send'}
                                     ]}
-                                    defaultValue={this.updateToOptionSelectServiceCode(this.props.filter.serviceCode)}
+                                    defaultValue={this.updateToOptionSelectServiceCode(this.state.filter.serviceCode)}
                                     onChange={(option) => {
 
                                         const optionSelected = option as {
@@ -385,7 +418,7 @@ class Filter extends Component<Props, State> {
                                         {value: 'cancel', label: 'Cancel'},
                                         {value: 'expired', label: 'Expired'}
                                     ]}
-                                    defaultValue={this.updateToOptionSelectStatusOrder(this.props.filter.statusOrder)}
+                                    defaultValue={this.updateToOptionSelectStatusOrder(this.state.filter.statusOrder)}
                                     onChange={(option) => {
 
                                         const optionSelected = option as {
@@ -418,30 +451,14 @@ class Filter extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.transactionApplication.filter,
-        filtered: state.transactionApplication.filtered
-    }
-}
-
 interface LinkDispatchToProps {
-    fetchApplicationAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterApplicationAction: () => void
+    fetchApplicationAction: (page: number) => Promise<Boolean>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FilterProps): LinkDispatchToProps => {
     return {
-        fetchApplicationAction: (page: number) => dispatch(fetchApplicationAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterApplicationAction: () => dispatch(clearFilterAction())
+        fetchApplicationAction: (page: number) => dispatch(fetchApplicationAction(page))
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(connect(null, mapDispatchToProps)(Filter));
