@@ -31,10 +31,10 @@ class FormTimeManual extends Component<Props> {
     toggleDateClose = (FormikProps: FormikProps<FormField>, field: string, prevValues: boolean, fieldDateStart: string, fieldDateEnd: string) => {
         FormikProps.setFieldValue(field, ! prevValues)
 
-        if ( ! prevValues) {
-            FormikProps.setFieldValue(fieldDateStart, '00:00')
-            FormikProps.setFieldValue(fieldDateEnd, '00:00')
-        }
+        // if ( ! prevValues) {
+        //     FormikProps.setFieldValue(fieldDateStart, '00:00')
+        //     FormikProps.setFieldValue(fieldDateEnd, '00:00')
+        // }
     }
 
     handleDateChangeRaw = (e: React.FormEvent<HTMLInputElement>) => {
