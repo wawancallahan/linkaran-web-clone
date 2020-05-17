@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { BrandVehicle, FormField, BrandVehicleCreate, BrandVehicleCreateResult } from '../../../types/admin/brandVehicle';
+import { BrandVehicle, FormField, BrandVehicleCreateField, BrandVehicleCreateResult } from '../../../types/admin/brandVehicle';
 import { createBrandVehicleAction, setAlertBrandVehicleShowAction } from '../../../actions/admin/brandVehicle';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
@@ -60,7 +60,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const brandVehicle: BrandVehicleCreate = {
+                    const brandVehicle: BrandVehicleCreateField = {
                         name: values.name
                     }
 
@@ -136,13 +136,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createBrandVehicleAction: (brandVehicle: BrandVehicleCreate) => Promise<ApiResponse<BrandVehicleCreateResult>>
+    createBrandVehicleAction: (brandVehicle: BrandVehicleCreateField) => Promise<ApiResponse<BrandVehicleCreateResult>>
     setAlertBrandVehicleShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createBrandVehicleAction: (brandVehicle: BrandVehicleCreate) => dispatch(createBrandVehicleAction(brandVehicle)),
+        createBrandVehicleAction: (brandVehicle: BrandVehicleCreateField) => dispatch(createBrandVehicleAction(brandVehicle)),
         setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color))
     }
 }

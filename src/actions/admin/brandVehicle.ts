@@ -11,8 +11,8 @@ import {
     FetchBrandVehicleActionType,
     FetchBrandVehicleErrorActionType,
     FetchBrandVehicleSuccessActionType,
-    BrandVehicleCreate,
-    BrandVehicleEdit,
+    BrandVehicleCreateField,
+    BrandVehicleEditField,
     AlertBrandVehicleHideActionType,
     ALERT_BRAND_VEHICLE_HIDE,
     AlertBrandVehicleShowActionType,
@@ -186,7 +186,7 @@ export const fetchListBrandVehicleAction = (search: string, page: number): Thunk
     }
 }
 
-export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreate): ThunkResult<Promise<ApiResponse<BrandVehicleCreateResult>>> => {
+export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreateField): ThunkResult<Promise<ApiResponse<BrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/brand-vehicle', brandVehicle)
             .then( (response: AxiosResponse) => {
@@ -292,7 +292,7 @@ export const findBrandVehicleAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editBrandVehicleAction = (brandVehicle: BrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<BrandVehicleEditResult>>> => {
+export const editBrandVehicleAction = (brandVehicle: BrandVehicleEditField, id: number): ThunkResult<Promise<ApiResponse<BrandVehicleEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/brand-vehicle/${id}`, brandVehicle)
             .then( (response: AxiosResponse) => {

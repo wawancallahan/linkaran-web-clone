@@ -1,83 +1,79 @@
-import { Paginator } from '../paginator';
+import { Paginator } from '../paginator'
+import { Timestamps } from '../timestamps'
 
-export const FETCH_BRAND_VEHICLE = "FETCH_BRAND_VEHICLE";
-export const FETCH_BRAND_VEHICLE_SUCCESS = "FETCH_BRAND_VEHICLE_SUCCESS";
-export const FETCH_BRAND_VEHICLE_ERROR = "FETCH_BRAND_VEHICLE_ERROR";
-export const SET_PAGINATOR_BRAND_VEHICLE = "SET_PAGINATOR_BRAND_VEHICLE";
-export const SET_FILTER_BRAND_VEHICLE = "SET_FILTER_BRAND_VEHICLE";
-export const CLEAR_FILTER_BRAND_VEHICLE = "CLEAR_FILTER_BRAND_VEHICLE";
+export const FETCH_BRAND_VEHICLE = "FETCH_BRAND_VEHICLE"
+export const FETCH_BRAND_VEHICLE_SUCCESS = "FETCH_BRAND_VEHICLE_SUCCESS"
+export const FETCH_BRAND_VEHICLE_ERROR = "FETCH_BRAND_VEHICLE_ERROR"
+export const SET_PAGINATOR_BRAND_VEHICLE = "SET_PAGINATOR_BRAND_VEHICLE"
+export const SET_FILTER_BRAND_VEHICLE = "SET_FILTER_BRAND_VEHICLE"
+export const CLEAR_FILTER_BRAND_VEHICLE = "CLEAR_FILTER_BRAND_VEHICLE"
 
-export const ALERT_BRAND_VEHICLE_SHOW = "ALERT_BRAND_VEHICLE_SHOW";
+export const ALERT_BRAND_VEHICLE_SHOW = "ALERT_BRAND_VEHICLE_SHOW"
 export const ALERT_BRAND_VEHICLE_HIDE = "ALERT_BRAND_VEHICLE_HIDE";
 
 export type FormField = {
     name: string
 }
 
-interface BrandVehicleField {
+export type BrandVehicleField = {
     name: string
 }
 
-interface BrandVehicleList {
-    name: string
-}
-interface BrandVehicleResult {
+export type BrandVehicle = {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    name: string
 }
 
-export type BrandVehicle = BrandVehicleResult & BrandVehicleList;
+export type BrandVehicleList = BrandVehicle & Partial<Timestamps>
 
-export type BrandVehicleCreate = BrandVehicleField;
+export type BrandVehicleCreateField = BrandVehicleField
 
-export type BrandVehicleEdit = BrandVehicleField;
+export type BrandVehicleEditField = BrandVehicleField
 
-export type BrandVehicleCreateResult = BrandVehicleResult;
+export type BrandVehicleCreateResult = BrandVehicle & Partial<Timestamps>
 
-export type BrandVehicleEditResult = BrandVehicleResult;
+export type BrandVehicleEditResult = BrandVehicle & Partial<Timestamps>
 
-export interface FetchBrandVehicleActionType {
+export type FetchBrandVehicleActionType = {
     type: typeof FETCH_BRAND_VEHICLE
 }
 
-export interface FetchBrandVehicleSuccessActionType {
+export type FetchBrandVehicleSuccessActionType = {
     type: typeof FETCH_BRAND_VEHICLE_SUCCESS,
     list: BrandVehicle[]
 }
 
-export interface FetchBrandVehicleErrorActionType {
+export type FetchBrandVehicleErrorActionType = {
     type: typeof FETCH_BRAND_VEHICLE_ERROR
 }
 
-export interface SetPaginatorBrandVehicleActionType {
+export type SetPaginatorBrandVehicleActionType = {
     type: typeof SET_PAGINATOR_BRAND_VEHICLE,
     paginate: Paginator
 }
 
-export interface AlertBrandVehicleHideActionType {
+export type AlertBrandVehicleHideActionType = {
     type: typeof ALERT_BRAND_VEHICLE_HIDE
 }
 
-export interface AlertBrandVehicleShowActionType {
+export type AlertBrandVehicleShowActionType = {
     type: typeof ALERT_BRAND_VEHICLE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string
 }
 
-export type FilterKeys = keyof Filter;
+export type FilterKeys = keyof Filter
 
-export interface SetFilterBrandVehicleActionType {
+export type SetFilterBrandVehicleActionType = {
     type: typeof SET_FILTER_BRAND_VEHICLE,
     filter: Filter
 }
 
-export interface ClearFilterBrandVehicleActionType {
+export type ClearFilterBrandVehicleActionType = {
     type: typeof CLEAR_FILTER_BRAND_VEHICLE
 }
 

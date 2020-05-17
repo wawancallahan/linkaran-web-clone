@@ -18,14 +18,14 @@ export type FormField = {
     accountName: string
 }
 
-interface BankField {
+export type BankField = {
     nama: string,
     bankName: number,
     accountNumber: string,
     accountName: string
 }
 
-export interface Bank {
+export type Bank = {
     id: number,
     nama: string,
     bankName: number,
@@ -45,46 +45,46 @@ export type BankCreateResult = Bank & Partial<Timestamps>
 
 export type BankEditResult = Bank & Partial<Timestamps>
 
-export interface FetchBankActionType {
+export type FetchBankActionType = {
     type: typeof FETCH_BANK
 }
 
-export interface FetchBankSuccessActionType {
+export type FetchBankSuccessActionType = {
     type: typeof FETCH_BANK_SUCCESS,
     list: BankList[]
 }
 
-export interface FetchBankErrorActionType {
+export type FetchBankErrorActionType = {
     type: typeof FETCH_BANK_ERROR
 }
 
-export interface SetPaginatorBankActionType {
+export type SetPaginatorBankActionType = {
     type: typeof SET_PAGINATOR_BANK,
     paginate: Paginator
 }
 
-export interface AlertBankHideActionType {
+export type AlertBankHideActionType = {
     type: typeof ALERT_BANK_HIDE
 }
 
-export interface AlertBankShowActionType {
+export type AlertBankShowActionType = {
     type: typeof ALERT_BANK_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     nama: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterBankActionType {
+export type SetFilterBankActionType = {
     type: typeof SET_FILTER_BANK,
     filter: Filter
 }
 
-export interface ClearFilterBankActionType {
+export type ClearFilterBankActionType = {
     type: typeof CLEAR_FILTER_BANK
 }
 
