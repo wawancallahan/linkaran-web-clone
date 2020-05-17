@@ -1,5 +1,6 @@
 import { Paginator } from '../paginator';
 import { VoucherPromo } from './voucherPromo';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_TICKET = "FETCH_TICKET";
 export const FETCH_TICKET_SUCCESS = "FETCH_TICKET_SUCCESS";
@@ -18,77 +19,80 @@ export type FormField = {
     redeemCode: string,
 }
 
-interface TicketField {
+export type TicketField = {
     redeemCode: string,
     voucher: {
         id: number
     }
 }
 
-interface TicketList {
-    redeemCode: string,
-    claimAt: string,
-    voucher: VoucherPromo
-}
-
-interface TicketResult {
+export type Ticket = {
     id: number,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
+    redeemCode: string,
+    claimAt: string | null
 }
 
-export type Ticket = TicketResult & TicketList;
+export type TicketList = Ticket & {
+    voucher?: Partial<VoucherPromo>
+}
 
-export type TicketCreate = TicketField;
+export type TicketShow = Ticket & {
+    voucher?: Partial<VoucherPromo>
+}
 
-export type TicketEdit = TicketField;
+export type TicketCreateField = TicketField;
 
-export type TicketCreateResult = TicketResult;
+export type TicketEditField = TicketField;
 
-export type TicketEditResult = TicketResult;
+export type TicketCreateResult = Ticket& Partial<Timestamps> & {
+    voucher?: Partial<VoucherPromo>
+};
 
-export interface FetchTicketActionType {
+export type TicketEditResult = Ticket & Partial<Timestamps> & {
+    voucher?: Partial<VoucherPromo>
+};
+
+export type FetchTicketActionType = {
     type: typeof FETCH_TICKET
 }
 
-export interface FetchTicketSuccessActionType {
+export type FetchTicketSuccessActionType = {
     type: typeof FETCH_TICKET_SUCCESS,
     list: Ticket[]
 }
 
-export interface FetchTicketErrorActionType {
+export type FetchTicketErrorActionType = {
     type: typeof FETCH_TICKET_ERROR
 }
 
-export interface SetPaginatorTicketActionType {
+export type SetPaginatorTicketActionType = {
     type: typeof SET_PAGINATOR_TICKET,
     paginate: Paginator
 }
 
-export interface FetchTicketVoucherActionType {
+export type FetchTicketVoucherActionType = {
     type: typeof FETCH_TICKET_VOUCHER
 }
 
-export interface FetchTicketVoucherSuccessActionType {
+export type FetchTicketVoucherSuccessActionType = {
     type: typeof FETCH_TICKET_VOUCHER_SUCCESS,
     list: Ticket[]
 }
 
-export interface FetchTicketVoucherErrorActionType {
+export type FetchTicketVoucherErrorActionType = {
     type: typeof FETCH_TICKET_VOUCHER_ERROR
 }
 
-export interface SetPaginatorTicketVoucherActionType {
+export type SetPaginatorTicketVoucherActionType = {
     type: typeof SET_PAGINATOR_TICKET_VOUCHER,
     paginate: Paginator
 }
 
-export interface AlertTicketHideActionType {
+export type AlertTicketHideActionType = {
     type: typeof ALERT_TICKET_HIDE
 }
 
-export interface AlertTicketShowActionType {
+export type AlertTicketShowActionType = {
     type: typeof ALERT_TICKET_SHOW,
     message: string,
     color: string

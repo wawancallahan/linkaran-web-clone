@@ -2,6 +2,9 @@ import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
 import { User } from './user';
 import { Bank } from './bank';
+import { SelectType } from '../select';
+import { Role } from './role';
+import { TokenFCM } from '../auth';
 
 export const FETCH_MANUAL_TOPUP = "FETCH_MANUAL_TOPUP";
 export const FETCH_MANUAL_TOPUP_SUCCESS = "FETCH_MANUAL_TOPUP_SUCCESS";
@@ -15,14 +18,8 @@ export const ALERT_MANUAL_TOPUP_HIDE = "ALERT_MANUAL_TOPUP_HIDE";
 
 export type FormField = {
     amount: string,
-    driverProfile: {
-        label: string,
-        value: number
-    },
-    bank: {
-        label: string,
-        value: number
-    },
+    driverProfile: SelectType,
+    bank: SelectType,
     image: File | null,
     image_preview: string
 }
@@ -30,12 +27,10 @@ export type FormField = {
 interface ManualTopUpField {
     amount: string,
     driverProfile: {
-        label: string,
-        value: number
+        id: number
     },
     bank: {
-        label: string,
-        value: number
+        id: number
     },
     image: File | null,
     image_preview: string
@@ -52,7 +47,13 @@ export interface ManualTopUp {
 
 export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -69,7 +70,13 @@ export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
 
 export type ManualTopUpShow = ManualTopUp & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -89,7 +96,13 @@ export type ManualTopUpCreateField = ManualTopUpField
 export type ManualTopUpEditField = ManualTopUpField
 
 export type ManualTopUpCreateResult = ManualTopUp & Partial<Timestamps> & {
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -107,7 +120,13 @@ export type ManualTopUpCreateResult = ManualTopUp & Partial<Timestamps> & {
 }
 
 export type ManualTopUpEditResult = ManualTopUp & Partial<Timestamps> & {
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,

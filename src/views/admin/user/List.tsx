@@ -37,7 +37,7 @@ import {
     setAlertUserHideAction,
     clearFilterAction
 } from '../../../actions/admin/user';
-import { User } from '../../../types/admin/user';
+import { User, UserList } from '../../../types/admin/user';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: User,
+    item: UserList,
     key: number,
     deleteUser: (id: number) => void
 }) => {
@@ -155,7 +155,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.userList.length > 0) {
-                userList = this.props.userList.map((item: User, index: number) => (
+                userList = this.props.userList.map((item: UserList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -245,7 +245,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    userList: User[],
+    userList: UserList[],
     paginate: Paginator,
     userAlert: IAlert
 }

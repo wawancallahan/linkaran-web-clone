@@ -37,7 +37,7 @@ import {
     setAlertFoodShowAction,
     clearFilterAction
 } from '../../../actions/admin/food';
-import { Food } from '../../../types/admin/food';
+import { Food, FoodList } from '../../../types/admin/food';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -58,7 +58,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Food,
+    item: FoodList,
     key: number,
     deleteFood: (id: number) => void
 }) => {
@@ -68,9 +68,9 @@ const TableItem = (props: {
             <td>{props.item.name}</td>
             <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.price} /></td>
             <td>{props.item.rating}</td>
-            <td>{props.item.foodCategory.name}</td>
-            <td>{props.item.restaurant.name}</td>
-            <td>{props.item.restaurant.district ? props.item.restaurant.district.name : ''}</td>
+            <td>{props.item.foodCategory ? props.item.foodCategory.name : ''}</td>
+            <td>{props.item.restaurant ? props.item.restaurant.name : ''}</td>
+            <td>{props.item.restaurant && props.item.restaurant.district ? props.item.restaurant.district.name : ''}</td>
             <td>
                 <Link to={`/admin/food/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -157,7 +157,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.foodList.length > 0) {
-                foodList = this.props.foodList.map((item: Food, index: number) => (
+                foodList = this.props.foodList.map((item: FoodList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -249,7 +249,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    foodList: Food[],
+    foodList: FoodList[],
     paginate: Paginator,
     foodAlert: IAlert
 }

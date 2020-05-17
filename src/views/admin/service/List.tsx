@@ -37,7 +37,7 @@ import {
     setAlertServiceShowAction,
     clearFilterAction
 } from '../../../actions/admin/service';
-import { Service } from '../../../types/admin/service';
+import { Service, ServiceList } from '../../../types/admin/service';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -58,7 +58,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Service,
+    item: ServiceList,
     key: number,
     deleteService: (id: number) => void
 }) => {
@@ -156,7 +156,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.serviceList.length > 0) {
-                serviceList = this.props.serviceList.map((item: Service, index: number) => (
+                serviceList = this.props.serviceList.map((item: ServiceList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -247,7 +247,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    serviceList: Service[],
+    serviceList: ServiceList[],
     paginate: Paginator,
     serviceAlert: IAlert
 }

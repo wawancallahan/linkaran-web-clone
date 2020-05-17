@@ -23,7 +23,9 @@ import {
     SetFilterBrandVehicleActionType,
     SET_FILTER_BRAND_VEHICLE,
     ClearFilterBrandVehicleActionType,
-    CLEAR_FILTER_BRAND_VEHICLE
+    CLEAR_FILTER_BRAND_VEHICLE,
+    BrandVehicleShow,
+    BrandVehicleList
 } from '../../types/admin/brandVehicle';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -100,7 +102,7 @@ export const fetchBrandVehicleAction = (page: number) : ThunkResult<Promise<Bool
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<BrandVehicle> = response.data;
+                const data: ApiResponseSuccessList<BrandVehicleList> = response.data;
 
                 dispatch(setFetchBrandVehicleSuccessAction(data.result));
 
@@ -133,11 +135,11 @@ export const fetchBrandVehicleAction = (page: number) : ThunkResult<Promise<Bool
     }
 }
 
-export const fetchListBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<BrandVehicle>>> => {
+export const fetchListBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<BrandVehicleList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<BrandVehicle> = response.data;
+                const data: ApiResponseSuccessList<BrandVehicleList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -239,11 +241,11 @@ export const createBrandVehicleAction = (brandVehicle: BrandVehicleCreateField):
     }
 }
 
-export const findBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<BrandVehicle>>> => {
+export const findBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<BrandVehicleShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<BrandVehicle> = response.data;
+                const data: ApiResponseSuccess<BrandVehicleShow> = response.data;
 
                 return Promise.resolve({
                     response: data,

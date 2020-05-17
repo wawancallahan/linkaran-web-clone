@@ -7,7 +7,7 @@ import { Province } from './region/province';
 import { District } from './region/district';
 import { Village } from './region/village';
 import { SubDistrict } from './region/subDistrict';
-import { User } from './user';
+import { User, EMoneyUser } from './user';
 import { SubBrandVehicle } from './subBrandVehicle';
 import { BrandVehicle } from './brandVehicle';
 
@@ -183,7 +183,8 @@ interface DriverList {
                 brandVehicle: Partial<BrandVehicle>
             }>,
             vehicleType: VehicleType
-        }>
+        }>,
+        eMoneyUser: EMoneyUser[]
     }>,
     wasOnceAnOnlineDriver: boolean,
     isActivelyBecomingAnotherOnlineDriver: boolean,

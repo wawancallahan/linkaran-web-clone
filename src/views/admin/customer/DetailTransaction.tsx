@@ -22,14 +22,19 @@ class DetailTransaction extends Component<Props> {
 
         if (customer) {
 
-            const serviceCount: Partial<ServiceCount>[] = customer.service;
-            const transactionCount = serviceCount.map((value: Partial<ServiceCount>) => {
-                let transactionCount = 0;
+            let transactionCount = 0;
+            let serviceCount: Partial<ServiceCount>[] = []
 
-                if (value.transactionCount) transactionCount = value.transactionCount;
+            if (customer.service) {
+                serviceCount = customer.service;
+                transactionCount = serviceCount.map((value: Partial<ServiceCount>) => {
+                    let transactionCount = 0;
 
-                return transactionCount
-            }).reduce((previousValue: number, currentValue: number) => previousValue + currentValue);
+                    if (value.transactionCount) transactionCount = value.transactionCount;
+
+                    return transactionCount
+                }).reduce((previousValue: number, currentValue: number) => previousValue + currentValue);
+            }
 
             return (
                 <>

@@ -2,6 +2,9 @@ import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
 import { User } from './user';
 import { Bank } from './bank';
+import { SelectType } from '../select';
+import { Role } from './role';
+import { TokenFCM } from '../auth';
 
 export const FETCH_MANUAL_WITHDRAW = "FETCH_MANUAL_WITHDRAW";
 export const FETCH_MANUAL_WITHDRAW_SUCCESS = "FETCH_MANUAL_WITHDRAW_SUCCESS";
@@ -15,14 +18,9 @@ export const ALERT_MANUAL_WITHDRAW_HIDE = "ALERT_MANUAL_WITHDRAW_HIDE";
 
 export type FormField = {
     amount: string,
-    driverProfile: {
-        label: string,
-        value: number
-    },
-    bank: {
-        label: string,
-        value: number
-    },
+    driverProfile: SelectType,
+    bank: SelectType,
+    bankName: string,
     accountNumber: string,
     accountName: string
 }
@@ -30,13 +28,12 @@ export type FormField = {
 interface ManualWithDrawField {
     amount: string,
     driverProfile: {
-        label: string,
-        value: number
+        id: number
     },
     bank: {
-        label: string,
-        value: number
+        id: number
     },
+    bankName: string,
     accountNumber: string,
     accountName: string
 }
@@ -52,7 +49,13 @@ export interface ManualWithDraw {
 
 export type ManualWithDrawList = ManualWithDraw & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> | null,
+    userMakerWithdraw?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -69,7 +72,13 @@ export type ManualWithDrawList = ManualWithDraw & Partial<Timestamps> & {
 
 export type ManualWithDrawShow = ManualWithDraw & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> | null,
+    userMakerWithdraw?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -89,7 +98,13 @@ export type ManualWithDrawCreateField = ManualWithDrawField
 export type ManualWithDrawEditField = ManualWithDrawField
 
 export type ManualWithDrawCreateResult = ManualWithDraw & Partial<Timestamps> & {
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,
@@ -105,7 +120,13 @@ export type ManualWithDrawCreateResult = ManualWithDraw & Partial<Timestamps> & 
 }
 
 export type ManualWithDrawEditResult = ManualWithDraw & Partial<Timestamps> & {
-    userMakerTopup?: Partial<User> | null,
+    userMakerTopup?: Partial<User> & {
+        roles?: Role[],
+        linkWithGoogle?: boolean,
+        tokenFCM?: TokenFCM[],
+        iat?: number,
+        exp?: number
+    } | null,
     request?: {
         id: number,
         bankName: string,

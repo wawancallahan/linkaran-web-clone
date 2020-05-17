@@ -23,6 +23,8 @@ export interface Customer {
     name: string,
     phoneNumber: string,
     email: string,
+    telegramuser: string | null,
+    chatId: number | null,
     gUserId: string | null,
     gUserPhoneVerified: boolean,
     isActive: boolean
@@ -31,7 +33,7 @@ export interface Customer {
 export type CustomerList = Customer
 
 export type CustomerShow = Customer & {
-    service: Partial<ServiceCount>[]
+    service?: Partial<ServiceCount>[]
 }
 
 export type CustomerCreateField = CustomerField

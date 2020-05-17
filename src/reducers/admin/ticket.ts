@@ -2,7 +2,7 @@ import {
     FETCH_TICKET,
     FETCH_TICKET_ERROR,
     FETCH_TICKET_SUCCESS,
-    Ticket,
+    TicketList,
     TicketActionTypes,
     FetchTicketActionType,
     FetchTicketSuccessActionType,
@@ -19,7 +19,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Ticket[],
+    list: TicketList[],
     paginate: Paginator,
     alert: Alert
 };

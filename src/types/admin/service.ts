@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_SERVICE = "FETCH_SERVICE";
 export const FETCH_SERVICE_SUCCESS = "FETCH_SERVICE_SUCCESS";
@@ -18,7 +19,7 @@ export type FormField = {
     maxServiceDistanceInKm: number
 }
 
-export interface ServiceField {
+export type ServiceField = {
     name: string,
     code: string,
     canBeMultiple: boolean,
@@ -26,19 +27,13 @@ export interface ServiceField {
     maxServiceDistanceInKm: number
 }
 
-export interface ServiceList {
-    name: string,
-    code: string,
-    canBeMultiple: boolean,
-    passangerWithDriver: boolean,
-    maxServiceDistanceInKm: number
-}
-
-interface ServiceResult {
+export type Service = {
     id: number,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
+    name: string,
+    code: string,
+    canBeMultiple: boolean,
+    passangerWithDriver: boolean,
+    maxServiceDistanceInKm: number
 }
 
 export type ServiceCount = {
@@ -47,45 +42,47 @@ export type ServiceCount = {
     transactionCount: number
 }
 
-export type Service = ServiceResult & ServiceList;
+export type ServiceList = Service
 
-export type ServiceCreate = ServiceField;
+export type ServiceShow = Service
 
-export type ServiceEdit = ServiceField;
+export type ServiceCreateField = ServiceField;
 
-export type ServiceCreateResult = ServiceResult & ServiceList;
+export type ServiceEditField = ServiceField;
 
-export type ServiceEditResult = ServiceResult &  ServiceList;
+export type ServiceCreateResult = Service & Partial<Timestamps>;
 
-export interface FetchServiceActionType {
+export type ServiceEditResult = Service & Partial<Timestamps>;
+
+export type FetchServiceActionType = {
     type: typeof FETCH_SERVICE
 }
 
-export interface FetchServiceSuccessActionType {
+export type FetchServiceSuccessActionType = {
     type: typeof FETCH_SERVICE_SUCCESS,
     list: Service[]
 }
 
-export interface FetchServiceErrorActionType {
+export type FetchServiceErrorActionType = {
     type: typeof FETCH_SERVICE_ERROR
 }
 
-export interface SetPaginatorServiceActionType {
+export type SetPaginatorServiceActionType = {
     type: typeof SET_PAGINATOR_SERVICE,
     paginate: Paginator
 }
 
-export interface AlertServiceHideActionType {
+export type AlertServiceHideActionType = {
     type: typeof ALERT_SERVICE_HIDE
 }
 
-export interface AlertServiceShowActionType {
+export type AlertServiceShowActionType = {
     type: typeof ALERT_SERVICE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     code: string,
     canBeMultiple: string,
@@ -94,12 +91,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterServiceActionType {
+export type SetFilterServiceActionType = {
     type: typeof SET_FILTER_SERVICE,
     filter: Filter
 }
 
-export interface ClearFilterServiceActionType {
+export type ClearFilterServiceActionType = {
     type: typeof CLEAR_FILTER_SERVICE
 }
 

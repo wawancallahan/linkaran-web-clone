@@ -25,7 +25,7 @@ import { Service } from "../../../types/admin/service";
 import { fetchListServiceAction } from '../../../actions/admin/service';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListVoucherTypeAction } from '../../../actions/admin/voucherType';
-import { VoucherType } from '../../../types/admin/voucherType';
+import { VoucherTypeList } from '../../../types/admin/voucherType';
 import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/utils';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi'
@@ -137,13 +137,13 @@ class Form extends Component<Props> {
         })
     }
 
-    loadVoucherTypeHandler = (search: string, loadedOption: {}, options: {
+    loadVoucherTypeHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListVoucherTypeAction(search, options.page)
-            .then((response: ApiResponseList<VoucherType>) => {
+            .then((response: ApiResponseList<VoucherTypeList>) => {
 
-                const data: ApiResponseSuccessList<VoucherType> = response.response!;
+                const data: ApiResponseSuccessList<VoucherTypeList> = response.response!;
 
                 let result: {
                     value: number,
@@ -159,7 +159,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: VoucherType) => {
+                    result = data.result.map((item: VoucherTypeList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -177,7 +177,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadServiceHandler = (search: string, loadedOption: {}, options: {
+    loadServiceHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListServiceAction(search, options.page)
@@ -650,7 +650,7 @@ type LinkDispatchToProps = {
     editVoucherPromoAction: (voucherPromo: VoucherPromoEdit, id: number) => Promise<ApiResponse<VoucherPromoEditResult>>,
     setAlertVoucherPromoShowAction: (message: string, color: string) => void,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
-    fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherType>>,
+    fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherTypeList>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {

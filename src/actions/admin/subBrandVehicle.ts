@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     SubBrandVehicle,
+    SubBrandVehicleShow,
+    SubBrandVehicleList,
     SET_PAGINATOR_SUB_BRAND_VEHICLE,
     FETCH_SUB_BRAND_VEHICLE_SUCCESS,
     FETCH_SUB_BRAND_VEHICLE_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchSubBrandVehicleActionType,
     FetchSubBrandVehicleErrorActionType,
     FetchSubBrandVehicleSuccessActionType,
-    SubBrandVehicleCreate,
-    SubBrandVehicleEdit,
+    SubBrandVehicleCreateField,
+    SubBrandVehicleEditField,
     AlertSubBrandVehicleHideActionType,
     ALERT_SUB_BRAND_VEHICLE_HIDE,
     AlertSubBrandVehicleShowActionType,
@@ -25,7 +27,6 @@ import {
     ClearFilterSubBrandVehicleActionType,
     CLEAR_FILTER_SUB_BRAND_VEHICLE
 } from '../../types/admin/subBrandVehicle';
-import { VehicleTypeList } from '../../types/admin/vehicleType';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
 import { ThunkResult } from '../../types/thunk';
@@ -102,7 +103,7 @@ export const fetchSubBrandVehicleAction = (page: number): ThunkResult<Promise<Bo
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccessList<SubBrandVehicleList> = response.data;
 
                 dispatch(setFetchSubBrandVehicleSuccessAction(data.result));
 
@@ -135,7 +136,7 @@ export const fetchSubBrandVehicleAction = (page: number): ThunkResult<Promise<Bo
 }
 
 
-export const fetchListSubBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<SubBrandVehicle>>> => {
+export const fetchListSubBrandVehicleAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<SubBrandVehicleList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         let paramsObject: OptionObjectString = {
             page: page.toString(),
@@ -146,7 +147,7 @@ export const fetchListSubBrandVehicleAction = (search: string, page: number): Th
         
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle?${params}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccessList<SubBrandVehicleList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -195,60 +196,7 @@ export const fetchListSubBrandVehicleAction = (search: string, page: number): Th
     }
 }
 
-export const fetchListVehicleTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VehicleTypeList>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/list-vehicle-type?page=${page}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VehicleTypeList> = response.data;
-
-                return Promise.resolve({
-                    response: data,
-                    error: null
-                });
-            })
-            .catch( (error: AxiosError) => {
-                 if (error.response) {
-                    if (error.response.status == 500) {
-                        const errorResponse: ApiResponseError = {
-                            metaData: {
-                                isError: true,
-                                message: error.message,
-                                statusCode: 500
-                            },
-                            result: null
-                        }
-    
-                        return Promise.reject({
-                            response: null,
-                            error: errorResponse
-                        });
-                    } else {
-                        return Promise.reject({
-                            response: null,
-                            error: error.response.data
-                        });
-                    }
-                } else {
-
-                    const errorResponse: ApiResponseError = {
-                        metaData: {
-                            isError: true,
-                            message: error.message,
-                            statusCode: 500
-                        },
-                        result: null
-                    }
-
-                    return Promise.reject({
-                        response: null,
-                        error: errorResponse
-                    });
-                }
-            })
-    }
-}
-
-export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreate): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
+export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCreateField): ThunkResult<Promise<ApiResponse<SubBrandVehicleCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/sub-brand-vehicle', subBrandVehicle)
             .then( (response: AxiosResponse) => {
@@ -301,11 +249,11 @@ export const createSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleCrea
     }
 }
 
-export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicle>>> => {
+export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<SubBrandVehicle> = response.data;
+                const data: ApiResponseSuccess<SubBrandVehicleShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -354,7 +302,7 @@ export const findSubBrandVehicleAction = (id: number): ThunkResult<Promise<ApiRe
     }
 }
 
-export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEdit, id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleEditResult>>> => {
+export const editSubBrandVehicleAction = (subBrandVehicle: SubBrandVehicleEditField, id: number): ThunkResult<Promise<ApiResponse<SubBrandVehicleEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/sub-brand-vehicle/${id}`, subBrandVehicle)
             .then( (response: AxiosResponse) => {

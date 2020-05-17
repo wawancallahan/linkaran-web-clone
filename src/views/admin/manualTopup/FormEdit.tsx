@@ -86,7 +86,7 @@ class Form extends Component<Props> {
         }
     }
 
-    loadBankHandler = (search: string, loadedOption: {}, options: {
+    loadBankHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListBankAction(search, options.page)
@@ -126,7 +126,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadDriverHandler = (search: string, loadedOption: {}, options: {
+    loadDriverHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListDriverAction(search, options.page)
@@ -176,8 +176,12 @@ class Form extends Component<Props> {
 
                     const manualTopup: ManualTopUpEditField = {
                         amount: values.amount,
-                        bank: values.bank,
-                        driverProfile: values.driverProfile,
+                        bank: {
+                            id: values.bank.value
+                        },
+                        driverProfile: {
+                            id: values.driverProfile.value
+                        },
                         image: values.image,
                         image_preview: values.image_preview
                     }

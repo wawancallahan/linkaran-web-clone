@@ -51,6 +51,7 @@ class Create extends Component<Props, State> {
                 label: '',
                 value: 0
             },
+            bankName: '',
             accountNumber: '',
             accountName: ''
         },

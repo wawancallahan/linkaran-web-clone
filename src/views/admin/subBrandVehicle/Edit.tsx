@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { SubBrandVehicle, FormField } from '../../../types/admin/subBrandVehicle';
+import { SubBrandVehicleShow, FormField } from '../../../types/admin/subBrandVehicle';
 import {
     findSubBrandVehicleAction
 } from '../../../actions/admin/subBrandVehicle';
@@ -66,26 +66,29 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findSubBrandVehicleAction(id)
-                .then((response: ApiResponse<SubBrandVehicle>) => {
+                .then((response: ApiResponse<SubBrandVehicleShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: SubBrandVehicle =response.response!.result;
+                    const data: SubBrandVehicleShow =response.response!.result;
 
                     form.name = data.name;
-                    form.brandVehicle = {
-                        value: data.brandVehicle.id,
-                        label: data.brandVehicle.name
-                    }
 
+                    if (data.brandVehicle) {
+                        form.brandVehicle = {
+                            value: data.brandVehicle.id ? data.brandVehicle.id : 0,
+                            label: data.brandVehicle.name ? data.brandVehicle.name : ''
+                        }
+                    }
+                    
                     this.setState({
                         form: form,
                         isLoaded: true
                     });
                     
                 })
-                .catch((response: ApiResponse<SubBrandVehicle>) => {
+                .catch((response: ApiResponse<SubBrandVehicleShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -161,7 +164,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicle>>
+    findSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicleShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

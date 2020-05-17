@@ -1,6 +1,7 @@
 import { Paginator } from '../../paginator';
 import { District } from './district';
 import { Timestamps } from '../../timestamps';
+import { SelectType } from '../../select';
 
 export const FETCH_SUB_DISTRICT = "FETCH_SUB_DISTRICT";
 export const FETCH_SUB_DISTRICT_SUCCESS = "FETCH_SUB_DISTRICT_SUCCESS";
@@ -14,20 +15,17 @@ export const ALERT_SUB_DISTRICT_HIDE = "ALERT_SUB_DISTRICT_HIDE";
 
 export type FormField = {
     name: string,
-    district: {
-        label: string,
-        value: number
-    }
+    district: SelectType
 }
 
-interface SubDistrictField {
+export type SubDistrictField = {
     name: string,
     district: {
         id: number
     }
 }
 
-export interface SubDistrict {
+export type SubDistrict = {
     id: number,
     name: string
 }
@@ -52,47 +50,47 @@ export type SubDistrictEditResult = SubDistrict & Partial<Timestamps> & {
     district?: Partial<District>
 }
 
-export interface FetchSubDistrictActionType {
+export type FetchSubDistrictActionType = {
     type: typeof FETCH_SUB_DISTRICT
 }
 
-export interface FetchSubDistrictSuccessActionType {
+export type FetchSubDistrictSuccessActionType = {
     type: typeof FETCH_SUB_DISTRICT_SUCCESS,
     list: SubDistrictList[]
 }
 
-export interface FetchSubDistrictErrorActionType {
+export type FetchSubDistrictErrorActionType = {
     type: typeof FETCH_SUB_DISTRICT_ERROR
 }
 
-export interface SetPaginatorSubDistrictActionType {
+export type SetPaginatorSubDistrictActionType = {
     type: typeof SET_PAGINATOR_SUB_DISTRICT,
     paginate: Paginator
 }
 
-export interface AlertSubDistrictHideActionType {
+export type AlertSubDistrictHideActionType = {
     type: typeof ALERT_SUB_DISTRICT_HIDE
 }
 
-export interface AlertSubDistrictShowActionType {
+export type AlertSubDistrictShowActionType = {
     type: typeof ALERT_SUB_DISTRICT_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     districtName: string
 }
 
 export type FilterKeys = keyof Filter
 
-export interface SetFilterSubDistrictActionType {
+export type SetFilterSubDistrictActionType = {
     type: typeof SET_FILTER_SUB_DISTRICT,
     filter: Filter
 }
 
-export interface ClearFilterSubDistrictActionType {
+export type ClearFilterSubDistrictActionType = {
     type: typeof CLEAR_FILTER_SUB_DISTRICT
 }
 

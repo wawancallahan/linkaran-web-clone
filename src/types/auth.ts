@@ -1,13 +1,9 @@
-export interface Role {
-    id: number,
-    title: string
-}
+import { Role } from "./admin/role";
 
 export interface Login {
     identity: string,
     type: string,
-    role: string,
-    tokenFCM: string
+    role: string
 }
 
 export interface ValidateLogin {
@@ -16,7 +12,8 @@ export interface ValidateLogin {
 }
 
 export interface Token {
-    token: string
+    token: string,
+    accessToken: string | null
 }
 
 export interface LoginResponse {
@@ -29,8 +26,7 @@ export interface LoginResult {
     metaData: {
         isError: boolean,
         message: string,
-        statusCode: number,
-        statusMessage: string
+        statusCode: number
     },
     result?: Token
 }
@@ -46,16 +42,11 @@ export interface LoginFailResult {
 
 export interface TokenFCM {
     token: string,
-    user: {
-        id: number
-    }
+    id: number
 }
 
 export interface LoginData {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
     name: string,
     phoneNumber: string,
     email: string,
@@ -70,8 +61,7 @@ export interface ValidateLoginResult {
     metaData: {
         isError: boolean,
         message: string,
-        statusCode: number,
-        statusMessage: string
+        statusCode: number
     },
     result?: LoginData
 }

@@ -2,7 +2,7 @@ import {
     FETCH_SERVICE,
     FETCH_SERVICE_ERROR,
     FETCH_SERVICE_SUCCESS,
-    Service,
+    ServiceList,
     ServiceActionTypes,
     FetchServiceActionType,
     FetchServiceSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Service[],
+    list: ServiceList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

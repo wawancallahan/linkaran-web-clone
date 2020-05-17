@@ -45,6 +45,15 @@ const createSchema = Yup.object().shape({
         label: Yup.string().required("Bidang pilihan driver wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan driver wajib diisi').required("Bidang pilihan driver wajib diisi")
     }),
+    bankName: Yup.string()
+        .test('len', 'Bidang isian nama bank tidak boleh lebih dari 255 karakter', (val: any): boolean => {
+            if (val) {
+                return val.length <= 255;
+            }
+
+            return true;
+        })
+        .required('Bidang isian nama bank wajib diiisi'),
     accountName: Yup.string()
              .test('len', 'Bidang isian nama akun tidak boleh lebih dari 255 karakter', (val: any): boolean => {
                 if (val) {
@@ -86,7 +95,7 @@ class Form extends Component<Props> {
         })
     }
 
-    loadBankHandler = (search: string, loadedOption: {}, options: {
+    loadBankHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListBankAction(search, options.page)
@@ -126,7 +135,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadDriverHandler = (search: string, loadedOption: {}, options: {
+    loadDriverHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListDriverAction(search, options.page)
@@ -176,8 +185,13 @@ class Form extends Component<Props> {
 
                     const manualWithdraw: ManualWithDrawCreateField = {
                         amount: values.amount,
-                        bank: values.bank,
-                        driverProfile: values.driverProfile,
+                        bank: {
+                            id: values.bank.value
+                        },
+                        driverProfile: {
+                            id: values.driverProfile.value
+                        },
+                        bankName: values.bankName,
                         accountName: values.accountName,
                         accountNumber: values.accountNumber
                     }
@@ -281,6 +295,31 @@ class Form extends Component<Props> {
                                             />
                                         <div>
                                             { FormikProps.errors.bank && FormikProps.touched.bank ? FormikProps.errors.bank.value : '' }
+                                        </div>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-bankName"
+                                        >
+                                            Nama Bank
+                                        </label>
+                                        <Input
+                                        className="form-control-alternative"
+                                        id="input-bankName"
+                                        placeholder="Nama Bank"
+                                        type="text"
+                                        name="bankName"
+                                        maxLength={255}
+                                        value={FormikProps.values.bankName}
+                                        required
+                                        onChange={FormikProps.handleChange}
+                                        onBlur={FormikProps.handleBlur}
+                                        invalid={ !!(FormikProps.touched.bankName && FormikProps.errors.bankName) }
+                                        />
+                                        <div>
+                                            {FormikProps.errors.bankName && FormikProps.touched.bankName ? FormikProps.errors.bankName : ''}
                                         </div>
                                     </FormGroup>
 

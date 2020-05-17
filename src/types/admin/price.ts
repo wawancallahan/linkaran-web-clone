@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_PRICE = "FETCH_PRICE";
 export const FETCH_PRICE_SUCCESS = "FETCH_PRICE_SUCCESS";
@@ -16,64 +17,60 @@ export type FormField = {
     minKm: string
 }
 
-interface PriceField {
+export type PriceField = {
     basePrice: number,
     perKilometer: number,
     minKm: number
 }
 
-interface PriceList {
-    basePrice: number,
-    perKilometer: number,
-    minKm: number
-}
-
-interface PriceResult {
+export type Price = {
     id: number,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
+    basePrice: number,
+    perKilometer: number,
+    minKm: number
 }
 
-export type Price = PriceResult & PriceList;
+export type PriceList = Price
 
-export type PriceCreate = PriceField;
+export type PriceShow = Price
 
-export type PriceEdit = PriceField;
+export type PriceCreateField = PriceField;
 
-export type PriceCreateResult = PriceResult & PriceList;
+export type PriceEditField = PriceField;
 
-export type PriceEditResult = PriceResult & PriceList;
+export type PriceCreateResult = Price & Partial<Timestamps>;
 
-export interface FetchPriceActionType {
+export type PriceEditResult = Price & Partial<Timestamps>;
+
+export type FetchPriceActionType = {
     type: typeof FETCH_PRICE
 }
 
-export interface FetchPriceSuccessActionType {
+export type FetchPriceSuccessActionType = {
     type: typeof FETCH_PRICE_SUCCESS,
     list: Price[]
 }
 
-export interface FetchPriceErrorActionType {
+export type FetchPriceErrorActionType = {
     type: typeof FETCH_PRICE_ERROR
 }
 
-export interface SetPaginatorPriceActionType {
+export type SetPaginatorPriceActionType = {
     type: typeof SET_PAGINATOR_PRICE,
     paginate: Paginator
 }
 
-export interface AlertPriceHideActionType {
+export type AlertPriceHideActionType = {
     type: typeof ALERT_PRICE_HIDE
 }
 
-export interface AlertPriceShowActionType {
+export type AlertPriceShowActionType = {
     type: typeof ALERT_PRICE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     basePrice: string,
     perKilometer: string,
     minKm: string
@@ -81,12 +78,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter
 
-export interface SetFilterPriceActionType {
+export type SetFilterPriceActionType = {
     type: typeof SET_FILTER_PRICE,
     filter: Filter
 }
 
-export interface ClearFilterPriceActionType {
+export type ClearFilterPriceActionType = {
     type: typeof CLEAR_FILTER_PRICE
 }
 

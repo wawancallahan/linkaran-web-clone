@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Food, FormField } from '../../../types/admin/food';
+import { FoodShow, FormField } from '../../../types/admin/food';
 import {
     findFoodAction
 } from '../../../actions/admin/food';
@@ -75,27 +75,33 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findFoodAction(id)
-                .then((response: ApiResponse<Food>) => {
+                .then((response: ApiResponse<FoodShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Food =response.response!.result;
+                    const data: FoodShow =response.response!.result;
 
                     form.name = data.name;
                     form.description = data.description;
-                    form.foodCategory = {
-                        label: data.foodCategory.name,
-                        value: data.foodCategory.id
+
+                    if (data.foodCategory) {
+                        form.foodCategory = {
+                            label: data.foodCategory.name ? data.foodCategory.name : '',
+                            value: data.foodCategory.id ? data.foodCategory.id : 0
+                        }
                     }
+                    
                     form.price = data.price;
                     form.rating = data.rating;
 
-                    form.restaurant = {
-                        value: data.restaurant.id ? data.restaurant.id : 0,
-                        label: data.restaurant.name ? data.restaurant.name : ''
+                    if (data.restaurant) {
+                        form.restaurant = {
+                            value: data.restaurant.id ? data.restaurant.id : 0,
+                            label: data.restaurant.name ? data.restaurant.name : ''
+                        }
                     }
-                    
+
                     form.image_preview = data.image ? data.image : '';
 
                     this.setState({
@@ -104,7 +110,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<Food>) => {
+                .catch((response: ApiResponse<FoodShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -180,7 +186,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findFoodAction: (id: number) => Promise<ApiResponse<Food>>
+    findFoodAction: (id: number) => Promise<ApiResponse<FoodShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

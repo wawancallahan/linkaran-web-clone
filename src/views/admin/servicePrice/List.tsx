@@ -37,7 +37,7 @@ import {
     setAlertServicePriceShowAction,
     clearFilterAction
 } from '../../../actions/admin/servicePrice';
-import { ServicePrice } from '../../../types/admin/servicePrice';
+import { ServicePrice, ServicePriceList } from '../../../types/admin/servicePrice';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -58,7 +58,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: ServicePrice,
+    item: ServicePriceList,
     key: number,
     deleteServicePrice: (id: number) => void
 }) => {
@@ -68,9 +68,9 @@ const TableItem = (props: {
             <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.basePrice} /></td>
             <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.pricePerKm} /></td>
             <td>{props.item.minKm}</td>
-            <td>{props.item.district.name}</td>
-            <td>{props.item.service.name}</td>
-            <td>{props.item.vehicleType.name}</td>
+            <td>{props.item.district ? props.item.district.name : ''}</td>
+            <td>{props.item.service ? props.item.service.name : ''}</td>
+            <td>{props.item.vehicleType ? props.item.vehicleType.name : ''}</td>
             <td>
                 <Link to={`/admin/service-price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i>
@@ -151,7 +151,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.servicePriceList.length > 0) {
-                servicePriceList = this.props.servicePriceList.map((item: ServicePrice, index: number) => (
+                servicePriceList = this.props.servicePriceList.map((item: ServicePriceList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -229,7 +229,9 @@ class List extends Component<Props, State> {
                                     <Pagination pageCount={this.props.paginate.pageCount}
                                                     currentPage={this.props.paginate.currentPage}
                                                     itemCount={this.props.paginate.itemCount}
-                                                    itemClicked={this.props.fetchServicePriceAction} />
+                                                    itemClicked={(page: number) => {
+                                                        this.fetchServicePriceList(page)
+                                                    }} />
                                 </CardFooter>
                             </Card>
                         </div>
@@ -241,7 +243,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    servicePriceList: ServicePrice[],
+    servicePriceList: ServicePriceList[],
     paginate: Paginator,
     servicePriceAlert: IAlert
 }

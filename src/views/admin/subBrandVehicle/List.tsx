@@ -37,7 +37,7 @@ import {
     setAlertSubBrandVehicleShowAction,
     clearFilterAction
 } from '../../../actions/admin/subBrandVehicle';
-import { SubBrandVehicle } from '../../../types/admin/subBrandVehicle';
+import { SubBrandVehicle, SubBrandVehicleList } from '../../../types/admin/subBrandVehicle';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: SubBrandVehicle,
+    item: SubBrandVehicleList,
     key: number,
     deleteSubBrandVehicle: (id: number) => void
 }) => {
@@ -65,7 +65,7 @@ const TableItem = (props: {
         <tr>
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
-            <td>{props.item.brandVehicle.name}</td>
+            <td>{props.item.brandVehicle ? props.item.brandVehicle.name : ''}</td>
             <td>
                 <Link to={`/admin/sub-brand-vehicle/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -151,7 +151,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.subBrandVehicleList.length > 0) {
-                subBrandVehicleList = this.props.subBrandVehicleList.map((item: SubBrandVehicle, index: number) => (
+                subBrandVehicleList = this.props.subBrandVehicleList.map((item: SubBrandVehicleList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -239,7 +239,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    subBrandVehicleList: SubBrandVehicle[],
+    subBrandVehicleList: SubBrandVehicleList[],
     paginate: Paginator,
     subBrandVehicleAlert: IAlert
 }

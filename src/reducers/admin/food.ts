@@ -2,7 +2,7 @@ import {
     FETCH_FOOD,
     FETCH_FOOD_ERROR,
     FETCH_FOOD_SUCCESS,
-    Food,
+    FoodList,
     FoodActionTypes,
     FetchFoodActionType,
     FetchFoodSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Food[],
+    list: FoodList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

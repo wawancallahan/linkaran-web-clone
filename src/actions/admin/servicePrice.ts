@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     ServicePrice,
+    ServicePriceList,
+    ServicePriceShow,
     SET_PAGINATOR_SERVICE_PRICE,
     FETCH_SERVICE_PRICE_SUCCESS,
     FETCH_SERVICE_PRICE_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchServicePriceActionType,
     FetchServicePriceErrorActionType,
     FetchServicePriceSuccessActionType,
-    ServicePriceCreate,
-    ServicePriceEdit,
+    ServicePriceCreateField,
+    ServicePriceEditField,
     AlertServicePriceHideActionType,
     ALERT_SERVICE_PRICE_HIDE,
     AlertServicePriceShowActionType,
@@ -82,7 +84,7 @@ export const setFilterAction = (filter: Filter) : SetFilterServicePriceActionTyp
     }
 }
 
-export const fetchServicePriceAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
+export const fetchServicePriceAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
         const querySearch = queryString.parse(window.location.search);
@@ -102,7 +104,7 @@ export const fetchServicePriceAction = (page: number, filter: Filter | {} = {}) 
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<ServicePrice> = response.data;
+                const data: ApiResponseSuccessList<ServicePriceList> = response.data;
 
                 dispatch(setFetchServicePriceSuccessAction(data.result));
 
@@ -134,11 +136,11 @@ export const fetchServicePriceAction = (page: number, filter: Filter | {} = {}) 
     }
 }
 
-export const fetchListServicePriceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServicePrice>>> => {
+export const fetchListServicePriceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServicePriceList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<ServicePrice> = response.data;
+                const data: ApiResponseSuccessList<ServicePriceList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -187,7 +189,7 @@ export const fetchListServicePriceAction = (search: string, page: number): Thunk
     }
 }
 
-export const createServicePriceAction = (servicePrice: ServicePriceCreate): ThunkResult<Promise<ApiResponse<ServicePriceCreateResult>>> => {
+export const createServicePriceAction = (servicePrice: ServicePriceCreateField): ThunkResult<Promise<ApiResponse<ServicePriceCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/service-price', servicePrice)
@@ -241,11 +243,11 @@ export const createServicePriceAction = (servicePrice: ServicePriceCreate): Thun
     }
 }
 
-export const findServicePriceAction = (id: number): ThunkResult<Promise<ApiResponse<ServicePrice>>> => {
+export const findServicePriceAction = (id: number): ThunkResult<Promise<ApiResponse<ServicePriceShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/service-price/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<ServicePrice> = response.data;
+                const data: ApiResponseSuccess<ServicePriceShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -294,7 +296,7 @@ export const findServicePriceAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editServicePriceAction = (servicePrice: ServicePriceEdit, id: number): ThunkResult<Promise<ApiResponse<ServicePriceEditResult>>> => {
+export const editServicePriceAction = (servicePrice: ServicePriceEditField, id: number): ThunkResult<Promise<ApiResponse<ServicePriceEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/service-price/${id}`, servicePrice)
             .then( (response: AxiosResponse) => {

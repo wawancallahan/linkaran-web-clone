@@ -22,9 +22,9 @@ import {
 } from '../../../types/admin/vehicleType';
 import {
     fetchListSubBrandVehicleAction,
-    fetchListVehicleTypeAction
 } from '../../../actions/admin/subBrandVehicle';
 import { Paginator } from '../../../types/paginator';
+import { fetchListVehicleTypeAction } from '../../../actions/admin/vehicleType';
 
 type FormKendaraanProps = {
     FormikProps: FormikProps<FormField>,
@@ -34,7 +34,7 @@ type Props = FormKendaraanProps & LinkDispatchToProps;
 
 class FormKendaraan extends Component<Props> {
 
-    loadTipeKendaraanHandler = (search: string, loadedOption: {}, options: {
+    loadTipeKendaraanHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListVehicleTypeAction(search, options.page)
@@ -74,7 +74,7 @@ class FormKendaraan extends Component<Props> {
             });
     }
 
-    loadMerekHandler = (search: string, loadedOption: {}, options: {
+    loadMerekHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListSubBrandVehicleAction(search, options.page)

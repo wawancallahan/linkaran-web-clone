@@ -1,6 +1,7 @@
 import { Paginator } from '../paginator';
 import { Role } from './role'
 import { SelectType } from '../select';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
@@ -20,7 +21,7 @@ export type FormField = {
     telegramuser: string | null
 }
 
-interface UserField {
+export type UserField = {
     name: string
     phoneNumber: string,
     email: string,
@@ -37,79 +38,74 @@ export type EMoneyUser = {
     balance: number
 }
 
-interface UserList {
-    name: string
+export type User = {
+    id: number,
+    name: string,
     phoneNumber: string,
     email: string,
-    gUserPhoneVerified: boolean | null,
-    gUserId: string | null
-    roles: Role[],
-    iat?: number,
-    exp?: number,
-    linkWithGoogle?: boolean,
-    isActive?: boolean,
     telegramuser: string | null,
-    chatId: number | string | null,
-    eMoneyUser?: EMoneyUser[]
+    chatId: number | null,
+    gUserId: string | null,
+    gUserPhoneVerified: boolean,
+    isActive: boolean,
 }
 
-interface UserResult {
-    id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+export type UserList = User & {
+    roles?: Role[]
 }
 
-export type User = UserResult & UserList;
+export type UserShow = User & {
+    roles?: Role[]
+}
 
-export type UserCreate = UserField;
+export type UserCreateField = UserField;
 
-export type UserEdit = UserField;
+export type UserEditField = UserField;
 
-export type UserCreateResult = UserResult & UserList;
+export type UserCreateResult = User & Partial<Timestamps>
 
-export type UserEditResult = UserResult &  UserList;
+export type UserEditResult = User & Partial<Timestamps>
 
-export interface FetchUserActionType {
+export type FetchUserActionType = {
     type: typeof FETCH_USER
 }
 
-export interface FetchUserSuccessActionType {
+export type FetchUserSuccessActionType = {
     type: typeof FETCH_USER_SUCCESS,
     list: User[]
 }
 
-export interface FetchUserErrorActionType {
+export type FetchUserErrorActionType = {
     type: typeof FETCH_USER_ERROR
 }
 
-export interface SetPaginatorUserActionType {
+export type SetPaginatorUserActionType = {
     type: typeof SET_PAGINATOR_USER,
     paginate: Paginator
 }
 
-export interface AlertUserHideActionType {
+export type AlertUserHideActionType = {
     type: typeof ALERT_USER_HIDE
 }
 
-export interface AlertUserShowActionType {
+export type AlertUserShowActionType = {
     type: typeof ALERT_USER_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterUserActionType {
+export type SetFilterUserActionType = {
     type: typeof SET_FILTER_USER,
     filter: Filter
 }
 
-export interface ClearFilterUserActionType {
+export type ClearFilterUserActionType = {
     type: typeof CLEAR_FILTER_USER
 }
 

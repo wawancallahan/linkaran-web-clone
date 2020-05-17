@@ -1,6 +1,10 @@
 import { Paginator } from '../paginator';
 import { Restaurant } from './restaurant';
 import { SelectType } from '../select';
+import { District } from './region/district';
+import { Province } from './region/province';
+import { FoodCategory } from './foodCategory';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_FOOD = "FETCH_FOOD";
 export const FETCH_FOOD_SUCCESS = "FETCH_FOOD_SUCCESS";
@@ -23,7 +27,7 @@ export type FormField = {
     restaurant: SelectType
 }
 
-interface FoodField {
+export type FoodField = {
     name: string,
     price: number,
     description: string,
@@ -38,79 +42,72 @@ interface FoodField {
     }
 }
 
-interface FoodList {
-    name: string,
-    price: number,
-    description: string,
-    rating: number,
-    image: string | null,
-    foodCategory: {
-        id: number,
-        name: string
-    },
-    restaurant: Partial<Restaurant>
-}
-
-interface FoodList2 {
-    name: string,
-    price: number,
-    description: string,
-    rating: number,
-    image: string | null,
-    foodCategory: {
-        id: number
-    },
-    restaurant: {
-        id: number
-    }
-}
-
-interface FoodResult {
+export type Food = {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    name: string,
+    price: number,
+    description: string,
+    rating: number,
+    image: string | null,
 }
 
-export type Food = FoodResult & FoodList;
+export type FoodList = Food & {
+    restaurant?: Partial<Restaurant> & {
+        district?: Partial<District> & {
+            province?: Partial<Province>
+        }
+    },
+    foodCategory?: Partial<FoodCategory>
+}
 
-export type FoodCreate = FoodField;
+export type FoodShow = Food & {
+    restaurant?: Partial<Restaurant>,
+    foodCategory?: Partial<FoodCategory>
+}
 
-export type FoodEdit = FoodField;
+export type FoodCreateField = FoodField;
 
-export type FoodCreateResult = FoodResult & FoodList2;
+export type FoodEditField = FoodField;
 
-export type FoodEditResult = FoodResult &  FoodList2;
+export type FoodCreateResult = Food & Partial<Timestamps> & {
+    restaurant?: Partial<Restaurant>,
+    foodCategory?: Partial<FoodCategory>
+}
 
-export interface FetchFoodActionType {
+export type FoodEditResult = Food & Partial<Timestamps> & {
+    restaurant?: Partial<Restaurant>,
+    foodCategory?: Partial<FoodCategory>
+}
+
+export type FetchFoodActionType = {
     type: typeof FETCH_FOOD
 }
 
-export interface FetchFoodSuccessActionType {
+export type FetchFoodSuccessActionType = {
     type: typeof FETCH_FOOD_SUCCESS,
     list: Food[]
 }
 
-export interface FetchFoodErrorActionType {
+export type FetchFoodErrorActionType = {
     type: typeof FETCH_FOOD_ERROR
 }
 
-export interface SetPaginatorFoodActionType {
+export type SetPaginatorFoodActionType = {
     type: typeof SET_PAGINATOR_FOOD,
     paginate: Paginator
 }
 
-export interface AlertFoodHideActionType {
+export type AlertFoodHideActionType = {
     type: typeof ALERT_FOOD_HIDE
 }
 
-export interface AlertFoodShowActionType {
+export type AlertFoodShowActionType = {
     type: typeof ALERT_FOOD_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     provinceName: string,
     districtName: string,
@@ -119,12 +116,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterFoodActionType {
+export type SetFilterFoodActionType = {
     type: typeof SET_FILTER_FOOD,
     filter: Filter
 }
 
-export interface ClearFilterFoodActionType {
+export type ClearFilterFoodActionType = {
     type: typeof CLEAR_FILTER_FOOD
 }
 

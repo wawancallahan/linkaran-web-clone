@@ -50,7 +50,7 @@ class FormInformation extends Component<Props> {
         }
     }
 
-    loadProvinceHandler = (search: string, loadedOption: {}, options: {
+    loadProvinceHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListProvinceAction(search, options.page)
@@ -90,7 +90,7 @@ class FormInformation extends Component<Props> {
             });       
     }
 
-    loadDistrictHandler = (search: string, loadedOption: {}, options: {
+    loadDistrictHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         if (this.props.FormikProps.values.province.value && this.props.FormikProps.values.province.value > 0) {

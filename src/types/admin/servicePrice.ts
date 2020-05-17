@@ -2,6 +2,8 @@ import { Paginator } from '../paginator';
 import { Service } from './service';
 import { VehicleType } from './vehicleType';
 import { SelectType } from '../select';
+import { District } from './region/district';
+import { Price } from './price';
 
 export const FETCH_SERVICE_PRICE = "FETCH_SERVICE_PRICE";
 export const FETCH_SERVICE_PRICE_SUCCESS = "FETCH_SERVICE_PRICE_SUCCESS";
@@ -23,7 +25,7 @@ export type FormField = {
     maxDriverDistanceRadius: string
 }
 
-interface ServicePriceField {
+export type ServicePriceField = {
     price: {
         id: number
     },
@@ -41,98 +43,87 @@ interface ServicePriceField {
     maxDriverDistanceRadius: number
 }
 
-interface ServicePriceList {
-    basePrice: number,
-    pricePerKm: number,
-    minKm: number,
-    priceId: number,
-    district: {
-        id: number,
-        name: string,
-        alternativeName: string
-    },
-    service: Service,
-    vehicleType: VehicleType,
-    driverPaymentDeductions?: number,
-    servicePaymentDeductions?: number,
-    maxDriverDistanceRadius?: number
-}
-
-interface ServicePriceResult {
+export type ServicePrice = {
     id: number,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
+    driverPaymentDeductions: number,
+    servicePaymentDeductions: number,
+    maxDriverDistanceRadius: number
 }
 
-type ServicePriceStoreResponse = ServicePriceResult & {
-    price: {
-        id: number
-    },
-    district: {
-        id: number
-    },
-    service: {
-        id: number
-    },
-    vehicleType: {
-        id: number
-    },
-    driverPaymentDeductions?: number,
-    servicePaymentDeductions?: number,
-    maxDriverDistanceRadius?: number
+export type ServicePriceList = ServicePrice & Partial<Omit<Price, "id">> & {
+    priceId?: number,
+    pricePerKm?: number,
+    district?: Partial<District>,
+    service?: Partial<Service>,
+    vehicleType?: Partial<VehicleType>,
 }
 
-export type ServicePrice = ServicePriceResult & ServicePriceList;
+export type ServicePriceShow = ServicePrice & Partial<Omit<Price, "id">> & {
+    priceId?: number,
+    pricePerKm?: number,
+    district?: Partial<District>,
+    service?: Partial<Service>,
+    vehicleType?: Partial<VehicleType>,
+}
 
-export type ServicePriceCreate = ServicePriceField;
+export type ServicePriceCreateField = ServicePriceField;
 
-export type ServicePriceEdit = ServicePriceField;
+export type ServicePriceEditField = ServicePriceField;
 
-export type ServicePriceCreateResult = ServicePriceResult & ServicePriceStoreResponse;
+export type ServicePriceCreateResult = ServicePrice & {
+    price?: Partial<Price>,
+    district?: Partial<District>,
+    service?: Partial<Service>,
+    vehicleType?: Partial<VehicleType>,
+}
 
-export type ServicePriceEditResult = ServicePriceResult  & ServicePriceStoreResponse
+export type ServicePriceEditResult = ServicePrice & {
+    price?: Partial<Price>,
+    district?: Partial<District>,
+    service?: Partial<Service>,
+    vehicleType?: Partial<VehicleType>,
+}
 
-export interface FetchServicePriceActionType {
+export type FetchServicePriceActionType = {
     type: typeof FETCH_SERVICE_PRICE
 }
 
-export interface FetchServicePriceSuccessActionType {
+export type FetchServicePriceSuccessActionType = {
     type: typeof FETCH_SERVICE_PRICE_SUCCESS,
     list: ServicePrice[]
 }
 
-export interface FetchServicePriceErrorActionType {
+export type FetchServicePriceErrorActionType = {
     type: typeof FETCH_SERVICE_PRICE_ERROR
 }
 
-export interface SetPaginatorServicePriceActionType {
+export type SetPaginatorServicePriceActionType = {
     type: typeof SET_PAGINATOR_SERVICE_PRICE,
     paginate: Paginator
 }
 
-export interface AlertServicePriceHideActionType {
+export type AlertServicePriceHideActionType = {
     type: typeof ALERT_SERVICE_PRICE_HIDE
 }
 
-export interface AlertServicePriceShowActionType {
+export type AlertServicePriceShowActionType = {
     type: typeof ALERT_SERVICE_PRICE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     districtName: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterServicePriceActionType {
+export type SetFilterServicePriceActionType = {
     type: typeof SET_FILTER_SERVICE_PRICE,
     filter: Filter
 }
 
-export interface ClearFilterServicePriceActionType {
+export type ClearFilterServicePriceActionType = {
     type: typeof CLEAR_FILTER_SERVICE_PRICE
 }
 

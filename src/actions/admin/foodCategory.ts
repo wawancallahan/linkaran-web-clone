@@ -11,8 +11,8 @@ import {
     FetchFoodCategoryActionType,
     FetchFoodCategoryErrorActionType,
     FetchFoodCategorySuccessActionType,
-    FoodCategoryCreate,
-    FoodCategoryEdit,
+    FoodCategoryCreateField,
+    FoodCategoryEditField,
     AlertFoodCategoryHideActionType,
     ALERT_FOOD_CATEGORY_HIDE,
     AlertFoodCategoryShowActionType,
@@ -23,7 +23,9 @@ import {
     SetFilterFoodCategoryActionType,
     SET_FILTER_FOOD_CATEGORY,
     ClearFilterFoodCategoryActionType,
-    CLEAR_FILTER_FOOD_CATEGORY
+    CLEAR_FILTER_FOOD_CATEGORY,
+    FoodCategoryList,
+    FoodCategoryShow
 } from '../../types/admin/foodCategory';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -100,7 +102,7 @@ export const fetchFoodCategoryAction = (page: number) : ThunkResult<Promise<Bool
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<FoodCategory> = response.data;
+                const data: ApiResponseSuccessList<FoodCategoryList> = response.data;
 
                 dispatch(setFetchFoodCategorySuccessAction(data.result));
 
@@ -132,7 +134,7 @@ export const fetchFoodCategoryAction = (page: number) : ThunkResult<Promise<Bool
     }
 }
 
-export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategory>>> => {
+export const fetchListFoodCategoryAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<FoodCategoryList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         
         let paramsObject: OptionObjectString = {
@@ -144,7 +146,7 @@ export const fetchListFoodCategoryAction = (search: string, page: number): Thunk
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<FoodCategory> = response.data;
+                const data: ApiResponseSuccessList<FoodCategoryList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -193,7 +195,7 @@ export const fetchListFoodCategoryAction = (search: string, page: number): Thunk
     }
 }
 
-export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
+export const createFoodCategoryAction = (foodCategory: FoodCategoryCreateField): ThunkResult<Promise<ApiResponse<FoodCategoryCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/food-category', foodCategory)
             .then( (response: AxiosResponse) => {
@@ -246,11 +248,11 @@ export const createFoodCategoryAction = (foodCategory: FoodCategoryCreate): Thun
     }
 }
 
-export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategory>>> => {
+export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiResponse<FoodCategoryShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/food-category/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<FoodCategory> = response.data;
+                const data: ApiResponseSuccess<FoodCategoryShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -299,7 +301,7 @@ export const findFoodCategoryAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editFoodCategoryAction = (foodCategory: FoodCategoryEdit, id: number): ThunkResult<Promise<ApiResponse<FoodCategoryEditResult>>> => {
+export const editFoodCategoryAction = (foodCategory: FoodCategoryEditField, id: number): ThunkResult<Promise<ApiResponse<FoodCategoryEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/food-category/${id}`, foodCategory)
             .then( (response: AxiosResponse) => {

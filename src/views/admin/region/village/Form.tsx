@@ -60,7 +60,7 @@ class Form extends Component<Props> {
         })
     }
 
-    loadSubDistrictHandler = (search: string, loadedOption: {}, options: {
+    loadSubDistrictHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListSubDistrictAction(search, options.page)

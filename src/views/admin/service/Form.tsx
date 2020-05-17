@@ -11,7 +11,7 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
-import { Service, FormField, ServiceCreate, ServiceCreateResult } from '../../../types/admin/service';
+import { Service, FormField, ServiceCreateField, ServiceCreateResult } from '../../../types/admin/service';
 import { createServiceAction, setAlertServiceShowAction } from '../../../actions/admin/service';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { Paginator } from '../../../types/paginator';
@@ -72,7 +72,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const service: ServiceCreate = {
+                    const service: ServiceCreateField = {
                         name: values.name,
                         code: values.code,
                         canBeMultiple: values.canBeMultiple == '1',
@@ -295,13 +295,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createServiceAction: (service: ServiceCreate) => Promise<ApiResponse<ServiceCreateResult>>
+    createServiceAction: (service: ServiceCreateField) => Promise<ApiResponse<ServiceCreateResult>>
     setAlertServiceShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createServiceAction: (service: ServiceCreate) => dispatch(createServiceAction(service)),
+        createServiceAction: (service: ServiceCreateField) => dispatch(createServiceAction(service)),
         setAlertServiceShowAction: (message: string, color: string) => dispatch(setAlertServiceShowAction(message, color))
     }
 }

@@ -207,8 +207,8 @@ export const createManualTopUpAction = (topUp: ManualTopUpCreateField): ThunkRes
         }
 
         data.set('amount', topUp.amount)
-        data.set('driverProfileId', topUp.driverProfile.value.toString())
-        data.set('bankId', topUp.bank.value.toString())
+        data.set('driverProfileId', topUp.driverProfile.id.toString())
+        data.set('bankId', topUp.bank.id.toString())
         
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/topup-manual-driver', data, {
                 headers: {
@@ -328,8 +328,8 @@ export const editManualTopUpAction = (topUp: ManualTopUpEditField, id: number): 
         }
 
         data.set('amount', topUp.amount)
-        data.set('driverProfileId', topUp.driverProfile.value.toString())
-        data.set('bankId', topUp.bank.value.toString())
+        data.set('driverProfileId', topUp.driverProfile.id.toString())
+        data.set('bankId', topUp.bank.id.toString())
         
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/topup-manual-driver/${id}`, data, {
                 headers: {

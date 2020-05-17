@@ -19,22 +19,6 @@ import {
     createInvestorAction
 } from '../../../actions/admin/investor';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
-
-import {
-    fetchListKabupatenKotaAction,
-    fetchListKecamatanAction,
-    fetchListKelurahanAction,
-    fetchListNegaraAction,
-    fetchListProvinsiAction
-} from '../../../actions/admin/location';
-import {
-    Negara,
-    KabupatenKota,
-    Kecamatan,
-    Kelurahan,
-    Provinsi
-} from '../../../types/admin/location';
-
 import Dropzone from '../../../components/Dropzone/Dropzone';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import DatePicker from 'react-datepicker';
@@ -44,6 +28,16 @@ import { Paginator } from '../../../types/paginator';
 import "react-datepicker/dist/react-datepicker.css";
 import BlockUi from '../../../components/BlockUi/BlockUi'
 import { toast, TypeOptions } from 'react-toastify'
+import { fetchListCountryAction } from '../../../actions/admin/region/country';
+import { Country, CountryList } from '../../../types/admin/region/country';
+import { fetchListProvinceAction } from '../../../actions/admin/region/province';
+import { Province, ProvinceList } from '../../../types/admin/region/province';
+import { fetchListDistrictAction } from '../../../actions/admin/region/district';
+import { District, DistrictList } from '../../../types/admin/region/district';
+import { SubDistrict, SubDistrictList } from '../../../types/admin/region/subDistrict';
+import { fetchListSubDistrictAction } from '../../../actions/admin/region/subDistrict';
+import { fetchListVillageAction } from '../../../actions/admin/region/village';
+import { Village, VillageList } from '../../../types/admin/region/village';
 
 const createSchema = Yup.object().shape({
     nama: Yup.string()
@@ -133,13 +127,13 @@ class Form extends Component<Props> {
         })
     }
 
-    loadNegaraHandler = (search: string, loadedOption: {}, options: {
+    loadNegaraHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
-        return this.props.fetchListNegaraAction(search, options.page)
-            .then((response: ApiResponseList<Negara>) => {
+        return this.props.fetchListCountryAction(search, options.page)
+            .then((response: ApiResponseList<Country>) => {
 
-                const data: ApiResponseSuccessList<Negara> = response.response!;
+                const data: ApiResponseSuccessList<Country> = response.response!;
 
                 let result: {
                     value: number,
@@ -155,7 +149,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Negara) => {
+                    result = data.result.map((item: Country) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -173,14 +167,15 @@ class Form extends Component<Props> {
             });
     }
 
-    loadProvinsiHandler = (search: string, loadedOption: {}, options: {
+    loadProvinsiHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
-    }) => {
+    }, FormikProps: FormikProps<FormField>) => {
 
-        return this.props.fetchListProvinsiAction(search, options.page, this.props.form.negara.value)
-            .then((response: ApiResponseList<Provinsi>) => {
+        if (FormikProps.values.negara.value && FormikProps.values.negara.value > 0) {
+            return this.props.fetchListProvinceAction(search, options.page, FormikProps.values.negara.value)
+            .then((response: ApiResponseList<Province>) => {
 
-                const data: ApiResponseSuccessList<Provinsi> = response.response!;
+                const data: ApiResponseSuccessList<Province> = response.response!;
 
                 let result: {
                     value: number,
@@ -196,7 +191,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Provinsi) => {
+                    result = data.result.map((item: Province) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -211,128 +206,187 @@ class Form extends Component<Props> {
                       page: options.page + 1,
                     },
                 };
-            });
+            });   
+        }
+
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
 
-    loadKabupatenKotaHandler = (search: string, loadedOption: {}, options: {
+    loadKabupatenKotaHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
-    }) => {
-        return this.props.fetchListKabupatenKotaAction(search, options.page, this.props.form.provinsi.value)
-            .then((response: ApiResponseList<KabupatenKota>) => {
+    }, FormikProps: FormikProps<FormField>) => {
 
-                const data: ApiResponseSuccessList<KabupatenKota> = response.response!;
+        if (FormikProps.values.provinsi.value && FormikProps.values.provinsi.value > 0) {
+            
+            return this.props.fetchListDistrictAction(search, options.page, FormikProps.values.provinsi.value)
+                .then((response: ApiResponseList<District>) => {
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    const data: ApiResponseSuccessList<District> = response.response!;
 
-                let hasMore = false;
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                if ( ! data.metaData.isError) {
+                    let hasMore = false;
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                    if ( ! data.metaData.isError) {
+
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: District) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: KabupatenKota) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
+        return new Promise((resolve, reject) => {
+                resolve();
+            }).then(() => {
                 return {
-                    options: result,
-                    hasMore: hasMore,
+                    options: [],
+                    hasMore: false,
                     additional: {
-                      page: options.page + 1,
+                        page: 1,
                     },
                 };
-            });
+            })
     }
 
-    loadKecamatanHandler = (search: string, loadedOption: {}, options: {
+    loadKecamatanHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
-    }) => {
-        return this.props.fetchListKecamatanAction(search, options.page, this.props.form.kabupaten_kota.value)
-            .then((response: ApiResponseList<Kecamatan>) => {
+    }, FormikProps: FormikProps<FormField>) => {
+        if (FormikProps.values.kabupaten_kota.value && FormikProps.values.kabupaten_kota.value > 0) {
+            
+            return this.props.fetchListSubDistrictAction(search, options.page, FormikProps.values.kabupaten_kota.value)
+                .then((response: ApiResponseList<SubDistrict>) => {
 
-                const data: ApiResponseSuccessList<Kecamatan> = response.response!;
+                    const data: ApiResponseSuccessList<SubDistrict> = response.response!;
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                let hasMore = false;
+                    let hasMore = false;
 
-                if ( ! data.metaData.isError) {
+                    if ( ! data.metaData.isError) {
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: SubDistrict) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: Kecamatan) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
-    loadKelurahanHandler = (search: string, loadedOption: {}, options: {
+    loadKelurahanHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
-    }) => {
-        return this.props.fetchListKelurahanAction(search, options.page, this.props.form.kecamatan.value)
-            .then((response: ApiResponseList<Kelurahan>) => {
+    }, FormikProps: FormikProps<FormField>) => {
+        if (FormikProps.values.kecamatan.value && FormikProps.values.kecamatan.value > 0) {
+            
+            return this.props.fetchListVillageAction(search, options.page, FormikProps.values.kecamatan.value)
+                .then((response: ApiResponseList<Village>) => {
 
-                const data: ApiResponseSuccessList<Kelurahan> = response.response!;
+                    const data: ApiResponseSuccessList<Village> = response.response!;
 
-                let result: {
-                    value: number,
-                    label: string
-                }[] = [];
+                    let result: {
+                        value: number,
+                        label: string
+                    }[] = [];
 
-                let hasMore = false;
+                    let hasMore = false;
 
-                if ( ! data.metaData.isError) {
+                    if ( ! data.metaData.isError) {
 
-                    if (data.metaData.paginate) {
-                        const paginate = data.metaData.paginate as Paginator;
-                        hasMore = paginate.pageCount > options.page;
+                        if (data.metaData.paginate) {
+                            const paginate = data.metaData.paginate as Paginator;
+                            hasMore = paginate.pageCount > options.page;
+                        }
+
+                        result = data.result.map((item: Village) => {
+                            return {
+                                value: item.id,
+                                label: `${item.name}`
+                            };
+                        });
                     }
 
-                    result = data.result.map((item: Kelurahan) => {
-                        return {
-                            value: item.id,
-                            label: `${item.name}`
-                        };
-                    });
-                }
+                    return {
+                        options: result,
+                        hasMore: hasMore,
+                        additional: {
+                        page: options.page + 1,
+                        },
+                    };
+                });
+        }
 
-                return {
-                    options: result,
-                    hasMore: hasMore,
-                    additional: {
-                      page: options.page + 1,
-                    },
-                };
-            });
+        return new Promise((resolve, reject) => {
+            resolve();
+        }).then(() => {
+            return {
+                options: [],
+                hasMore: false,
+                additional: {
+                    page: 1,
+                },
+            };
+        })
     }
 
     onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
@@ -650,7 +704,12 @@ class Form extends Component<Props> {
                                         </label>
                                         <ReactSelectAsyncPaginate 
                                             value={FormikProps.values.provinsi}
-                                            loadOptions={this.loadProvinsiHandler}
+                                            loadOptions={(inputValue: string, prevOptions: {
+                                                label: string;
+                                                value: number;
+                                            }[], additional: {
+                                                page: number;
+                                            }) => this.loadProvinsiHandler(inputValue, prevOptions, additional, FormikProps)}
                                             onChange={(option) => FormikProps.setFieldValue('provinsi', option)}
                                             onBlur={() => FormikProps.setFieldTouched('provinsi', true)}
                                             additional={{
@@ -672,7 +731,12 @@ class Form extends Component<Props> {
                                         </label>
                                         <ReactSelectAsyncPaginate 
                                             value={FormikProps.values.kabupaten_kota}
-                                            loadOptions={this.loadKabupatenKotaHandler}
+                                            loadOptions={(inputValue: string, prevOptions: {
+                                                label: string;
+                                                value: number;
+                                            }[], additional: {
+                                                page: number;
+                                            }) => this.loadKabupatenKotaHandler(inputValue, prevOptions, additional, FormikProps)}
                                             onChange={(option) => FormikProps.setFieldValue('kabupaten_kota', option)}
                                             onBlur={() => FormikProps.setFieldTouched('kabupaten_kota', true)}
                                             additional={{
@@ -694,7 +758,12 @@ class Form extends Component<Props> {
                                         </label>
                                         <ReactSelectAsyncPaginate 
                                             value={FormikProps.values.kecamatan}
-                                            loadOptions={this.loadKecamatanHandler}
+                                            loadOptions={(inputValue: string, prevOptions: {
+                                                label: string;
+                                                value: number;
+                                            }[], additional: {
+                                                page: number;
+                                            }) => this.loadKecamatanHandler(inputValue, prevOptions, additional, FormikProps)}
                                             onChange={(option) => FormikProps.setFieldValue('kecamatan', option)}
                                             onBlur={() => FormikProps.setFieldTouched('kecamatan', true)}
                                             additional={{
@@ -716,7 +785,12 @@ class Form extends Component<Props> {
                                         </label>
                                         <ReactSelectAsyncPaginate 
                                             value={FormikProps.values.kelurahan}
-                                            loadOptions={this.loadKelurahanHandler}
+                                            loadOptions={(inputValue: string, prevOptions: {
+                                                label: string;
+                                                value: number;
+                                            }[], additional: {
+                                                page: number;
+                                            }) => this.loadKelurahanHandler(inputValue, prevOptions, additional, FormikProps)}
                                             onChange={(option) => FormikProps.setFieldValue('kelurahan', option)}
                                             onBlur={() => FormikProps.setFieldTouched('kelurahan', true)}
                                             additional={{
@@ -811,22 +885,22 @@ class Form extends Component<Props> {
 type LinkDispatchToProps = {
     createInvestorAction: (investor: InvestorCreate) => Promise<ApiResponse<InvestorCreateResult>>
     setAlertInvestorShowAction: (message: string, color: string) => void,
-    fetchListNegaraAction: (search: string, page: number) => Promise<ApiResponseList<Negara>>,
-    fetchListProvinsiAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Provinsi>>,
-    fetchListKabupatenKotaAction: (search: string, page: number, id: number) => Promise<ApiResponseList<KabupatenKota>>,
-    fetchListKecamatanAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Kecamatan>>,
-    fetchListKelurahanAction: (search: string, page: number, id: number) => Promise<ApiResponseList<Kelurahan>>
+    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
+    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
+    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
+    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrictList>>,
+    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<VillageList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
         createInvestorAction: (investor: InvestorCreate) => dispatch(createInvestorAction(investor)),
         setAlertInvestorShowAction: (message: string, color: string) => dispatch(setAlertInvestorShowAction(message, color)),
-        fetchListNegaraAction: (search: string, page: number) => dispatch(fetchListNegaraAction(search, page)),
-        fetchListProvinsiAction: (search: string, page: number, id: number) => dispatch(fetchListProvinsiAction(search, page, id)),
-        fetchListKabupatenKotaAction: (search: string, page: number, id: number) => dispatch(fetchListKabupatenKotaAction(search, page, id)),
-        fetchListKecamatanAction: (search: string, page: number, id: number) => dispatch(fetchListKecamatanAction(search, page, id)),
-        fetchListKelurahanAction: (search: string, page: number, id: number) => dispatch(fetchListKelurahanAction(search, page, id))
+        fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
+        fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
+        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
+        fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
+        fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
     }
 }
 

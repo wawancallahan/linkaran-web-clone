@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     Service,
+    ServiceList,
+    ServiceShow,
     SET_PAGINATOR_SERVICE,
     FETCH_SERVICE_SUCCESS,
     FETCH_SERVICE_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchServiceActionType,
     FetchServiceErrorActionType,
     FetchServiceSuccessActionType,
-    ServiceCreate,
-    ServiceEdit,
+    ServiceCreateField,
+    ServiceEditField,
     AlertServiceHideActionType,
     ALERT_SERVICE_HIDE,
     AlertServiceShowActionType,
@@ -104,7 +106,7 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Service> = response.data;
+                const data: ApiResponseSuccessList<ServiceList> = response.data;
 
                 dispatch(setFetchServiceSuccessAction(data.result));
 
@@ -136,11 +138,11 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
     }
 }
 
-export const fetchListServiceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Service>>> => {
+export const fetchListServiceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServiceList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/service?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Service> = response.data;
+                const data: ApiResponseSuccessList<ServiceList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -189,7 +191,7 @@ export const fetchListServiceAction = (search: string, page: number): ThunkResul
     }
 }
 
-export const createServiceAction = (servicePrice: ServiceCreate): ThunkResult<Promise<ApiResponse<ServiceCreateResult>>> => {
+export const createServiceAction = (servicePrice: ServiceCreateField): ThunkResult<Promise<ApiResponse<ServiceCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/service', servicePrice)
@@ -243,11 +245,11 @@ export const createServiceAction = (servicePrice: ServiceCreate): ThunkResult<Pr
     }
 }
 
-export const findServiceAction = (id: number): ThunkResult<Promise<ApiResponse<Service>>> => {
+export const findServiceAction = (id: number): ThunkResult<Promise<ApiResponse<ServiceShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/service/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Service> = response.data;
+                const data: ApiResponseSuccess<ServiceShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -296,7 +298,7 @@ export const findServiceAction = (id: number): ThunkResult<Promise<ApiResponse<S
     }
 }
 
-export const editServiceAction = (servicePrice: ServiceEdit, id: number): ThunkResult<Promise<ApiResponse<ServiceEditResult>>> => {
+export const editServiceAction = (servicePrice: ServiceEditField, id: number): ThunkResult<Promise<ApiResponse<ServiceEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/service/${id}`, servicePrice)
             .then( (response: AxiosResponse) => {

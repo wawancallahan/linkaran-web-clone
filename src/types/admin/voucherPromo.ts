@@ -66,7 +66,7 @@ interface VoucherPromoList {
     isLimited: boolean,
     quantity: number,
     description: string,
-    type: VoucherType,
+    type: Partial<VoucherType>,
     service: Service[],
     ticketUsed?: number
     quotaUsed?: string,

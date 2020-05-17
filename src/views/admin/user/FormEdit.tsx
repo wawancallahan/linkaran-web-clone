@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { User, FormField, UserCreate, UserEdit, UserEditResult } from '../../../types/admin/user';
+import { User, FormField, UserEditField, UserEditResult } from '../../../types/admin/user';
 import { editUserAction, setAlertUserShowAction } from '../../../actions/admin/user';
 import { fetchListRoleAction } from '../../../actions/admin/role';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
@@ -71,7 +71,7 @@ class Form extends Component<Props> {
         })
     }
 
-    loadRoleHandler = (search: string, loadedOption: {}, options: {
+    loadRoleHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListRoleAction(search, options.page)
@@ -129,7 +129,7 @@ class Form extends Component<Props> {
                         }
                     })
 
-                    const user: UserEdit = {
+                    const user: UserEditField = {
                         email: values.email,
                         name: values.name,
                         phoneNumber: values.phoneNumber,
@@ -302,14 +302,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editUserAction: (user: UserEdit, id: number) => Promise<ApiResponse<UserEditResult>>,
+    editUserAction: (user: UserEditField, id: number) => Promise<ApiResponse<UserEditResult>>,
     setAlertUserShowAction: (message: string, color: string) => void,
     fetchListRoleAction: (search: string, page: number) => Promise<ApiResponseList<Role>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editUserAction: (user: UserEdit, id: number) => dispatch(editUserAction(user, id)),
+        editUserAction: (user: UserEditField, id: number) => dispatch(editUserAction(user, id)),
         setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color)),
         fetchListRoleAction: (search: string, page: number) => dispatch(fetchListRoleAction(search, page))
     }

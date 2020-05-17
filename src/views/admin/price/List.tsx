@@ -37,7 +37,7 @@ import {
     setAlertPriceShowAction,
     clearFilterAction
 } from '../../../actions/admin/price';
-import { Price } from '../../../types/admin/price';
+import { Price, PriceList } from '../../../types/admin/price';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -59,7 +59,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Price,
+    item: PriceList,
     key: number,
     deletePrice: (id: number) => void
 }) => {
@@ -155,7 +155,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.priceList.length > 0) {
-                priceList = this.props.priceList.map((item: Price, index: number) => (
+                priceList = this.props.priceList.map((item: PriceList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -244,7 +244,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    priceList: Price[],
+    priceList: PriceList[],
     paginate: Paginator,
     priceAlert: IAlert
 }

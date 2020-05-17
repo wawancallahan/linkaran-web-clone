@@ -1,5 +1,7 @@
 import { Paginator } from '../paginator';
 import { SelectType } from '../select';
+import { BrandVehicle } from './brandVehicle';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_SUB_BRAND_VEHICLE = "FETCH_SUB_BRAND_VEHICLE";
 export const FETCH_SUB_BRAND_VEHICLE_SUCCESS = "FETCH_SUB_BRAND_VEHICLE_SUCCESS";
@@ -16,86 +18,79 @@ export type FormField = {
     brandVehicle: SelectType
 }
 
-interface SubBrandVehicleField {
+export type SubBrandVehicleField = {
     name: string,
     brandVehicle: {
         id: number
     }
 }
 
-interface SubBrandVehicleList {
-    name: string,
-    brandVehicle: {
-        id: number,
-        name: string
-    }
-}
-
-interface SubBrandVehicleList2 {
-    name: string,
-    brandVehicle: {
-        id: number
-    }
-}
-
-interface SubBrandVehicleResult {
+export type SubBrandVehicle = {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    name: string
 }
 
-export type SubBrandVehicle = SubBrandVehicleResult & SubBrandVehicleList;
+export type SubBrandVehicleList = SubBrandVehicle & {
+    brandVehicle?: Partial<BrandVehicle>
+}
 
-export type SubBrandVehicleCreate = SubBrandVehicleField;
+export type SubBrandVehicleShow = SubBrandVehicle & {
+    brandVehicle?: Partial<BrandVehicle>
+}
 
-export type SubBrandVehicleEdit = SubBrandVehicleField;
+export type SubBrandVehicleCreateField = SubBrandVehicleField;
 
-export type SubBrandVehicleCreateResult = SubBrandVehicleResult & SubBrandVehicleList2;
+export type SubBrandVehicleEditField = SubBrandVehicleField;
 
-export type SubBrandVehicleEditResult = SubBrandVehicleResult &  SubBrandVehicleList2;
+export type SubBrandVehicleCreateResult = SubBrandVehicle & Partial<Timestamps> & {
+    brandVehicle?: Partial<BrandVehicle>
+}
 
-export interface FetchSubBrandVehicleActionType {
+export type SubBrandVehicleEditResult = SubBrandVehicle & Partial<Timestamps> & {
+    brandVehicle?: Partial<BrandVehicle>
+}
+
+export type FetchSubBrandVehicleActionType = {
     type: typeof FETCH_SUB_BRAND_VEHICLE
 }
 
-export interface FetchSubBrandVehicleSuccessActionType {
+export type FetchSubBrandVehicleSuccessActionType = {
     type: typeof FETCH_SUB_BRAND_VEHICLE_SUCCESS,
     list: SubBrandVehicle[]
 }
 
-export interface FetchSubBrandVehicleErrorActionType {
+export type FetchSubBrandVehicleErrorActionType = {
     type: typeof FETCH_SUB_BRAND_VEHICLE_ERROR
 }
 
-export interface SetPaginatorSubBrandVehicleActionType {
+export type SetPaginatorSubBrandVehicleActionType = {
     type: typeof SET_PAGINATOR_SUB_BRAND_VEHICLE,
     paginate: Paginator
 }
 
-export interface AlertSubBrandVehicleHideActionType {
+export type AlertSubBrandVehicleHideActionType = {
     type: typeof ALERT_SUB_BRAND_VEHICLE_HIDE
 }
 
-export interface AlertSubBrandVehicleShowActionType {
+export type AlertSubBrandVehicleShowActionType = {
     type: typeof ALERT_SUB_BRAND_VEHICLE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     brandName: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterSubBrandVehicleActionType {
+export type SetFilterSubBrandVehicleActionType = {
     type: typeof SET_FILTER_SUB_BRAND_VEHICLE,
     filter: Filter
 }
 
-export interface ClearFilterSubBrandVehicleActionType {
+export type ClearFilterSubBrandVehicleActionType = {
     type: typeof CLEAR_FILTER_SUB_BRAND_VEHICLE
 }
 

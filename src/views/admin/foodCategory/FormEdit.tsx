@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryEdit, FoodCategoryEditResult } from '../../../types/admin/foodCategory';
+import { FoodCategory, FormField, FoodCategoryEditField, FoodCategoryEditResult } from '../../../types/admin/foodCategory';
 import { editFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
@@ -61,7 +61,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const foodCategory: FoodCategoryEdit = {
+                    const foodCategory: FoodCategoryEditField = {
                         name: values.name
                     }
 
@@ -137,13 +137,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => Promise<ApiResponse<FoodCategoryEditResult>>
+    editFoodCategoryAction: (foodCategory: FoodCategoryEditField, id: number) => Promise<ApiResponse<FoodCategoryEditResult>>
     setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editFoodCategoryAction: (foodCategory: FoodCategoryEdit, id: number) => dispatch(editFoodCategoryAction(foodCategory, id)),
+        editFoodCategoryAction: (foodCategory: FoodCategoryEditField, id: number) => dispatch(editFoodCategoryAction(foodCategory, id)),
         setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
     }
 }

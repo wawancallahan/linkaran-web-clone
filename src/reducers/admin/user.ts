@@ -2,7 +2,7 @@ import {
     FETCH_USER,
     FETCH_USER_ERROR,
     FETCH_USER_SUCCESS,
-    User,
+    UserList,
     UserActionTypes,
     FetchUserActionType,
     FetchUserSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: User[],
+    list: UserList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

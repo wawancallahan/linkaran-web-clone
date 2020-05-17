@@ -11,7 +11,7 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
-import { Price, FormField, PriceCreate, PriceCreateResult } from '../../../types/admin/price';
+import { Price, FormField, PriceCreateField, PriceCreateResult } from '../../../types/admin/price';
 import { createPriceAction, setAlertPriceShowAction } from '../../../actions/admin/price';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import { Paginator } from '../../../types/paginator';
@@ -82,7 +82,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const price: PriceCreate = {
+                    const price: PriceCreateField = {
                         basePrice: Number.parseInt(values.basePrice),
                         minKm: Number.parseInt(values.minKm),
                         perKilometer: Number.parseInt(values.perKilometer)
@@ -208,13 +208,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createPriceAction: (price: PriceCreate) => Promise<ApiResponse<PriceCreateResult>>
+    createPriceAction: (price: PriceCreateField) => Promise<ApiResponse<PriceCreateResult>>
     setAlertPriceShowAction: (message: string, color: string) => void,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createPriceAction: (price: PriceCreate) => dispatch(createPriceAction(price)),
+        createPriceAction: (price: PriceCreateField) => dispatch(createPriceAction(price)),
         setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color)),
     }
 }

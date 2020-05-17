@@ -39,9 +39,7 @@ type Props = FormDriverProps & LinkDispatchToProps;
 
 class FormDriver extends Component<Props> {
 
-    private selectProvince = React.createRef<(ReactSelectAsyncPaginate<{}, {page: number}>)>();
-    
-    loadNegaraHandler = (search: string, loadedOption: {}, options: {
+    loadNegaraHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListCountryAction(search, options.page)
@@ -81,7 +79,7 @@ class FormDriver extends Component<Props> {
             });
     }
 
-    loadProvinsiHandler = (search: string, loadedOption: {}, options: {
+    loadProvinsiHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
 
@@ -137,7 +135,7 @@ class FormDriver extends Component<Props> {
     }
 
 
-    loadKabupatenKotaHandler = (search: string, loadedOption: {}, options: {
+    loadKabupatenKotaHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
 
@@ -193,7 +191,7 @@ class FormDriver extends Component<Props> {
             })
     }
 
-    loadKecamatanHandler = (search: string, loadedOption: {}, options: {
+    loadKecamatanHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         if (this.props.FormikProps.values.kabupaten_kota.value && this.props.FormikProps.values.kabupaten_kota.value > 0) {
@@ -248,7 +246,7 @@ class FormDriver extends Component<Props> {
         })
     }
 
-    loadKelurahanHandler = (search: string, loadedOption: {}, options: {
+    loadKelurahanHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         if (this.props.FormikProps.values.kecamatan.value && this.props.FormikProps.values.kecamatan.value > 0) {

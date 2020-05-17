@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Price, FormField } from '../../../types/admin/price';
+import { PriceShow, FormField } from '../../../types/admin/price';
 
 import {
     findPriceAction
@@ -65,12 +65,12 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findPriceAction(id)
-                .then((response: ApiResponse<Price>) => {
+                .then((response: ApiResponse<PriceShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Price = response.response!.result;
+                    const data: PriceShow = response.response!.result;
 
                     form.basePrice = data.basePrice.toString()
                     form.minKm = data.minKm.toString()
@@ -82,7 +82,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<Price>) => {
+                .catch((response: ApiResponse<PriceShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
@@ -166,7 +166,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findPriceAction: (id: number) => Promise<ApiResponse<Price>>
+    findPriceAction: (id: number) => Promise<ApiResponse<PriceShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

@@ -1,6 +1,7 @@
 import { Paginator } from '../../paginator';
 import { SubDistrict } from './subDistrict';
 import { Timestamps } from '../../timestamps';
+import { SelectType } from '../../select';
 
 export const FETCH_VILLAGE = "FETCH_VILLAGE";
 export const FETCH_VILLAGE_SUCCESS = "FETCH_VILLAGE_SUCCESS";
@@ -14,20 +15,17 @@ export const ALERT_VILLAGE_HIDE = "ALERT_VILLAGE_HIDE";
 
 export type FormField = {
     name: string,
-    subDistrict: {
-        label: string,
-        value: number
-    }
+    subDistrict: SelectType
 }
 
-interface VillageField {
+export type VillageField = {
     name: string,
     subDistrict: {
         id: number
     }
 }
 
-export interface Village {
+export type Village = {
     id: number,
     name: string
 }
@@ -52,47 +50,47 @@ export type VillageEditResult = Village & Partial<Timestamps> & {
     subDistrict?: Partial<SubDistrict>
 }
 
-export interface FetchVillageActionType {
+export type FetchVillageActionType = {
     type: typeof FETCH_VILLAGE
 }
 
-export interface FetchVillageSuccessActionType {
+export type FetchVillageSuccessActionType = {
     type: typeof FETCH_VILLAGE_SUCCESS,
     list: VillageList[]
 }
 
-export interface FetchVillageErrorActionType {
+export type FetchVillageErrorActionType = {
     type: typeof FETCH_VILLAGE_ERROR
 }
 
-export interface SetPaginatorVillageActionType {
+export type SetPaginatorVillageActionType = {
     type: typeof SET_PAGINATOR_VILLAGE,
     paginate: Paginator
 }
 
-export interface AlertVillageHideActionType {
+export type AlertVillageHideActionType = {
     type: typeof ALERT_VILLAGE_HIDE
 }
 
-export interface AlertVillageShowActionType {
+export type AlertVillageShowActionType = {
     type: typeof ALERT_VILLAGE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     subDistrictName: string
 }
 
 export type FilterKeys = keyof Filter
 
-export interface SetFilterVillageActionType {
+export type SetFilterVillageActionType = {
     type: typeof SET_FILTER_VILLAGE,
     filter: Filter
 }
 
-export interface ClearFilterVillageActionType {
+export type ClearFilterVillageActionType = {
     type: typeof CLEAR_FILTER_VILLAGE
 }
 

@@ -188,7 +188,6 @@ class Login extends React.Component<Props, State> {
                     const item: LoginInterface = {
                         identity: this.state.form.email,
                         type: "email",
-                        tokenFCM: "",
                         role: this.state.form.role.value
                     };
             

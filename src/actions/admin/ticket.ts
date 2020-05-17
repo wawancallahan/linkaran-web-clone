@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     Ticket,
+    TicketList,
+    TicketShow,
     SET_PAGINATOR_TICKET,
     FETCH_TICKET_SUCCESS,
     FETCH_TICKET_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchTicketActionType,
     FetchTicketErrorActionType,
     FetchTicketSuccessActionType,
-    TicketCreate,
-    TicketEdit,
+    TicketCreateField,
+    TicketEditField,
     AlertTicketHideActionType,
     ALERT_TICKET_HIDE,
     AlertTicketShowActionType,
@@ -92,7 +94,7 @@ export const fetchTicketAction = (page: number): ThunkResult<Promise<Boolean>> =
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/ticket?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Ticket> = response.data;
+                const data: ApiResponseSuccessList<TicketList> = response.data;
 
                 dispatch(setFetchTicketSuccessAction(data.result));
 
@@ -128,7 +130,7 @@ export const fetchTicketVoucherAction = (page: number, id: number): ThunkResult<
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/ticket?page=${page}&voucherId=${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Ticket> = response.data;
+                const data: ApiResponseSuccessList<TicketList> = response.data;
 
                 dispatch(setFetchTicketVoucherSuccessAction(data.result));
 
@@ -160,11 +162,11 @@ export const fetchTicketVoucherAction = (page: number, id: number): ThunkResult<
     }
 }
 
-export const fetchListTicketAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Ticket>>> => {
+export const fetchListTicketAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<TicketList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/ticket?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Ticket> = response.data;
+                const data: ApiResponseSuccessList<TicketList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -213,7 +215,7 @@ export const fetchListTicketAction = (search: string, page: number): ThunkResult
     }
 }
 
-export const createTicketAction = (ticket: TicketCreate): ThunkResult<Promise<ApiResponse<TicketCreateResult>>> => {
+export const createTicketAction = (ticket: TicketCreateField): ThunkResult<Promise<ApiResponse<TicketCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/ticket', ticket)
             .then( (response: AxiosResponse) => {
@@ -266,11 +268,11 @@ export const createTicketAction = (ticket: TicketCreate): ThunkResult<Promise<Ap
     }
 }
 
-export const findTicketAction = (id: number): ThunkResult<Promise<ApiResponse<Ticket>>> => {
+export const findTicketAction = (id: number): ThunkResult<Promise<ApiResponse<TicketShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/ticket/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Ticket> = response.data;
+                const data: ApiResponseSuccess<TicketShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -319,7 +321,7 @@ export const findTicketAction = (id: number): ThunkResult<Promise<ApiResponse<Ti
     }
 }
 
-export const editTicketAction = (ticket: TicketEdit, id: number): ThunkResult<Promise<ApiResponse<TicketEditResult>>> => {
+export const editTicketAction = (ticket: TicketEditField, id: number): ThunkResult<Promise<ApiResponse<TicketEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/ticket/${id}`, ticket)
             .then( (response: AxiosResponse) => {

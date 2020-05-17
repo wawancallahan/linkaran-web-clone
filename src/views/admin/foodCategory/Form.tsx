@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { FoodCategory, FormField, FoodCategoryCreate, FoodCategoryCreateResult } from '../../../types/admin/foodCategory';
+import { FoodCategory, FormField, FoodCategoryCreateField, FoodCategoryCreateResult } from '../../../types/admin/foodCategory';
 import { createFoodCategoryAction, setAlertFoodCategoryShowAction } from '../../../actions/admin/foodCategory';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
@@ -60,7 +60,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const foodCategory: FoodCategoryCreate = {
+                    const foodCategory: FoodCategoryCreateField = {
                         name: values.name
                     }
 
@@ -136,13 +136,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => Promise<ApiResponse<FoodCategoryCreateResult>>
+    createFoodCategoryAction: (foodCategory: FoodCategoryCreateField) => Promise<ApiResponse<FoodCategoryCreateResult>>
     setAlertFoodCategoryShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createFoodCategoryAction: (foodCategory: FoodCategoryCreate) => dispatch(createFoodCategoryAction(foodCategory)),
+        createFoodCategoryAction: (foodCategory: FoodCategoryCreateField) => dispatch(createFoodCategoryAction(foodCategory)),
         setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
     }
 }

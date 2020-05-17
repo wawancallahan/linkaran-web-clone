@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     User,
+    UserList,
+    UserShow,
     SET_PAGINATOR_USER,
     FETCH_USER_SUCCESS,
     FETCH_USER_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchUserActionType,
     FetchUserErrorActionType,
     FetchUserSuccessActionType,
-    UserCreate,
-    UserEdit,
+    UserCreateField,
+    UserEditField,
     AlertUserHideActionType,
     ALERT_USER_HIDE,
     AlertUserShowActionType,
@@ -100,7 +102,7 @@ export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> =>
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<User> = response.data;
+                const data: ApiResponseSuccessList<UserList> = response.data;
 
                 dispatch(setFetchUserSuccessAction(data.result));
 
@@ -132,7 +134,7 @@ export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> =>
     }
 }
 
-export const fetchListUserAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<User>>> => {
+export const fetchListUserAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<UserList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         let paramsObject: OptionObjectString = {
@@ -144,7 +146,7 @@ export const fetchListUserAction = (search: string, page: number): ThunkResult<P
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<User> = response.data;
+                const data: ApiResponseSuccessList<UserList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -193,7 +195,7 @@ export const fetchListUserAction = (search: string, page: number): ThunkResult<P
     }
 }
 
-export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiResponse<UserCreateResult>>> => {
+export const createUserAction = (user: UserCreateField): ThunkResult<Promise<ApiResponse<UserCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/user', user)
             .then( (response: AxiosResponse) => {
@@ -246,11 +248,11 @@ export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User>>> => {
+export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<UserShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/user/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<User> = response.data;
+                const data: ApiResponseSuccess<UserShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -299,7 +301,7 @@ export const findUserAction = (id: number): ThunkResult<Promise<ApiResponse<User
     }
 }
 
-export const editUserAction = (user: UserEdit, id: number): ThunkResult<Promise<ApiResponse<UserEditResult>>> => {
+export const editUserAction = (user: UserEditField, id: number): ThunkResult<Promise<ApiResponse<UserEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/user/${id}`, user)
             .then( (response: AxiosResponse) => {

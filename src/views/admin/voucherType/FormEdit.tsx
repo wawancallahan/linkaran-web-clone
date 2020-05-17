@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { VoucherType, FormField, VoucherTypeCreate, VoucherTypeEdit, VoucherTypeEditResult } from '../../../types/admin/voucherType';
+import { VoucherType, FormField, VoucherTypeEditField, VoucherTypeEditResult } from '../../../types/admin/voucherType';
 import { editVoucherTypeAction, setAlertVoucherTypeShowAction } from '../../../actions/admin/voucherType';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
@@ -61,7 +61,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const voucherType: VoucherTypeEdit = {
+                    const voucherType: VoucherTypeEditField = {
                         name: values.name
                     }
 
@@ -137,13 +137,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editVoucherTypeAction: (voucherType: VoucherTypeEdit, id: number) => Promise<ApiResponse<VoucherTypeEditResult>>
+    editVoucherTypeAction: (voucherType: VoucherTypeEditField, id: number) => Promise<ApiResponse<VoucherTypeEditResult>>
     setAlertVoucherTypeShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editVoucherTypeAction: (voucherType: VoucherTypeEdit, id: number) => dispatch(editVoucherTypeAction(voucherType, id)),
+        editVoucherTypeAction: (voucherType: VoucherTypeEditField, id: number) => dispatch(editVoucherTypeAction(voucherType, id)),
         setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color))
     }
 }

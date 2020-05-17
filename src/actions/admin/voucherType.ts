@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     VoucherType,
+    VoucherTypeList,
+    VoucherTypeShow,
     SET_PAGINATOR_VOUCHER_TYPE,
     FETCH_VOUCHER_TYPE_SUCCESS,
     FETCH_VOUCHER_TYPE_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchVoucherTypeActionType,
     FetchVoucherTypeErrorActionType,
     FetchVoucherTypeSuccessActionType,
-    VoucherTypeCreate,
-    VoucherTypeEdit,
+    VoucherTypeCreateField,
+    VoucherTypeEditField,
     AlertVoucherTypeHideActionType,
     ALERT_VOUCHER_TYPE_HIDE,
     AlertVoucherTypeShowActionType,
@@ -100,7 +102,7 @@ export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolea
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VoucherType> = response.data;
+                const data: ApiResponseSuccessList<VoucherTypeList> = response.data;
 
                 dispatch(setFetchVoucherTypeSuccessAction(data.result));
 
@@ -133,11 +135,11 @@ export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolea
 }
 
 
-export const fetchListVoucherTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VoucherType>>> => {
+export const fetchListVoucherTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VoucherTypeList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VoucherType> = response.data;
+                const data: ApiResponseSuccessList<VoucherTypeList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -186,7 +188,7 @@ export const fetchListVoucherTypeAction = (search: string, page: number): ThunkR
     }
 }
 
-export const createVoucherTypeAction = (voucherType: VoucherTypeCreate): ThunkResult<Promise<ApiResponse<VoucherTypeCreateResult>>> => {
+export const createVoucherTypeAction = (voucherType: VoucherTypeCreateField): ThunkResult<Promise<ApiResponse<VoucherTypeCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/voucher-type', voucherType)
             .then( (response: AxiosResponse) => {
@@ -239,11 +241,11 @@ export const createVoucherTypeAction = (voucherType: VoucherTypeCreate): ThunkRe
     }
 }
 
-export const findVoucherTypeAction = (id: number): ThunkResult<Promise<ApiResponse<VoucherType>>> => {
+export const findVoucherTypeAction = (id: number): ThunkResult<Promise<ApiResponse<VoucherTypeShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<VoucherType> = response.data;
+                const data: ApiResponseSuccess<VoucherTypeShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -292,7 +294,7 @@ export const findVoucherTypeAction = (id: number): ThunkResult<Promise<ApiRespon
     }
 }
 
-export const editVoucherTypeAction = (voucherType: VoucherTypeEdit, id: number): ThunkResult<Promise<ApiResponse<VoucherTypeEditResult>>> => {
+export const editVoucherTypeAction = (voucherType: VoucherTypeEditField, id: number): ThunkResult<Promise<ApiResponse<VoucherTypeEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher-type/${id}`, voucherType)
             .then( (response: AxiosResponse) => {

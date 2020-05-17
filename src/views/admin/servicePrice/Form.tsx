@@ -11,22 +11,17 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
-import {
-    fetchListServicePriceAction
-} from '../../../actions/admin/servicePrice';
-import { ServicePrice, FormField, ServicePriceCreate, ServicePriceCreateResult } from '../../../types/admin/servicePrice';
+import { ServicePrice, FormField, ServicePriceCreateField, ServicePriceCreateResult } from '../../../types/admin/servicePrice';
 import { createServicePriceAction, setAlertServicePriceShowAction } from '../../../actions/admin/servicePrice';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Paginator } from '../../../types/paginator';
 import { VehicleTypeList } from '../../../types/admin/vehicleType';
-import { fetchListVehicleTypeAction } from '../../../actions/admin/subBrandVehicle';
-import { fetchListRegionDistrictAction } from '../../../actions/admin/location';
-import { RegionDistrict } from '../../../types/admin/location';
+import { fetchListVehicleTypeAction } from '../../../actions/admin/vehicleType';
 import { fetchListPriceAction } from '../../../actions/admin/price';
 import { fetchListServiceAction } from '../../../actions/admin/service';
-import { Price } from '../../../types/admin/price';
-import { Service } from "../../../types/admin/service";
+import { PriceList } from '../../../types/admin/price';
+import { ServiceList } from "../../../types/admin/service";
 import { fetchListDistrictAction } from '../../../actions/admin/region/district';
 import { DistrictList } from '../../../types/admin/region/district';
 import swal from 'sweetalert'
@@ -103,13 +98,13 @@ class Form extends Component<Props> {
         })
     }
 
-    loadServiceHandler = (search: string, loadedOption: {}, options: {
+    loadServiceHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListServiceAction(search, options.page)
-            .then((response: ApiResponseList<Service>) => {
+            .then((response: ApiResponseList<ServiceList>) => {
 
-                const data: ApiResponseSuccessList<Service> = response.response!;
+                const data: ApiResponseSuccessList<ServiceList> = response.response!;
 
                 let result: {
                     value: number,
@@ -125,7 +120,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Service) => {
+                    result = data.result.map((item: ServiceList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -143,13 +138,13 @@ class Form extends Component<Props> {
             });
     }
 
-    loadPriceHandler = (search: string, loadedOption: {}, options: {
+    loadPriceHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListPriceAction(search, options.page)
-            .then((response: ApiResponseList<Price>) => {
+            .then((response: ApiResponseList<PriceList>) => {
 
-                const data: ApiResponseSuccessList<Price> = response.response!;
+                const data: ApiResponseSuccessList<PriceList> = response.response!;
 
                 let result: {
                     value: number,
@@ -165,7 +160,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Price) => {
+                    result = data.result.map((item: PriceList) => {
                         return {
                             value: item.id,
                             label: `${item.basePrice}`
@@ -183,7 +178,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadVehicleTypeHandler = (search: string, loadedOption: {}, options: {
+    loadVehicleTypeHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListVehicleTypeAction(search, options.page)
@@ -223,7 +218,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadRegionDistrictHandler = (search: string, loadedOption: {}, options: {
+    loadRegionDistrictHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListDistrictAction(search, options.page)
@@ -272,7 +267,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const servicePrice: ServicePriceCreate = {
+                    const servicePrice: ServicePriceCreateField = {
                         price: {
                             id: values.price.value
                         },
@@ -495,17 +490,17 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createServicePriceAction: (servicePrice: ServicePriceCreate) => Promise<ApiResponse<ServicePriceCreateResult>>
+    createServicePriceAction: (servicePrice: ServicePriceCreateField) => Promise<ApiResponse<ServicePriceCreateResult>>
     setAlertServicePriceShowAction: (message: string, color: string) => void,
-    fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<Price>>,
+    fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<PriceList>>,
     fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>,
     fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
-    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
+    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<ServiceList>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createServicePriceAction: (servicePrice: ServicePriceCreate) => dispatch(createServicePriceAction(servicePrice)),
+        createServicePriceAction: (servicePrice: ServicePriceCreateField) => dispatch(createServicePriceAction(servicePrice)),
         setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
         fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
         fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),

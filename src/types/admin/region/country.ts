@@ -15,11 +15,11 @@ export type FormField = {
     name: string,
 }
 
-interface CountryField {
+export type CountryField = {
     name: string
 }
 
-export interface Country {
+export type Country = {
     id: number,
     name: string
 }
@@ -36,46 +36,46 @@ export type CountryCreateResult = Country & Partial<Timestamps>
 
 export type CountryEditResult = Country & Partial<Timestamps>
 
-export interface FetchCountryActionType {
+export type FetchCountryActionType = {
     type: typeof FETCH_COUNTRY
 }
 
-export interface FetchCountrySuccessActionType {
+export type FetchCountrySuccessActionType = {
     type: typeof FETCH_COUNTRY_SUCCESS,
     list: CountryList[]
 }
 
-export interface FetchCountryErrorActionType {
+export type FetchCountryErrorActionType = {
     type: typeof FETCH_COUNTRY_ERROR
 }
 
-export interface SetPaginatorCountryActionType {
+export type SetPaginatorCountryActionType = {
     type: typeof SET_PAGINATOR_COUNTRY,
     paginate: Paginator
 }
 
-export interface AlertCountryHideActionType {
+export type AlertCountryHideActionType = {
     type: typeof ALERT_COUNTRY_HIDE
 }
 
-export interface AlertCountryShowActionType {
+export type AlertCountryShowActionType = {
     type: typeof ALERT_COUNTRY_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string
 }
 
 export type FilterKeys = keyof Filter
 
-export interface SetFilterCountryActionType {
+export type SetFilterCountryActionType = {
     type: typeof SET_FILTER_COUNTRY,
     filter: Filter
 }
 
-export interface ClearFilterCountryActionType {
+export type ClearFilterCountryActionType = {
     type: typeof CLEAR_FILTER_COUNTRY
 }
 

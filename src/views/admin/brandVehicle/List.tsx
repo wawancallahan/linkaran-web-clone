@@ -37,7 +37,7 @@ import {
     setAlertBrandVehicleShowAction,
     clearFilterAction
 } from '../../../actions/admin/brandVehicle';
-import { BrandVehicle } from '../../../types/admin/brandVehicle';
+import { BrandVehicle, BrandVehicleList } from '../../../types/admin/brandVehicle';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: BrandVehicle,
+    item: BrandVehicleList,
     key: number,
     deleteBrandVehicle: (id: number) => void
 }) => {
@@ -151,7 +151,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.brandVehicleList.length > 0) {
-                brandVehicleList = this.props.brandVehicleList.map((item: BrandVehicle, index: number) => (
+                brandVehicleList = this.props.brandVehicleList.map((item: BrandVehicleList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -238,7 +238,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    brandVehicleList: BrandVehicle[],
+    brandVehicleList: BrandVehicleList[],
     paginate: Paginator,
     brandVehicleAlert: IAlert
 }

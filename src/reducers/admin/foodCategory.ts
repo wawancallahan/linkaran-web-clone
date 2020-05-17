@@ -2,7 +2,7 @@ import {
     FETCH_FOOD_CATEGORY,
     FETCH_FOOD_CATEGORY_ERROR,
     FETCH_FOOD_CATEGORY_SUCCESS,
-    FoodCategory,
+    FoodCategoryList,
     FoodCategoryActionTypes,
     FetchFoodCategoryActionType,
     FetchFoodCategorySuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: FoodCategory[],
+    list: FoodCategoryList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

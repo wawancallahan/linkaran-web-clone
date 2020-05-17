@@ -37,7 +37,7 @@ import {
     setAlertFoodCategoryShowAction,
     clearFilterAction
 } from '../../../actions/admin/foodCategory';
-import { FoodCategory } from '../../../types/admin/foodCategory';
+import { FoodCategory, FoodCategoryList } from '../../../types/admin/foodCategory';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: FoodCategory,
+    item: FoodCategoryList,
     key: number,
     deleteFoodCategory: (id: number) => void
 }) => {
@@ -151,7 +151,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.foodCategoryList.length > 0) {
-                foodCategoryList = this.props.foodCategoryList.map((item: FoodCategory, index: number) => (
+                foodCategoryList = this.props.foodCategoryList.map((item: FoodCategoryList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -238,7 +238,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    foodCategoryList: FoodCategory[],
+    foodCategoryList: FoodCategoryList[],
     paginate: Paginator,
     foodCategoryAlert: IAlert
 }

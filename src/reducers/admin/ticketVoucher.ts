@@ -2,7 +2,7 @@ import {
     FETCH_TICKET_VOUCHER,
     FETCH_TICKET_VOUCHER_ERROR,
     FETCH_TICKET_VOUCHER_SUCCESS,
-    Ticket,
+    TicketList,
     TicketActionTypes,
     FetchTicketVoucherActionType,
     FetchTicketVoucherSuccessActionType,
@@ -15,7 +15,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Ticket[],
+    list: TicketList[],
     paginate: Paginator,
     alert: Alert
 };

@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { User, FormField } from '../../../types/admin/user';
+import { UserShow, FormField } from '../../../types/admin/user';
 import {
     findUserAction
 } from '../../../actions/admin/user';
@@ -67,23 +67,27 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findUserAction(id)
-                .then((response: ApiResponse<User>) => {
+                .then((response: ApiResponse<UserShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: User =response.response!.result;
+                    const data: UserShow = response.response!.result;
 
                     form.email =  data.email;
                     form.name = data.name;
                     form.phoneNumber = data.phoneNumber;
                     form.telegramuser = data.telegramuser
-                    form.roles = data.roles.map((value: Role) => {
-                        return {
-                            value: value.id,
-                            label: value.title
-                        };
-                    })
+                    
+                    if (data.roles) {
+                        form.roles = data.roles.map((value: Role) => {
+                            return {
+                                value: value.id,
+                                label: value.title
+                            };
+                        })
+                    }
+                    
 
                     this.setState({
                         form: form,
@@ -91,7 +95,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<User>) => {
+                .catch((response: ApiResponse<UserShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -167,7 +171,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findUserAction: (id: number) => Promise<ApiResponse<User>>
+    findUserAction: (id: number) => Promise<ApiResponse<UserShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

@@ -23,7 +23,7 @@ export type FormField = {
     ips: string[]
 }
 
-interface PartnerField {
+export type PartnerField = {
     name: string,
     email: string,
     phoneNumber: string,
@@ -34,7 +34,7 @@ interface PartnerField {
     ips: string[]
 }
 
-export interface Partner {
+export type Partner = {
     id: number,
     companyName: string,
     startWorkingTogether: string,
@@ -60,35 +60,35 @@ export type PartnerCreateResult = Partner & Partial<Timestamps>
 
 export type PartnerEditResult = Partner & Partial<Timestamps>
 
-export interface FetchPartnerActionType {
+export type FetchPartnerActionType = {
     type: typeof FETCH_PARTNER
 }
 
-export interface FetchPartnerSuccessActionType {
+export type FetchPartnerSuccessActionType = {
     type: typeof FETCH_PARTNER_SUCCESS,
     list: PartnerList[]
 }
 
-export interface FetchPartnerErrorActionType {
+export type FetchPartnerErrorActionType = {
     type: typeof FETCH_PARTNER_ERROR
 }
 
-export interface SetPaginatorPartnerActionType {
+export type SetPaginatorPartnerActionType = {
     type: typeof SET_PAGINATOR_PARTNER,
     paginate: Paginator
 }
 
-export interface AlertPartnerHideActionType {
+export type AlertPartnerHideActionType = {
     type: typeof ALERT_PARTNER_HIDE
 }
 
-export interface AlertPartnerShowActionType {
+export type AlertPartnerShowActionType = {
     type: typeof ALERT_PARTNER_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     companyName: string,
     startWorkingTogether: Date | null,
@@ -104,12 +104,12 @@ export type FilterOmit = Omit<Filter, 'startWorkingTogether' | 'endWorkingTogeth
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterPartnerActionType {
+export type SetFilterPartnerActionType = {
     type: typeof SET_FILTER_PARTNER,
     filter: Filter
 }
 
-export interface ClearFilterPartnerActionType {
+export type ClearFilterPartnerActionType = {
     type: typeof CLEAR_FILTER_PARTNER
 }
 

@@ -26,6 +26,8 @@ export type BrandVehicle = {
 
 export type BrandVehicleList = BrandVehicle & Partial<Timestamps>
 
+export type BrandVehicleShow = BrandVehicle & Partial<Timestamps>
+
 export type BrandVehicleCreateField = BrandVehicleField
 
 export type BrandVehicleEditField = BrandVehicleField

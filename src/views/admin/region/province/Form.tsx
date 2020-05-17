@@ -69,7 +69,7 @@ class Form extends Component<Props> {
         })
     }
 
-    loadCountryHandler = (search: string, loadedOption: {}, options: {
+    loadCountryHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListCountryAction(search, options.page)

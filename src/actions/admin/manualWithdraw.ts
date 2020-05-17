@@ -198,9 +198,19 @@ export const fetchListManualWithDrawAction = (search: string, page: number): Thu
     }
 }
 
-export const createManualWithDrawAction = (topUp: ManualWithDrawCreateField): ThunkResult<Promise<ApiResponse<ManualWithDrawCreateResult>>> => {
+export const createManualWithDrawAction = (withdraw: ManualWithDrawCreateField): ThunkResult<Promise<ApiResponse<ManualWithDrawCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/withdraw-manual-driver', topUp, {
+
+        const data = new FormData;
+
+        data.set('amount', withdraw.amount)
+        data.set('driverProfileId', withdraw.driverProfile.id.toString())
+        data.set('bankId', withdraw.bank.id.toString())
+        data.set('bankName', withdraw.bankName)
+        data.set('accountNumber', withdraw.accountNumber)
+        data.set('accountName', withdraw.accountName)
+
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/withdraw-manual-driver', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -308,9 +318,19 @@ export const findManualWithDrawAction = (id: number): ThunkResult<Promise<ApiRes
     }
 }
 
-export const editManualWithDrawAction = (topUp: ManualWithDrawEditField, id: number): ThunkResult<Promise<ApiResponse<ManualWithDrawEditResult>>> => {
+export const editManualWithDrawAction = (withdraw: ManualWithDrawEditField, id: number): ThunkResult<Promise<ApiResponse<ManualWithDrawEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/withdraw-manual-driver/${id}`, topUp, {
+
+        const data = new FormData;
+
+        data.set('amount', withdraw.amount)
+        data.set('driverProfileId', withdraw.driverProfile.id.toString())
+        data.set('bankId', withdraw.bank.id.toString())
+        data.set('bankName', withdraw.bankName)
+        data.set('accountNumber', withdraw.accountNumber)
+        data.set('accountName', withdraw.accountName)
+
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/withdraw-manual-driver/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }

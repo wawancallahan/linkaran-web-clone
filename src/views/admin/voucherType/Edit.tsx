@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { VoucherType, FormField } from '../../../types/admin/voucherType';
+import { VoucherTypeShow, FormField } from '../../../types/admin/voucherType';
 import {
     findVoucherTypeAction
 } from '../../../actions/admin/voucherType';
@@ -62,12 +62,12 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findVoucherTypeAction(id)
-                .then((response: ApiResponse<VoucherType>) => {
+                .then((response: ApiResponse<VoucherTypeShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: VoucherType =response.response!.result;
+                    const data: VoucherTypeShow =response.response!.result;
 
                     form.name = data.name;
 
@@ -77,7 +77,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<VoucherType>) => {
+                .catch((response: ApiResponse<VoucherTypeShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -153,7 +153,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findVoucherTypeAction: (id: number) => Promise<ApiResponse<VoucherType>>
+    findVoucherTypeAction: (id: number) => Promise<ApiResponse<VoucherTypeShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_VOUCHER_TYPE = "FETCH_VOUCHER_TYPE";
 export const FETCH_VOUCHER_TYPE_SUCCESS = "FETCH_VOUCHER_TYPE_SUCCESS";
@@ -14,71 +15,67 @@ export type FormField = {
     name: string
 }
 
-interface VoucherTypeField {
+export type VoucherTypeField = {
     name: string
 }
 
-interface VoucherTypeList {
-    name: string
-}
-
-interface VoucherTypeResult {
+export type VoucherType = {
     id: number,
-    createdAt?: string,
-    updatedAt?: string | null,
-    deletedAt?: string | null,
+    name: string
 }
 
-export type VoucherType = VoucherTypeResult & VoucherTypeList;
+export type VoucherTypeList = VoucherType
 
-export type VoucherTypeCreate = VoucherTypeField;
+export type VoucherTypeShow = VoucherType
 
-export type VoucherTypeEdit = VoucherTypeField;
+export type VoucherTypeCreateField = VoucherTypeField
 
-export type VoucherTypeCreateResult = VoucherTypeResult & VoucherTypeList;
+export type VoucherTypeEditField = VoucherTypeField
 
-export type VoucherTypeEditResult = VoucherTypeResult &  VoucherTypeList;
+export type VoucherTypeCreateResult = VoucherType & Partial<Timestamps>
 
-export interface FetchVoucherTypeActionType {
+export type VoucherTypeEditResult = VoucherType &  Partial<Timestamps>
+
+export type FetchVoucherTypeActionType = {
     type: typeof FETCH_VOUCHER_TYPE
 }
 
-export interface FetchVoucherTypeSuccessActionType {
+export type FetchVoucherTypeSuccessActionType = {
     type: typeof FETCH_VOUCHER_TYPE_SUCCESS,
     list: VoucherType[]
 }
 
-export interface FetchVoucherTypeErrorActionType {
+export type FetchVoucherTypeErrorActionType = {
     type: typeof FETCH_VOUCHER_TYPE_ERROR
 }
 
-export interface SetPaginatorVoucherTypeActionType {
+export type SetPaginatorVoucherTypeActionType = {
     type: typeof SET_PAGINATOR_VOUCHER_TYPE,
     paginate: Paginator
 }
 
-export interface AlertVoucherTypeHideActionType {
+export type AlertVoucherTypeHideActionType = {
     type: typeof ALERT_VOUCHER_TYPE_HIDE
 }
 
-export interface AlertVoucherTypeShowActionType {
+export type AlertVoucherTypeShowActionType = {
     type: typeof ALERT_VOUCHER_TYPE_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterVoucherTypeActionType {
+export type SetFilterVoucherTypeActionType = {
     type: typeof SET_FILTER_VOUCHER_TYPE,
     filter: Filter
 }
 
-export interface ClearFilterVoucherTypeActionType {
+export type ClearFilterVoucherTypeActionType = {
     type: typeof CLEAR_FILTER_VOUCHER_TYPE
 }
 

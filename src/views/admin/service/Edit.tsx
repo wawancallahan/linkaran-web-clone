@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Service, FormField } from '../../../types/admin/service';
+import { ServiceShow, FormField } from '../../../types/admin/service';
 
 import FormService from './FormEdit';
 import { ApiResponse } from '../../../types/api';
@@ -65,12 +65,12 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findServiceAction(id)
-                .then((response: ApiResponse<Service>) => {
+                .then((response: ApiResponse<ServiceShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Service = response.response!.result;
+                    const data: ServiceShow = response.response!.result;
 
                     form.name = data.name
                     form.code = data.code
@@ -84,7 +84,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<Service>) => {
+                .catch((response: ApiResponse<ServiceShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
@@ -168,7 +168,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findServiceAction: (id: number) => Promise<ApiResponse<Service>>
+    findServiceAction: (id: number) => Promise<ApiResponse<ServiceShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

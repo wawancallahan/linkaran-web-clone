@@ -2,7 +2,7 @@ import {
     FETCH_SUB_BRAND_VEHICLE,
     FETCH_SUB_BRAND_VEHICLE_ERROR,
     FETCH_SUB_BRAND_VEHICLE_SUCCESS,
-    SubBrandVehicle,
+    SubBrandVehicleList,
     SubBrandVehicleActionTypes,
     FetchSubBrandVehicleActionType,
     FetchSubBrandVehicleSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: SubBrandVehicle[],
+    list: SubBrandVehicleList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

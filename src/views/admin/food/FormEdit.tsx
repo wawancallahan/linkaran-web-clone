@@ -13,12 +13,12 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import {
-    FoodCategory
+    FoodCategoryList
 } from '../../../types/admin/foodCategory';
 import {
     fetchListFoodCategoryAction
 } from '../../../actions/admin/foodCategory';
-import { Food, FormField, FoodEdit, FoodEditResult } from '../../../types/admin/food';
+import { Food, FormField, FoodEditField, FoodEditResult } from '../../../types/admin/food';
 import { editFoodAction, setAlertFoodShowAction } from '../../../actions/admin/food';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
@@ -97,13 +97,13 @@ class Form extends Component<Props> {
         }
     }
 
-    loadFoodCategoryHandler = (search: string, loadedOption: {}, options: {
+    loadFoodCategoryHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListFoodCategoryAction(search, options.page)
-            .then((response: ApiResponseList<FoodCategory>) => {
+            .then((response: ApiResponseList<FoodCategoryList>) => {
 
-                const data: ApiResponseSuccessList<FoodCategory> = response.response!;
+                const data: ApiResponseSuccessList<FoodCategoryList> = response.response!;
 
                 let result: {
                     value: number,
@@ -119,7 +119,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: FoodCategory) => {
+                    result = data.result.map((item: FoodCategoryList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -137,7 +137,7 @@ class Form extends Component<Props> {
             });
     }
 
-    loadRestaurantHandler = (search: string, loadedOption: {}, options: {
+    loadRestaurantHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListRestaurantAction(search, options.page)
@@ -185,7 +185,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const food: FoodEdit = {
+                    const food: FoodEditField = {
                         name: values.name,
                         description: values.description,
                         foodCategory: {
@@ -408,15 +408,15 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editFoodAction: (food: FoodEdit, id: number) => Promise<ApiResponse<FoodEditResult>>
+    editFoodAction: (food: FoodEditField, id: number) => Promise<ApiResponse<FoodEditResult>>
     setAlertFoodShowAction: (message: string, color: string) => void,
-    fetchListFoodCategoryAction: (search: string, page: number) => Promise<ApiResponseList<FoodCategory>>,
+    fetchListFoodCategoryAction: (search: string, page: number) => Promise<ApiResponseList<FoodCategoryList>>,
     fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<Restaurant>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editFoodAction: (food: FoodEdit, id: number) => dispatch(editFoodAction(food, id)),
+        editFoodAction: (food: FoodEditField, id: number) => dispatch(editFoodAction(food, id)),
         setAlertFoodShowAction: (message: string, color: string) => dispatch(setAlertFoodShowAction(message, color)),
         fetchListFoodCategoryAction: (search: string, page: number) => dispatch(fetchListFoodCategoryAction(search, page)),
         fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))

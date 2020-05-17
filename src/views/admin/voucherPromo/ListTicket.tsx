@@ -25,7 +25,7 @@ import { AppActions } from '../../../types';
 
 import Pagination from '../../../components/Pagination/Pagination'
 import { VoucherPromo } from '../../../types/admin/voucherPromo';
-import { Ticket, FormField, TicketCreate, TicketCreateResult, TicketEdit, TicketEditResult } from '../../../types/admin/ticket';
+import { Ticket, TicketList, FormField, TicketCreateField, TicketCreateResult, TicketEditField, TicketEditResult } from '../../../types/admin/ticket';
 import { Paginator } from '../../../types/paginator';
 import { fetchTicketVoucherAction, createTicketAction, deleteTicketAction, editTicketAction } from '../../../actions/admin/ticket';
 import Spinner from '../../../components/Loader/Spinner'
@@ -65,11 +65,11 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Ticket,
+    item: TicketList,
     key: number,
     modalState: ModalState,
     voucher: VoucherPromo | null,
-    editTicketAction: (ticket: TicketEdit, id: number) => Promise<ApiResponse<TicketEditResult>>,
+    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>,
     setAlertMessage: (message: string, color: string) => void,
     loadTicketVoucherList: () => void,
     setAlertOpen: (open: boolean) => void,
@@ -79,7 +79,7 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.item.redeemCode}</td>
-            <td>{parseDateTimeFormat(props.item.claimAt)}</td>
+            <td>{props.item.claimAt ? parseDateTimeFormat(props.item.claimAt) : ''}</td>
             <td>
                 <Button color="warning" size="sm" onClick={() => props.toggleEditModelTicket(props.index)}>
                     <i className="fa fa-edit"></i>
@@ -115,7 +115,7 @@ const TableItem = (props: {
                                     props.setAlertOpen(false)
 
                                     if (props.voucher) {
-                                        const ticketForm: TicketEdit = {
+                                        const ticketForm: TicketEditField = {
                                             redeemCode: values.redeemCode,
                                             voucher: {
                                                 id: props.voucher.id
@@ -365,7 +365,7 @@ class ListTicket extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.ticketVoucherList.length > 0) {
-                ticketVoucherList = this.props.ticketVoucherList.map((item: Ticket, index: number) => {
+                ticketVoucherList = this.props.ticketVoucherList.map((item: TicketList, index: number) => {
                     const selectedModalState = this.state.modalState[index];
 
                     return (
@@ -471,7 +471,7 @@ class ListTicket extends Component<Props, State> {
                                     this.setAlertOpen(false)
 
                                     if (this.props.data) {
-                                        const ticketForm: TicketCreate = {
+                                        const ticketForm: TicketCreateField = {
                                             redeemCode: values.redeemCode,
                                             voucher: {
                                                 id: this.props.data.id
@@ -560,7 +560,7 @@ class ListTicket extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    ticketVoucherList: Ticket[],
+    ticketVoucherList: TicketList[],
     paginate: Paginator,
 }
 
@@ -574,16 +574,16 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 interface LinkDispatchToProps {
     fetchTicketVoucherAction: (page: number, id: number) => Promise<Boolean>,
     deleteTicketAction: (id: number) => Promise<ApiResponse<Ticket>>,
-    createTicketAction: (ticket: TicketCreate) => Promise<ApiResponse<TicketCreateResult>>,
-    editTicketAction: (ticket: TicketEdit, id: number) => Promise<ApiResponse<TicketEditResult>>
+    createTicketAction: (ticket: TicketCreateField) => Promise<ApiResponse<TicketCreateResult>>,
+    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListTicketProps): LinkDispatchToProps => {
     return {
         fetchTicketVoucherAction: (page: number, id: number) => dispatch(fetchTicketVoucherAction(page, id)),
         deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
-        createTicketAction: (ticket: TicketCreate) => dispatch(createTicketAction(ticket)),
-        editTicketAction: (ticket: TicketEdit, id: number) => dispatch(editTicketAction(ticket, id))
+        createTicketAction: (ticket: TicketCreateField) => dispatch(createTicketAction(ticket)),
+        editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id))
     }
 }
 

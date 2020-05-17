@@ -2,7 +2,7 @@ import {
     FETCH_SERVICE_PRICE,
     FETCH_SERVICE_PRICE_ERROR,
     FETCH_SERVICE_PRICE_SUCCESS,
-    ServicePrice,
+    ServicePriceList,
     ServicePriceActionTypes,
     FetchServicePriceActionType,
     FetchServicePriceSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: ServicePrice[],
+    list: ServicePriceList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

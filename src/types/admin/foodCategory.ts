@@ -1,4 +1,5 @@
 import { Paginator } from '../paginator';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_FOOD_CATEGORY = "FETCH_FOOD_CATEGORY";
 export const FETCH_FOOD_CATEGORY_SUCCESS = "FETCH_FOOD_CATEGORY_SUCCESS";
@@ -14,69 +15,67 @@ export type FormField = {
     name: string,
 }
 
-interface FoodCategoryField {
+export type FoodCategoryField = {
     name: string
 }
-interface FoodCategoryList {
-    name: string
-}
-interface FoodCategoryResult {
+
+export type FoodCategory = {
     id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+    name: string
 }
 
-export type FoodCategory = FoodCategoryResult & FoodCategoryList;
+export type FoodCategoryList = FoodCategory & Partial<Timestamps>
 
-export type FoodCategoryCreate = FoodCategoryField;
+export type FoodCategoryShow = FoodCategory & Partial<Timestamps>
 
-export type FoodCategoryEdit = FoodCategoryField;
+export type FoodCategoryCreateField = FoodCategoryField
 
-export type FoodCategoryCreateResult = FoodCategoryResult;
+export type FoodCategoryEditField = FoodCategoryField
 
-export type FoodCategoryEditResult = FoodCategoryResult;
+export type FoodCategoryCreateResult = FoodCategory & Partial<Timestamps>
 
-export interface FetchFoodCategoryActionType {
+export type FoodCategoryEditResult = FoodCategory & Partial<Timestamps>
+
+export type FetchFoodCategoryActionType = {
     type: typeof FETCH_FOOD_CATEGORY
 }
 
-export interface FetchFoodCategorySuccessActionType {
+export type FetchFoodCategorySuccessActionType = {
     type: typeof FETCH_FOOD_CATEGORY_SUCCESS,
     list: FoodCategory[]
 }
 
-export interface FetchFoodCategoryErrorActionType {
+export type FetchFoodCategoryErrorActionType = {
     type: typeof FETCH_FOOD_CATEGORY_ERROR
 }
 
-export interface SetPaginatorFoodCategoryActionType {
+export type SetPaginatorFoodCategoryActionType = {
     type: typeof SET_PAGINATOR_FOOD_CATEGORY,
     paginate: Paginator
 }
 
-export interface AlertFoodCategoryHideActionType {
+export type AlertFoodCategoryHideActionType = {
     type: typeof ALERT_FOOD_CATEGORY_HIDE
 }
 
-export interface AlertFoodCategoryShowActionType {
+export type AlertFoodCategoryShowActionType = {
     type: typeof ALERT_FOOD_CATEGORY_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string
 }
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterFoodCategoryActionType {
+export type SetFilterFoodCategoryActionType = {
     type: typeof SET_FILTER_FOOD_CATEGORY,
     filter: Filter
 }
 
-export interface ClearFilterFoodCategoryActionType {
+export type ClearFilterFoodCategoryActionType = {
     type: typeof CLEAR_FILTER_FOOD_CATEGORY
 }
 

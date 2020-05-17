@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { BrandVehicle, FormField } from '../../../types/admin/brandVehicle';
+import { BrandVehicle, FormField, BrandVehicleShow } from '../../../types/admin/brandVehicle';
 import {
     findBrandVehicleAction
 } from '../../../actions/admin/brandVehicle';
@@ -62,12 +62,12 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findBrandVehicleAction(id)
-                .then((response: ApiResponse<BrandVehicle>) => {
+                .then((response: ApiResponse<BrandVehicleShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: BrandVehicle =response.response!.result;
+                    const data: BrandVehicleShow =response.response!.result;
 
                     form.name = data.name;
 
@@ -77,7 +77,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<BrandVehicle>) => {
+                .catch((response: ApiResponse<BrandVehicleShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -153,7 +153,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findBrandVehicleAction: (id: number) => Promise<ApiResponse<BrandVehicle>>
+    findBrandVehicleAction: (id: number) => Promise<ApiResponse<BrandVehicleShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

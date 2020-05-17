@@ -37,7 +37,7 @@ import {
     setAlertVoucherTypeShowAction,
     clearFilterAction
 } from '../../../actions/admin/voucherType';
-import { VoucherType } from '../../../types/admin/voucherType';
+import { VoucherType, VoucherTypeList } from '../../../types/admin/voucherType';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: VoucherType,
+    item: VoucherTypeList,
     key: number,
     deleteVoucherType: (id: number) => void
 }) => {
@@ -151,7 +151,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.voucherTypeList.length > 0) {
-                voucherTypeList = this.props.voucherTypeList.map((item: VoucherType, index: number) => (
+                voucherTypeList = this.props.voucherTypeList.map((item: VoucherTypeList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -238,7 +238,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    voucherTypeList: VoucherType[],
+    voucherTypeList: VoucherTypeList[],
     paginate: Paginator,
     voucherTypeAlert: IAlert
 }

@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { ServicePrice, FormField } from '../../../types/admin/servicePrice';
+import { ServicePriceShow, FormField } from '../../../types/admin/servicePrice';
 
 import FormServicePrice from './FormEdit';
 import { ApiResponse } from '../../../types/api';
@@ -79,31 +79,39 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findServicePriceAction(id)
-                .then((response: ApiResponse<ServicePrice>) => {
+                .then((response: ApiResponse<ServicePriceShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: ServicePrice = response.response!.result;
+                    const data: ServicePriceShow = response.response!.result;
 
-                    form.price = {
-                        value: data.priceId,
-                        label: data.basePrice.toString()
+                    if (data.priceId && data.basePrice) {
+                        form.price = {
+                            value: data.priceId,
+                            label: data.basePrice.toString()
+                        }
                     }
 
-                    form.district = {
-                        value: data.district.id,
-                        label: data.district.name
+                    if (data.district) {
+                        form.district = {
+                            value: data.district.id ? data.district.id : 0,
+                            label: data.district.name ? data.district.name : ''
+                        }
                     }
 
-                    form.service = {
-                        value: data.service.id,
-                        label: data.service.name
+                    if (data.service) {
+                        form.service = {
+                            value: data.service.id ? data.service.id : 0,
+                            label: data.service.name ? data.service.name : ''
+                        }
                     }
 
-                    form.vehicleType = {
-                        value: data.vehicleType.id,
-                        label: data.vehicleType.name || ''
+                    if (data.vehicleType) {
+                        form.vehicleType = {
+                            value: data.vehicleType.id ? data.vehicleType.id : 0,
+                            label: data.vehicleType.name ? data.vehicleType.name : ''
+                        }
                     }
 
                     if (data.driverPaymentDeductions) {
@@ -124,7 +132,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ServicePrice>) => {
+                .catch((response: ApiResponse<ServicePriceShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
@@ -208,7 +216,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>
+    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePriceShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

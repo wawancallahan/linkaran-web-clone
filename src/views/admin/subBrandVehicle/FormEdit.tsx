@@ -13,13 +13,13 @@ import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
 import {
-    BrandVehicle
+    BrandVehicleList
 } from '../../../types/admin/brandVehicle';
 import {
     fetchListBrandVehicleAction
 } from '../../../actions/admin/brandVehicle';
 
-import { SubBrandVehicle, FormField, SubBrandVehicleCreate, SubBrandVehicleEdit, SubBrandVehicleEditResult } from '../../../types/admin/subBrandVehicle';
+import { SubBrandVehicle, FormField, SubBrandVehicleEditField, SubBrandVehicleEditResult } from '../../../types/admin/subBrandVehicle';
 import { editSubBrandVehicleAction, setAlertSubBrandVehicleShowAction } from '../../../actions/admin/subBrandVehicle';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 
@@ -67,13 +67,13 @@ class Form extends Component<Props> {
         })
     }
 
-    loadSubBrandVehicleHandler = (search: string, loadedOption: {}, options: {
+    loadSubBrandVehicleHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
         return this.props.fetchListBrandVehicleAction(search, options.page)
-            .then((response: ApiResponseList<BrandVehicle>) => {
+            .then((response: ApiResponseList<BrandVehicleList>) => {
 
-                const data: ApiResponseSuccessList<BrandVehicle> = response.response!;
+                const data: ApiResponseSuccessList<BrandVehicleList> = response.response!;
 
                 let result: {
                     value: number,
@@ -89,7 +89,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: BrandVehicle) => {
+                    result = data.result.map((item: BrandVehicleList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -115,7 +115,7 @@ class Form extends Component<Props> {
                 onSubmit={(values, action) => {
                     this.props.setAlertOpen(false);
 
-                    const subBrandVehicle: SubBrandVehicleEdit = {
+                    const subBrandVehicle: SubBrandVehicleEditField = {
                         name: values.name,
                         brandVehicle: {
                             id: values.brandVehicle.value
@@ -215,14 +215,14 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEdit, id: number) => Promise<ApiResponse<SubBrandVehicleEditResult>>
+    editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEditField, id: number) => Promise<ApiResponse<SubBrandVehicleEditResult>>
     setAlertSubBrandVehicleShowAction: (message: string, color: string) => void,
-    fetchListBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<BrandVehicle>>
+    fetchListBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<BrandVehicleList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEdit, id: number) => dispatch(editSubBrandVehicleAction(subBrandVehicle, id)),
+        editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEditField, id: number) => dispatch(editSubBrandVehicleAction(subBrandVehicle, id)),
         setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color)),
         fetchListBrandVehicleAction: (search: string, page: number) => dispatch(fetchListBrandVehicleAction(search, page))
     }

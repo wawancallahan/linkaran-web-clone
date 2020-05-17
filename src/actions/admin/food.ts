@@ -11,8 +11,8 @@ import {
     FetchFoodActionType,
     FetchFoodErrorActionType,
     FetchFoodSuccessActionType,
-    FoodCreate,
-    FoodEdit,
+    FoodCreateField,
+    FoodEditField,
     AlertFoodHideActionType,
     ALERT_FOOD_HIDE,
     AlertFoodShowActionType,
@@ -23,7 +23,9 @@ import {
     SetFilterFoodActionType,
     SET_FILTER_FOOD,
     ClearFilterFoodActionType,
-    CLEAR_FILTER_FOOD
+    CLEAR_FILTER_FOOD,
+    FoodShow,
+    FoodList
 } from '../../types/admin/food';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -105,7 +107,7 @@ export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> =>
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Food> = response.data;
+                const data: ApiResponseSuccessList<FoodList> = response.data;
 
                 dispatch(setFetchFoodSuccessAction(data.result));
 
@@ -137,7 +139,7 @@ export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> =>
     }
 }
 
-export const createFoodAction = (food: FoodCreate): ThunkResult<Promise<ApiResponse<FoodCreateResult>>> => {
+export const createFoodAction = (food: FoodCreateField): ThunkResult<Promise<ApiResponse<FoodCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         const data = new FormData;
 
@@ -207,11 +209,11 @@ export const createFoodAction = (food: FoodCreate): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food>>> => {
+export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<FoodShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/food/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Food> = response.data;
+                const data: ApiResponseSuccess<FoodShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -260,7 +262,7 @@ export const findFoodAction = (id: number): ThunkResult<Promise<ApiResponse<Food
     }
 }
 
-export const editFoodAction = (food: FoodEdit, id: number): ThunkResult<Promise<ApiResponse<FoodEditResult>>> => {
+export const editFoodAction = (food: FoodEditField, id: number): ThunkResult<Promise<ApiResponse<FoodEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         const data = new FormData;
         

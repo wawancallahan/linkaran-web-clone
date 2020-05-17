@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { FoodCategory, FormField } from '../../../types/admin/foodCategory';
+import { FoodCategory, FormField, FoodCategoryShow } from '../../../types/admin/foodCategory';
 import {
     findFoodCategoryAction
 } from '../../../actions/admin/foodCategory';
@@ -62,12 +62,12 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findFoodCategoryAction(id)
-                .then((response: ApiResponse<FoodCategory>) => {
+                .then((response: ApiResponse<FoodCategoryShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: FoodCategory =response.response!.result;
+                    const data: FoodCategoryShow =response.response!.result;
 
                     form.name = data.name;
 
@@ -77,7 +77,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<FoodCategory>) => {
+                .catch((response: ApiResponse<FoodCategoryShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -153,7 +153,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategory>>
+    findFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategoryShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
