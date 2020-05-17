@@ -215,14 +215,23 @@ class List extends Component<Props, State> {
                                             <h3 className="mb-0">Daftar Driver</h3>
                                         </div>
                                         <div className="col text-right">
-                                        <Link to="/admin/driver/create">
-                                            <Button
-                                                color="primary"
-                                                size="sm"
-                                            >
-                                                Tambah Driver
-                                            </Button>
-                                        </Link>
+                                            <Link to="/admin/driver/create" className="mr-2">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Driver
+                                                </Button>
+                                            </Link>
+
+                                            <Link to="/admin/driver/create-from-customer">
+                                                <Button
+                                                    color="primary"
+                                                    size="sm"
+                                                >
+                                                    Tambah Driver Dari Customer
+                                                </Button>
+                                            </Link>
                                         </div>
                                     </Row>
                                     <Row className="mt-4">

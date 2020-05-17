@@ -80,9 +80,6 @@ const TableItem = (props: {
             <td>{props.item.email}</td>
             <td>{props.item.isActive ? "Aktif" : "Tidak Aktif"}</td>
             <td>
-                <Link to={`/admin/customer/${props.item.id}`} className="btn btn-info btn-sm">
-                    <i className="fa fa-eye"></i>
-                </Link>
                 {
                     props.item.isActive ? (
                         <Button color="danger" size="sm" onClick={() => props.deactiveCustomer(props.item.id)}>
@@ -94,6 +91,14 @@ const TableItem = (props: {
                         </Button>
                     )
                 }
+                
+                <Link to={`/admin/customer/${props.item.id}`} className="btn btn-info btn-sm">
+                    <i className="fa fa-eye"></i>
+                </Link>
+
+                <Link to={`/admin/driver/create-from-customer/${props.item.id}`} className="btn btn-primary btn-sm">
+                    <i className="fa fa-motorcycle"></i> Driver
+                </Link>
             </td>
         </tr>
     )

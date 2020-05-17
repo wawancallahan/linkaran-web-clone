@@ -15,7 +15,9 @@ import {
     AlertDriverShowActionType,
     ALERT_DRIVER_SHOW,
     DriverCreate,
+    DriverCreateFromCustomer,
     DriverCreateResult,
+    DriverCreateFromCustomerResult,
     DriverEdit,
     DriverEditResult,
     FetchDriverErrorActionType,
@@ -254,6 +256,103 @@ export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<Ap
             })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<DriverCreateResult> = response.data;
+                
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                console.log(error.response)
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const createDriverFromCustomerAction = (driver: DriverCreateFromCustomer): ThunkResult<Promise<ApiResponse<DriverCreateFromCustomerResult>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        
+        const data = new FormData();
+
+        data.set('user.id', driver.user.id.toString());
+        data.set('dateOfBirth', driver.tanggal_lahir)
+        data.set('identityNumber', driver.no_ktp)
+        data.set('gender', driver.jenis_kelamin == 1 ? 'L' : 'P')
+        data.set('address', driver.alamat)
+        data.set('country.id', driver.negara.id.toString())
+        data.set('province.id', driver.provinsi.id.toString())
+        data.set('district.id', driver.kabupaten_kota.id.toString())
+        data.set('subDistrict.id', driver.kecamatan.id.toString())
+        data.set('village.id', driver.kelurahan.id.toString())
+        data.set('rating', '0')
+        data.set('user.vehicle.vehicleType.id', driver.tipe_kendaraan.id.toString())
+        data.set('user.vehicle.policeNumber', driver.no_polisi)
+        data.set('user.vehicle.stnkNumber', driver.no_stnk)
+        data.set('user.vehicle.chassisNumber', driver.no_rangka)
+        data.set('user.vehicle.subBrandVehicle.id', driver.merek.id.toString())
+        data.set('user.vehicle.description', driver.keterangan)
+        // data.set('user.vehicle.seat', driver.jumlah_seat.toString())
+        data.set('user.vehicle.color', driver.warna)
+        data.set('wasOnceAnOnlineDriver', booleanToString(driver.wasOnceAnOnlineDriver))
+        data.set('isActivelyBecomingAnotherOnlineDriver', booleanToString(driver.isActivelyBecomingAnotherOnlineDriver))
+        data.set('isJoiningTheDriverCommunity', booleanToString(driver.isJoiningTheDriverCommunity))
+        data.set('isJoiningLinkaranAsmainJob', booleanToString(driver.isJoiningLinkaranAsmainJob))
+        data.set('choiceOfActiveWorkHours', driver.choiceOfActiveWorkHours)
+        data.set('placeOfBirth', driver.tempat_lahir)
+        data.set('residenceAddress', driver.alamat_domisili)
+        data.set('isMeried', booleanToString(driver.isMeried))
+
+        if (driver.ktp_file) {
+            data.append('ktpPhoto', driver.ktp_file);
+        }
+
+        if (driver.foto_profil) {
+            data.append('photo', driver.foto_profil);
+        }
+        
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/driver-profile/create-from-costumer', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<DriverCreateFromCustomerResult> = response.data;
                 
                 return Promise.resolve({
                     response: data,

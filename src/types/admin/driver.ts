@@ -84,6 +84,19 @@ export type FormField = {
     isMeried: boolean
 }
 
+export type FormFieldFromCustomer = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
+    user: {
+        label: string,
+        value: number
+    }
+}
+
+export type FormFieldFromCustomerWithId = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
+    user: {
+        id: number
+    }
+}
+
 interface DriverField {
     nama: string,
     no_telepon: string,
@@ -271,11 +284,19 @@ export type Driver = DriverResult & DriverList & {
 
 export type DriverCreate = DriverField;
 
+export type DriverCreateFromCustomer = Omit<DriverField, 'nama' | 'no_telepon' | 'email'> & {
+    user: {
+        id: number
+    }
+}
+
 export type DriverEdit = DriverField;
 
 export type DriverCreateResult = DriverResult & DriverList2;
 
 export type DriverEditResult = DriverResult &  DriverList2;
+
+export type DriverCreateFromCustomerResult = DriverResult &  DriverList2;
 
 export interface FetchDriverActionType {
     type: typeof FETCH_DRIVER,

@@ -132,6 +132,67 @@ export const fetchUserAction = (page: number) : ThunkResult<Promise<Boolean>> =>
     }
 }
 
+export const fetchListUserAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<User>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/user`, {
+                params: paramsObject
+            })
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccessList<User> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
 export const createUserAction = (user: UserCreate): ThunkResult<Promise<ApiResponse<UserCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/user', user)
