@@ -8,10 +8,10 @@ import {
     Col
 } from 'reactstrap'
 
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 
 type Props = {
-    driver: DriverDetail | null
+    driver: DriverShow | null
 }
 
 class DetailKendaraan extends Component<Props> {
@@ -29,7 +29,10 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">Jenis Kendaraan</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.subBrandVehicle.brandVehicle.name}
+                                {driver.vehicle && 
+                                    driver.vehicle.subBrandVehicle && 
+                                        driver.vehicle.subBrandVehicle.brandVehicle ? 
+                                            driver.vehicle.subBrandVehicle.brandVehicle.name : ''}
                             </Col>
                         </Row>
                         <Row className="mb-3">
@@ -37,7 +40,7 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">No. Plat</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.policeNumber}
+                                {driver.vehicle ? driver.vehicle.policeNumber : ''}
                             </Col>
                         </Row>
                         <Row className="mb-3">
@@ -45,7 +48,7 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">No. STNK</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.stnkNumber}
+                                {driver.vehicle ? driver.vehicle.stnkNumber : ''}
                             </Col>
                         </Row>
                         <Row className="mb-3">
@@ -53,7 +56,7 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">No. Rangka</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.chassisNumber}
+                                {driver.vehicle ? driver.vehicle.chassisNumber : ''}
                             </Col>
                         </Row>
                         <Row className="mb-3">
@@ -61,7 +64,7 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">Tipe Kendaraan</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.vehicleType.name}
+                                {driver.vehicle && driver.vehicle.vehicleType ? driver.vehicle.vehicleType.name : ''}
                             </Col>
                         </Row>
                         <Row className="mb-3">
@@ -69,7 +72,7 @@ class DetailKendaraan extends Component<Props> {
                                 <label htmlFor="">Keterangan</label>
                             </Col>
                             <Col md="6">
-                                {driver.vehicle.description}
+                                {driver.vehicle ? driver.vehicle.description : ''}
                             </Col>
                         </Row>
                     </CardBody>

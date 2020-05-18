@@ -16,7 +16,7 @@ import DetailRating from './DetailRating'
 import DetailKeterangan from './DetailKeterangan'
 
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 import { AppState } from '../../../store/configureStore';
 import { AppActions } from '../../../types';
 import { ThunkDispatch } from 'redux-thunk';
@@ -33,7 +33,7 @@ type DetailProps = RouteComponentProps<{
 type Props = DetailProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    data: DriverDetail | null,
+    data: DriverShow | null,
     isLoaded: boolean,
     loadedMessage: string,
     alert_visible: boolean,
@@ -54,9 +54,9 @@ class Detail extends Component<Props, State> {
         const id = +this.props.match.params.id;
         
         this.props.findDriverAction(id)
-                .then((response: ApiResponse<DriverDetail>) => {    
+                .then((response: ApiResponse<DriverShow>) => {    
                     if (response.response) {
-                        const data: DriverDetail = response.response.result;
+                        const data: DriverShow = response.response.result;
 
                         this.setState({
                             data: data,
@@ -68,7 +68,7 @@ class Detail extends Component<Props, State> {
                         });
                     }
                 })
-                .catch((response: ApiResponse<DriverDetail>) => {
+                .catch((response: ApiResponse<DriverShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
@@ -139,7 +139,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findDriverAction: (id: number) => Promise<ApiResponse<DriverDetail>>
+    findDriverAction: (id: number) => Promise<ApiResponse<DriverShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: DetailProps): LinkDispatchToProps => {

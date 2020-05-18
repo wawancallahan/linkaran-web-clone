@@ -10,10 +10,10 @@ import {
     icoStarActive, icoStarUnActive
 } from '../../../helpers/Assets'
 
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 
 type Props = {
-    driver: DriverDetail | null
+    driver: DriverShow | null
 }
 
 class DetailRating extends  Component<Props> {

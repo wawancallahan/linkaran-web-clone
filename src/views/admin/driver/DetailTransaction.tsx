@@ -7,12 +7,12 @@ import {
     Col
 } from 'reactstrap'
 
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 import { ServiceCount } from '../../../types/admin/service';
 import { icoLinkImage } from '../../../helpers/utils';
 
 type Props = {
-    driver: DriverDetail | null
+    driver: DriverShow | null
 }
 
 class DetailTransaction extends Component<Props> {
@@ -22,9 +22,13 @@ class DetailTransaction extends Component<Props> {
 
         if (driver) {
 
-            const transactionCount = driver.serviceCount.map((value: ServiceCount) => {
-                return value.transactionCount
-            }).reduce((previousValue: number, currentValue: number) => previousValue + currentValue)
+            let transactionCount = 0;
+
+            if (driver.serviceCount) {
+                transactionCount = driver.serviceCount.map((value: Partial<ServiceCount>) => {
+                    return value.transactionCount ? value.transactionCount : 0
+                }).reduce((previousValue: number, currentValue: number) => previousValue + currentValue)
+            }
 
             return (
                 <>
@@ -46,7 +50,7 @@ class DetailTransaction extends Component<Props> {
                     </Card>
 
                     <Row>
-                        {driver.serviceCount.map((value: ServiceCount, index: number) => {
+                        {driver.serviceCount && driver.serviceCount.map((value: Partial<ServiceCount>, index: number) => {
                             return (
                                 <Col md={6} key={index}>
                                     <Card className="card-stats mb-2">
@@ -60,7 +64,7 @@ class DetailTransaction extends Component<Props> {
                                                 </div>
                                                 <Col className="col-auto align-self-center">
                                                     <div className="img-ico-link">
-                                                        <img src={icoLinkImage(value.code)} alt=""/>
+                                                        <img src={value.code ? icoLinkImage(value.code) : ''} alt=""/>
                                                     </div>
                                                 </Col>
                                             </Row>

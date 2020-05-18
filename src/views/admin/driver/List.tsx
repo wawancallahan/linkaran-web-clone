@@ -37,7 +37,7 @@ import {
     deleteDriverAction,
     clearFilterAction
 } from '../../../actions/admin/driver';
-import { Driver } from '../../../types/admin/driver';
+import { Driver, DriverList } from '../../../types/admin/driver';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -61,31 +61,30 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Driver,
+    item: DriverList,
     key: number,
     deleteDriver: (id: number) => void
 }) => {
 
     let saldo = 0;
 
-    if (props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0) {
-        saldo = _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: EMoneyUser) => {
-            return sum + eMoneyUser.balance;
+    if (props.item.user && props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0) {
+        saldo = _.reduce(props.item.user.eMoneyUser, (sum: number, eMoneyUser: Partial<EMoneyUser>) => {
+            return sum + (eMoneyUser.balance ? eMoneyUser.balance : 0);
         }, 0);
     }
     
-
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.user.name}</td>
-            <td>{props.item.user.phoneNumber}</td>
-            <td>{props.item.user.email}</td>
+            <td>{props.item.user ? props.item.user.name : ''}</td>
+            <td>{props.item.user ? props.item.user.phoneNumber : ''}</td>
+            <td>{props.item.user ? props.item.user.email : ''}</td>
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
-            <td>{props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? (<NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={saldo} />)  : '-'}</td>
-            <td>{parseDateFormat(props.item.createdAt)}</td>
+            <td>{props.item.user && props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? (<NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={saldo} />)  : '-'}</td>
+            <td>{props.item.createdAt ? parseDateFormat(props.item.createdAt) : ''}</td>
             <td>
                 <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
@@ -178,7 +177,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.driverList.length > 0) {
-                driverList = this.props.driverList.map((item: Driver, index: number) => (
+                driverList = this.props.driverList.map((item: DriverList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -281,7 +280,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    driverList: Driver[],
+    driverList: DriverList[],
     paginate: Paginator,
     driverAlert: IAlert
 }

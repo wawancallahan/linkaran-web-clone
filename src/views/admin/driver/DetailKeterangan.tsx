@@ -6,10 +6,10 @@ import {
     CardBody
 } from 'reactstrap'
 
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 
 type Props = {
-    driver: DriverDetail | null
+    driver: DriverShow | null
 }
 
 class DetailKeterangan extends Component<Props> {

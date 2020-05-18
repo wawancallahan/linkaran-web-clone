@@ -10,6 +10,8 @@ import { SubDistrict } from './region/subDistrict';
 import { User, EMoneyUser } from './user';
 import { SubBrandVehicle } from './subBrandVehicle';
 import { BrandVehicle } from './brandVehicle';
+import { SelectType } from '../select';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const FETCH_DRIVER_SUCCESS = "FETCH_DRIVER_SUCCESS";
@@ -36,37 +38,16 @@ export type FormField = {
     sim_file_preview: string,
     alamat: string,
     alamat_domisili: string,
-    negara: {
-        label: string,
-        value: number
-    },
-    provinsi: {
-        label: string,
-        value: number
-    },
-    kabupaten_kota: {
-        label: string,
-        value: number
-    },
-    kecamatan: {
-        label: string,
-        value: number
-    },
-    kelurahan: {
-        label: string,
-        value: number
-    },
+    negara: SelectType,
+    provinsi: SelectType,
+    kabupaten_kota: SelectType,
+    kecamatan: SelectType,
+    kelurahan: SelectType,
     foto_profil: File | null,
     foto_profil_preview: string,
     rating: number | null,
-    tipe_kendaraan: {
-        label: string,
-        value: number
-    },
-    merek: {
-        label: string,
-        value: number
-    },
+    tipe_kendaraan: SelectType,
+    merek: SelectType,
     no_stnk: string,
     no_polisi: string,
     no_rangka: string,
@@ -85,10 +66,7 @@ export type FormField = {
 }
 
 export type FormFieldFromCustomer = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
-    user: {
-        label: string,
-        value: number
-    }
+    user: SelectType
 }
 
 export type FormFieldFromCustomerWithId = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
@@ -97,7 +75,7 @@ export type FormFieldFromCustomerWithId = Omit<FormField, 'nama' | 'no_telepon' 
     }
 }
 
-interface DriverField {
+export type DriverField = {
     nama: string,
     no_telepon: string,
     email: string,
@@ -147,45 +125,18 @@ interface DriverField {
     isMeried: boolean
 }
 
-interface DriverList {
+export type Driver = {
+    id: number,
     dateOfBirth: string,
     placeOfBirth: string,
     residenceAddress: string,
     gender: string,
     identityNumber: string,
-    ktpPhoto: string,
-    photo: string,
+    ktpPhoto: string | null,
+    photo: string | null,
     address: string,
+    driverHelpCenter: boolean,
     rating: number,
-    country: {
-        id: number,
-        name: string
-    },
-    province: {
-        id: number,
-        name: string
-    },
-    district: {
-        id: number,
-        name: string
-    },
-    subDistrict: {
-        id: number,
-        name: string
-    },
-    village: {
-        id: number,
-        name: string
-    },
-    user: Partial<User & {
-        vehicle: Partial<Vehicle & {
-            subBrandVehicle: Partial<SubBrandVehicle & {
-                brandVehicle: Partial<BrandVehicle>
-            }>,
-            vehicleType: VehicleType
-        }>,
-        eMoneyUser: EMoneyUser[]
-    }>,
     wasOnceAnOnlineDriver: boolean,
     isActivelyBecomingAnotherOnlineDriver: boolean,
     isJoiningTheDriverCommunity: boolean,
@@ -194,96 +145,40 @@ interface DriverList {
     isMeried: boolean
 }
 
-interface DriverList2 {
-    dateOfBirth: string,
-    gender: string,
-    identityNumber: string,
-    ktpPhoto: string,
-    photo: string,
-    address: string,
-    rating: number,
-    country: {
-        id: string
-    },
-    province: {
-        id: string
-    },
-    district: {
-        id: string
-    },
-    subDistrict: {
-        id: string
-    },
-    village: {
-        id: string
-    },
-    user: {
-        id: number
-    },
-    isMeried: boolean,
-    deletedAt: string,
-    id: number,
-    createdAt: string,
-    updatedAt: string
-}
-
-export type DriverDetail = {
-    id: number,
-    dateOfBirth: string,
-    placeOfBirth: string,
-    residenceAddress: string,
-    gender: string,
-    identityNumber:string,
-    ktpPhoto: string | null,
-    photo: string | null,
-    address: string,
-    rating: number,
-    wasOnceAnOnlineDriver: boolean,
-    isActivelyBecomingAnotherOnlineDriver: boolean,
-    isJoiningTheDriverCommunity: boolean,
-    isJoiningLinkaranAsmainJob: boolean,
-    choiceOfActiveWorkHours: string,
-    name: string,
-    phoneNumber: string,
-    email: string,
-    gUserId: string | null,
-    gUserPhoneVerified: string | null,
-    vehicle: Vehicle & {
-        vehicleType: VehicleType,        
-        subBrandVehicle: {
-            id: number,
-            name: string,
-            brandVehicle: {
-                id: number,
-                name: string
-            }
+export type DriverList = Driver & Partial<Timestamps> & {
+    user?: Partial<User> & {
+        eMoneyUser?: Partial<EMoneyUser>[],
+        vehicle?: Partial<Vehicle> & {
+            subBrandVehicle?: Partial<SubBrandVehicle> & {
+                brandVehicle: Partial<BrandVehicle>
+            },
+            vehicleType?: Partial<VehicleType>
         }
     },
-    serviceCount: ServiceCount[],
-    isMeried: boolean,
-    country: Country | null,
-    province: Province | null,
-    district: District | null,
-    subDistrict: SubDistrict | null,
-    village: Village | null
+    country?: Partial<Country> | null,
+    province?: Partial<Province> | null,
+    district?: Partial<District> | null,
+    subDistrict?: Partial<SubDistrict> | null,
+    village?: Partial<Village> | null,
 }
 
-interface DriverResult {
-    id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+export type DriverShow = Driver & Partial<Timestamps> & Partial<Omit<User, "id">> & {
+    eMoneyUser?: Partial<EMoneyUser>[],
+    vehicle?: Partial<Vehicle> & {
+        subBrandVehicle?: Partial<SubBrandVehicle> & {
+            brandVehicle: Partial<BrandVehicle>
+        },
+        vehicleType?: Partial<VehicleType>
+    },
+    serviceCount?: Partial<ServiceCount>[],
+    country?: Partial<Country> | null,
+    province?: Partial<Province> | null,
+    district?: Partial<District> | null,
+    subDistrict?: Partial<SubDistrict> | null,
+    village?: Partial<Village> | null,
 }
 
-export type Driver = DriverResult & DriverList & {
-    country?: Partial<Country>,
-    province?: Partial<Province>,
-    district?: Partial<District>,
-    subDistrict?: Partial<SubDistrict>,
-    village?: Partial<Village>
-};
-
-export type DriverCreate = DriverField;
+export type DriverCreateField = DriverField;
 
 export type DriverCreateFromCustomer = Omit<DriverField, 'nama' | 'no_telepon' | 'email'> & {
     user: {
@@ -291,45 +186,84 @@ export type DriverCreateFromCustomer = Omit<DriverField, 'nama' | 'no_telepon' |
     }
 }
 
-export type DriverEdit = DriverField;
+export type DriverEditField = DriverField;
 
-export type DriverCreateResult = DriverResult & DriverList2;
+export type DriverCreateResult = Driver & Partial<Timestamps> & {
+    user?: Partial<User> & {
+        eMoneyUser?: Partial<EMoneyUser> & Partial<Timestamps>,
+        vehicle?: Partial<Vehicle> & Partial<Timestamps> & {
+            subBrandVehicle?: Partial<SubBrandVehicle>,
+            vehicleType?: Partial<VehicleType>
+        }
+    },
+    country?: Partial<Country> | null,
+    province?: Partial<Province> | null,
+    district?: Partial<District> | null,
+    subDistrict?: Partial<SubDistrict> | null,
+    village?: Partial<Village> | null
+}
 
-export type DriverEditResult = DriverResult &  DriverList2;
+export type DriverEditResult = Driver & Partial<Timestamps> & {
+    user?: Partial<User> & {
+        eMoneyUser?: Partial<EMoneyUser> & Partial<Timestamps>,
+        vehicle?: Partial<Vehicle> & Partial<Timestamps> & {
+            subBrandVehicle?: Partial<SubBrandVehicle>,
+            vehicleType?: Partial<VehicleType>
+        }
+    },
+    country?: Partial<Country> | null,
+    province?: Partial<Province> | null,
+    district?: Partial<District> | null,
+    subDistrict?: Partial<SubDistrict> | null,
+    village?: Partial<Village> | null
+}
 
-export type DriverCreateFromCustomerResult = DriverResult &  DriverList2;
+export type DriverCreateFromCustomerResult = Driver & Partial<Timestamps> & {
+    user?: Partial<User> & {
+        eMoneyUser?: Partial<EMoneyUser> & Partial<Timestamps>,
+        vehicle?: Partial<Vehicle> & Partial<Timestamps> & {
+            subBrandVehicle?: Partial<SubBrandVehicle>,
+            vehicleType?: Partial<VehicleType>
+        }
+    },
+    country?: Partial<Country> | null,
+    province?: Partial<Province> | null,
+    district?: Partial<District> | null,
+    subDistrict?: Partial<SubDistrict> | null,
+    village?: Partial<Village> | null
+}
 
-export interface FetchDriverActionType {
+export type FetchDriverActionType = {
     type: typeof FETCH_DRIVER,
     list: Driver[]
 }
 
-export interface FetchDriverSuccessActionType {
+export type FetchDriverSuccessActionType = {
     type: typeof FETCH_DRIVER_SUCCESS,
     list: Driver[]
 }
 
-export interface FetchDriverErrorActionType {
+export type FetchDriverErrorActionType = {
     type: typeof FETCH_DRIVER_ERROR
 }
 
 
-export interface SetPaginatorDriverActionType {
+export type SetPaginatorDriverActionType = {
     type: typeof SET_PAGINATOR_DRIVER,
     paginate: Paginator
 }
 
-export interface AlertDriverHideActionType {
+export type AlertDriverHideActionType = {
     type: typeof ALERT_DRIVER_HIDE
 }
 
-export interface AlertDriverShowActionType {
+export type AlertDriverShowActionType = {
     type: typeof ALERT_DRIVER_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     phoneNumber: string,
     email: string,
@@ -338,12 +272,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterDriverActionType {
+export type SetFilterDriverActionType = {
     type: typeof SET_FILTER_DRIVER,
     filter: Filter
 }
 
-export interface ClearFilterDriverActionType {
+export type ClearFilterDriverActionType = {
     type: typeof CLEAR_FILTER_DRIVER
 }
 

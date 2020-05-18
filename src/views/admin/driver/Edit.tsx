@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Driver, FormField, DriverDetail } from '../../../types/admin/driver';
+import { Driver, FormField, DriverShow } from '../../../types/admin/driver';
 
 import FormDriver from './FormEdit';
 
@@ -146,88 +146,100 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findDriverAction(id)
-                .then((response: ApiResponse<DriverDetail>) => {
+                .then((response: ApiResponse<DriverShow>) => {
 
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: DriverDetail = response.response!.result;
+                    const data: DriverShow = response.response!.result;
 
+                    form.nama = data.name ? data.name : '';
+                    form.tempat_lahir = data.placeOfBirth
+                    form.alamat_domisili = data.residenceAddress
+                    form.no_ktp = data.identityNumber;
                     form.alamat = data.address;
-                    form.email = data.email;
-                    form.foto_profil_preview = data.photo || '';
+                    form.email = data.email ? data.email : '';
+                    form.foto_profil_preview = data.photo ? data.photo : '';
                     form.jenis_kelamin = data.gender == 'L' ? 1 : 0;
                     form.jumlah_seat = 0;
                     if (data.district) {
                         form.kabupaten_kota = {
-                            value: data.district.id,
-                            label: data.district.name   
+                            value: data.district.id ? data.district.id : 0,
+                            label: data.district.name ? data.district.name : ''
                         }
                     }
                     
                     if (data.subDistrict) {
                         form.kecamatan = {
-                            value: data.subDistrict.id,
-                            label: data.subDistrict.name
+                            value: data.subDistrict.id ? data.subDistrict.id : 0,
+                            label: data.subDistrict.name ? data.subDistrict.name : ''
                         }
                     }
                     
                     if (data.village) {
                         form.kelurahan = {
-                            value: data.village.id,
-                            label: data.village.name
+                            value: data.village.id ? data.village.id : 0,
+                            label: data.village.name ? data.village.name : ''
                         }
                     }
                     
                     if (data.country) {
                         form.negara = {
-                            value: data.country.id,
-                            label: data.country.name
+                            value: data.country.id ? data.country.id : 0,
+                            label: data.country.name ? data.country.name : ''
                         }
                     }
                     
                     if (data.province) {
                         form.provinsi = {
-                            value: data.province.id,
-                            label: data.province.name
+                            value: data.province.id ? data.province.id : 0,
+                            label: data.province.name ? data.province.name : ''
                         }
                     }
                     form.keterangan = '';
                     form.ktp_file_preview = data.ktpPhoto || '';
-                    form.merek = {
-                        value: data.vehicle.subBrandVehicle.id,
-                        label: data.vehicle.subBrandVehicle.name
+
+                    if (data.phoneNumber) {
+                        const maskPhoneNumber = data.phoneNumber.substr(0, 2);
+                        let phoneNumber = data.phoneNumber;
+
+                        if (maskPhoneNumber == "628") {
+                            phoneNumber = phoneNumber.substr(2);
+                        }
+
+                        form.no_telepon = phoneNumber;
                     }
-                    form.nama = data.name;
-                    form.tempat_lahir = data.placeOfBirth
-                    form.alamat_domisili = data.residenceAddress
-                    form.no_ktp = data.identityNumber;
-                    form.no_polisi = data.vehicle.policeNumber;
-                    form.no_rangka = data.vehicle.chassisNumber;
-                    form.no_stnk = data.vehicle.stnkNumber;
-
-                    const maskPhoneNumber = data.phoneNumber.substr(0, 2);
-                    let phoneNumber = data.phoneNumber;
-
-                    if (maskPhoneNumber == "628") {
-                        phoneNumber = phoneNumber.substr(2);
-                    }
-
-                    form.no_telepon = phoneNumber;
                    
                     form.rating = 0;
                     form.tanggal_lahir = new Date(data.dateOfBirth);
-                    form.tipe_kendaraan = {
-                        value: data.vehicle.vehicleType.id,
-                        label: data.vehicle.vehicleType.name || ''
+
+                    if (data.vehicle) {
+                        form.warna = data.vehicle.color ? data.vehicle.color : '';
+                        form.keterangan = data.vehicle.description ? data.vehicle.description : '';
+
+                        if (data.vehicle.vehicleType) {
+                            form.tipe_kendaraan = {
+                                value: data.vehicle.vehicleType.id ? data.vehicle.vehicleType.id : 0,
+                                label: data.vehicle.vehicleType.name ? data.vehicle.vehicleType.name : ''
+                            }
+                        }
+
+                        if (data.vehicle.subBrandVehicle) {
+                            form.merek = {
+                                value: data.vehicle.subBrandVehicle.id ? data.vehicle.subBrandVehicle.id : 0,
+                                label: data.vehicle.subBrandVehicle.name ? data.vehicle.subBrandVehicle.name : ''
+                            }
+                        }
+                        
+                        form.no_polisi = data.vehicle.policeNumber ? data.vehicle.policeNumber : '';
+                        form.no_rangka = data.vehicle.chassisNumber ? data.vehicle.chassisNumber : '';
+                        form.no_stnk = data.vehicle.stnkNumber ? data.vehicle.stnkNumber : '';
+
                     }
 
-                    form.warna = data.vehicle.color;
-                    form.keterangan = data.vehicle.description;
                     form.tempat_lahir = data.placeOfBirth
                     form.alamat_domisili = data.residenceAddress
-
                     form.wasOnceAnOnlineDriver = data.wasOnceAnOnlineDriver ? '1' : '0'
                     form.isActivelyBecomingAnotherOnlineDriver = data.isActivelyBecomingAnotherOnlineDriver ? '1' : '0'
                     form.isJoiningTheDriverCommunity = data.isJoiningTheDriverCommunity ? '1' : '0'
@@ -265,7 +277,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<DriverDetail>) => {
+                .catch((response: ApiResponse<DriverShow>) => {
 
                     const error = response.error as ApiResponseError
 
@@ -344,7 +356,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findDriverAction: (id: number) => Promise<ApiResponse<DriverDetail>>
+    findDriverAction: (id: number) => Promise<ApiResponse<DriverShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

@@ -1,6 +1,6 @@
 import {  
     FETCH_DRIVER,
-    Driver,
+    DriverList,
     DriverActionTypes,
     FetchDriverActionType,
     SetPaginatorDriverActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Driver[],
+    list: DriverList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

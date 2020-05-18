@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     Driver,
+    DriverList,
+    DriverShow,
     SET_PAGINATOR_DRIVER,
     FETCH_DRIVER,
     FETCH_DRIVER_ERROR,
@@ -14,15 +16,14 @@ import {
     ALERT_DRIVER_HIDE,
     AlertDriverShowActionType,
     ALERT_DRIVER_SHOW,
-    DriverCreate,
+    DriverCreateField,
     DriverCreateFromCustomer,
     DriverCreateResult,
     DriverCreateFromCustomerResult,
-    DriverEdit,
+    DriverEditField,
     DriverEditResult,
     FetchDriverErrorActionType,
     FetchDriverSuccessActionType,
-    DriverDetail,
     Filter,
     SetFilterDriverActionType,
     SET_FILTER_DRIVER,
@@ -114,7 +115,7 @@ export const fetchDriverAction = (page: number) : ThunkResult<Promise<Boolean>> 
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Driver> = response.data;
+                const data: ApiResponseSuccessList<DriverList> = response.data;
 
                 dispatch(setFetchDriverSuccessAction(data.result));
 
@@ -146,18 +147,18 @@ export const fetchDriverAction = (page: number) : ThunkResult<Promise<Boolean>> 
     }
 }
 
-export const fetchListDriverAction = (search: string, page: number) : ThunkResult<Promise<ApiResponseList<Driver>>> => {
+export const fetchListDriverAction = (search: string, page: number) : ThunkResult<Promise<ApiResponseList<DriverList>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             name: search
         }
-
-        const params = objectToParamsUrl(paramsObject)
         
-        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile?${params}`)
+        return await axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Driver> = response.data;
+                const data: ApiResponseSuccessList<DriverList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -206,7 +207,7 @@ export const fetchListDriverAction = (search: string, page: number) : ThunkResul
     }
 }
 
-export const createDriverAction = (driver: DriverCreate): ThunkResult<Promise<ApiResponse<DriverCreateResult>>> => {
+export const createDriverAction = (driver: DriverCreateField): ThunkResult<Promise<ApiResponse<DriverCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         
         const data = new FormData();
@@ -402,11 +403,11 @@ export const createDriverFromCustomerAction = (driver: DriverCreateFromCustomer)
     }
 }
 
-export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<DriverDetail>>> => {
+export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<DriverShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/driver-profile/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<DriverDetail> = response.data;
+                const data: ApiResponseSuccess<DriverShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -458,7 +459,7 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
     }
 }
 
-export const editDriverAction = (driver: DriverEdit, id: number): ThunkResult<Promise<ApiResponse<DriverEditResult>>> => {
+export const editDriverAction = (driver: DriverEditField, id: number): ThunkResult<Promise<ApiResponse<DriverEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         const data = new FormData();
 

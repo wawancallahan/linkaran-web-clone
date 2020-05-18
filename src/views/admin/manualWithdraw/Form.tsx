@@ -20,7 +20,7 @@ import Dropzone from '../../../components/Dropzone/Dropzone'
 import { BankList } from '../../../types/admin/bank';
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { fetchListBankAction } from '../../../actions/admin/bank';
-import { Driver } from '../../../types/admin/driver';
+import { DriverList } from '../../../types/admin/driver';
 import { fetchListDriverAction } from '../../../actions/admin/driver';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi' 
@@ -139,9 +139,9 @@ class Form extends Component<Props> {
         page: number
     }) => {
         return this.props.fetchListDriverAction(search, options.page)
-            .then((response: ApiResponseList<Driver>) => {
+            .then((response: ApiResponseList<DriverList>) => {
 
-                const data: ApiResponseSuccessList<Driver> = response.response!;
+                const data: ApiResponseSuccessList<DriverList> = response.response!;
 
                 let result: {
                     value: number,
@@ -157,10 +157,10 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Driver) => {
+                    result = data.result.map((item: DriverList) => {
                         return {
                             value: item.id,
-                            label: `${item.user.phoneNumber} - ${item.user.name}`
+                            label: item.user ? `${item.user.phoneNumber} - ${item.user.name}` : ''
                         };
                     });
                 }
@@ -389,7 +389,7 @@ type LinkDispatchToProps = {
     createManualWithDrawAction: (manualWithdraw: ManualWithDrawCreateField) => Promise<ApiResponse<ManualWithDrawCreateResult>>
     setAlertManualWithDrawShowAction: (message: string, color: string) => void,
     fetchListBankAction: (search: string, page: number) => Promise<ApiResponseList<BankList>>,
-    fetchListDriverAction: (search: string, page: number) => Promise<ApiResponseList<Driver>>
+    fetchListDriverAction: (search: string, page: number) => Promise<ApiResponseList<DriverList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {

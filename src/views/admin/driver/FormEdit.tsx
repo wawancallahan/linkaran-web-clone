@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Driver, FormField, DriverEdit, DriverEditResult } from '../../../types/admin/driver';
+import { Driver, FormField, DriverEditField, DriverEditResult } from '../../../types/admin/driver';
 import {
     setAlertDriverShowAction,
     setAlertDriverHideAction,
@@ -234,7 +234,7 @@ class Form extends Component<Props> {
 
                     let choiceOfActiveWorkHours = this.getchoiceOfActiveWorkHours(values.choiceOfActiveWorkHours, values.custom_interval_jam_kerja_start, values.custom_interval_jam_kerja_end);
 
-                    const driver: DriverEdit = {
+                    const driver: DriverEditField = {
                         alamat_domisili: values.alamat_domisili,
                         tempat_lahir: values.tempat_lahir,
                         alamat: values.alamat,
@@ -352,13 +352,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editDriverAction: (driver: DriverEdit, id: number) => Promise<ApiResponse<DriverEditResult>>
+    editDriverAction: (driver: DriverEditField, id: number) => Promise<ApiResponse<DriverEditResult>>
     setAlertDriverShowAction: (message: string, color: string) => void,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editDriverAction: (driver: DriverEdit, id: number) => dispatch(editDriverAction(driver, id)),
+        editDriverAction: (driver: DriverEditField, id: number) => dispatch(editDriverAction(driver, id)),
         setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
     }
 }

@@ -10,13 +10,13 @@ import {
 
 import { profileImage } from '../../../helpers/Assets'
 
-import { DriverDetail } from '../../../types/admin/driver';
+import { DriverShow } from '../../../types/admin/driver';
 
 import '../../../react-modal-image.d.ts'
 import { Lightbox } from 'react-modal-image'
 
 type Props = {
-    driver: DriverDetail | null
+    driver: DriverShow | null
 }
 
 type State = {
