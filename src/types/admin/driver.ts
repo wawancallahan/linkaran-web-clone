@@ -62,7 +62,8 @@ export type FormField = {
     choiceOfActiveWorkHoursOther: boolean,
     custom_interval_jam_kerja_start: Date | null,
     custom_interval_jam_kerja_end: Date | null,
-    isMeried: boolean
+    isMeried: boolean,
+    driverHelpCenter: boolean,
 }
 
 export type FormFieldFromCustomer = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
@@ -122,7 +123,8 @@ export type DriverField = {
     isJoiningTheDriverCommunity: boolean,
     isJoiningLinkaranAsmainJob: boolean,
     choiceOfActiveWorkHours: string,
-    isMeried: boolean
+    isMeried: boolean,
+    driverHelpCenter: boolean,
 }
 
 export type Driver = {

@@ -145,7 +145,9 @@ const createSchema = Yup.object().shape({
                     })
                     .required('Bidang isian keterangan wajib diisi'),
     isMeried: Yup.boolean()
-                    .required('Bidang isian status pernikahan wajib diisi') 
+                    .required('Bidang isian status pernikahan wajib diisi'),
+    driverHelpCenter: Yup.boolean()
+                    .required('Bidang isian pusat bantuan pengemudi wajib diisi') 
 });
 
 type FormProps = {
@@ -270,7 +272,8 @@ class Form extends Component<Props> {
                         isJoiningTheDriverCommunity: isJoiningTheDriverCommunity,
                         isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
                         choiceOfActiveWorkHours: choiceOfActiveWorkHours,
-                        isMeried: values.isMeried
+                        isMeried: values.isMeried,
+                        driverHelpCenter: values.driverHelpCenter
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {

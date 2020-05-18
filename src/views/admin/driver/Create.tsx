@@ -101,7 +101,8 @@ class Create extends Component<Props, State> {
             choiceOfActiveWorkHoursOther: false,
             custom_interval_jam_kerja_start: null,
             custom_interval_jam_kerja_end: null,
-            isMeried: false
+            isMeried: false,
+            driverHelpCenter: false
         },
         alert_visible: false,
         alert_message: ''

@@ -241,6 +241,7 @@ export const createDriverAction = (driver: DriverCreateField): ThunkResult<Promi
         data.set('placeOfBirth', driver.tempat_lahir)
         data.set('residenceAddress', driver.alamat_domisili)
         data.set('isMeried', booleanToString(driver.isMeried))
+        data.set('driverHelpCenter', booleanToString(driver.driverHelpCenter))
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -338,6 +339,7 @@ export const createDriverFromCustomerAction = (driver: DriverCreateFromCustomer)
         data.set('placeOfBirth', driver.tempat_lahir)
         data.set('residenceAddress', driver.alamat_domisili)
         data.set('isMeried', booleanToString(driver.isMeried))
+        data.set('driverHelpCenter', booleanToString(driver.driverHelpCenter))
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);
@@ -492,6 +494,7 @@ export const editDriverAction = (driver: DriverEditField, id: number): ThunkResu
         data.set('placeOfBirth', driver.tempat_lahir)
         data.set('residenceAddress', driver.alamat_domisili)
         data.set('isMeried', booleanToString(driver.isMeried))
+        data.set('driverHelpCenter', booleanToString(driver.driverHelpCenter))
 
         if (driver.ktp_file) {
             data.append('ktpPhoto', driver.ktp_file);

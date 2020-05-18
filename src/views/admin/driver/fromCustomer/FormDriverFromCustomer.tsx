@@ -481,7 +481,57 @@ class FormDriver extends Component<Props> {
                         </div>
                     </fieldset>
                     <div>
-                        {FormikProps.errors.wasOnceAnOnlineDriver && FormikProps.touched.wasOnceAnOnlineDriver ? FormikProps.errors.wasOnceAnOnlineDriver : ''}
+                        {FormikProps.errors.isMeried && FormikProps.touched.isMeried ? FormikProps.errors.isMeried : ''}
+                    </div>
+                </FormGroup>
+
+                <FormGroup>
+                    <label
+                    className="form-control-label"
+                    htmlFor="input-driverHelpCenter"
+                    >
+                        Pusat Bantuan Pengemudi
+                    </label>
+                </FormGroup>
+                <FormGroup>
+                    <fieldset>
+                        <div className="custom-control custom-radio mb-3">
+                            <input
+                                className="custom-control-input"
+                                defaultChecked={ ! FormikProps.values.driverHelpCenter}
+                                id="driverHelpCenter_no"
+                                name="driverHelpCenter"
+                                type="radio"
+                                value="0"
+                                onChange={() => {
+                                    FormikProps.setFieldValue('driverHelpCenter', false, true);
+                                }}
+                                onBlur={FormikProps.handleBlur}
+                            />
+                            <label className="custom-control-label" htmlFor="driverHelpCenter_no">
+                                Belum
+                            </label>
+                        </div>
+                        <div className="custom-control custom-radio mb-3">
+                            <input
+                                className="custom-control-input"
+                                defaultChecked={FormikProps.values.driverHelpCenter}
+                                id="driverHelpCenter_yes"
+                                name="driverHelpCenter"
+                                type="radio"
+                                value="1"
+                                onChange={() => {
+                                    FormikProps.setFieldValue('driverHelpCenter', true, true);
+                                }}
+                                onBlur={FormikProps.handleBlur}
+                            />
+                            <label className="custom-control-label" htmlFor="driverHelpCenter_yes">
+                                Sudah
+                            </label>
+                        </div>
+                    </fieldset>
+                    <div>
+                        {FormikProps.errors.driverHelpCenter && FormikProps.touched.driverHelpCenter ? FormikProps.errors.driverHelpCenter : ''}
                     </div>
                 </FormGroup>
 
