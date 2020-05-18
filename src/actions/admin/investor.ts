@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     Investor,
+    InvestorList,
+    InvestorShow,
     SET_PAGINATOR_INVESTOR,
     FETCH_INVESTOR,
     FETCH_INVESTOR_ERROR,
@@ -14,9 +16,9 @@ import {
     ALERT_INVESTOR_HIDE,
     AlertInvestorShowActionType,
     ALERT_INVESTOR_SHOW,
-    InvestorCreate,
+    InvestorCreateField,
     InvestorCreateResult,
-    InvestorEdit,
+    InvestorEditField,
     InvestorEditResult,
     FetchInvestorErrorActionType,
     FetchInvestorSuccessActionType
@@ -72,7 +74,7 @@ export const fetchInvestorAction = (page: number) : ThunkResult<Promise<Boolean>
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/investor-profile?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Investor> = response.data;
+                const data: ApiResponseSuccessList<InvestorList> = response.data;
 
                 dispatch(setFetchInvestorSuccessAction(data.result));
 
@@ -104,7 +106,7 @@ export const fetchInvestorAction = (page: number) : ThunkResult<Promise<Boolean>
     }
 }
 
-export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Promise<ApiResponse<InvestorCreateResult>>> => {
+export const createInvestorAction = (investor: InvestorCreateField): ThunkResult<Promise<ApiResponse<InvestorCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         
         const data = new FormData();
@@ -187,11 +189,11 @@ export const createInvestorAction = (investor: InvestorCreate): ThunkResult<Prom
     }
 }
 
-export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<Investor>>> => {
+export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<InvestorShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/investor-profile/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<Investor> = response.data;
+                const data: ApiResponseSuccess<InvestorShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -240,7 +242,7 @@ export const findInvestorAction = (id: number): ThunkResult<Promise<ApiResponse<
     }
 }
 
-export const editInvestorAction = (investor: InvestorEdit, id: number): ThunkResult<Promise<ApiResponse<InvestorEditResult>>> => {
+export const editInvestorAction = (investor: InvestorEditField, id: number): ThunkResult<Promise<ApiResponse<InvestorEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
          
         const data = new FormData();

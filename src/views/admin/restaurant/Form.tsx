@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Restaurant, FormField, RestaurantCreate, RestaurantCreateResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantCreateField, RestaurantCreateResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
 import { createRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 
@@ -160,7 +160,7 @@ class Form extends Component<Props> {
                     operatingTime.push(saturdayOperationTime)
                     operatingTime.push(sundayOperationTime)
 
-                    const restaurant: RestaurantCreate = {
+                    const restaurant: RestaurantCreateField = {
                         name: values.name,
                         address: values.address,
                         point: {
@@ -223,13 +223,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createRestaurantAction: (restaurant: RestaurantCreate) => Promise<ApiResponse<RestaurantCreateResult>>,
+    createRestaurantAction: (restaurant: RestaurantCreateField) => Promise<ApiResponse<RestaurantCreateResult>>,
     setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createRestaurantAction: (restaurant: RestaurantCreate) => dispatch(createRestaurantAction(restaurant)),
+        createRestaurantAction: (restaurant: RestaurantCreateField) => dispatch(createRestaurantAction(restaurant)),
         setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
     }
 }

@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Restaurant, FormField, RestaurantEdit, RestaurantEditResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantEditField, RestaurantEditResult, OperatingTime as OperationTimeInterface } from '../../../types/admin/restaurant';
 import { editRestaurantAction, setAlertRestaurantShowAction } from '../../../actions/admin/restaurant';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from '../../../types/api';
 import swal from 'sweetalert'
@@ -156,7 +156,7 @@ class Form extends Component<Props> {
                     operatingTime.push(saturdayOperationTime)
                     operatingTime.push(sundayOperationTime)
 
-                    const restaurant: RestaurantEdit = {
+                    const restaurant: RestaurantEditField = {
                         name: values.name,
                         address: values.address,
                         point: {
@@ -219,13 +219,13 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editRestaurantAction: (restaurant: RestaurantEdit, id: number) => Promise<ApiResponse<RestaurantEditResult>>,
+    editRestaurantAction: (restaurant: RestaurantEditField, id: number) => Promise<ApiResponse<RestaurantEditResult>>,
     setAlertRestaurantShowAction: (message: string, color: string) => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editRestaurantAction: (restaurant: RestaurantEdit, id: number) => dispatch(editRestaurantAction(restaurant, id)),
+        editRestaurantAction: (restaurant: RestaurantEditField, id: number) => dispatch(editRestaurantAction(restaurant, id)),
         setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
     }
 }

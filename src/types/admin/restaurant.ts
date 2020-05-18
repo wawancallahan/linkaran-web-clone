@@ -1,6 +1,8 @@
 import { Paginator } from '../paginator';
 import { District } from './region/district';
 import { Province } from './region/province';
+import { SelectType } from '../select';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_RESTAURANT = "FETCH_RESTAURANT";
 export const FETCH_RESTAURANT_SUCCESS = "FETCH_RESTAURANT_SUCCESS";
@@ -43,26 +45,13 @@ export type FormField = {
     sunday_start: string | null,
     sunday_end: string | null,
     sunday_isClosed: boolean,
-    province: {
-        label: string,
-        value: number
-    },
-    district: {
-        label: string,
-        value: number
-    },
+    province: SelectType,
+    district: SelectType,
     phoneNumber: string,
     registered: string
 }
 
-export interface OperatingTime {
-    openTime: string,
-    closeTime: string,
-    day: number,
-    isClosed: boolean
-}
-
-interface RestaurantField {
+export type RestaurantField = {
     name: string,
     address: string,
     point: {
@@ -79,103 +68,82 @@ interface RestaurantField {
     phoneNumber: string,
     registered: boolean
 }
-interface RestaurantList {
-    name: string,
-    address: string | null,
-    point: {
-        lat: string,
-        lng: string
-    },
-    rating: number,
-    image: string | null,
-    phoneNumber?: string,
-    registered: boolean
-}
-interface RestaurantResult {
-    id: number,
-    createdAt: string | null,
-    updatedAt: string | null,
-    deletedAt: string | null,
-}
 
-interface RestaurantModel {
+export type Restaurant = {
+    id: number,
     name: string,
     address: string,
-    rating: number,
-    image: string,
+    registered: boolean,
+    phoneNumber: string | null,
     point: {
         lat: string,
         lng: string
     },
-    phoneNumber?: string,
-    registered: boolean
+    rating: number,
+    image: string | null
 }
 
-export interface OperatingTimeModel {
+export type OperatingTime = {
     openTime: string,
     closeTime: string,
     day: number,
-    isClosed: string
+    isClosed: boolean
 }
 
-export type Restaurant = RestaurantResult & RestaurantList & {
-    district?: Partial<District> & {
-        province?: Partial<Province>
-    }
-};
-
-export type RestaurantCreate = RestaurantField;
-
-export type RestaurantEdit = RestaurantField;
-
-type operatingTimeResult = RestaurantResult & OperatingTimeModel & {
-    restaurant: RestaurantModel & RestaurantResult & {
-        district?: Partial<District>
-    }
-}
-
-export type RestaurantCreateResult = RestaurantResult & RestaurantModel & {
-    operatingTime: operatingTimeResult[],
+export type RestaurantList = Restaurant & {
     district?: Partial<District> & {
         province?: Partial<Province>
     }
 }
 
-export type RestaurantEditResult = RestaurantResult & RestaurantModel & {
-    operatingTime: operatingTimeResult[],
+export type RestaurantShow = Restaurant & {
     district?: Partial<District> & {
         province?: Partial<Province>
-    }
-};
-
-type OperatingTimeDetail = OperatingTime & RestaurantResult;
-
-export type RestaurantDetailResult = RestaurantResult & RestaurantModel & {
-    operatingTime: OperatingTimeDetail[],
-    district?: Partial<District> & {
-        province?: Partial<Province>
-    }
+    },
+    operatingTime?: Partial<OperatingTime>[]
 }
 
-export interface FetchRestaurantActionType {
+export type RestaurantCreateField = RestaurantField;
+
+export type RestaurantEditField = RestaurantField;
+
+export type RestaurantCreateResult = Restaurant & Partial<Timestamps> & {
+    district?: Partial<District>,
+    operatingTime?: Partial<OperatingTime & Timestamps & {
+        restaurant?: Partial<Restaurant> & {
+            district?: Partial<District>
+        }
+    }>[]
+}
+
+export type RestaurantEditResult = Restaurant & Partial<Timestamps> & {
+    district?: Partial<District>,
+    operatingTime?: Partial<OperatingTime & Timestamps & {
+        restaurant?: Partial<Restaurant> & {
+            district?: Partial<District>
+        }
+    }>[]
+}
+
+export type FetchRestaurantActionType = {
     type: typeof FETCH_RESTAURANT
 }
 
-export interface FetchRestaurantSuccessActionType {
+export type FetchRestaurantSuccessActionType = {
     type: typeof FETCH_RESTAURANT_SUCCESS,
     list: Restaurant[]
 }
 
-export interface FetchRestaurantErrorActionType {
+export type FetchRestaurantErrorActionType = {
     type: typeof FETCH_RESTAURANT_ERROR
 }
 
-export interface SetPaginatorRestaurantActionType {
+export type SetPaginatorRestaurantActionType = {
     type: typeof SET_PAGINATOR_RESTAURANT,
     paginate: Paginator
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     provinceName: string,
     districtName: string
@@ -183,20 +151,20 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter
 
-export interface SetFilterRestaurantActionType {
+export type SetFilterRestaurantActionType = {
     type: typeof SET_FILTER_RESTAURANT,
     filter: Filter
 }
 
-export interface ClearFilterRestaurantActionType {
+export type ClearFilterRestaurantActionType = {
     type: typeof CLEAR_FILTER_RESTAURANT
 }
 
-export interface AlertRestaurantHideActionType {
+export type AlertRestaurantHideActionType = {
     type: typeof ALERT_RESTAURANT_HIDE
 }
 
-export interface AlertRestaurantShowActionType {
+export type AlertRestaurantShowActionType = {
     type: typeof ALERT_RESTAURANT_SHOW,
     message: string,
     color: string

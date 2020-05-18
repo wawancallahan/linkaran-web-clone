@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { Investor, FormField, InvestorEdit, InvestorEditResult } from '../../../types/admin/investor';
+import { Investor, FormField, InvestorEditField, InvestorEditResult } from '../../../types/admin/investor';
 import {
     setAlertInvestorShowAction,
     setAlertInvestorHideAction,
@@ -434,7 +434,7 @@ class Form extends Component<Props> {
                         tanggal_lahir = `${values.tanggal_lahir.getFullYear()}-${values.tanggal_lahir.getMonth() + 1}-${values.tanggal_lahir.getDate()}`;
                     }
 
-                    const investor: InvestorEdit = {
+                    const investor: InvestorEditField = {
                         alamat: values.alamat,
                         email: values.email,
                         foto_profil: values.foto_profil,
@@ -898,7 +898,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editInvestorAction: (investor: InvestorEdit, id: number) => Promise<ApiResponse<InvestorEditResult>>
+    editInvestorAction: (investor: InvestorEditField, id: number) => Promise<ApiResponse<InvestorEditResult>>
     setAlertInvestorShowAction: (message: string, color: string) => void,
     fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
     fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
@@ -909,7 +909,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editInvestorAction: (investor: InvestorEdit, id: number) => dispatch(editInvestorAction(investor, id)),
+        editInvestorAction: (investor: InvestorEditField, id: number) => dispatch(editInvestorAction(investor, id)),
         setAlertInvestorShowAction: (message: string, color: string) => dispatch(setAlertInvestorShowAction(message, color)),
         fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
         fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),

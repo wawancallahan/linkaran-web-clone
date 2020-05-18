@@ -37,7 +37,7 @@ import {
     setAlertRestaurantShowAction,
     clearFilterAction
 } from '../../../actions/admin/restaurant';
-import { Restaurant } from '../../../types/admin/restaurant';
+import { Restaurant, RestaurantList } from '../../../types/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -57,7 +57,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Restaurant,
+    item: RestaurantList,
     key: number,
     deleteRestaurant: (id: number) => void
 }) => {
@@ -156,7 +156,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.restaurantList.length > 0) {
-                restaurantList = this.props.restaurantList.map((item: Restaurant, index: number) => (
+                restaurantList = this.props.restaurantList.map((item: RestaurantList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -248,7 +248,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    restaurantList: Restaurant[],
+    restaurantList: RestaurantList[],
     paginate: Paginator,
     restaurantAlert: IAlert
 }

@@ -1,4 +1,12 @@
 import { Paginator } from '../paginator';
+import { SelectType } from '../select';
+import { Timestamps } from '../timestamps';
+import { Country } from './region/country';
+import { Province } from './region/province';
+import { District } from './region/district';
+import { SubDistrict } from './region/subDistrict';
+import { Village } from './region/village';
+import { User } from './user';
 
 export const FETCH_INVESTOR = "FETCH_INVESTOR";
 export const FETCH_INVESTOR_SUCCESS = "FETCH_INVESTOR_SUCCESS";
@@ -14,37 +22,22 @@ export type FormField = {
     email: string,
     tanggal_lahir: Date | null,
     jenis_kelamin: string,
-    no_ktp: string,
+    no_ktp: string, 
     ktp_file: File | null,
     ktp_file_preview: string,
     alamat: string,
-    negara: {
-        label: string,
-        value: number
-    },
-    provinsi: {
-        label: string,
-        value: number
-    },
-    kabupaten_kota: {
-        label: string,
-        value: number
-    },
-    kecamatan: {
-        label: string,
-        value: number
-    },
-    kelurahan: {
-        label: string,
-        value: number
-    },
+    negara: SelectType,
+    provinsi: SelectType,
+    kabupaten_kota: SelectType,
+    kecamatan: SelectType,
+    kelurahan: SelectType,
     foto_profil: File | null,
     foto_profil_preview: string,
     nomor_asosiasi_lingkungan: string,
     nomor_asosiasi_warga_negara: string,
 }
 
-interface InvestorField {
+export type InvestorField = {
     nama: string,
     no_telepon: string,
     email: string,
@@ -73,117 +66,83 @@ interface InvestorField {
     nomor_asosiasi_warga_negara: string,
 }
 
-interface InvestorList {
+export type Investor = {
+    id: number,
     dateOfBirth: string,
     gender: string,
     identityNumber: string,
-    ktpPhoto: string,
-    photo: string,
+    ktpPhoto: string | null,
+    photo: string | null,
     address: string,
     neighboorhoodAssociationNumber: string,
-    citizensAssociationNumber: string,
-    country: {
-        id: number,
-        name: string
-    },
-    province: {
-        id: number,
-        name: string
-    },
-    district: {
-        id: number,
-        name: string
-    },
-    subDistrict: {
-        id: number,
-        name: string
-    },
-    village: {
-        id: number,
-        name: string
-    },
-    user: {
-        id: number,
-        name: string,
-        phoneNumber: string,
-        email: string
-    }
+    citizensAssociationNumber: string
 }
 
-interface InvestorList2 {
-    dateOfBirth: string,
-    gender: string,
-    identityNumber: string,
-    ktpPhoto: string,
-    photo: string,
-    address: string,
-    neighboorhoodAssociationNumber: string,
-    citizensAssociationNumber: string,
-    country: {
-        id: string
-    },
-    province: {
-        id: string
-    },
-    district: {
-        id: string
-    },
-    subDistrict: {
-        id: string
-    },
-    village: {
-        id: string
-    },
-    user: {
-        id: number
-    },
-    deletedAt: string,
-    id: number,
-    createdAt: string,
-    updatedAt: string
-}
-interface InvestorResult {
-    id: number,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
+export type InvestorList = Investor & Partial<Timestamps> & {
+    country?: Partial<Country>,
+    province?: Partial<Province>,
+    district?: Partial<District>,
+    subDistrict?: Partial<SubDistrict>,
+    village?: Partial<Village>,
+    user?: Partial<User>
 }
 
-export type Investor = InvestorResult & InvestorList;
+export type InvestorShow = Investor & Partial<Timestamps> & {
+    country?: Partial<Country>,
+    province?: Partial<Province>,
+    district?: Partial<District>,
+    subDistrict?: Partial<SubDistrict>,
+    village?: Partial<Village>,
+    user?: Partial<User>
+}
 
-export type InvestorCreate = InvestorField;
+export type InvestorCreateField = InvestorField;
 
-export type InvestorEdit = InvestorField;
+export type InvestorEditField = InvestorField;
 
-export type InvestorCreateResult = InvestorResult & InvestorList2;
+export type InvestorCreateResult = Investor & Partial<Timestamps> & {
+    country?: Partial<Country>,
+    province?: Partial<Province>,
+    district?: Partial<District>,
+    subDistrict?: Partial<SubDistrict>,
+    village?: Partial<Village>,
+    user?: Partial<User>
+}
 
-export type InvestorEditResult = InvestorResult &  InvestorList2;
+export type InvestorEditResult = Investor & Partial<Timestamps> & {
+    country?: Partial<Country>,
+    province?: Partial<Province>,
+    district?: Partial<District>,
+    subDistrict?: Partial<SubDistrict>,
+    village?: Partial<Village>,
+    user?: Partial<User>
+}
 
-export interface FetchInvestorActionType {
+export type FetchInvestorActionType = {
     type: typeof FETCH_INVESTOR,
     list: Investor[]
 }
 
-export interface FetchInvestorSuccessActionType {
+export type FetchInvestorSuccessActionType = {
     type: typeof FETCH_INVESTOR_SUCCESS,
     list: Investor[]
 }
 
-export interface FetchInvestorErrorActionType {
+export type FetchInvestorErrorActionType = {
     type: typeof FETCH_INVESTOR_ERROR
 }
 
 
-export interface SetPaginatorInvestorActionType {
+export type SetPaginatorInvestorActionType = {
     type: typeof SET_PAGINATOR_INVESTOR,
     paginate: Paginator
 }
 
-export interface AlertInvestorHideActionType {
+export type AlertInvestorHideActionType = {
     type: typeof ALERT_INVESTOR_HIDE
 }
 
-export interface AlertInvestorShowActionType {
+export type AlertInvestorShowActionType = {
     type: typeof ALERT_INVESTOR_SHOW,
     message: string,
     color: string

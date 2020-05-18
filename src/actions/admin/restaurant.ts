@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     Restaurant,
+    RestaurantList,
+    RestaurantShow,
     SET_PAGINATOR_RESTAURANT,
     FETCH_RESTAURANT_SUCCESS,
     FETCH_RESTAURANT_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchRestaurantActionType,
     FetchRestaurantErrorActionType,
     FetchRestaurantSuccessActionType,
-    RestaurantCreate,
-    RestaurantEdit,
+    RestaurantCreateField,
+    RestaurantEditField,
     AlertRestaurantHideActionType,
     ALERT_RESTAURANT_HIDE,
     AlertRestaurantShowActionType,
@@ -20,7 +22,6 @@ import {
     RestaurantEditResult,
     RestaurantCreateResult,
     OperatingTime,
-    RestaurantDetailResult,
     Filter,
     SetFilterRestaurantActionType,
     SET_FILTER_RESTAURANT,
@@ -106,7 +107,7 @@ export const fetchRestaurantAction = (page: number, filter: Filter | {} = {}) : 
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Restaurant> = response.data;
+                const data: ApiResponseSuccessList<RestaurantList> = response.data;
 
                 dispatch(setFetchRestaurantSuccessAction(data.result));
 
@@ -138,7 +139,7 @@ export const fetchRestaurantAction = (page: number, filter: Filter | {} = {}) : 
     }
 }
 
-export const fetchListRestaurantAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<Restaurant>>> => {
+export const fetchListRestaurantAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<RestaurantList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         let paramsObject: OptionObjectString = {
@@ -150,7 +151,7 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
                 params: paramsObject
             })
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<Restaurant> = response.data;
+                const data: ApiResponseSuccessList<RestaurantList> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -199,7 +200,7 @@ export const fetchListRestaurantAction = (search: string, page: number): ThunkRe
     }
 }
 
-export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
+export const createRestaurantAction = (restaurant: RestaurantCreateField): ThunkResult<Promise<ApiResponse<RestaurantCreateResult>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         
         const data = new FormData;
@@ -279,11 +280,11 @@ export const createRestaurantAction = (restaurant: RestaurantCreate): ThunkResul
     }
 }
 
-export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<RestaurantDetailResult>>> => {
+export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiResponse<RestaurantShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/restaurant/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<RestaurantDetailResult> = response.data;
+                const data: ApiResponseSuccess<RestaurantShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -332,7 +333,7 @@ export const findRestaurantAction = (id: number): ThunkResult<Promise<ApiRespons
     }
 }
 
-export const editRestaurantAction = (restaurant: RestaurantEdit, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
+export const editRestaurantAction = (restaurant: RestaurantEditField, id: number): ThunkResult<Promise<ApiResponse<RestaurantEditResult>>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
         const data = new FormData;

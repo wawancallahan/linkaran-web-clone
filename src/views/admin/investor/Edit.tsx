@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Investor, FormField } from '../../../types/admin/investor';
+import { InvestorShow, FormField } from '../../../types/admin/investor';
 
 import FormInvestor from './FormEdit';
 
@@ -96,44 +96,69 @@ class Create extends Component<Props, State> {
         const id = +this.props.match.params.id;
 
         this.props.findInvestorAction(id)
-                .then((response: ApiResponse<Investor>) => {
+                .then((response: ApiResponse<InvestorShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: Investor =response.response!.result;
+                    const data: InvestorShow =response.response!.result;
 
                     form.alamat = data.address;
-                    form.email = data.user.email;
-                    form.foto_profil_preview = data.photo;
                     form.jenis_kelamin = data.gender;
-                    form.kabupaten_kota = {
-                        value: data.district.id,
-                        label: data.district.name
-                    }
-                    form.kecamatan = {
-                        value: data.subDistrict.id,
-                        label: data.subDistrict.name
-                    }
-                    form.kelurahan = {
-                        value: data.village.id,
-                        label: data.village.name
-                    }
-                    form.ktp_file_preview = data.ktpPhoto;
-                    form.nama = data.user.name;
-                    form.negara = {
-                        value: data.country.id,
-                        label: data.country.name
-                    }
-                    form.no_ktp = data.identityNumber;
-                    form.no_telepon = data.user.phoneNumber;
-                    form.provinsi = {
-                        value: data.province.id,
-                        label: data.province.name
-                    }
                     form.tanggal_lahir = new Date(data.dateOfBirth);
                     form.nomor_asosiasi_lingkungan = data.neighboorhoodAssociationNumber;
                     form.nomor_asosiasi_warga_negara = data.citizensAssociationNumber;
+                    form.no_ktp = data.identityNumber;
+
+                    if (data.user) {
+                        form.email = data.user.email ? data.user.email : '';
+                        form.nama = data.user.name ? data.user.name : '';
+                        form.no_telepon = data.user.phoneNumber ? data.user.phoneNumber : '';
+                    }
+
+                    if (data.photo) {
+                        form.foto_profil_preview = data.photo;
+                    }
+
+                    if (data.ktpPhoto) {
+                        form.ktp_file_preview = data.ktpPhoto;
+                    }
+                    
+                    
+                    if (data.district) {
+                        form.kabupaten_kota = {
+                            value: data.district.id ? data.district.id : 0,
+                            label: data.district.name ? data.district.name : ''
+                        }
+                    }
+
+                    if (data.subDistrict) {
+                        form.kecamatan = {
+                            value: data.subDistrict.id ? data.subDistrict.id : 0,
+                            label: data.subDistrict.name ? data.subDistrict.name : ''
+                        }
+                    }
+
+                    if (data.village) {
+                        form.kelurahan = {
+                            value: data.village.id ? data.village.id : 0,
+                            label: data.village.name ? data.village.name : ''
+                        }
+                    }
+
+                    if (data.country) {
+                        form.negara = {
+                            value: data.country.id ? data.country.id : 0,
+                            label: data.country.name ? data.country.name : ''
+                        }
+                    }
+
+                    if (data.province) {
+                        form.provinsi = {
+                            value: data.province.id ? data.province.id : 0,
+                            label: data.province.name ? data.province.name : ''
+                        }
+                    }
 
                     this.setState({
                         form: form,
@@ -141,7 +166,7 @@ class Create extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<Investor>) => {
+                .catch((response: ApiResponse<InvestorShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -217,7 +242,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findInvestorAction: (id: number) => Promise<ApiResponse<Investor>>
+    findInvestorAction: (id: number) => Promise<ApiResponse<InvestorShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: CreateProps) => {

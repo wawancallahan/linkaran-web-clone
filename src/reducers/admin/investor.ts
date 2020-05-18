@@ -1,6 +1,6 @@
 import {  
     FETCH_INVESTOR,
-    Investor,
+    InvestorList,
     InvestorActionTypes,
     FetchInvestorActionType,
     SetPaginatorInvestorActionType,
@@ -19,7 +19,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Investor[],
+    list: InvestorList[],
     paginate: Paginator,
     alert: Alert
 };

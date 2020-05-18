@@ -2,7 +2,7 @@ import {
     FETCH_RESTAURANT,
     FETCH_RESTAURANT_ERROR,
     FETCH_RESTAURANT_SUCCESS,
-    Restaurant,
+    RestaurantList,
     RestaurantActionTypes,
     FetchRestaurantActionType,
     FetchRestaurantSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 interface initialStateInterface {
-    list: Restaurant[],
+    list: RestaurantList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

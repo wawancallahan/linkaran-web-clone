@@ -35,7 +35,7 @@ import {
     setAlertInvestorShowAction,
     deleteInvestorAction
 } from '../../../actions/admin/investor';
-import { Investor } from '../../../types/admin/investor';
+import { Investor, InvestorList } from '../../../types/admin/investor';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -54,16 +54,16 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: Investor,
+    item: InvestorList,
     key: number,
     deleteInvestor: (id: number) => void
 }) => {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td>{props.item.user.name}</td>
-            <td>{props.item.user.phoneNumber}</td>
-            <td>{props.item.user.email}</td>
+            <td>{props.item.user ? props.item.user.name : ''}</td>
+            <td>{props.item.user ? props.item.user.phoneNumber : ''}</td>
+            <td>{props.item.user ? props.item.user.email : ''}</td>
             <td>{props.item.identityNumber}</td>
             <td>{props.item.gender}</td>
             <td>{props.item.dateOfBirth}</td>
@@ -147,7 +147,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.investorList.length > 0) {
-                investorList = this.props.investorList.map((item: Investor, index: number) => (
+                investorList = this.props.investorList.map((item: InvestorList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -232,7 +232,7 @@ class List extends Component<Props, State> {
 }
 
 interface LinkStateToProps {
-    investorList: Investor[],
+    investorList: InvestorList[],
     paginate: Paginator,
     investorAlert: IAlert
 }

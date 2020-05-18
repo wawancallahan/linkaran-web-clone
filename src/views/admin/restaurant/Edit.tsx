@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Restaurant, FormField, RestaurantDetailResult, OperatingTime as OperatingTimeInterface, OperatingTimeModel } from '../../../types/admin/restaurant';
+import { Restaurant, FormField, RestaurantShow, OperatingTime as OperatingTimeInterface } from '../../../types/admin/restaurant';
 import {
     findRestaurantAction
 } from '../../../actions/admin/restaurant';
@@ -98,28 +98,32 @@ class Edit extends Component<Props, State> {
         alert_message: ''
     }
 
-    findOperatingTime = (operatingTime: OperatingTimeInterface[], day: number) => {
-        const operatingTimeSelected : OperatingTimeInterface | undefined = operatingTime.find((item: OperatingTimeInterface) => item.day === day)
+    findOperatingTime = (operatingTime: Partial<OperatingTimeInterface>[], day: number) => {
+        const operatingTimeSelected : Partial<OperatingTimeInterface> | undefined = operatingTime.find((item: Partial<OperatingTimeInterface>) => item.day === day)
 
         return operatingTimeSelected
     }
 
-    getTimeParse = (time: string) => {
-        const [timeParseHours, timeParseMinutes, timeParseSecond] = time.split(":")
+    getTimeParse = (time: string | undefined) => {
+        if (time) {
+            const [timeParseHours, timeParseMinutes, timeParseSecond] = time.split(":")
 
-        return `${timeParseHours}:${timeParseMinutes}`;
+            return `${timeParseHours}:${timeParseMinutes}`;
+        }
+
+        return "00:00"
     }
 
     componentDidMount() {
         const id = +this.props.match.params.id;
 
         this.props.findRestaurantAction(id)
-                .then((response: ApiResponse<RestaurantDetailResult>) => {
+                .then((response: ApiResponse<RestaurantShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: RestaurantDetailResult = response.response!.result;
+                    const data: RestaurantShow = response.response!.result;
 
                     form.name = data.name;
                     form.address = data.address ? data.address : '';
@@ -145,55 +149,57 @@ class Edit extends Component<Props, State> {
                         }
                     }
 
-                    const operatingTime: OperatingTimeInterface[] = data.operatingTime
-                    const operatingTimeMonday = this.findOperatingTime(operatingTime, 1)
-                    const operatingTimeTuesday = this.findOperatingTime(operatingTime, 2)
-                    const operatingTimeWednesday = this.findOperatingTime(operatingTime, 3)
-                    const operatingTimeThursday = this.findOperatingTime(operatingTime, 4)
-                    const operatingTimeFriday = this.findOperatingTime(operatingTime, 5)
-                    const operatingTimeSaturday = this.findOperatingTime(operatingTime, 6)
-                    const operatingTimeSunday = this.findOperatingTime(operatingTime, 7)
+                    if (data.operatingTime) {
+                        const operatingTime: Partial<OperatingTimeInterface>[] = data.operatingTime
+                        const operatingTimeMonday = this.findOperatingTime(operatingTime, 1)
+                        const operatingTimeTuesday = this.findOperatingTime(operatingTime, 2)
+                        const operatingTimeWednesday = this.findOperatingTime(operatingTime, 3)
+                        const operatingTimeThursday = this.findOperatingTime(operatingTime, 4)
+                        const operatingTimeFriday = this.findOperatingTime(operatingTime, 5)
+                        const operatingTimeSaturday = this.findOperatingTime(operatingTime, 6)
+                        const operatingTimeSunday = this.findOperatingTime(operatingTime, 7)
 
-                    if (operatingTimeMonday) {
-                        form.monday_start = this.getTimeParse(operatingTimeMonday.openTime)
-                        form.monday_end = this.getTimeParse(operatingTimeMonday.closeTime)
-                        form.monday_isClosed = operatingTimeMonday.isClosed
-                    }
+                        if (operatingTimeMonday) {
+                            form.monday_start = this.getTimeParse(operatingTimeMonday.openTime)
+                            form.monday_end = this.getTimeParse(operatingTimeMonday.closeTime)
+                            form.monday_isClosed = operatingTimeMonday.isClosed ? operatingTimeMonday.isClosed : false
+                        }
 
-                    if (operatingTimeTuesday) {
-                        form.tuesday_start = this.getTimeParse(operatingTimeTuesday.openTime)
-                        form.tuesday_end = this.getTimeParse(operatingTimeTuesday.closeTime)
-                        form.tuesday_isClosed = operatingTimeTuesday.isClosed
-                    }
+                        if (operatingTimeTuesday) {
+                            form.tuesday_start = this.getTimeParse(operatingTimeTuesday.openTime)
+                            form.tuesday_end = this.getTimeParse(operatingTimeTuesday.closeTime)
+                            form.tuesday_isClosed = operatingTimeTuesday.isClosed ? operatingTimeTuesday.isClosed : false
+                        }
 
-                    if (operatingTimeWednesday) {
-                        form.wednesday_start = this.getTimeParse(operatingTimeWednesday.openTime)
-                        form.wednesday_end = this.getTimeParse(operatingTimeWednesday.closeTime)
-                        form.wednesday_isClosed = operatingTimeWednesday.isClosed
-                    }
+                        if (operatingTimeWednesday) {
+                            form.wednesday_start = this.getTimeParse(operatingTimeWednesday.openTime)
+                            form.wednesday_end = this.getTimeParse(operatingTimeWednesday.closeTime)
+                            form.wednesday_isClosed = operatingTimeWednesday.isClosed ? operatingTimeWednesday.isClosed : false
+                        }
 
-                    if (operatingTimeThursday) {
-                        form.thursday_start = this.getTimeParse(operatingTimeThursday.openTime)
-                        form.thursday_end = this.getTimeParse(operatingTimeThursday.closeTime)
-                        form.thursday_isClosed = operatingTimeThursday.isClosed
-                    }
+                        if (operatingTimeThursday) {
+                            form.thursday_start = this.getTimeParse(operatingTimeThursday.openTime)
+                            form.thursday_end = this.getTimeParse(operatingTimeThursday.closeTime)
+                            form.thursday_isClosed = operatingTimeThursday.isClosed ? operatingTimeThursday.isClosed : false
+                        }
 
-                    if (operatingTimeFriday) {
-                        form.friday_start = this.getTimeParse(operatingTimeFriday.openTime)
-                        form.friday_end = this.getTimeParse(operatingTimeFriday.closeTime)
-                        form.friday_isClosed = operatingTimeFriday.isClosed
-                    }
+                        if (operatingTimeFriday) {
+                            form.friday_start = this.getTimeParse(operatingTimeFriday.openTime)
+                            form.friday_end = this.getTimeParse(operatingTimeFriday.closeTime)
+                            form.friday_isClosed = operatingTimeFriday.isClosed ? operatingTimeFriday.isClosed : false
+                        }
 
-                    if (operatingTimeSaturday) {
-                        form.saturday_start = this.getTimeParse(operatingTimeSaturday.openTime)
-                        form.saturday_end = this.getTimeParse(operatingTimeSaturday.closeTime)
-                        form.saturday_isClosed = operatingTimeSaturday.isClosed
-                    }
+                        if (operatingTimeSaturday) {
+                            form.saturday_start = this.getTimeParse(operatingTimeSaturday.openTime)
+                            form.saturday_end = this.getTimeParse(operatingTimeSaturday.closeTime)
+                            form.saturday_isClosed = operatingTimeSaturday.isClosed ? operatingTimeSaturday.isClosed : false
+                        }
 
-                    if (operatingTimeSunday) {
-                        form.sunday_start = this.getTimeParse(operatingTimeSunday.openTime)
-                        form.sunday_end = this.getTimeParse(operatingTimeSunday.closeTime)
-                        form.sunday_isClosed = operatingTimeSunday.isClosed
+                        if (operatingTimeSunday) {
+                            form.sunday_start = this.getTimeParse(operatingTimeSunday.openTime)
+                            form.sunday_end = this.getTimeParse(operatingTimeSunday.closeTime)
+                            form.sunday_isClosed = operatingTimeSunday.isClosed ? operatingTimeSunday.isClosed : false
+                        }
                     }
 
                     this.setState({
@@ -267,7 +273,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 interface LinkDispatchToProps {
-    findRestaurantAction: (id: number) => Promise<ApiResponse<RestaurantDetailResult>>
+    findRestaurantAction: (id: number) => Promise<ApiResponse<RestaurantShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {
