@@ -154,7 +154,7 @@ class FormInformation extends Component<Props> {
                 <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                         <Col>
-                            <h3 className="mb-0">Informasi Restaurant</h3>
+                            <h3 className="mb-0">Informasi Restoran</h3>
                         </Col>
                     </Row>
                 </CardHeader>

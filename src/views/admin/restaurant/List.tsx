@@ -198,7 +198,7 @@ class List extends Component<Props, State> {
                                                     color="primary"
                                                     size="sm"
                                                 >
-                                                    Tambah Restpran
+                                                    Tambah Restoran
                                                 </Button>
                                             </Link>
                                         </div>
