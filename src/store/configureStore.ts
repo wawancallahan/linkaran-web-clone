@@ -30,6 +30,7 @@ import bankReducer from '../reducers/admin/bank'
 import manualTopupReducer from '../reducers/admin/manualTopup'
 import manualWithdrawReducer from '../reducers/admin/manualWithdraw'
 import partnerReducer from '../reducers/admin/partner'
+import historyDataReducer from '../reducers/admin/historyData'
 
 import topUpReducer from '../reducers/financialManager/topup'
 import withDrawReducer from '../reducers/financialManager/withdraw'
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
     topup: topUpReducer,
     manualTopup: manualTopupReducer,
     partner: partnerReducer,
+    historyData: historyDataReducer,
     manualWithdraw: manualWithdrawReducer,
     withdraw: withDrawReducer
 });

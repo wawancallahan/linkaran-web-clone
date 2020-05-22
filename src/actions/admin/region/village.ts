@@ -84,7 +84,7 @@ export const setFilterAction = (filter: Filter) : SetFilterVillageActionType => 
     }
 }
 
-export const fetchVillageAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
+export const fetchVillageAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
         const querySearch = queryString.parse(window.location.search);

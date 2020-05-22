@@ -20,7 +20,8 @@ import AdminCustomerRoutes from './views/admin/customer/Index'
 import AdminBankRoutes from './views/admin/bank/Index'
 import AdminManualTopupRoutes from './views/admin/manualTopup/Index'
 import AdminManualWithdrawRoutes from './views/admin/manualWithdraw/Index'
-import AdmiPartnerRoutes from './views/admin/partner/Index'
+import AdminPartnerRoutes from './views/admin/partner/Index'
+import AdminHistoryDataRoutes from './views/admin/historyData/Index'
 
 import FinancialManagerTopUpRoutes from './views/financialManager/topup/Index'
 import FinancialManagerWithDrawRoutes from './views/financialManager/withdraw/Index'
@@ -55,7 +56,8 @@ const routes: Route[] = [
     ...AdminBankRoutes,
     ...AdminManualTopupRoutes,
     ...AdminManualWithdrawRoutes,
-    ...AdmiPartnerRoutes,
+    ...AdminPartnerRoutes,
+    ...AdminHistoryDataRoutes,
     ...FinancialManagerTopUpRoutes,
     ...FinancialManagerWithDrawRoutes,
 ]

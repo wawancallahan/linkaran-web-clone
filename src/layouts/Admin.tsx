@@ -199,6 +199,12 @@ const routeList: (SidebarRoute | null)[] = [
     roles: ["admin", "super admin"]
   },
   {
+    path: "/admin/history-data",
+    name: "Histori",
+    icon: "ni ni-archive-2 text-warning",
+    roles: ["admin", "super admin"]
+  },
+  {
     path: "/admin/topup",
     name: "Top Up",
     icon: "ni ni-credit-card text-danger",
@@ -209,7 +215,7 @@ const routeList: (SidebarRoute | null)[] = [
     name: "With Draw",
     icon: "ni ni-credit-card text-info",
     roles: ["financial manager"]
-  }
+  },
 ];
 
 type AdminProps = RouteComponentProps

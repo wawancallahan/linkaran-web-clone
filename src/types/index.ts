@@ -24,6 +24,7 @@ import { BankActionTypes as AdminBankActionTypes } from './admin/bank'
 import { ManualTopUpActionTypes as AdminManualTopUpActionTypes } from './admin/manualTopup'
 import { ManualWithDrawActionTypes as AdminManualWithDrawActionTypes } from './admin/manualWithdraw'
 import { PartnerActionTypes as AdminPartnerActionTypes } from './admin/partner'
+import { HistoryDataActionTypes as AdminHistoryDataActionTypes } from './admin/historyData/historyData'
 
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
 import { WithDrawActionTypes as FinancialManagerWithDrawActionTypes } from './financialManager/withdraw'
@@ -55,5 +56,6 @@ export type AppActions =
     | AdminManualTopUpActionTypes
     | AdminManualWithDrawActionTypes
     | AdminPartnerActionTypes
+    | AdminHistoryDataActionTypes
     | FinancialManagerTopUpActionTypes
     | FinancialManagerWithDrawActionTypes

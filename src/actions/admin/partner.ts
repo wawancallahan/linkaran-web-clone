@@ -86,7 +86,7 @@ export const setFilterAction = (filter: Filter) : SetFilterPartnerActionType => 
     }
 }
 
-export const fetchPartnerAction = (page: number, filter: Filter | {} = {}): ThunkResult<Promise<Boolean>> => {
+export const fetchPartnerAction = (page: number): ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
 
         const querySearch = queryString.parse(window.location.search);

@@ -85,7 +85,7 @@ export const setFilterAction = (filter: Filter) : SetFilterRestaurantActionType 
     }
 }
 
-export const fetchRestaurantAction = (page: number, filter: Filter | {} = {}) : ThunkResult<Promise<Boolean>> => {
+export const fetchRestaurantAction = (page: number) : ThunkResult<Promise<Boolean>> => {
     return async (dispatch: Dispatch, getState: () => AppState) => {
         
         const querySearch = queryString.parse(window.location.search);
