@@ -237,7 +237,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     subDistrictList: SubDistrictList[],
     paginate: Paginator,
     subDistrictAlert: IAlert
@@ -251,7 +251,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchSubDistrictAction: (page: number) => Promise<Boolean>,
     deleteSubDistrictAction: (id: number) => Promise<ApiResponse<SubDistrict>>,
     setAlertSubDistrictHideAction: () => void,

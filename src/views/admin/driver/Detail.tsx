@@ -130,7 +130,7 @@ class Detail extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
@@ -138,7 +138,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findDriverAction: (id: number) => Promise<ApiResponse<DriverShow>>
 }
 

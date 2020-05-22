@@ -451,7 +451,7 @@ class Filter extends Component<Props, State> {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchApplicationAction: (page: number) => Promise<Boolean>
 }
 

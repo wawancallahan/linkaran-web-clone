@@ -18,7 +18,7 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-interface initialStateInterface {
+type initialStateInterface = {
     list: InvestorList[],
     paginate: Paginator,
     alert: Alert

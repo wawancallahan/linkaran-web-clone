@@ -23,7 +23,7 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-interface initialStateInterface {
+type initialStateInterface = {
     list: TopUpList[],
     paginate: Paginator,
     alert: Alert,

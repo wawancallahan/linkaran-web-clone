@@ -247,7 +247,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     restaurantList: RestaurantList[],
     paginate: Paginator,
     restaurantAlert: IAlert
@@ -261,7 +261,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchRestaurantAction: (page: number) => Promise<Boolean>,
     deleteRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>,
     setAlertRestaurantHideAction: () => void,

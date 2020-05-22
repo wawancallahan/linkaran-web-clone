@@ -101,7 +101,7 @@ class DetailApprove extends Component<Props, State> {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     approveTopUpAction: (id: number) => Promise<ApiResponse<TopUpApprove>>
 }
 

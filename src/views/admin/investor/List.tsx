@@ -231,7 +231,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     investorList: InvestorList[],
     paginate: Paginator,
     investorAlert: IAlert
@@ -245,7 +245,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchInvestorAction: (page: number) =>  Promise<Boolean>,
     setAlertInvestorHideAction: () => void,
     setAlertInvestorShowAction: (message: string, color: string) => void,

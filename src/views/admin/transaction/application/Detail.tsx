@@ -128,7 +128,7 @@ class Detail extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
@@ -137,7 +137,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findApplicationAction: (type: string, numberTransaction: string) => Promise<ApiResponse<ApplicationShow>>
 }
 

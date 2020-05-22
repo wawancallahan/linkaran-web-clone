@@ -3,7 +3,8 @@ import "./Dropzone.css";
 import { Button } from "reactstrap";
 import '../../react-lazyload.d.ts'
 import LazyLoad from 'react-lazyload'
-interface DropzoneProps {
+
+type DropzoneProps = {
     disabled: boolean,
     onFilesAdded: ([]: any[]) => void,
     multiple: boolean

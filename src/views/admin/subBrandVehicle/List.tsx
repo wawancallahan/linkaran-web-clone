@@ -238,7 +238,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     subBrandVehicleList: SubBrandVehicleList[],
     paginate: Paginator,
     subBrandVehicleAlert: IAlert
@@ -252,7 +252,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchSubBrandVehicleAction: (page: number) => Promise<Boolean>,
     deleteSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicle>>,
     setAlertSubBrandVehicleHideAction: () => void,

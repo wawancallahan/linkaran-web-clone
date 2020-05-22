@@ -16,7 +16,7 @@ type Props = {
     itemClicked: (page: number) => void 
 }
 
-interface Page {
+export type Page = {
     text: string,
     active: boolean,
     disabled: boolean,

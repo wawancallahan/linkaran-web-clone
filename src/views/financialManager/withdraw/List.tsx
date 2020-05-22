@@ -209,7 +209,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     withdraw: WithDrawList[],
     paginate: Paginator,
     withdrawAlert: IAlert
@@ -223,7 +223,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchWithDrawAction: (page: number) => Promise<Boolean>,
     setAlertWithDrawHideAction: () => void,
     setAlertWithDrawShowAction: (message: string, color: string) => void,

@@ -247,7 +247,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     manualTopup: ManualTopUpList[],
     paginate: Paginator,
     manualTopupAlert: IAlert
@@ -261,7 +261,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchManualTopUpAction: (page: number) => Promise<Boolean>,
     setAlertManualTopUpHideAction: () => void,
     setAlertManualTopUpShowAction: (message: string, color: string) => void,

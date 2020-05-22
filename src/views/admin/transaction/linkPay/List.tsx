@@ -174,7 +174,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     transactionLinkPay: LinkPay[],
     paginate: Paginator,
     transactionLinkPayAlert: IAlert
@@ -188,7 +188,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchLinkPayAction: (page: number) => void,
     setAlertLinkPayHideAction: () => void,
     setAlertLinkPayShowAction: (message: string, color: string) => void

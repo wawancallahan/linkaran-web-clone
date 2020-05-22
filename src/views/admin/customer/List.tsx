@@ -277,7 +277,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     customerList: Customer[],
     paginate: Paginator,
     customerAlert: IAlert
@@ -291,7 +291,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchCustomerAction: (page: number) => Promise<Boolean>,
     setAlertCustomerHideAction: () => void,
     setAlertCustomerShowAction: (message: string, color: string) => void,

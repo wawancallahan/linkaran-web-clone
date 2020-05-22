@@ -39,7 +39,7 @@ import { number } from 'prop-types';
 import swal from 'sweetalert'
 import { toast, TypeOptions } from 'react-toastify'
 
-interface ModalState { 
+type ModalState = { 
     id: number, 
     redeemCode: string,
     visible: boolean
@@ -559,7 +559,7 @@ class ListTicket extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     ticketVoucherList: TicketList[],
     paginate: Paginator,
 }
@@ -571,7 +571,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchTicketVoucherAction: (page: number, id: number) => Promise<Boolean>,
     deleteTicketAction: (id: number) => Promise<ApiResponse<Ticket>>,
     createTicketAction: (ticket: TicketCreateField) => Promise<ApiResponse<TicketCreateResult>>,

@@ -1,12 +1,13 @@
 export type Transaction = {
     id: number,
     numberTransaction: string,
-    dateTime: string,
+    dateTime: string | null,
     driverTakeOrderAt: string | null,
     cancelAt: string | null,
-    note: string,
+    note: string | null,
     cost: number,
     discount: number | null,
     totalCost: number,
-    totalCostBeforeCut: number
+    totalCostBeforeCut: number,
+    paymentFromVoucher: number,
 }

@@ -237,7 +237,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     villageList: VillageList[],
     paginate: Paginator,
     villageAlert: IAlert
@@ -251,7 +251,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchVillageAction: (page: number) => Promise<Boolean>,
     deleteVillageAction: (id: number) => Promise<ApiResponse<Village>>,
     setAlertVillageHideAction: () => void,

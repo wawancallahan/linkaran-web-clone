@@ -19,10 +19,10 @@ export const ALERT_APPLICATION_HIDE = "ALERT_APPLICATION_HIDE";
 export type FormField = {
 }
 
-interface ApplicationField {
+export type ApplicationField = {
 }
 
-export interface Application {
+export type Application = {
     id: number,
     date: string,
     numberTransaction: string,
@@ -181,35 +181,35 @@ export type ApplicationCreateResult = Application & Partial<Timestamps>
 
 export type ApplicationEditResult = Application & Partial<Timestamps>
 
-export interface FetchApplicationActionType {
+export type FetchApplicationActionType = {
     type: typeof FETCH_APPLICATION
 }
 
-export interface FetchApplicationSuccessActionType {
+export type FetchApplicationSuccessActionType = {
     type: typeof FETCH_APPLICATION_SUCCESS,
     list: ApplicationList[]
 }
 
-export interface FetchApplicationErrorActionType {
+export type FetchApplicationErrorActionType = {
     type: typeof FETCH_APPLICATION_ERROR
 }
 
-export interface SetPaginatorApplicationActionType {
+export type SetPaginatorApplicationActionType = {
     type: typeof SET_PAGINATOR_APPLICATION,
     paginate: Paginator
 }
 
-export interface AlertApplicationHideActionType {
+export type AlertApplicationHideActionType = {
     type: typeof ALERT_APPLICATION_HIDE
 }
 
-export interface AlertApplicationShowActionType {
+export type AlertApplicationShowActionType = {
     type: typeof ALERT_APPLICATION_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     numberTransaction: string,
     userName: string,
     date: Date | null,
@@ -225,12 +225,12 @@ export type FilterOmit = Omit<Filter, 'date'> & {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterApplicationActionType {
+export type SetFilterApplicationActionType = {
     type: typeof SET_FILTER_APPLICATION,
     filter: Filter
 }
 
-export interface ClearFilterApplicationActionType {
+export type ClearFilterApplicationActionType = {
     type: typeof CLEAR_FILTER_APPLICATION
 }
 

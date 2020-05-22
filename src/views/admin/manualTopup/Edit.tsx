@@ -79,7 +79,7 @@ class Edit extends Component<Props, State> {
 
                     const data: ManualTopUpShow =response.response!.result;
 
-                    form.amount = data.request ? data.request.uniqueCodeWithAmount.toString() : '';
+                    form.amount = data.request && data.request.uniqueCodeWithAmount ? data.request.uniqueCodeWithAmount.toString() : '';
 
                     if (data.request && data.request.driverProfile && data.request.driverProfile.user) {
                         form.driverProfile = {
@@ -168,7 +168,7 @@ class Edit extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 
 }
 
@@ -178,7 +178,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findManualTopUpAction: (id: number) => Promise<ApiResponse<ManualTopUpShow>>
 }
 

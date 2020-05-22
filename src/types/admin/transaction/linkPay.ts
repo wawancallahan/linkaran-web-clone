@@ -12,11 +12,11 @@ export type FormField = {
    
 }
 
-interface LinkPayField {
+export type LinkPayField = {
     
 }
 
-interface LinkPayList {
+export type LinkPayList = {
     linkpay_id: number,
     payment_id: number,
     amount: number,
@@ -28,7 +28,7 @@ interface LinkPayList {
     datetime_transaction: string
 }
 
-interface LinkPayResult {
+export type LinkPayResult = {
    id: number
 }
 
@@ -42,29 +42,29 @@ export type LinkPayCreateResult = LinkPayResult;
 
 export type LinkPayEditResult = LinkPayResult;
 
-export interface FetchLinkPayActionType {
+export type FetchLinkPayActionType = {
     type: typeof FETCH_LINK_PAY
 }
 
-export interface FetchLinkPaySuccessActionType {
+export type FetchLinkPaySuccessActionType = {
     type: typeof FETCH_LINK_PAY_SUCCESS,
     list: LinkPay[]
 }
 
-export interface FetchLinkPayErrorActionType {
+export type FetchLinkPayErrorActionType = {
     type: typeof FETCH_LINK_PAY_ERROR
 }
 
-export interface SetPaginatorLinkPayActionType {
+export type SetPaginatorLinkPayActionType = {
     type: typeof SET_PAGINATOR_LINK_PAY,
     paginate: Paginator
 }
 
-export interface AlertLinkPayHideActionType {
+export type AlertLinkPayHideActionType = {
     type: typeof ALERT_LINK_PAY_HIDE
 }
 
-export interface AlertLinkPayShowActionType {
+export type AlertLinkPayShowActionType = {
     type: typeof ALERT_LINK_PAY_SHOW,
     message: string,
     color: string

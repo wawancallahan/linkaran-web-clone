@@ -3,6 +3,7 @@ import { District } from './region/district';
 import { Province } from './region/province';
 import { SelectType } from '../select';
 import { Timestamps } from '../timestamps';
+import { LocationPoint } from './locationPoint';
 
 export const FETCH_RESTAURANT = "FETCH_RESTAURANT";
 export const FETCH_RESTAURANT_SUCCESS = "FETCH_RESTAURANT_SUCCESS";
@@ -17,10 +18,7 @@ export const ALERT_RESTAURANT_HIDE = "ALERT_RESTAURANT_HIDE";
 export type FormField = {
     name: string,
     address: string,
-    point: {
-        lat: string,
-        lng: string
-    },
+    point: LocationPoint,
     rating: number,
     photo: File | null,
     photo_preview: string,
@@ -54,10 +52,7 @@ export type FormField = {
 export type RestaurantField = {
     name: string,
     address: string,
-    point: {
-        lat: string,
-        lng: string
-    },
+    point: LocationPoint,
     rating: number,
     photo: File | null,
     photo_preview: string,
@@ -75,10 +70,7 @@ export type Restaurant = {
     address: string,
     registered: boolean,
     phoneNumber: string | null,
-    point: {
-        lat: string,
-        lng: string
-    },
+    point: LocationPoint,
     rating: number,
     image: string | null
 }

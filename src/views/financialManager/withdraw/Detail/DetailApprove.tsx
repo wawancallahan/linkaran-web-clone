@@ -101,7 +101,7 @@ class DetailApprove extends Component<Props, State> {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     approveWithDrawAction: (id: number) => Promise<ApiResponse<WithDrawApprove>>
 }
 

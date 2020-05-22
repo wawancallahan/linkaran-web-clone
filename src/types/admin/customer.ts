@@ -15,10 +15,10 @@ export const ALERT_CUSTOMER_HIDE = "ALERT_CUSTOMER_HIDE";
 export type FormField = {
 }
 
-interface CustomerField {
+export type CustomerField = {
 }
 
-export interface Customer {
+export type Customer = {
     id: number,
     name: string,
     phoneNumber: string,
@@ -44,35 +44,35 @@ export type CustomerCreateResult = Customer & Partial<Timestamps>
 
 export type CustomerEditResult = Customer & Partial<Timestamps>
 
-export interface FetchCustomerActionType {
+export type FetchCustomerActionType = {
     type: typeof FETCH_CUSTOMER
 }
 
-export interface FetchCustomerSuccessActionType {
+export type FetchCustomerSuccessActionType = {
     type: typeof FETCH_CUSTOMER_SUCCESS,
     list: CustomerList[]
 }
 
-export interface FetchCustomerErrorActionType {
+export type FetchCustomerErrorActionType = {
     type: typeof FETCH_CUSTOMER_ERROR
 }
 
-export interface SetPaginatorCustomerActionType {
+export type SetPaginatorCustomerActionType = {
     type: typeof SET_PAGINATOR_CUSTOMER,
     paginate: Paginator
 }
 
-export interface AlertCustomerHideActionType {
+export type AlertCustomerHideActionType = {
     type: typeof ALERT_CUSTOMER_HIDE
 }
 
-export interface AlertCustomerShowActionType {
+export type AlertCustomerShowActionType = {
     type: typeof ALERT_CUSTOMER_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     email: string,
     phoneNumber: string
@@ -80,12 +80,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterCustomerActionType {
+export type SetFilterCustomerActionType = {
     type: typeof SET_FILTER_CUSTOMER,
     filter: Filter
 }
 
-export interface ClearFilterCustomerActionType {
+export type ClearFilterCustomerActionType = {
     type: typeof CLEAR_FILTER_CUSTOMER
 }
 

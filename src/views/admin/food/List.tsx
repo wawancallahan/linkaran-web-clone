@@ -248,7 +248,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     foodList: FoodList[],
     paginate: Paginator,
     foodAlert: IAlert
@@ -262,7 +262,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchFoodAction: (page: number) => Promise<Boolean>,
     deleteFoodAction: (id: number) => Promise<ApiResponse<Food>>,
     setAlertFoodHideAction: () => void,

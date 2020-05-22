@@ -26,7 +26,7 @@ import AdminHistoryDataRoutes from './views/admin/historyData/Index'
 import FinancialManagerTopUpRoutes from './views/financialManager/topup/Index'
 import FinancialManagerWithDrawRoutes from './views/financialManager/withdraw/Index'
 
-export interface Route {
+export type Route = {
     exact: boolean,
     path: string,
     component: any,

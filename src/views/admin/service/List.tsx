@@ -246,7 +246,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     serviceList: ServiceList[],
     paginate: Paginator,
     serviceAlert: IAlert
@@ -260,7 +260,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchServiceAction: (page: number) => Promise<Boolean>,
     deleteServiceAction: (id: number) => Promise<ApiResponse<Service>>,
     setAlertServiceHideAction: () => void,

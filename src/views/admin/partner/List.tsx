@@ -303,7 +303,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     partnerList: PartnerList[],
     paginate: Paginator,
     partnerAlert: IAlert
@@ -317,7 +317,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchPartnerAction: (page: number) => Promise<Boolean>,
     deletePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
     activePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,

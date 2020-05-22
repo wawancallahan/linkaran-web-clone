@@ -12,11 +12,11 @@ export type FormField = {
    
 }
 
-interface AccountLinkPayField {
+export type AccountLinkPayField = {
     
 }
 
-interface AccountLinkPayList {
+export type AccountLinkPayList = {
     user_id: number,
     name: string,
     balance: number,
@@ -24,7 +24,7 @@ interface AccountLinkPayList {
     type: string
 }
 
-interface AccountLinkPayResult {
+export type AccountLinkPayResult = {
    id: number
 }
 
@@ -38,29 +38,29 @@ export type AccountLinkPayCreateResult = AccountLinkPayResult;
 
 export type AccountLinkPayEditResult = AccountLinkPayResult;
 
-export interface FetchAccountLinkPayActionType {
+export type FetchAccountLinkPayActionType = {
     type: typeof FETCH_ACCOUNT_LINK_PAY
 }
 
-export interface FetchAccountLinkPaySuccessActionType {
+export type FetchAccountLinkPaySuccessActionType = {
     type: typeof FETCH_ACCOUNT_LINK_PAY_SUCCESS,
     list: AccountLinkPay[]
 }
 
-export interface FetchAccountLinkPayErrorActionType {
+export type FetchAccountLinkPayErrorActionType = {
     type: typeof FETCH_ACCOUNT_LINK_PAY_ERROR
 }
 
-export interface SetPaginatorAccountLinkPayActionType {
+export type SetPaginatorAccountLinkPayActionType = {
     type: typeof SET_PAGINATOR_ACCOUNT_LINK_PAY,
     paginate: Paginator
 }
 
-export interface AlertAccountLinkPayHideActionType {
+export type AlertAccountLinkPayHideActionType = {
     type: typeof ALERT_ACCOUNT_LINK_PAY_HIDE
 }
 
-export interface AlertAccountLinkPayShowActionType {
+export type AlertAccountLinkPayShowActionType = {
     type: typeof ALERT_ACCOUNT_LINK_PAY_SHOW,
     message: string,
     color: string

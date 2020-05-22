@@ -1,31 +1,29 @@
 import { Paginator, PaginatorLinkPay } from "./paginator";
 
-export interface MetaData {
+export type MetaData = {
     isError: boolean,
     message: string,
     statusCode: number
 }
 
-export interface MetaDataSuccess extends MetaData {
+export type MetaDataSuccess = MetaData & {
     statusMessage: string,
     paginate?: Paginator | PaginatorLinkPay
 }
 
-export interface ApiResponseSuccess<T> {
+export type ApiResponseSuccess<T> = {
     metaData: MetaDataSuccess,
     result: T
 }
 
-export interface ApiResponseSuccessList<T> {
+export type ApiResponseSuccessList<T> = {
     metaData: MetaDataSuccess,
     result: T[]
 }
 
-export interface MetaDataError extends MetaData {
+export type MetaDataError = MetaData
 
-}
-
-export interface ApiResponseError {
+export type ApiResponseError = {
     metaData: MetaDataError,
     result: null
 }

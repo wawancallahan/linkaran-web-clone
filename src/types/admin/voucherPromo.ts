@@ -2,7 +2,7 @@ import { Paginator } from '../paginator';
 import { Service } from './service' 
 import { VoucherType } from './voucherType';
 import { User } from './user';
-import { Transaction } from './tansaction';
+import { Transaction } from './transaction';
 import { SelectType } from '../select';
 
 export const FETCH_VOUCHER_PROMO = "FETCH_VOUCHER_PROMO";
@@ -37,7 +37,7 @@ export type FormField = {
     image_preview: string
 }
 
-interface VoucherPromoField {
+export type VoucherPromoField = {
     name: string,
     code: string,
     amount: string,
@@ -54,7 +54,7 @@ interface VoucherPromoField {
     image_preview: string
 }
 
-interface VoucherPromoList {
+export type VoucherPromoList = {
     name: string,
     code: string,
     image: string | null,
@@ -73,7 +73,7 @@ interface VoucherPromoList {
     typeId?: number
 }
 
-interface VoucherPromoResult {
+export type VoucherPromoResult = {
     id: number,
     createdAt?: string,
     updatedAt?: string,
@@ -97,53 +97,53 @@ export type VoucherPromoCreateResult = VoucherPromoResult;
 
 export type VoucherPromoEditResult = VoucherPromoResult;
 
-export interface FetchVoucherPromoActionType {
+export type FetchVoucherPromoActionType = {
     type: typeof FETCH_VOUCHER_PROMO
 }
 
-export interface FetchVoucherPromoSuccessActionType {
+export type FetchVoucherPromoSuccessActionType = {
     type: typeof FETCH_VOUCHER_PROMO_SUCCESS,
     list: VoucherPromo[]
 }
 
-export interface FetchVoucherPromoErrorActionType {
+export type FetchVoucherPromoErrorActionType = {
     type: typeof FETCH_VOUCHER_PROMO_ERROR
 }
 
-export interface SetPaginatorVoucherPromoActionType {
+export type SetPaginatorVoucherPromoActionType = {
     type: typeof SET_PAGINATOR_VOUCHER_PROMO,
     paginate: Paginator
 }
 
-export interface FetchVoucherPromoUserUsedActionType {
+export type FetchVoucherPromoUserUsedActionType = {
     type: typeof FETCH_VOUCHER_PROMO_USER_USED
 }
 
-export interface FetchVoucherPromoUserUsedSuccessActionType {
+export type FetchVoucherPromoUserUsedSuccessActionType = {
     type: typeof FETCH_VOUCHER_PROMO_USER_USED_SUCCESS,
     list: VoucherPromoUserUsed[]
 }
 
-export interface FetchVoucherPromoUserUsedErrorActionType {
+export type FetchVoucherPromoUserUsedErrorActionType = {
     type: typeof FETCH_VOUCHER_PROMO_USER_USED_ERROR
 }
 
-export interface SetPaginatorVoucherPromoUserUsedActionType {
+export type SetPaginatorVoucherPromoUserUsedActionType = {
     type: typeof SET_PAGINATOR_VOUCHER_PROMO_USER_USED,
     paginate: Paginator
 }
 
-export interface AlertVoucherPromoHideActionType {
+export type AlertVoucherPromoHideActionType = {
     type: typeof ALERT_VOUCHER_PROMO_HIDE
 }
 
-export interface AlertVoucherPromoShowActionType {
+export type AlertVoucherPromoShowActionType = {
     type: typeof ALERT_VOUCHER_PROMO_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     code: string,
     amount: string,
@@ -155,12 +155,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterVoucherPromoActionType {
+export type SetFilterVoucherPromoActionType = {
     type: typeof SET_FILTER_VOUCHER_PROMO,
     filter: Filter
 }
 
-export interface ClearFilterVoucherPromoActionType {
+export type ClearFilterVoucherPromoActionType = {
     type: typeof CLEAR_FILTER_VOUCHER_PROMO
 }
 

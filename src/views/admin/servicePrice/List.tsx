@@ -242,7 +242,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     servicePriceList: ServicePriceList[],
     paginate: Paginator,
     servicePriceAlert: IAlert
@@ -256,7 +256,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchServicePriceAction: (page: number) => Promise<Boolean>,
     deleteServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>,
     setAlertServicePriceHideAction: () => void,

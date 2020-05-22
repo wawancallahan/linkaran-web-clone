@@ -46,8 +46,8 @@ import swal from 'sweetalert'
 import Filter from './Filter'
 import { parseDateFormat } from '../../../helpers/utils';
 import _ from 'lodash'
-import { EMoneyUser } from '../../../types/admin/user';
 import NumberFormat from 'react-number-format'
+import { EMoneyUser } from '../../../types/admin/eMoneyUser';
 
 type ListProps = RouteComponentProps & {
 
@@ -279,7 +279,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     driverList: DriverList[],
     paginate: Paginator,
     driverAlert: IAlert
@@ -293,7 +293,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchDriverAction: (page: number) => Promise<Boolean>,
     setAlertDriverHideAction: () => void,
     setAlertDriverShowAction: (message: string, color: string) => void,

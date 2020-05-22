@@ -240,7 +240,7 @@ class CreateFromCustomer extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 
 }
 
@@ -250,7 +250,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findCustomerAction: (id: number) => Promise<ApiResponse<CustomerShow>>
 }
 

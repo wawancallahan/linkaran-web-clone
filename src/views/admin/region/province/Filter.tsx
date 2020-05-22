@@ -200,7 +200,7 @@ class Filter extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     filter: IFilter,
     filtered: boolean
 }
@@ -212,7 +212,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchProvinceAction: (page: number) => Promise<Boolean>,
     setFilterAction: (filter: IFilter) => void,
     clearFilterProvinceAction: () => void

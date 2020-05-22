@@ -4,7 +4,10 @@ import { User } from './user';
 import { Bank } from './bank';
 import { SelectType } from '../select';
 import { Role } from './role';
-import { TokenFCM } from '../auth';
+import { TokenFCM } from '../tokenFCM';
+import { ClaimIdentifies } from './claimIdentifies';
+import { ManualTopUpRequest } from './manualTopupRequest';
+import { Driver } from './driver';
 
 export const FETCH_MANUAL_TOPUP = "FETCH_MANUAL_TOPUP";
 export const FETCH_MANUAL_TOPUP_SUCCESS = "FETCH_MANUAL_TOPUP_SUCCESS";
@@ -24,7 +27,7 @@ export type FormField = {
     image_preview: string
 }
 
-interface ManualTopUpField {
+export type ManualTopUpField = {
     amount: string,
     driverProfile: {
         id: number
@@ -36,7 +39,7 @@ interface ManualTopUpField {
     image_preview: string
 }
 
-export interface ManualTopUp {
+export type ManualTopUp = {
     id: number,
     evidance: string | null,
     idManualTopup: number | null,
@@ -47,22 +50,14 @@ export interface ManualTopUp {
 
 export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> & {
+    userMakerTopup?: Partial<User> & Partial<ClaimIdentifies> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        uniqueCodeWithAmount: number,
+    request?: Partial<ManualTopUpRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
     },
@@ -70,22 +65,14 @@ export type ManualTopUpList = ManualTopUp & Partial<Timestamps> & {
 
 export type ManualTopUpShow = ManualTopUp & Partial<Timestamps> & {
     approvedBy?: Partial<User>,
-    userMakerTopup?: Partial<User> & {
+    userMakerTopup?: Partial<User> & Partial<ClaimIdentifies> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        uniqueCodeWithAmount: number,
+    request?: Partial<ManualTopUpRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
     },
@@ -95,83 +82,59 @@ export type ManualTopUpCreateField = ManualTopUpField
 
 export type ManualTopUpEditField = ManualTopUpField
 
-export type ManualTopUpCreateResult = ManualTopUp & Partial<Timestamps> & {
+export type ManualTopUpCreateResult = ManualTopUp & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     userMakerTopup?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        amount: number,
-        uniqueCode: number | null,
-        uniqueCodeWithAmount: number,
-        transactionDate: string,
+    request?: Partial<ManualTopUpRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number
-        }
+        driverProfile?: Partial<Driver>
     } & Partial<Timestamps>,
 }
 
-export type ManualTopUpEditResult = ManualTopUp & Partial<Timestamps> & {
+export type ManualTopUpEditResult = ManualTopUp & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     userMakerTopup?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        amount: number,
-        uniqueCode: number | null,
-        uniqueCodeWithAmount: number,
-        transactionDate: string,
+    request?: Partial<ManualTopUpRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number
-        }
+        driverProfile?: Partial<Driver>
     } & Partial<Timestamps>,
 }
 
-export interface FetchManualTopUpActionType {
+export type FetchManualTopUpActionType = {
     type: typeof FETCH_MANUAL_TOPUP
 }
 
-export interface FetchManualTopUpSuccessActionType {
+export type FetchManualTopUpSuccessActionType = {
     type: typeof FETCH_MANUAL_TOPUP_SUCCESS,
     list: ManualTopUpList[]
 }
 
-export interface FetchManualTopUpErrorActionType {
+export type FetchManualTopUpErrorActionType = {
     type: typeof FETCH_MANUAL_TOPUP_ERROR
 }
 
-export interface SetPaginatorManualTopUpActionType {
+export type SetPaginatorManualTopUpActionType = {
     type: typeof SET_PAGINATOR_MANUAL_TOPUP,
     paginate: Paginator
 }
 
-export interface AlertManualTopUpHideActionType {
+export type AlertManualTopUpHideActionType = {
     type: typeof ALERT_MANUAL_TOPUP_HIDE
 }
 
-export interface AlertManualTopUpShowActionType {
+export type AlertManualTopUpShowActionType = {
     type: typeof ALERT_MANUAL_TOPUP_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     accountName: string,
     accountNumber: string,
     bankName: string
@@ -179,12 +142,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterManualTopUpActionType {
+export type SetFilterManualTopUpActionType = {
     type: typeof SET_FILTER_MANUAL_TOPUP,
     filter: Filter
 }
 
-export interface ClearFilterManualTopUpActionType {
+export type ClearFilterManualTopUpActionType = {
     type: typeof CLEAR_FILTER_MANUAL_TOPUP
 }
 

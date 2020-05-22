@@ -52,7 +52,7 @@ const TableItem = (props: {
                 {props.item.user.name}
             </td>
             <td>
-                {parseDateTimeFormat(props.item.transaction.dateTime)}
+                {props.item.transaction.dateTime ? parseDateTimeFormat(props.item.transaction.dateTime) : ''}
             </td>
             <td>
                 {props.item.transaction.numberTransaction}
@@ -159,7 +159,7 @@ class DetailPenggunaanVoucher extends Component<Props, State> {
 }
 
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     voucherPromoUserUsedList: VoucherPromoUserUsed[],
     paginate: Paginator,
 }
@@ -171,7 +171,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchVoucherPromoUserUsedAction: (page: number, id: number) => Promise<Boolean>
 }
 

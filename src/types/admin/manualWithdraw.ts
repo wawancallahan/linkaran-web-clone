@@ -4,7 +4,10 @@ import { User } from './user';
 import { Bank } from './bank';
 import { SelectType } from '../select';
 import { Role } from './role';
-import { TokenFCM } from '../auth';
+import { TokenFCM } from '../tokenFCM';
+import { ClaimIdentifies } from './claimIdentifies';
+import { ManualWithDrawRequest } from './ManualWithdrawRequest';
+import { Driver } from './driver';
 
 export const FETCH_MANUAL_WITHDRAW = "FETCH_MANUAL_WITHDRAW";
 export const FETCH_MANUAL_WITHDRAW_SUCCESS = "FETCH_MANUAL_WITHDRAW_SUCCESS";
@@ -25,7 +28,7 @@ export type FormField = {
     accountName: string
 }
 
-interface ManualWithDrawField {
+export type ManualWithDrawField = {
     amount: string,
     driverProfile: {
         id: number
@@ -38,56 +41,40 @@ interface ManualWithDrawField {
     accountName: string
 }
 
-export interface ManualWithDraw {
+export type ManualWithDraw = {
     id: number,
     evidance: string | null,
-    idManualTopup: number | null,
+    idManualWithdraw: number | null,
     transactionDate: string,
     isManual: boolean,
     approvedAt: string | null,   
 }
 
-export type ManualWithDrawList = ManualWithDraw & Partial<Timestamps> & {
+export type ManualWithDrawList = ManualWithDraw & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     approvedBy?: Partial<User>,
     userMakerWithdraw?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        isCancel: boolean,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
     },
 }
 
-export type ManualWithDrawShow = ManualWithDraw & Partial<Timestamps> & {
+export type ManualWithDrawShow = ManualWithDraw & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     approvedBy?: Partial<User>,
     userMakerWithdraw?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        isCancel: boolean,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
     },
@@ -97,79 +84,59 @@ export type ManualWithDrawCreateField = ManualWithDrawField
 
 export type ManualWithDrawEditField = ManualWithDrawField
 
-export type ManualWithDrawCreateResult = ManualWithDraw & Partial<Timestamps> & {
+export type ManualWithDrawCreateResult = ManualWithDraw & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     userMakerTopup?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        transactionDate: string,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        isCancel: boolean,
-        driverProfile?: {
-            id: number
-        }
+        driverProfile?: Partial<Driver>
     } & Partial<Timestamps>,
 }
 
-export type ManualWithDrawEditResult = ManualWithDraw & Partial<Timestamps> & {
+export type ManualWithDrawEditResult = ManualWithDraw & Partial<Timestamps> & Partial<ClaimIdentifies> & {
     userMakerTopup?: Partial<User> & {
         roles?: Role[],
         linkWithGoogle?: boolean,
-        tokenFCM?: TokenFCM[],
-        iat?: number,
-        exp?: number
+        tokenFCM?: TokenFCM[]
     } | null,
-    request?: {
-        id: number,
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        transactionDate: string,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        isCancel: boolean,
-        driverProfile?: {
-            id: number
-        }
+        driverProfile?: Partial<Driver>
     } & Partial<Timestamps>,
 }
 
-export interface FetchManualWithDrawActionType {
+export type FetchManualWithDrawActionType = {
     type: typeof FETCH_MANUAL_WITHDRAW
 }
 
-export interface FetchManualWithDrawSuccessActionType {
+export type FetchManualWithDrawSuccessActionType = {
     type: typeof FETCH_MANUAL_WITHDRAW_SUCCESS,
     list: ManualWithDrawList[]
 }
 
-export interface FetchManualWithDrawErrorActionType {
+export type FetchManualWithDrawErrorActionType = {
     type: typeof FETCH_MANUAL_WITHDRAW_ERROR
 }
 
-export interface SetPaginatorManualWithDrawActionType {
+export type SetPaginatorManualWithDrawActionType = {
     type: typeof SET_PAGINATOR_MANUAL_WITHDRAW,
     paginate: Paginator
 }
 
-export interface AlertManualWithDrawHideActionType {
+export type AlertManualWithDrawHideActionType = {
     type: typeof ALERT_MANUAL_WITHDRAW_HIDE
 }
 
-export interface AlertManualWithDrawShowActionType {
+export type AlertManualWithDrawShowActionType = {
     type: typeof ALERT_MANUAL_WITHDRAW_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     accountName: string,
     accountNumber: string,
     bankName: string,
@@ -178,12 +145,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterManualWithDrawActionType {
+export type SetFilterManualWithDrawActionType = {
     type: typeof SET_FILTER_MANUAL_WITHDRAW,
     filter: Filter
 }
 
-export interface ClearFilterManualWithDrawActionType {
+export type ClearFilterManualWithDrawActionType = {
     type: typeof CLEAR_FILTER_MANUAL_WITHDRAW
 }
 

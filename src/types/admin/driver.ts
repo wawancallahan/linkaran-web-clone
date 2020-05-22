@@ -7,11 +7,12 @@ import { Province } from './region/province';
 import { District } from './region/district';
 import { Village } from './region/village';
 import { SubDistrict } from './region/subDistrict';
-import { User, EMoneyUser } from './user';
+import { User } from './user';
 import { SubBrandVehicle } from './subBrandVehicle';
 import { BrandVehicle } from './brandVehicle';
 import { SelectType } from '../select';
 import { Timestamps } from '../timestamps';
+import { EMoneyUser } from './eMoneyUser';
 
 export const FETCH_DRIVER = "FETCH_DRIVER";
 export const FETCH_DRIVER_SUCCESS = "FETCH_DRIVER_SUCCESS";

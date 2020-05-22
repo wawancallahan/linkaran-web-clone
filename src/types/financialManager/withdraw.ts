@@ -1,8 +1,10 @@
 import { Paginator } from '../paginator';
 import { Timestamps } from '../timestamps';
 import { Bank } from '../admin/bank';
-import { TokenFCM } from '../auth';
 import { User } from '../admin/user';
+import { ManualWithDraw } from '../admin/manualWithdraw';
+import { ManualWithDrawRequest } from '../admin/ManualWithdrawRequest';
+import { Driver } from '../admin/driver';
 
 export const FETCH_WITHDRAW = "FETCH_WITHDRAW";
 export const FETCH_WITHDRAW_SUCCESS = "FETCH_WITHDRAW_SUCCESS";
@@ -18,52 +20,34 @@ export type FormField = {
     name: string,
 }
 
-interface WithDrawField {
+export type WithDrawField = {
     name: string
 }
 
-export interface WithDraw {
-    id: number,
-    evidance: string | null,
-    idManualWithdraw: number,
-    transactionDate: string | null,
-    isManual: boolean,
-    approvedAt: string | null,
-}
+export type WithDraw = ManualWithDraw
 
 export type WithDrawApprove = Partial<WithDraw> & Partial<Timestamps>
 
 export type WithDrawList = WithDraw & {
     approvedBy?: Partial<User> | null,
     userMakerTopup?: Partial<User> | null,
-    request?: {
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        uniqueCodeWithAmount: number,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        isCancel: boolean,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
-    }
+    },
 }
 
 export type WithDrawShow = WithDraw & {
     approvedBy?: Partial<User> | null,
     userMakerTopup?: Partial<User> | null,
-    request?: {
-        bankName: string,
-        accountNumber: string,
-        accountName: string,
-        uniqueCodeWithAmount: number,
+    request?: Partial<ManualWithDrawRequest> & {
         bank?: Partial<Bank>,
-        driverProfile?: {
-            id: number,
+        driverProfile?: Partial<Driver> & {
             user?: Partial<User>
         }
-    }
+    },
 }
 
 export type WithDrawCreateField = WithDrawField
@@ -74,35 +58,35 @@ export type WithDrawCreateResult = WithDraw & Partial<Timestamps>
 
 export type WithDrawEditResult = WithDraw & Partial<Timestamps>
 
-export interface FetchWithDrawActionType {
+export type FetchWithDrawActionType = {
     type: typeof FETCH_WITHDRAW
 }
 
-export interface FetchWithDrawSuccessActionType {
+export type FetchWithDrawSuccessActionType = {
     type: typeof FETCH_WITHDRAW_SUCCESS,
     list: WithDrawList[]
 }
 
-export interface FetchWithDrawErrorActionType {
+export type FetchWithDrawErrorActionType = {
     type: typeof FETCH_WITHDRAW_ERROR
 }
 
-export interface SetPaginatorWithDrawActionType {
+export type SetPaginatorWithDrawActionType = {
     type: typeof SET_PAGINATOR_WITHDRAW,
     paginate: Paginator
 }
 
-export interface AlertWithDrawHideActionType {
+export type AlertWithDrawHideActionType = {
     type: typeof ALERT_WITHDRAW_HIDE
 }
 
-export interface AlertWithDrawShowActionType {
+export type AlertWithDrawShowActionType = {
     type: typeof ALERT_WITHDRAW_SHOW,
     message: string,
     color: string
 }
 
-export interface Filter {
+export type Filter = {
     name: string,
     accountNumber: string,
     bankName: string,
@@ -113,12 +97,12 @@ export interface Filter {
 
 export type FilterKeys = keyof Filter;
 
-export interface SetFilterWithDrawActionType {
+export type SetFilterWithDrawActionType = {
     type: typeof SET_FILTER_WITHDRAW,
     filter: Filter
 }
 
-export interface ClearFilterWithDrawActionType {
+export type ClearFilterWithDrawActionType = {
     type: typeof CLEAR_FILTER_WITHDRAW
 }
 

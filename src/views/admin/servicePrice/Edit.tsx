@@ -205,7 +205,7 @@ class Edit extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 
 }
 
@@ -215,7 +215,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePriceShow>>
 }
 

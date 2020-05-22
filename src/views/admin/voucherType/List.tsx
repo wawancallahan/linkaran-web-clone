@@ -237,7 +237,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     voucherTypeList: VoucherTypeList[],
     paginate: Paginator,
     voucherTypeAlert: IAlert
@@ -251,7 +251,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchVoucherTypeAction: (page: number) => Promise<Boolean>,
     deleteVoucherTypeAction: (id: number) => Promise<ApiResponse<VoucherType>>,
     setAlertVoucherTypeHideAction: () => void,

@@ -37,11 +37,12 @@ import {
   import { authLogin, authValidate } from "../../actions/auth";
 import { Role } from "../../types/admin/role";
 
-import Select from 'react-select'
+import Select, { ValueType } from 'react-select'
 
 import AuthNavbar from "../../components/Navbars/AuthNavbar";
 import AuthFooter from "../../components/Footers/AuthFooter";
 import { accessToken } from '../../services/auth'
+import { SelectStringType } from "../../types/select";
 
 type LoginProps = RouteComponentProps & {
 
@@ -51,13 +52,8 @@ type Props = LoginProps & LinkDispatchToProps & {
     
 };
 
-interface OptionType {
-    value: string,
-    label: string
-}
-
-type OptionsType<OptionType> = ReadonlyArray<OptionType>;
-type ValueType<OptionType> = OptionType | OptionsType<OptionType> | null | undefined;
+type OptionsStringType<T> = ReadonlyArray<T>;
+type ValueStringType<T> = T | OptionsStringType<T> | null | undefined;
 
 type State = {
     isEmailSubmited: boolean,
@@ -65,14 +61,14 @@ type State = {
         email: string;
         token: string;
         pin: string;
-        role: OptionType;
+        role: SelectStringType;
     },
     alert_visible: boolean,
     alert_message: string,
     isSubmitting: boolean
 }
 
-const roleOptions = [
+const roleOptions: SelectStringType[] = [
     { value: 'admin', label: 'Admin' },
     { value: 'super admin', label: 'Super Admin' },
     { value: 'financial manager', label: 'Financial Manager' }
@@ -314,8 +310,8 @@ class Login extends React.Component<Props, State> {
                                                 isRtl={false}
                                                 isSearchable={false}
                                                 name="role"
-                                                onChange={(value: ValueType<OptionType>) => {
-                                                    let optionTypes: OptionType;
+                                                onChange={(value: ValueStringType<SelectStringType>) => {
+                                                    let optionTypes: SelectStringType;
 
                                                     if (value == null || value == undefined) {
                                                         optionTypes = {
@@ -325,7 +321,7 @@ class Login extends React.Component<Props, State> {
                                                     } else if (Array.isArray(value)) {
                                                         optionTypes = value[0];
                                                     } else {
-                                                        optionTypes = value as OptionType;
+                                                        optionTypes = value as SelectStringType;
                                                     }
 
                                                     this.setState(prevState => {
@@ -414,7 +410,7 @@ class Login extends React.Component<Props, State> {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     authLogin: (item: LoginInterface) => Promise<LoginResponse>;
     authValidate: (item: ValidateLogin) => Promise<ValidateLoginResponse>;
 }

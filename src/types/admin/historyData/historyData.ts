@@ -13,12 +13,15 @@ export const ALERT_HISTORY_DATA_SHOW = "ALERT_HISTORY_DATA_SHOW";
 export const ALERT_HISTORY_DATA_HIDE = "ALERT_HISTORY_DATA_HIDE";
 
 export enum EntityNameEnum {
+    PAYMENT = "Payment",
     EMONEY_USER = "EmoneyUser",
     TIMELINE_DRIVER = "TimelineDriver",
     TRANSACTION_FEEDBACK = "TransactionFeedback",
     CLAIM_VOUCHER = "ClaimVoucher",
     TRANSACTION = "Transaction",
-    COUNTRY = "Country"
+    COUNTRY = "Country",
+    DRIVER_GET_NOTIF_TRANSACTION = "DriverGetNotifTransaction",
+    FOOD_ORDER = "FoodOrder"
 }
 
 export enum EventEnum {

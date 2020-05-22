@@ -1,11 +1,11 @@
-export interface Paginator {
+export type Paginator = {
     currentPage: number,
     pageCount: number,
     itemCount: number,
     total: number
 }
 
-export interface PaginatorLinkPay {
+export type PaginatorLinkPay = {
     current_page: number,
     first_page_url: string | null,
     from: number,

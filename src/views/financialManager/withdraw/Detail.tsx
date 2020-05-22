@@ -179,7 +179,7 @@ class Detail extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
@@ -188,7 +188,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findWithDrawAction: (id: number) => Promise<ApiResponse<WithDrawShow>>
 }
 

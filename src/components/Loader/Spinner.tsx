@@ -22,7 +22,7 @@ type Types =
     | 'None'
     | 'NotSpecified';
 
-interface LoaderProps {
+export type LoaderProps = {
     type?: Types;
     color?: string;
     timeout?: number; // in milliseconds

@@ -94,8 +94,8 @@ class Edit extends Component<Props, State> {
                         }
                     }
 
-                    form.accountName = data.request ? data.request.accountName : '';
-                    form.accountNumber = data.request ? data.request.accountNumber : '';
+                    form.accountName = data.request && data.request.accountName ? data.request.accountName : '';
+                    form.accountNumber = data.request && data.request.accountNumber ? data.request.accountNumber : '';
 
                     this.setState({
                         form: form,
@@ -168,7 +168,7 @@ class Edit extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
 
 }
 
@@ -178,7 +178,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     findManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDrawShow>>
 }
 

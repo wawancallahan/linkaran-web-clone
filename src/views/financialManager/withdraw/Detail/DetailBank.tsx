@@ -55,7 +55,7 @@ class DetailBank extends Component<Props> {
                         <div className="form-group">
                             <label htmlFor="">Jumlah</label>
                             <div>
-                                { data && data.request ? data.request.uniqueCodeWithAmount : '' }
+                                { data && data.request ? data.request.amount : '' }
                             </div>
                         </div>
                     </div>

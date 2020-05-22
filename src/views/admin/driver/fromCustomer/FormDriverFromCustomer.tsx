@@ -878,7 +878,7 @@ class FormDriver extends Component<Props> {
     
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchListUserAction: (search: string, page: number) => Promise<ApiResponseList<User>>,
     fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
     fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,

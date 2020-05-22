@@ -213,7 +213,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     historyDataList: HistoryDataList[],
     paginate: Paginator,
     historyDataAlert: IAlert
@@ -227,7 +227,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchHistoryDataAction: (page: number) => Promise<Boolean>,
     setAlertHistoryDataHideAction: () => void,
     setAlertHistoryDataShowAction: (message: string, color: string) => void,

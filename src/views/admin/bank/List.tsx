@@ -230,7 +230,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     bank: BankList[],
     paginate: Paginator,
     bankAlert: IAlert
@@ -244,7 +244,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchBankAction: (page: number) => Promise<Boolean>,
     setAlertBankHideAction: () => void,
     setAlertBankShowAction: (message: string, color: string) => void,

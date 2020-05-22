@@ -1,3 +1,3 @@
-export interface ModalToggleVisible {
+export type ModalToggleVisible = {
     [key: number]: boolean
 }

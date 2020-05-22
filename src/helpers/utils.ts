@@ -4,15 +4,15 @@ import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
 
 moment.locale('id');
 
-export interface OptionObjectString {
+export type OptionObjectString = {
     [key: string]: string
 }
 
-export interface OptionObjectNumber {
+export type OptionObjectNumber = {
     [key: string]: number
 }
 
-export interface OptionObjectAny {
+export type OptionObjectAny = {
     [key: string]: any
 }
 

@@ -1,28 +1,29 @@
 import { Role } from "./admin/role";
+import { TokenFCM } from "./tokenFCM";
 
-export interface Login {
+export type Login = {
     identity: string,
     type: string,
     role: string
 }
 
-export interface ValidateLogin {
+export type ValidateLogin = {
     pin: string,
     token: string
 }
 
-export interface Token {
+export type Token = {
     token: string,
     accessToken: string | null
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
     status: boolean,
     response: LoginResult | LoginFailResult | null,
     message: string
 }
 
-export interface LoginResult {
+export type LoginResult = {
     metaData: {
         isError: boolean,
         message: string,
@@ -31,7 +32,7 @@ export interface LoginResult {
     result?: Token
 }
 
-export interface LoginFailResult {
+export type LoginFailResult = {
     metaData: {
         isError: boolean,
         message: string,
@@ -40,12 +41,7 @@ export interface LoginFailResult {
     result: null
 }
 
-export interface TokenFCM {
-    token: string,
-    id: number
-}
-
-export interface LoginData {
+export type LoginData = {
     id: number,
     name: string,
     phoneNumber: string,
@@ -57,7 +53,7 @@ export interface LoginData {
     linkWithGoogle: boolean
 }
 
-export interface ValidateLoginResult {
+export type ValidateLoginResult = {
     metaData: {
         isError: boolean,
         message: string,
@@ -66,7 +62,7 @@ export interface ValidateLoginResult {
     result?: LoginData
 }
 
-export interface ValidateLoginFailResult {
+export type ValidateLoginFailResult = {
     metaData: {
         isError: boolean,
         message: string,
@@ -75,7 +71,7 @@ export interface ValidateLoginFailResult {
     result: null
 }
 
-export interface ValidateLoginResponse {
+export type ValidateLoginResponse = {
     status: boolean,
     response: ValidateLoginResult | ValidateLoginFailResult | null,
     message: string

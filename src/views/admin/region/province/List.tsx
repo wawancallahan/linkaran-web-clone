@@ -237,7 +237,7 @@ class List extends Component<Props, State> {
     }
 }
 
-interface LinkStateToProps {
+type LinkStateToProps = {
     provinceList: ProvinceList[],
     paginate: Paginator,
     provinceAlert: IAlert
@@ -251,7 +251,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-interface LinkDispatchToProps {
+type LinkDispatchToProps = {
     fetchProvinceAction: (page: number) => Promise<Boolean>,
     deleteProvinceAction: (id: number) => Promise<ApiResponse<Province>>,
     setAlertProvinceHideAction: () => void,

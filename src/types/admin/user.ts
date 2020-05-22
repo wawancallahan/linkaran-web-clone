@@ -31,13 +31,6 @@ export type UserField = {
     telegramuser: string | null 
 }
 
-export type EMoneyUser = {
-    id: number,
-    name: string,
-    accountNumber: string,
-    balance: number
-}
-
 export type User = {
     id: number,
     name: string,
