@@ -82,6 +82,7 @@
     "reactstrap": "7.1.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "sweetalert": "^2.1.2",
     "yup": "^0.27.0"
   },
@@ -105,6 +106,7 @@
     "@types/reactstrap": "^8.0.6",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
+    "@types/socket.io-client": "^1.4.33",
     "@types/yup": "^0.26.24",
     "typescript": "^3.8.3"
   }
