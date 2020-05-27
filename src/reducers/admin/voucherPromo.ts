@@ -2,7 +2,7 @@ import {
     FETCH_VOUCHER_PROMO,
     FETCH_VOUCHER_PROMO_ERROR,
     FETCH_VOUCHER_PROMO_SUCCESS,
-    VoucherPromo,
+    VoucherPromoList,
     VoucherPromoActionTypes,
     FetchVoucherPromoActionType,
     FetchVoucherPromoSuccessActionType,
@@ -24,7 +24,7 @@ import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
 type initialStateInterface = {
-    list: VoucherPromo[],
+    list: VoucherPromoList[],
     paginate: Paginator,
     alert: Alert,
     filter: Filter,

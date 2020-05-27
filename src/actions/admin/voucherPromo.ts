@@ -4,6 +4,8 @@ import { Paginator } from '../../types/paginator';
 import { AppState } from "../../store/configureStore";
 import {
     VoucherPromo,
+    VoucherPromoList,
+    VoucherPromoShow,
     SET_PAGINATOR_VOUCHER_PROMO,
     FETCH_VOUCHER_PROMO_SUCCESS,
     FETCH_VOUCHER_PROMO_ERROR,
@@ -11,8 +13,8 @@ import {
     FetchVoucherPromoActionType,
     FetchVoucherPromoErrorActionType,
     FetchVoucherPromoSuccessActionType,
-    VoucherPromoCreate,
-    VoucherPromoEdit,
+    VoucherPromoCreateField,
+    VoucherPromoEditField,
     AlertVoucherPromoHideActionType,
     ALERT_VOUCHER_PROMO_HIDE,
     AlertVoucherPromoShowActionType,
@@ -203,60 +205,7 @@ export const fetchVoucherPromoUserUsedAction = (page: number, id: number): Thunk
     }
 }
 
-export const fetchListVoucherPromoAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VoucherPromo>>> => {
-    return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher?page=${page}`)
-            .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<VoucherPromo> = response.data;
-
-                return Promise.resolve({
-                    response: data,
-                    error: null
-                });
-            })
-            .catch( (error: AxiosError) => {
-                 if (error.response) {
-                    if (error.response.status == 500) {
-                        const errorResponse: ApiResponseError = {
-                            metaData: {
-                                isError: true,
-                                message: error.message,
-                                statusCode: 500
-                            },
-                            result: null
-                        }
-    
-                        return Promise.reject({
-                            response: null,
-                            error: errorResponse
-                        });
-                    } else {
-                        return Promise.reject({
-                            response: null,
-                            error: error.response.data
-                        });
-                    }
-                } else {
-
-                    const errorResponse: ApiResponseError = {
-                        metaData: {
-                            isError: true,
-                            message: error.message,
-                            statusCode: 500
-                        },
-                        result: null
-                    }
-
-                    return Promise.reject({
-                        response: null,
-                        error: errorResponse
-                    });
-                }
-            })
-    }
-}
-
-export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): ThunkResult<Promise<ApiResponse<VoucherPromoCreateResult>>> => {
+export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreateField): ThunkResult<Promise<ApiResponse<VoucherPromoCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         const data = new FormData();
@@ -337,11 +286,11 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): Thun
     }
 }
 
-export const findVoucherPromoAction = (id: number): ThunkResult<Promise<ApiResponse<VoucherPromo>>> => {
+export const findVoucherPromoAction = (id: number): ThunkResult<Promise<ApiResponse<VoucherPromoShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<VoucherPromo> = response.data;
+                const data: ApiResponseSuccess<VoucherPromoShow> = response.data;
 
                 return Promise.resolve({
                     response: data,
@@ -390,7 +339,7 @@ export const findVoucherPromoAction = (id: number): ThunkResult<Promise<ApiRespo
     }
 }
 
-export const editVoucherPromoAction = (voucherPromo: VoucherPromoEdit, id: number): ThunkResult<Promise<ApiResponse<VoucherPromoEditResult>>> => {
+export const editVoucherPromoAction = (voucherPromo: VoucherPromoEditField, id: number): ThunkResult<Promise<ApiResponse<VoucherPromoEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
 
         const data = new FormData();

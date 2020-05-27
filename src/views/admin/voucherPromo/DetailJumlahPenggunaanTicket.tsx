@@ -6,10 +6,10 @@ import {
     Progress
 } from 'reactstrap'
 
-import { VoucherPromo } from '../../../types/admin/voucherPromo'
+import { VoucherPromoShow } from '../../../types/admin/voucherPromo'
 
 type DetailJumlahPenggunaanTicketProps = {
-    voucher: VoucherPromo | null
+    voucher: VoucherPromoShow | null
 }
 
 type Props = DetailJumlahPenggunaanTicketProps

@@ -14,7 +14,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { VoucherPromo, FormField, VoucherPromoEdit, VoucherPromoEditResult } from '../../../types/admin/voucherPromo';
+import { VoucherPromo, FormField, VoucherPromoEditField, VoucherPromoEditResult } from '../../../types/admin/voucherPromo';
 import { editVoucherPromoAction, setAlertVoucherPromoShowAction } from '../../../actions/admin/voucherPromo';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import Dropzone from '../../../components/Dropzone/Dropzone';
@@ -254,7 +254,7 @@ class Form extends Component<Props> {
                         endDateTime = `${getOnlyDateFromDate(values.endDateTime)} ${getTimeFromDate(values.endDateTime)}`
                     }
 
-                    const voucherPromo: VoucherPromoEdit = {
+                    const voucherPromo: VoucherPromoEditField = {
                         name: values.name,
                         code: values.code,
                         description: values.description,
@@ -649,7 +649,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    editVoucherPromoAction: (voucherPromo: VoucherPromoEdit, id: number) => Promise<ApiResponse<VoucherPromoEditResult>>,
+    editVoucherPromoAction: (voucherPromo: VoucherPromoEditField, id: number) => Promise<ApiResponse<VoucherPromoEditResult>>,
     setAlertVoucherPromoShowAction: (message: string, color: string) => void,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
     fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherTypeList>>,
@@ -657,7 +657,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        editVoucherPromoAction: (voucherPromo: VoucherPromoEdit, id: number) => dispatch(editVoucherPromoAction(voucherPromo, id)),
+        editVoucherPromoAction: (voucherPromo: VoucherPromoEditField, id: number) => dispatch(editVoucherPromoAction(voucherPromo, id)),
         setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
         fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
         fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),

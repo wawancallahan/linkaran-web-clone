@@ -34,7 +34,7 @@ import queryString from 'query-string';
 import {
     findVoucherPromoAction
 } from '../../../actions/admin/voucherPromo';
-import { VoucherPromo } from '../../../types/admin/voucherPromo';
+import { VoucherPromoShow } from '../../../types/admin/voucherPromo';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -53,7 +53,7 @@ type DetailProps = RouteComponentProps<{
 type Props = DetailProps & LinkStateToProps & LinkDispatchToProps;
 
 type State = {
-    data: VoucherPromo | null,
+    data: VoucherPromoShow | null,
     isLoaded: boolean,
     loadedMessage: string,
     alert_visible: boolean,
@@ -74,9 +74,9 @@ class Detail extends Component<Props, State> {
         const id = +this.props.match.params.id;
         
         this.props.findVoucherPromoAction(id)
-                .then((response: ApiResponse<VoucherPromo>) => {    
+                .then((response: ApiResponse<VoucherPromoShow>) => {    
                     if (response.response) {
-                            const data: VoucherPromo = response.response.result;
+                            const data: VoucherPromoShow = response.response.result;
 
                         this.setState({
                             data: data,
@@ -88,7 +88,7 @@ class Detail extends Component<Props, State> {
                         });
                     }
                 })
-                .catch((response: ApiResponse<VoucherPromo>) => {
+                .catch((response: ApiResponse<VoucherPromoShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
@@ -171,7 +171,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 type LinkDispatchToProps = {
-    findVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromo>>
+    findVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromoShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: DetailProps): LinkDispatchToProps => {

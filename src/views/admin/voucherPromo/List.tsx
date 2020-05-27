@@ -39,7 +39,7 @@ import {
     setAlertVoucherPromoShowAction,
     clearFilterAction
 } from '../../../actions/admin/voucherPromo';
-import { VoucherPromo } from '../../../types/admin/voucherPromo';
+import { VoucherPromo, VoucherPromoList } from '../../../types/admin/voucherPromo';
 import { Paginator } from '../../../types/paginator';
 import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } from '../../../types/api';
 import { Alert as IAlert } from '../../../types/alert';
@@ -66,7 +66,7 @@ type State = {
 
 const TableItem = (props: {
     index: number,
-    item: VoucherPromo,
+    item: VoucherPromoList,
     key: number,
     deleteVoucherPromo: (id: number) => void
 }) => {
@@ -107,7 +107,7 @@ const TableItem = (props: {
                                 </svg>
                             </div>
                             <div className="d-inline-block mr-2">
-                                <Badge color="success">{props.item.type.name}</Badge>
+                                {props.item.type ? (<Badge color="success">{props.item.type.name}</Badge>) : ''}
                             </div>
                             <div className="d-inline-block">
                                 Rp. {props.item.amount}
@@ -257,7 +257,7 @@ class List extends Component<Props, State> {
 
         if ( ! this.state.loader) {
             if (this.props.voucherPromoList.length > 0) {
-                voucherPromoList = this.props.voucherPromoList.map((item: VoucherPromo, index: number) => (
+                voucherPromoList = this.props.voucherPromoList.map((item: VoucherPromoList, index: number) => (
                     <TableItem key={index}
                                item={item}
                                index={index}
@@ -346,7 +346,7 @@ class List extends Component<Props, State> {
 }
 
 type LinkStateToProps = {
-    voucherPromoList: VoucherPromo[],
+    voucherPromoList: VoucherPromoList[],
     paginate: Paginator,
     voucherPromoAlert: IAlert
 }

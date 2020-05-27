@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { VoucherPromo, FormField } from '../../../types/admin/voucherPromo';
+import { VoucherPromoShow, FormField } from '../../../types/admin/voucherPromo';
 
 import FormVoucher from './FormEdit';
 import { findVoucherPromoAction } from '../../../actions/admin/voucherPromo';
@@ -77,16 +77,17 @@ class Edit extends Component<Props, State> {
         const id = +this.props.match.params.id;
         
         this.props.findVoucherPromoAction(id)
-                .then((response: ApiResponse<VoucherPromo>) => {
+                .then((response: ApiResponse<VoucherPromoShow>) => {
                     const form: FormField = {
                         ...this.state.form
                     }
 
-                    const data: VoucherPromo =response.response!.result;
+                    const data: VoucherPromoShow =response.response!.result;
 
                     form.amount = data.amount.toString()
                     form.code = data.code
-                    form.description = data.description
+                    form.description = data.description ? data.description : ''
+                    form.startDateTime = new Date(data.startDateTime)
                     form.endDateTime = new Date(data.endDateTime)
                     form.image_preview = data.image ? data.image : ''
                     form.isLimited = data.isLimited ? '1' : '0'
@@ -94,14 +95,15 @@ class Edit extends Component<Props, State> {
                     form.name = data.name
                     form.quantity = data.quantity.toString()
                     form.quota = data.quota.toString()
-                    form.service = data.service.map((value: Service, index: number) => {
-                        return {
-                            label: value.name,
-                            value: value.id
-                        }
-                    })
 
-                    form.startDateTime = new Date(data.startDateTime)
+                    if (data.service) {
+                        form.service = data.service.map((value: Partial<Service>, index: number) => {
+                            return {
+                                label: value.name ? value.name : '',
+                                value: value.id ? value.id : 0
+                            }
+                        })
+                    }
 
                     if (data.type) {
                         form.voucherType = {
@@ -116,7 +118,7 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<VoucherPromo>) => {
+                .catch((response: ApiResponse<VoucherPromoShow>) => {
                     this.setState({
                         loadedMessage: response.error!.metaData.message
                     })
@@ -192,7 +194,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 }
 
 type LinkDispatchToProps = {
-    findVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromo>>
+    findVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromoShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: EditProps) => {

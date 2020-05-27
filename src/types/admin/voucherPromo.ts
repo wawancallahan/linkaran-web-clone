@@ -4,6 +4,7 @@ import { VoucherType } from './voucherType';
 import { User } from './user';
 import { Transaction } from './transaction';
 import { SelectType } from '../select';
+import { Timestamps } from '../timestamps';
 
 export const FETCH_VOUCHER_PROMO = "FETCH_VOUCHER_PROMO";
 export const FETCH_VOUCHER_PROMO_SUCCESS = "FETCH_VOUCHER_PROMO_SUCCESS";
@@ -56,30 +57,20 @@ export type VoucherPromoField = {
     image_preview: string
 }
 
-export type VoucherPromoList = {
+export type VoucherPromo = {
+    id: number,
     name: string,
     code: string,
     image: string | null,
     amount: number,
     quota: number,
+    quotaUse: number,
     minimumPurchase: number,
     startDateTime: string,
     endDateTime: string,
     isLimited: boolean,
     quantity: number,
-    description: string,
-    type: Partial<VoucherType>,
-    service: Service[],
-    ticketUsed?: number
-    quotaUsed?: string,
-    typeId?: number
-}
-
-export type VoucherPromoResult = {
-    id: number,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
+    description: string | null,
 }
 
 export type VoucherPromoUserUsed = {
@@ -89,15 +80,30 @@ export type VoucherPromoUserUsed = {
     transaction: Transaction
 }
 
-export type VoucherPromo = VoucherPromoResult & VoucherPromoList;
+export type VoucherPromoList = VoucherPromo & {
+    type?: Partial<VoucherType>,
+    service?: Partial<Service>[]
+}
 
-export type VoucherPromoCreate = VoucherPromoField;
+export type VoucherPromoShow = VoucherPromo & {
+    type?: Partial<VoucherType>,
+    service?: Partial<Service>[],
+    ticketUsed?: number
+}
 
-export type VoucherPromoEdit = VoucherPromoField;
+export type VoucherPromoCreateField = VoucherPromoField;
 
-export type VoucherPromoCreateResult = VoucherPromoResult;
+export type VoucherPromoEditField = VoucherPromoField;
 
-export type VoucherPromoEditResult = VoucherPromoResult;
+export type VoucherPromoCreateResult = VoucherPromo & Partial<Timestamps> & {
+    type?: Partial<VoucherType>,
+    service?: Partial<Service>[]
+}
+
+export type VoucherPromoEditResult = VoucherPromo & Partial<Timestamps> & {
+    type?: Partial<VoucherType>,
+    service?: Partial<Service>[]
+}
 
 export type FetchVoucherPromoActionType = {
     type: typeof FETCH_VOUCHER_PROMO

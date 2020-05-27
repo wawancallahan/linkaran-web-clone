@@ -19,7 +19,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 
 import Pagination from '../../../components/Pagination/Pagination'
-import { VoucherPromo, VoucherPromoUserUsed } from '../../../types/admin/voucherPromo';
+import { VoucherPromoShow, VoucherPromoUserUsed } from '../../../types/admin/voucherPromo';
 
 import Spinner from '../../../components/Loader/Spinner'
 
@@ -32,7 +32,7 @@ import { ApiResponse, ApiResponseSuccess, ApiResponseError, ApiResponseList } fr
 import { parseDateTimeFormat } from '../../../helpers/utils';
 
 type DetailPenggunaanVoucherProps = RouteComponentProps & {
-    data: VoucherPromo | null
+    data: VoucherPromoShow | null
 }
 
 type Props = DetailPenggunaanVoucherProps & LinkStateToProps & LinkDispatchToProps

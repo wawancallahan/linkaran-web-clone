@@ -5,10 +5,10 @@ import {
     CardBody,
     Progress
 } from 'reactstrap'
-import { VoucherPromo } from '../../../types/admin/voucherPromo'
+import { VoucherPromoShow } from '../../../types/admin/voucherPromo'
 
 type DetailJumlahPenggunaanVoucherProps = {
-    voucher: VoucherPromo | null
+    voucher: VoucherPromoShow | null
 }
 
 type Props = DetailJumlahPenggunaanVoucherProps

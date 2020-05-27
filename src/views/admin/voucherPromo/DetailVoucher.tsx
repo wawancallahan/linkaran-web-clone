@@ -8,12 +8,12 @@ import {
 import {
     Link
 } from 'react-router-dom'
-import { VoucherPromo } from '../../../types/admin/voucherPromo'
+import { VoucherPromoShow } from '../../../types/admin/voucherPromo'
 import { Service } from '../../../types/admin/service'
 import { voucherUsedFormat, parseDateTimeFormat } from '../../../helpers/utils'
 
 type DetailVoucherProps = {
-    voucher: VoucherPromo | null,
+    voucher: VoucherPromoShow | null,
     ticketState: boolean,
     voucherState: boolean
 }
@@ -93,7 +93,7 @@ class DetailVoucher extends Component<Props> {
                                                         </svg>
                                                     </div>
                                                     <div className="d-inline-block mr-2">
-                                                        <Badge color="success">{voucher.type.name}</Badge>
+                                                        {voucher.type ? (<Badge color="success">{voucher.type.name}</Badge>) : ''}
                                                     </div>
                                                     <div className="d-inline-block">
                                                         Rp. {voucher.amount}
@@ -123,9 +123,13 @@ class DetailVoucher extends Component<Props> {
                                                         lineHeight: '15px'
                                                     }}>Layanan</label>
 
-                                                    {voucher.service.map((value: Service, index: number) => {
-                                                        return <Badge className="ml-1" color="info" key={index}>{value.name}</Badge>
-                                                    })}
+                                                    {
+                                                        voucher.service ? (
+                                                            voucher.service.map((value: Partial<Service>, index: number) => {
+                                                                return <Badge className="ml-1" color="info" key={index}>{value.name}</Badge>
+                                                            })
+                                                        ) : ''
+                                                    }
                                                 </div>
                                             </div>
                                         </div>

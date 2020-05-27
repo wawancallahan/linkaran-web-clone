@@ -14,7 +14,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
 import { connect } from 'react-redux';
 
-import { VoucherPromo, FormField, VoucherPromoCreate, VoucherPromoCreateResult } from '../../../types/admin/voucherPromo';
+import { VoucherPromo, FormField, VoucherPromoCreateField, VoucherPromoCreateResult } from '../../../types/admin/voucherPromo';
 import { createVoucherPromoAction, setAlertVoucherPromoShowAction } from '../../../actions/admin/voucherPromo';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import Dropzone from '../../../components/Dropzone/Dropzone';
@@ -253,7 +253,7 @@ class Form extends Component<Props> {
                         endDateTime = `${getOnlyDateFromDate(values.endDateTime)} ${getTimeFromDate(values.endDateTime)}`
                     }
 
-                    const voucherPromo: VoucherPromoCreate = {
+                    const voucherPromo: VoucherPromoCreateField = {
                         name: values.name,
                         code: values.code,
                         description: values.description,
@@ -647,7 +647,7 @@ class Form extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    createVoucherPromoAction: (voucherPromo: VoucherPromoCreate) => Promise<ApiResponse<VoucherPromoCreateResult>>,
+    createVoucherPromoAction: (voucherPromo: VoucherPromoCreateField) => Promise<ApiResponse<VoucherPromoCreateResult>>,
     setAlertVoucherPromoShowAction: (message: string, color: string) => void,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
     fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherTypeList>>,
@@ -655,7 +655,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
     return {
-        createVoucherPromoAction: (voucherPromo: VoucherPromoCreate) => dispatch(createVoucherPromoAction(voucherPromo)),
+        createVoucherPromoAction: (voucherPromo: VoucherPromoCreateField) => dispatch(createVoucherPromoAction(voucherPromo)),
         setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
         fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
         fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),
