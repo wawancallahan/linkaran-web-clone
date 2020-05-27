@@ -28,7 +28,9 @@ import {
     FetchTicketVoucherErrorActionType,
     SET_PAGINATOR_TICKET_VOUCHER,
     SetPaginatorTicketVoucherActionType,
-    FetchTicketVoucherSuccessActionType
+    FetchTicketVoucherSuccessActionType,
+    TicketGenerateField,
+    TicketGenerateResult
 } from '../../types/admin/ticket';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -168,6 +170,59 @@ export const fetchListTicketAction = (search: string, page: number): ThunkResult
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<TicketList> = response.data;
 
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const generateTicketAction = (ticket: TicketGenerateField): ThunkResult<Promise<ApiResponse<TicketGenerateResult>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/ticket/generate', ticket)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<TicketGenerateResult> = response.data;
+                
                 return Promise.resolve({
                     response: data,
                     error: null

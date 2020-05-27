@@ -44,11 +44,17 @@ export type TicketCreateField = TicketField;
 
 export type TicketEditField = TicketField;
 
+export type TicketGenerateField = TicketField
+
 export type TicketCreateResult = Ticket& Partial<Timestamps> & {
     voucher?: Partial<VoucherPromo>
 };
 
 export type TicketEditResult = Ticket & Partial<Timestamps> & {
+    voucher?: Partial<VoucherPromo>
+};
+
+export type TicketGenerateResult = Ticket & Partial<Timestamps> & {
     voucher?: Partial<VoucherPromo>
 };
 

@@ -25,9 +25,9 @@ import { AppActions } from '../../../types';
 
 import Pagination from '../../../components/Pagination/Pagination'
 import { VoucherPromo } from '../../../types/admin/voucherPromo';
-import { Ticket, TicketList, FormField, TicketCreateField, TicketCreateResult, TicketEditField, TicketEditResult } from '../../../types/admin/ticket';
+import { Ticket, TicketList, FormField, TicketCreateField, TicketCreateResult, TicketEditField, TicketEditResult, TicketGenerateResult, TicketGenerateField } from '../../../types/admin/ticket';
 import { Paginator } from '../../../types/paginator';
-import { fetchTicketVoucherAction, createTicketAction, deleteTicketAction, editTicketAction } from '../../../actions/admin/ticket';
+import { fetchTicketVoucherAction, createTicketAction, deleteTicketAction, editTicketAction, generateTicketAction } from '../../../actions/admin/ticket';
 import Spinner from '../../../components/Loader/Spinner'
 import { parseDateTimeFormat } from '../../../helpers/utils';
 import queryString from 'query-string';
@@ -54,8 +54,10 @@ type Props = ListTicketProps & LinkStateToProps & LinkDispatchToProps
 type State = {
     loader: boolean,
     modal_add_visible: boolean,
+    modal_generate_visible: boolean,
     modal_edit_visible: ModalToggleVisible,
     form: FormField,
+    formGenerate: FormField,
     voucherId: string,
     modalState: ModalState[],
     alert_visible: boolean,
@@ -227,9 +229,13 @@ class ListTicket extends Component<Props, State> {
     state = {
         loader: false,
         modal_add_visible: false,
+        modal_generate_visible: false,
         modal_edit_visible: {},
         form: {
             redeemCode: '',
+        },
+        formGenerate: {
+            redeemCode: ''
         },
         voucherId: '',
         modalState: [],
@@ -291,11 +297,11 @@ class ListTicket extends Component<Props, State> {
     toggleGenerateModalTicket = () => {
         this.setState( (prevState: State) => {
             return {
-                form: {
-                    ...prevState.form,
-                    redeemCode: ''
+                formGenerate: {
+                    ...prevState.formGenerate,
+                    redeemCodeGenerate: ''
                 },
-                modal_add_visible: ! prevState.modal_add_visible
+                modal_generate_visible: ! prevState.modal_generate_visible
             }
         })
     }
@@ -498,11 +504,11 @@ class ListTicket extends Component<Props, State> {
                                             }
                                         }
     
-                                        this.props.createTicketAction(ticketForm)
+                                        this.props.generateTicketAction(ticketForm)
                                             .then( (response: ApiResponse<TicketCreateResult>) => {
                                                 const data: ApiResponseSuccess<TicketCreateResult> = response.response!;
                                                 
-                                                this.toastNotify("Data Berhasil Ditambah", "error");
+                                                this.toastNotify("Tiket Berhasil Ditambah", "success");
                                                 this.toggleAddModalTicket();
                                                 this.loadTicketVoucherList();
                                             })
@@ -519,7 +525,7 @@ class ListTicket extends Component<Props, State> {
                                                 action.setSubmitting(false)
                                             });
                                     } else {
-                                        this.toastNotify("Data Gagal Ditambah", "error");
+                                        this.toastNotify("Tiket Gagal Ditambah", "error");
                                         this.toggleAddModalTicket()
                                         action.setSubmitting(false)
                                     }
@@ -574,6 +580,115 @@ class ListTicket extends Component<Props, State> {
                         </Formik>
                     </div>
                 </Modal>
+
+                <Modal
+                    className="modal-dialog-centered"
+                    isOpen={this.state.modal_generate_visible}
+                    toggle={() => this.toggleGenerateModalTicket()}
+                >
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="modal-ticket">
+                            Generate Tiket
+                        </h5>
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleGenerateModalTicket()}
+                            >
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <Formik initialValues={this.state.form}
+                                onSubmit={(values, action) => {
+                                    this.setAlertOpen(false)
+
+                                    if (this.props.data) {
+                                        const ticketForm: TicketGenerateField = {
+                                            redeemCode: values.redeemCode,
+                                            voucher: {
+                                                id: this.props.data.id
+                                            }
+                                        }
+    
+                                        this.props.createTicketAction(ticketForm)
+                                            .then( (response: ApiResponse<TicketGenerateResult>) => {
+                                                const data: ApiResponseSuccess<TicketGenerateResult> = response.response!;
+                                                
+                                                this.toastNotify("Tiket Berhasil Digenerate", "success");
+                                                this.toggleGenerateModalTicket();
+                                                this.loadTicketVoucherList();
+                                            })
+                                            .catch( (error: ApiResponse<TicketGenerateResult>) => {
+                                                let message = "Gagal Mendapatkan Response";
+
+                                                if (error.error) {
+                                                    message = error.error.metaData.message;
+                                                }
+
+                                                this.toastNotify(message, "error");
+
+                                                this.toggleGenerateModalTicket()
+                                                action.setSubmitting(false)
+                                            });
+                                    } else {
+                                        this.toastNotify("Tiket Gagal Digenerate", "error");
+                                        this.toggleAddModalTicket()
+                                        action.setSubmitting(false)
+                                    }
+                                }}
+                                validationSchema={createSchema}>
+                            {(FormikProps => {
+                                return (
+                                    <FormReactStrap onSubmit={FormikProps.handleSubmit} formMethod="POST">
+                                        <FormGroup>
+                                            <label
+                                            className="form-control-label"
+                                            htmlFor="input-code"
+                                            >
+                                                Kode
+                                            </label>
+                                            <Input
+                                                className="form-control-alternative"
+                                                id="input-code"
+                                                placeholder="Kode"
+                                                type="text"
+                                                name="redeemCode"
+                                                maxLength={255}
+                                                value={FormikProps.values.redeemCode}
+                                                required
+                                                onChange={FormikProps.handleChange}
+                                                onBlur={FormikProps.handleBlur}
+                                                invalid={ !!(FormikProps.touched.redeemCode && FormikProps.errors.redeemCode) }
+                                            />
+                                            <div>
+                                                {FormikProps.errors.redeemCode && FormikProps.touched.redeemCode ? FormikProps.errors.redeemCode : ''}
+                                            </div>
+                                        </FormGroup>
+                                        <div className="text-right">
+                                            <Button
+                                                color="secondary"
+                                                data-dismiss="modal"
+                                                type="button"
+                                                onClick={() => this.toggleGenerateModalTicket()}
+                                            >
+                                                Tutup
+                                            </Button>
+                                            <Button color="primary" type="button" onClick={() => {
+                                                FormikProps.setSubmitting(true)
+                                                FormikProps.submitForm();
+                                            }} disabled={FormikProps.isSubmitting}>
+                                                Generate
+                                            </Button>
+                                        </div>
+                                    </FormReactStrap>
+                                );
+                            })}
+                        </Formik>
+                    </div>
+                </Modal>
             </>
         )
     }
@@ -595,7 +710,8 @@ type LinkDispatchToProps = {
     fetchTicketVoucherAction: (page: number, id: number) => Promise<Boolean>,
     deleteTicketAction: (id: number) => Promise<ApiResponse<Ticket>>,
     createTicketAction: (ticket: TicketCreateField) => Promise<ApiResponse<TicketCreateResult>>,
-    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>
+    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>,
+    generateTicketAction: (ticket: TicketGenerateField) => Promise<ApiResponse<TicketGenerateResult>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: ListTicketProps): LinkDispatchToProps => {
@@ -603,7 +719,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         fetchTicketVoucherAction: (page: number, id: number) => dispatch(fetchTicketVoucherAction(page, id)),
         deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
         createTicketAction: (ticket: TicketCreateField) => dispatch(createTicketAction(ticket)),
-        editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id))
+        editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id)),
+        generateTicketAction: (ticket: TicketGenerateField) => dispatch(generateTicketAction(ticket))
     }
 }
 
