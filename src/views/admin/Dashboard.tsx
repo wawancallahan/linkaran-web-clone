@@ -181,9 +181,12 @@ class Index extends React.Component<Props, State> {
                             marker = new google.maps.Marker();
                             marker.setMap(map);
 
-                            marker.addListener('click', (event: google.maps.MouseEvent) => {
+                            marker.addListener('click', function (this: any, event: google.maps.MouseEvent) {
+                                
+                                const getOrder = this.get('order')
+
                                 if (destinationMarker) {
-                                    if (order && destinationMarker.orderId == order.id) {
+                                    if (getOrder && destinationMarker.orderId == getOrder.id) {
                                         if (map.getZoom() < 20) {
                                             map.panTo(event.latLng);
                                             map.setZoom(20);
@@ -199,7 +202,7 @@ class Index extends React.Component<Props, State> {
                                     }
                                 }
 
-                                if (order) {
+                                if (getOrder) {
                             //         // document
                             //         // .getElementById('information')
                             //         // .appendChild(
@@ -207,12 +210,12 @@ class Index extends React.Component<Props, State> {
                             //         // );
                                     boundDestinationMarker = new google.maps.LatLngBounds();
 
-                                    const { service, vehicleType } = order.transaction;
+                                    const { service, vehicleType } = getOrder.transaction;
                                     
                                     const [
                                         lng,
                                         lat,
-                                    ] = order.transaction.origin.coordinates;
+                                    ] = getOrder.transaction.origin.coordinates;
 
                                     const icon = this.getIconOrder(service, vehicleType, 1, 1, 1);
 
@@ -221,6 +224,8 @@ class Index extends React.Component<Props, State> {
                                         map,
                                         icon
                                     });
+
+                                    destinationMarker.set('orderId', getOrder.id)
 
                                     destinationMarker.addListener('click', function() {
                                         if (map.getZoom() < 20) {
@@ -253,10 +258,11 @@ class Index extends React.Component<Props, State> {
                             coordinates[0],
                         );
 
-
                         driverMarker.set(id, marker);
                         marker.setIcon(icon);
                         marker.setPosition(pos);
+                        marker.set('order', order)
+                        marker.set('driver', response.driver)
                     } else if (response.event === 'delete' && driverMarker.has(response.driver.id)) {
                         const { id } = response.driver;
                         const marker = driverMarker.get(id);
@@ -322,7 +328,17 @@ class Index extends React.Component<Props, State> {
                         <Col>
                             <Card>
                                 <CardBody>
-                                    <div id="map"></div>
+                                    <Row>
+                                        <Col xs={12} sm={12} md={7}>
+                                            <div id="map"></div>
+                                        </Col>
+                                        <Col xs={12} sm={12} md={5}>
+                                            <div>
+
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    
                                 </CardBody>
                             </Card>
                         </Col>

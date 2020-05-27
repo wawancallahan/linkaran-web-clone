@@ -68,11 +68,11 @@ export type FormField = {
 }
 
 export type FormFieldFromCustomer = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
-    user: SelectType
+    customer: SelectType
 }
 
 export type FormFieldFromCustomerWithId = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
-    user: {
+    customer: {
         id: number
     }
 }

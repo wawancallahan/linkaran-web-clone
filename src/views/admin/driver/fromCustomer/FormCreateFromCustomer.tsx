@@ -28,9 +28,9 @@ import FormKendaraan from './FormKendaraan';
 import FormPertanyaan from './FormPertanyaan';
 
 const createSchema = Yup.object().shape({
-    user: Yup.object().shape({
-        label: Yup.string().required("Bidang pilihan user wajib diisi"),
-        value: Yup.number().notOneOf([0], 'Bidang pilihan user wajib diisi').required("Bidang pilihan user wajib diisi")
+    customer: Yup.object().shape({
+        label: Yup.string().required("Bidang pilihan customer wajib diisi"),
+        value: Yup.number().notOneOf([0], 'Bidang pilihan customer wajib diisi').required("Bidang pilihan customer wajib diisi")
     }),
     jenis_kelamin: Yup.number()
                       .oneOf([0, 1], 'Bidang pilihan jenis kelamin wajib diisi')
@@ -227,7 +227,7 @@ class Form extends Component<Props> {
 
                     const driver: DriverCreateFromCustomer = {
                         user: {
-                            id: values.user.value
+                            id: values.customer.value
                         },
                         alamat_domisili: values.alamat_domisili,
                         tempat_lahir: values.tempat_lahir,

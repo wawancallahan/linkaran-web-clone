@@ -49,7 +49,7 @@ class CreateFromCustomer extends Component<Props, State> {
 
     state = {
         form: {
-            user: {
+            customer: {
                 label: '',
                 value: 0
             },

@@ -20,8 +20,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../../types';
 import { Paginator } from '../../../../types/paginator';
-import { fetchListUserAction } from '../../../../actions/admin/user';
-import { User } from '../../../../types/admin/user';
+import { fetchListCustomerAction } from '../../../../actions/admin/customer';
+import { CustomerList } from '../../../../types/admin/customer';
 import { fetchListCountryAction } from '../../../../actions/admin/region/country';
 import { Country, CountryList } from '../../../../types/admin/region/country';
 import { fetchListProvinceAction } from '../../../../actions/admin/region/province';
@@ -41,13 +41,13 @@ type Props = FormDriverProps & LinkDispatchToProps;
 
 class FormDriver extends Component<Props> {
 
-    loadUserHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
+    loadCustomerHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
         page: number
     }) => {
-        return this.props.fetchListUserAction(search, options.page)
-            .then((response: ApiResponseList<User>) => {
+        return this.props.fetchListCustomerAction(search, options.page)
+            .then((response: ApiResponseList<CustomerList>) => {
 
-                const data: ApiResponseSuccessList<User> = response.response!;
+                const data: ApiResponseSuccessList<CustomerList> = response.response!;
 
                 let result: {
                     value: number,
@@ -63,7 +63,7 @@ class FormDriver extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: User) => {
+                    result = data.result.map((item: CustomerList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -366,24 +366,24 @@ class FormDriver extends Component<Props> {
                 <FormGroup>
                     <label
                     className="form-control-label"
-                    htmlFor="input-user"
+                    htmlFor="input-customer"
                     >
-                        User
+                        Customer
                     </label>
                     <ReactSelectAsyncPaginate 
-                        value={FormikProps.values.user}
-                        loadOptions={this.loadUserHandler}
+                        value={FormikProps.values.customer}
+                        loadOptions={this.loadCustomerHandler}
                         onChange={(option) => {
-                            FormikProps.setFieldValue('user', option)
+                            FormikProps.setFieldValue('customer', option)
                         }}
-                        onBlur={() => FormikProps.setFieldTouched('user', true)}
+                        onBlur={() => FormikProps.setFieldTouched('customer', true)}
                         additional={{
                             page: 1
                         }}
                         debounceTimeout={250}
                         />
                     <div>
-                        { FormikProps.errors.user && FormikProps.touched.user ? FormikProps.errors.user.value : '' }
+                        { FormikProps.errors.customer && FormikProps.touched.customer ? FormikProps.errors.customer.value : '' }
                     </div>
                 </FormGroup>
 
@@ -879,7 +879,7 @@ class FormDriver extends Component<Props> {
 }
 
 type LinkDispatchToProps = {
-    fetchListUserAction: (search: string, page: number) => Promise<ApiResponseList<User>>,
+    fetchListCustomerAction: (search: string, page: number) => Promise<ApiResponseList<CustomerList>>,
     fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
     fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
     fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
@@ -889,7 +889,7 @@ type LinkDispatchToProps = {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormDriverProps): LinkDispatchToProps => {
     return {
-        fetchListUserAction: (search: string, page: number) => dispatch(fetchListUserAction(search, page)),
+        fetchListCustomerAction: (search: string, page: number) => dispatch(fetchListCustomerAction(search, page)),
         fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
         fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
         fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
