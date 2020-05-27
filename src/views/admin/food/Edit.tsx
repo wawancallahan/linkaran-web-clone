@@ -63,6 +63,10 @@ class Create extends Component<Props, State> {
             restaurant: {
                 value: 0,
                 label: ''
+            },
+            status: {
+                value: '',
+                label: ''
             }
         },
         isLoaded: false,
@@ -100,6 +104,11 @@ class Create extends Component<Props, State> {
                             value: data.restaurant.id ? data.restaurant.id : 0,
                             label: data.restaurant.name ? data.restaurant.name : ''
                         }
+                    }
+
+                    form.status = {
+                        value: data.status,
+                        label: data.status
                     }
 
                     form.image_preview = data.image ? data.image : '';

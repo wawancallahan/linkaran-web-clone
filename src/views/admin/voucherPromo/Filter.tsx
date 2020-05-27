@@ -72,7 +72,7 @@ class Filter extends Component<Props, State> {
         } as IFilter);
     }
 
-    handleOnChangeSelect = (option: {
+    handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
@@ -310,7 +310,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'isLimited')
+                                        this.handleOnSelectChange(optionSelected, 'isLimited')
                                     }}  
                                     />
                             </FormGroup>

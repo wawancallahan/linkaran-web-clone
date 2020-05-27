@@ -67,6 +67,7 @@ const TableItem = (props: {
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
             <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.price} /></td>
+            <td>{props.item.status}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.foodCategory ? props.item.foodCategory.name : ''}</td>
             <td>{props.item.restaurant ? props.item.restaurant.name : ''}</td>
@@ -217,6 +218,7 @@ class List extends Component<Props, State> {
                                             <th>No</th>
                                             <th>Nama</th>
                                             <th>Harga</th>
+                                            <th>Status</th>
                                             <th>Rating</th>
                                             <th>Kategori</th>
                                             <th>Restoran</th>

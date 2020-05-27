@@ -100,7 +100,7 @@ class Filter extends Component<Props, State> {
         });
     }
 
-    handleOnChangeSelect = (option: {
+    handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
@@ -369,7 +369,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'type')
+                                        this.handleOnSelectChange(optionSelected, 'type')
                                     }}  
                                     />
                             </FormGroup>
@@ -396,7 +396,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'serviceCode')
+                                        this.handleOnSelectChange(optionSelected, 'serviceCode')
                                     }}  
                                     />
                             </FormGroup>
@@ -426,7 +426,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'statusOrder')
+                                        this.handleOnSelectChange(optionSelected, 'statusOrder')
                                     }}  
                                     />
                             </FormGroup>

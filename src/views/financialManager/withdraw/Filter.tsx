@@ -74,7 +74,7 @@ class Filter extends Component<Props, State> {
         this.props.clearFilterWithDrawAction();
     }
 
-    handleOnChangeSelect = (option: {
+    handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
@@ -249,7 +249,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'needApproved')
+                                        this.handleOnSelectChange(optionSelected, 'needApproved')
                                     }}  
                                     />
                             </FormGroup>
@@ -274,7 +274,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'isManual')
+                                        this.handleOnSelectChange(optionSelected, 'isManual')
                                     }}  
                                     />
                             </FormGroup>
@@ -299,7 +299,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'isDecline')
+                                        this.handleOnSelectChange(optionSelected, 'isDecline')
                                     }}  
                                     />
                             </FormGroup>

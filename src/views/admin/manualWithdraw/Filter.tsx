@@ -74,7 +74,7 @@ class Filter extends Component<Props, State> {
         this.props.clearFilterManualWithDrawAction();
     }
 
-    handleOnChangeSelect = (option: {
+    handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
@@ -249,7 +249,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'isManual')
+                                        this.handleOnSelectChange(optionSelected, 'isManual')
                                     }}  
                                     />
                             </FormGroup>

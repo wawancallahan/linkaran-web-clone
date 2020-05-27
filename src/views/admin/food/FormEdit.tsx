@@ -18,9 +18,10 @@ import {
 import {
     fetchListFoodCategoryAction
 } from '../../../actions/admin/foodCategory';
-import { Food, FormField, FoodEditField, FoodEditResult } from '../../../types/admin/food';
+import { Food, FormField, FoodEditField, FoodEditResult, FoodStatusEnum } from '../../../types/admin/food';
 import { editFoodAction, setAlertFoodShowAction } from '../../../actions/admin/food';
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
+import ReactSelect from 'react-select'
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 import { Restaurant } from '../../../types/admin/restaurant';
 import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
@@ -56,6 +57,10 @@ const createSchema = Yup.object().shape({
     restaurant: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan restaurant wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan restaurant wajib diisi').required("Bidang pilihan restaurant wajib diisi")
+    }),
+    status: Yup.object().shape({
+        label: Yup.string().required("Bidang pilihan restaurant wajib diisi"),
+        value: Yup.string().required("Bidang pilihan restaurant wajib diisi")
     }),
     image_preview: Yup.string().nullable()
 });
@@ -198,6 +203,7 @@ class Form extends Component<Props> {
                         },
                         image_preview: values.image_preview,
                         image: values.image,
+                        status: values.status.value as FoodStatusEnum
                     }
 
                     swal("Apakah anda yakin?", "Data akan diubah!", {
@@ -326,6 +332,34 @@ class Form extends Component<Props> {
                                             {FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price : ''}
                                         </div>
                                     </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-status"
+                                        >
+                                            Status
+                                        </label>
+                                        <ReactSelect 
+                                            options={[
+                                                {value: FoodStatusEnum.AVAILABLE, label: FoodStatusEnum.AVAILABLE},
+                                                {value: FoodStatusEnum.NOT_AVAILABLE , label: FoodStatusEnum.NOT_AVAILABLE},
+                                                {value: FoodStatusEnum.OUT_OF_STOCK , label: FoodStatusEnum.OUT_OF_STOCK}
+                                            ]}
+                                            defaultValue={FormikProps.values.status}
+                                            onChange={(option) => {
+
+                                                const optionSelected = option as {
+                                                    value: string,
+                                                    label: string
+                                                };
+
+                                                FormikProps.setFieldValue('status', optionSelected)
+                                            }}  
+                                            onBlur={() => FormikProps.setFieldTouched('status', true)}
+                                            />
+                                    </FormGroup>
+                                    
                                     <FormGroup>
                                         <label
                                         className="form-control-label"

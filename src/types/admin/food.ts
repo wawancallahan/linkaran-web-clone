@@ -1,6 +1,6 @@
 import { Paginator } from '../paginator';
 import { Restaurant } from './restaurant';
-import { SelectType } from '../select';
+import { SelectType, SelectStringType } from '../select';
 import { District } from './region/district';
 import { Province } from './region/province';
 import { FoodCategory } from './foodCategory';
@@ -24,7 +24,8 @@ export type FormField = {
     image: File | null,
     image_preview: string,
     foodCategory: SelectType,
-    restaurant: SelectType
+    restaurant: SelectType,
+    status: SelectStringType
 }
 
 export type FoodField = {
@@ -39,7 +40,14 @@ export type FoodField = {
     },
     restaurant: {
         id: number
-    }
+    },
+    status: FoodStatusEnum
+}
+
+export enum FoodStatusEnum {
+    AVAILABLE = 'AVAILABLE',
+    OUT_OF_STOCK = 'OUT_OF_STOCK',
+    NOT_AVAILABLE = 'NOT_AVAILABLE',
 }
 
 export type Food = {
@@ -49,6 +57,7 @@ export type Food = {
     description: string,
     rating: number,
     image: string | null,
+    status: FoodStatusEnum
 }
 
 export type FoodList = Food & {

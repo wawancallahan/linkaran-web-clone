@@ -153,6 +153,7 @@ export const createFoodAction = (food: FoodCreateField): ThunkResult<Promise<Api
         data.set('rating', food.rating.toString())
         data.set('foodCategory.id', food.foodCategory.id.toString())
         data.set('restaurant.id', food.restaurant.id.toString())
+        data.set('status', food.status)
        
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/food', data, {
                 headers: {
@@ -276,6 +277,7 @@ export const editFoodAction = (food: FoodEditField, id: number): ThunkResult<Pro
         data.set('rating', food.rating.toString())
         data.set('foodCategory.id', food.foodCategory.id.toString())
         data.set('restaurant.id', food.restaurant.id.toString())
+        data.set('status', food.status)
         
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/food/${id}`, data, {
                 headers: {

@@ -70,7 +70,7 @@ class Filter extends Component<Props, State> {
         } as IFilter);
     }
 
-    handleOnChangeSelect = (option: {
+    handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
@@ -232,7 +232,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'canBeMultiple')
+                                        this.handleOnSelectChange(optionSelected, 'canBeMultiple')
                                     }}  
                                     />
                             </FormGroup>
@@ -257,7 +257,7 @@ class Filter extends Component<Props, State> {
                                             label: string
                                         };
 
-                                        this.handleOnChangeSelect(optionSelected, 'passangerWithDriver')
+                                        this.handleOnSelectChange(optionSelected, 'passangerWithDriver')
                                     }}  
                                     />
                             </FormGroup>

@@ -55,6 +55,10 @@ class Create extends Component<Props, State> {
             restaurant: {
                 value: 0,
                 label: ''
+            },
+            status: {
+                value: '',
+                label: ''
             }
         },
         alert_visible: false,
