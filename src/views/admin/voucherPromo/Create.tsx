@@ -51,7 +51,7 @@ class Create extends Component<Props, State> {
             quantity: '',
             description: '',
             service: [],
-            type: {
+            voucherType: {
                 value: 0,
                 label: ''
             },

@@ -276,7 +276,7 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreate): Thun
         data.set('startDateTime', voucherPromo.startDateTime)
         data.set('endDateTime', voucherPromo.endDateTime)
 
-        data.set('type.id', voucherPromo.type.value.toString())
+        data.set('type.id', voucherPromo.type.id.toString())
 
         voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())
@@ -410,7 +410,7 @@ export const editVoucherPromoAction = (voucherPromo: VoucherPromoEdit, id: numbe
         data.set('startDateTime', voucherPromo.startDateTime)
         data.set('endDateTime', voucherPromo.endDateTime)
 
-        data.set('type.id', voucherPromo.type.value.toString())
+        data.set('type.id', voucherPromo.type.id.toString())
 
         voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())

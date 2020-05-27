@@ -30,7 +30,7 @@ export type FormField = {
     quantity: string,
     description: string,
     service: SelectType[],
-    type: SelectType,
+    voucherType: SelectType,
     startDateTime: Date | null,
     endDateTime: Date | null,
     image: File | null,
@@ -47,7 +47,9 @@ export type VoucherPromoField = {
     quantity: string,
     description: string,
     service: SelectType[],
-    type: SelectType,
+    type: {
+        id: number
+    },
     startDateTime: string,
     endDateTime: string,
     image: File | null,

@@ -58,7 +58,7 @@ class Edit extends Component<Props, State> {
             quantity: '',
             description: '',
             service: [],
-            type: {
+            voucherType: {
                 value: 0,
                 label: ''
             },
@@ -102,9 +102,12 @@ class Edit extends Component<Props, State> {
                     })
 
                     form.startDateTime = new Date(data.startDateTime)
-                    form.type = {
-                        label: data.type.name ? data.type.name : '',
-                        value: data.type.id ? data.type.id : 0
+
+                    if (data.type) {
+                        form.voucherType = {
+                            label: data.type.name ? data.type.name : '',
+                            value: data.type.id ? data.type.id : 0
+                        }
                     }
 
                     this.setState({

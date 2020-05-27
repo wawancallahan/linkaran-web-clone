@@ -109,9 +109,9 @@ const createSchema = Yup.object().shape({
                     value: Yup.number().notOneOf([0], 'Bidang pilihan layanan wajib diisi').required('Bidang pilihan layanan wajib diisi')
                 })
             ),
-    type: Yup.object().shape({
+    voucherType: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan tipe voucher wajib diisi"),
-        value: Yup.number().notOneOf([0], 'Bidang pilihan tipe voucher wajib diisi').required("Bidang pilihan brand vehicle wajib diisi")
+        value: Yup.number().notOneOf([0], 'Bidang pilihan tipe voucher wajib diisi').required("Bidang pilihan tipe voucher wajib diisi")
     })
 });
 
@@ -267,7 +267,9 @@ class Form extends Component<Props> {
                         image_preview: values.image_preview,
                         startDateTime: startDateTime,
                         endDateTime: endDateTime,
-                        type: values.type,
+                        type: {
+                            id: values.voucherType.value
+                        },
                         service: values.service
                     }
 
@@ -309,22 +311,22 @@ class Form extends Component<Props> {
                                     <FormGroup>
                                         <label
                                         className="form-control-label"
-                                        htmlFor="input-type"
+                                        htmlFor="input-voucherType"
                                         >
                                             Tipe Voucher
                                         </label>
                                         <ReactSelectAsyncPaginate 
-                                            value={FormikProps.values.type}
+                                            value={FormikProps.values.voucherType}
                                             loadOptions={this.loadVoucherTypeHandler}
-                                            onChange={(option) => FormikProps.setFieldValue('type', option)}
-                                            onBlur={() => FormikProps.setFieldTouched('type', true)}
+                                            onChange={(option) => FormikProps.setFieldValue('voucherType', option)}
+                                            onBlur={() => FormikProps.setFieldTouched('voucherType', true)}
                                             additional={{
                                                 page: 1
                                             }}
                                             debounceTimeout={250}
                                             />
                                         <div>
-                                            { FormikProps.errors.type && FormikProps.touched.type ? FormikProps.errors.type : '' }
+                                            { FormikProps.errors.voucherType && FormikProps.touched.voucherType ? FormikProps.errors.voucherType.value : '' }
                                         </div>
                                     </FormGroup> 
 

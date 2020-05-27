@@ -137,7 +137,15 @@ export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolea
 
 export const fetchListVoucherTypeAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<VoucherTypeList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type?page=${page}`)
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/voucher-type`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<VoucherTypeList> = response.data;
 
