@@ -288,6 +288,18 @@ class ListTicket extends Component<Props, State> {
         })
     }
 
+    toggleGenerateModalTicket = () => {
+        this.setState( (prevState: State) => {
+            return {
+                form: {
+                    ...prevState.form,
+                    redeemCode: ''
+                },
+                modal_add_visible: ! prevState.modal_add_visible
+            }
+        })
+    }
+
     toggleEditModelTicket = (index: number) => {
 
         const modalStateList: ModalState[] = {
@@ -414,6 +426,14 @@ class ListTicket extends Component<Props, State> {
                                     onClick={() => this.toggleAddModalTicket()}
                                 >
                                     Tambah Tiket
+                                </Button>
+
+                                <Button
+                                    color="info"
+                                    size="sm"
+                                    onClick={() => this.toggleGenerateModalTicket()}
+                                >
+                                    Generate Tiket
                                 </Button>
                             </div>
                         </Row>

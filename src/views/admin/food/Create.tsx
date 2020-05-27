@@ -22,7 +22,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../../../store/configureStore';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
-import { Food, FormField } from '../../../types/admin/food';
+import { Food, FormField, FoodStatusEnum } from '../../../types/admin/food';
 
 import FormFood from './Form';
 
@@ -57,8 +57,8 @@ class Create extends Component<Props, State> {
                 label: ''
             },
             status: {
-                value: '',
-                label: ''
+                value: FoodStatusEnum.AVAILABLE,
+                label: FoodStatusEnum.AVAILABLE
             }
         },
         alert_visible: false,
