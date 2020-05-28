@@ -51,9 +51,7 @@ import NumberFormat from 'react-number-format'
 import Filter from './Filter'
 import Spinner from '../../../../components/Loader/Spinner';
 
-type ListProps = RouteComponentProps<{
-    type?: string
-}> & {
+type ListProps = RouteComponentProps & {
 
 }
 

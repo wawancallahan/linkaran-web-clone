@@ -52,7 +52,7 @@ export const typeTransactionFormat = (status?: string) => {
     let type = "complete"
 
     if (status) {
-        if (["inprogress", "complete"].includes(status)) {
+        if (["inorder", "complete"].includes(status)) {
             type = status
         }
     }
