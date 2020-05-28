@@ -5,6 +5,7 @@ import { Service } from '../service';
 import { Restaurant } from '../restaurant';
 import { User } from '../user';
 import { Partner } from '../partner';
+import { Customer } from '../customer';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -35,17 +36,33 @@ export type Application = {
 
 export type ApplicationList = Application
 
+export type FoodTransactionDetail = {
+    id: string,
+    price: number,
+    quantity: number,
+    subPrice: number,
+    note: string,
+    name: string,
+    description: string,
+    image: string
+}
+
+export type RestaurantTransactionDetail = Partial<Restaurant> & {
+    district: string | null,
+    province: string | null,
+    openTime: string,
+    closeTime: string,
+    isClosed: boolean,
+    distance: string
+}
+
 export type ApplicationShowComplete = {
     driverId: number | null,
     costumer: {
-        userInfo: {
-            email: string,
-            name: string,
-            phoneNumber: string
-        },
+        userInfo: Partial<Customer>,
         id: number
     },
-    driverInformation?: {
+    driverInformation?: null | {
         name: string,
         policeNumber: string,
         profileImage: string | null,
@@ -55,23 +72,19 @@ export type ApplicationShowComplete = {
         vehicleMerk: string
     },
     transaction: {
+        voucherCode?: string,   
         code: string,
-        service: {
-            name: string,
-            code: string
-        },
+        service: Partial<Service>,
         dateTime: string,
         note: string,
-        vehicleType: {
-            code: string,
-            name: string,
-            seat: number
-        },
+        vehicleType: Partial<VehicleType>,
         paymentFromVoucher: number,
+        serviceFee: number,
         totalCost: number,
         totalCostBeforeCut: number,
         typePayment: string,
         priceSplit: number[],
+        transportationFee: number,
         cost: number,
         status: string,
         addressDestination?: string,
@@ -81,36 +94,28 @@ export type ApplicationShowComplete = {
             coordinates: number[],
             type: string
         },
-        distance: string
+        distance: string,
+        destination: string
     },
-    driverFeedback?: {
+    driverFeedback?: null | {
         rating: number,
         description: string
-    } | null,
-    costumerFeedback?: {
+    },
+    costumerFeedback?: null | {
         rating: number,
         description: string,
         tip: number
-    } | null,
-    foodTransaction?: {
+    },
+    foodTransaction?: null | {
         foodCost: number,
-        foods: {
-            id: string,
-            price: number,
-            quantity: number,
-            subPrice: number,
-            note: string,
-            name: string,
-            description: string,
-            image: number
-        }[],
+        foods: FoodTransactionDetail[],
         freightCost: number,
         restaurantId: number,
-        restaurant?: Partial<Restaurant>
-    } | null,
-    sendTransaction?: {
-        isFragile: any,
-        stuffSize: any,
+        restaurant?: RestaurantTransactionDetail
+    },
+    sendTransaction?: null | {
+        isFragile: boolean,
+        stuffSize: string,
         sender: {
             name: string,
             note: string,
@@ -121,8 +126,8 @@ export type ApplicationShowComplete = {
             note: string,
             phoneNumber: string
         }
-    } | null,
-    cancelFeedback?: {
+    },
+    cancelFeedback?: null | {
         description: string;
         cancelAt: string;
     }
