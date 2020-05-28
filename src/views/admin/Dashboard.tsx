@@ -182,8 +182,28 @@ class Index extends React.Component<Props, State> {
                             marker.setMap(map);
 
                             marker.addListener('click', function (this: any, event: google.maps.MouseEvent) {
-                                
+
+                                const informationNode = document.getElementById('information')
+
+                                if (informationNode !== null) {
+                                    informationNode.innerHTML = ""
+                                }
+
                                 const getOrder = this.get('order')
+
+                                const getDriver = this.get('driver')
+
+                                if (getDriver) {
+                                    if (informationNode !== null) {
+                                        const informationDriverDetail = document.createElement('div')
+
+                                        informationDriverDetail.innerHTML = `<pre>${JSON.stringify(getDriver, null, "\t")}</pre>`
+
+                                        informationNode.appendChild(
+                                            informationDriverDetail
+                                        )
+                                    }
+                                }
 
                                 if (destinationMarker) {
                                     if (getOrder && destinationMarker.orderId == getOrder.id) {
@@ -203,11 +223,17 @@ class Index extends React.Component<Props, State> {
                                 }
 
                                 if (getOrder) {
-                            //         // document
-                            //         // .getElementById('information')
-                            //         // .appendChild(
-                            //         //     renderjson({ ...order, driver: driver }),
-                            //         // );
+
+                                    if (informationNode !== null) {
+                                        const informationOrderDetail = document.createElement('div')
+
+                                        informationOrderDetail.innerHTML = `<pre>${JSON.stringify(getOrder, null, "\t")}</pre>`
+
+                                        informationNode.appendChild(
+                                            informationOrderDetail
+                                        )
+                                    }
+
                                     boundDestinationMarker = new google.maps.LatLngBounds();
 
                                     const { service, vehicleType } = getOrder.transaction;
@@ -329,11 +355,11 @@ class Index extends React.Component<Props, State> {
                             <Card>
                                 <CardBody>
                                     <Row>
-                                        <Col xs={12} sm={12} md={7}>
+                                        <Col xs={12}>
                                             <div id="map"></div>
                                         </Col>
-                                        <Col xs={12} sm={12} md={5}>
-                                            <div>
+                                        <Col xs={12}>
+                                            <div id="information">
 
                                             </div>
                                         </Col>
