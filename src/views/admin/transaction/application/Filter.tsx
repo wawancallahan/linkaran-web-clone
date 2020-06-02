@@ -383,10 +383,10 @@ class Filter extends Component<Props, State> {
                                 </label>
                                 <ReactSelect 
                                     options={[
-                                        {value: 'link-ride', label: 'Link Ride'},
-                                        {value: 'link-car', label: 'Link Car'},
-                                        {value: 'link-food', label: 'Link Food'},
-                                        {value: 'link-send', label: 'Link Send'}
+                                        {value: 'linkride', label: 'Link Ride'},
+                                        {value: 'linkcar', label: 'Link Car'},
+                                        {value: 'linkfood', label: 'Link Food'},
+                                        {value: 'linksend', label: 'Link Send'}
                                     ]}
                                     defaultValue={this.updateToOptionSelectServiceCode(this.state.filter.serviceCode)}
                                     onChange={(option) => {
