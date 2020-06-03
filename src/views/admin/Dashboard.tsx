@@ -106,7 +106,7 @@ class Index extends React.Component<Props, State> {
       const broadcastMarker = new Map();
       const broadcastData = new Map();
 
-      const socket = io(join(this.baseUrl, "admin"), {
+      const socket = io(`${this.baseUrl}/admin`, {
         path: "/ws/socket.io",
         transports: ["websocket"],
       });
