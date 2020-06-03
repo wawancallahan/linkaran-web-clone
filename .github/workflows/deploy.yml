@@ -45,6 +45,6 @@ jobs:
       - name: Telegram Notify
         uses: appleboy/telegram-action@0.0.3
         with:
-          to: ${{ secrets.TELEGRAM_GROUP_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          args: The ${{ github.event_name }} event triggered first step.
+          to: "1001156670029"
+          token: "1286986055:AAE6SOZwcWSFmKyntlq2BFDn4-wkttKYkKE"
+          args: The ${{ github.event_name }} event triggered first step ${{ matrix.target }}.
