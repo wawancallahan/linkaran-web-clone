@@ -21,7 +21,12 @@ import withTitle from "../../hoc/WithTitle";
 import io from "socket.io-client";
 import { OptionObjectString } from "../../helpers/utils";
 import "./Dashboard.css";
-import { join } from "path";
+import _ from 'lodash'
+
+type IIcoStatus = {
+    code: string,
+    message: string
+}
 
 type State = {
   mapIsReady: boolean;
@@ -365,6 +370,25 @@ class Index extends React.Component<Props, State> {
   }
 
   render() {
+
+    const icoStatus: IIcoStatus[] = [
+        { code: "car/large/iddle", message: "Car Large Idle" },
+        { code: "car/large/drop-off", message: "Car Large Drop Off" },
+        { code: "car/large/on-the-way", message: "Car Large On The Way" },
+        { code: "car/large/waiting", message: "Car Large Waiting" },
+        { code: "car/large/delivery-item", message: "Car Large Delivery Item" },
+        { code: "car/reguler/iddle", message: "Car Idle" },
+        { code: "car/reguler/drop-off", message: "Car Drop Off" },
+        { code: "car/reguler/on-the-way", message: "Car On The Way" },
+        { code: "car/reguler/waiting", message: "Car Waiting" },
+        { code: "car/reguler/delivery-item", message: "Car Delivery Item" },
+        { code: "motocycle/iddle", message: "Motorcycle Idle" },
+        { code: "motocycle/drop-off", message: "Motorcycle Drop Off" },
+        { code: "motocycle/on-the-way", message: "Motorcycle On The Way" },
+        { code: "motocycle/waiting", message: "Motorcycle Waiting" },
+        { code: "motocycle/delivery-item", message: "Motorcycle Delivery Item" },
+    ];
+
     return (
       <>
         <Header />
@@ -374,14 +398,32 @@ class Index extends React.Component<Props, State> {
             <Col>
               <Card>
                 <CardBody>
-                  <Row>
-                    <Col xs={12}>
-                      <div id="map"></div>
-                    </Col>
-                    <Col xs={12}>
-                      <div id="information"></div>
-                    </Col>
-                  </Row>
+                    <h3>Informasi Icon</h3>
+                    <Row className="mb-2">
+                        {_.chunk(icoStatus, 5).map((items: IIcoStatus[], index: number) => {
+                            return (
+                                <Col xs={12} sm={4} md={4} key={index}>
+                                    {items.map((item: IIcoStatus, index: number) => {
+                                        return (
+                                            <div key={index}>
+                                                <div className="img-ico-list"><img src={`${this.baseUrl}/api/icon/${item.code}.svg`} alt=""/></div>
+                                                <label className="message-ico-list">{item.message}</label>
+                                            </div>
+                                        );
+                                    })}
+                                </Col>
+                            )
+                        })}        
+                    </Row>
+                    <h3>Maps Driver</h3>
+                    <Row>
+                        <Col xs={12}>
+                        <div id="map"></div>
+                        </Col>
+                        <Col xs={12}>
+                        <div id="information"></div>
+                        </Col>
+                    </Row>
                 </CardBody>
               </Card>
             </Col>

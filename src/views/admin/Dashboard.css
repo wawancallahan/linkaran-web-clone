@@ -7,3 +7,12 @@
 #information {
     padding: 10px 20px;
 }
+
+.img-ico-list {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.message-ico-list {
+    line-height: 61px;
+}
