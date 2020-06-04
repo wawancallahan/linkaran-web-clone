@@ -60,16 +60,10 @@ const TableItem = (props: {
     return (
         <tr>
             <td>{props.index + 1}</td>
-            <td></td>
             <td>{amountFormat(props.item.amount)}</td>
             <td>{typeOfTransaction(props.item.is_deposit, props.item.is_withdraw, props.item.is_transfer)}</td>
             <td>{props.item.send_to}</td>
             <td>{props.item.datetime_transaction}</td>
-            <td>
-                <Link to={`/admin/transaction/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
-                    <i className="fa fa-eye"></i> Detail
-                </Link>
-            </td>
         </tr>
     )
 }
@@ -146,12 +140,10 @@ class List extends Component<Props, State> {
                                     <thead className="thead-light">
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
                                             <th>Dikirm ke</th>
                                             <th>Tanggal</th>
-                                            <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
