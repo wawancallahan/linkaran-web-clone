@@ -66,7 +66,7 @@ class FormDriver extends Component<Props> {
                     result = data.result.map((item: CustomerList) => {
                         return {
                             value: item.id,
-                            label: `${item.name}`
+                            label: `${item.name} - ${item.phoneNumber}`
                         };
                     });
                 }

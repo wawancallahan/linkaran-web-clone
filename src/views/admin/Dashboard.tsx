@@ -22,6 +22,7 @@ import io from "socket.io-client";
 import { OptionObjectString } from "../../helpers/utils";
 import "./Dashboard.css";
 import _ from 'lodash'
+import * as renderjson from 'renderjson'
 
 type IIcoStatus = {
     code: string,
