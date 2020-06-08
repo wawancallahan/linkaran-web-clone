@@ -5,6 +5,7 @@ import { User } from './user';
 import { Transaction } from './transaction';
 import { SelectType } from '../select';
 import { Timestamps } from '../timestamps';
+import { Restaurant } from './restaurant';
 
 export const FETCH_VOUCHER_PROMO = "FETCH_VOUCHER_PROMO";
 export const FETCH_VOUCHER_PROMO_SUCCESS = "FETCH_VOUCHER_PROMO_SUCCESS";
@@ -35,7 +36,9 @@ export type FormField = {
     startDateTime: Date | null,
     endDateTime: Date | null,
     image: File | null,
-    image_preview: string
+    image_preview: string,
+    isAutoSet: string,
+    restaurants: SelectType[]
 }
 
 export type VoucherPromoField = {
@@ -54,7 +57,9 @@ export type VoucherPromoField = {
     startDateTime: string,
     endDateTime: string,
     image: File | null,
-    image_preview: string
+    image_preview: string,
+    isAutoSet: boolean,
+    restaurants: number[]
 }
 
 export type VoucherPromo = {
@@ -64,13 +69,13 @@ export type VoucherPromo = {
     image: string | null,
     amount: number,
     quota: number,
-    quotaUse: number,
     minimumPurchase: number,
     startDateTime: string,
     endDateTime: string,
     isLimited: boolean,
     quantity: number,
     description: string | null,
+    isAutoSet: boolean
 }
 
 export type VoucherPromoUserUsed = {
@@ -82,13 +87,17 @@ export type VoucherPromoUserUsed = {
 
 export type VoucherPromoList = VoucherPromo & {
     type?: Partial<VoucherType>,
-    service?: Partial<Service>[]
+    service?: Partial<Service>[],
+    restaurant?: Partial<Restaurant>[]
 }
 
 export type VoucherPromoShow = VoucherPromo & {
     type?: Partial<VoucherType>,
     service?: Partial<Service>[],
-    ticketUsed?: number
+    ticketUsed?: number,
+    typeId?: number,
+    quotaUse?: string,
+    restaurants?: Partial<Restaurant>[]
 }
 
 export type VoucherPromoCreateField = VoucherPromoField;

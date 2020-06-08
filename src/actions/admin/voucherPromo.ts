@@ -217,6 +217,7 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreateField):
         data.set('minimumPurchase', voucherPromo.minimumPurchase)
         data.set('description', voucherPromo.description)
         data.set('isLimited', booleanToString(voucherPromo.isLimited))
+        data.set('isAutoSet', booleanToString(voucherPromo.isAutoSet))
 
         if (voucherPromo.image) {
             data.append('fileimage', voucherPromo.image)
@@ -229,6 +230,10 @@ export const createVoucherPromoAction = (voucherPromo: VoucherPromoCreateField):
 
         voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())
+        })
+
+        voucherPromo.restaurants.forEach((value: number, index: number) => {
+            data.set(`restaurant.${index}.id`, value.toString())
         })
 
         return axiosService.post(process.env.REACT_APP_API_URL + '/web/voucher', data, {
@@ -351,6 +356,7 @@ export const editVoucherPromoAction = (voucherPromo: VoucherPromoEditField, id: 
         data.set('minimumPurchase', voucherPromo.minimumPurchase)
         data.set('description', voucherPromo.description)
         data.set('isLimited', booleanToString(voucherPromo.isLimited))
+        data.set('isAutoSet', booleanToString(voucherPromo.isAutoSet))
 
         if (voucherPromo.image) {
             data.append('fileimage', voucherPromo.image)
@@ -363,6 +369,10 @@ export const editVoucherPromoAction = (voucherPromo: VoucherPromoEditField, id: 
 
         voucherPromo.service.forEach((value: SelectType, index: number) => {
             data.set(`service.${index}.id`, value.value.toString())
+        })
+
+        voucherPromo.restaurants.forEach((value: number, index: number) => {
+            data.set(`restaurant.${index}.id`, value.toString())
         })
 
         return axiosService.patch(process.env.REACT_APP_API_URL + `/web/voucher/${id}`, data, {

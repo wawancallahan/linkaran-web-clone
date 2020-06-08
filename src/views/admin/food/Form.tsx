@@ -23,7 +23,7 @@ import { createFoodAction, setAlertFoodShowAction } from '../../../actions/admin
 import { ApiResponse, ApiResponseError, ApiResponseSuccess, ApiResponseList, ApiResponseSuccessList } from '../../../types/api';
 import ReactSelect from 'react-select'
 import ReactSelectAsyncPaginate from 'react-select-async-paginate';
-import { Restaurant } from '../../../types/admin/restaurant';
+import { RestaurantList } from '../../../types/admin/restaurant';
 import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
 import { Paginator } from '../../../types/paginator';
 import Dropzone from '../../../components/Dropzone/Dropzone'
@@ -145,9 +145,9 @@ class Form extends Component<Props> {
         page: number
     }) => {
         return this.props.fetchListRestaurantAction(search, options.page)
-            .then((response: ApiResponseList<Restaurant>) => {
+            .then((response: ApiResponseList<RestaurantList>) => {
 
-                const data: ApiResponseSuccessList<Restaurant> = response.response!;
+                const data: ApiResponseSuccessList<RestaurantList> = response.response!;
 
                 let result: {
                     value: number,
@@ -163,7 +163,7 @@ class Form extends Component<Props> {
                         hasMore = paginate.pageCount > options.page;
                     }
 
-                    result = data.result.map((item: Restaurant) => {
+                    result = data.result.map((item: RestaurantList) => {
                         return {
                             value: item.id,
                             label: `${item.name}`
@@ -445,7 +445,7 @@ type LinkDispatchToProps = {
     createFoodAction: (food: FoodCreateField) => Promise<ApiResponse<FoodCreateResult>>
     setAlertFoodShowAction: (message: string, color: string) => void,
     fetchListFoodCategoryAction: (search: string, page: number) => Promise<ApiResponseList<FoodCategoryList>>,
-    fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<Restaurant>>
+    fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<RestaurantList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {

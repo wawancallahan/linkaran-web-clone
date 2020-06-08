@@ -314,6 +314,7 @@ class Form extends Component<Props> {
                                                 />
                                         </div>
                                     </FormGroup>
+
                                     <FormGroup>
                                         <label
                                         className="form-control-label"
@@ -364,6 +365,7 @@ class Form extends Component<Props> {
                                             )}
                                             />
                                     </FormGroup>
+                                    
                                     <FormGroup>
                                         <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
                                     </FormGroup>

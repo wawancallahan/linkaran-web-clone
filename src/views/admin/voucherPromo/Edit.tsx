@@ -28,6 +28,7 @@ import FormVoucher from './FormEdit';
 import { findVoucherPromoAction } from '../../../actions/admin/voucherPromo';
 import { ApiResponse } from '../../../types/api';
 import { Service } from '../../../types/admin/service';
+import { Restaurant } from '../../../types/admin/restaurant';
 
 type EditProps = RouteComponentProps<{
     id: string
@@ -65,7 +66,9 @@ class Edit extends Component<Props, State> {
             startDateTime: null,
             endDateTime: null,
             image: null,
-            image_preview: ''
+            image_preview: '',
+            isAutoSet: '0',
+            restaurants: []
         },
         isLoaded: false,
         loadedMessage: '',
@@ -91,6 +94,7 @@ class Edit extends Component<Props, State> {
                     form.endDateTime = new Date(data.endDateTime)
                     form.image_preview = data.image ? data.image : ''
                     form.isLimited = data.isLimited ? '1' : '0'
+                    form.isAutoSet = data.isAutoSet ? '1' : '0'
                     form.minimumPurchase = data.minimumPurchase.toString()
                     form.name = data.name
                     form.quantity = data.quantity.toString()
@@ -98,6 +102,15 @@ class Edit extends Component<Props, State> {
 
                     if (data.service) {
                         form.service = data.service.map((value: Partial<Service>, index: number) => {
+                            return {
+                                label: value.name ? value.name : '',
+                                value: value.id ? value.id : 0
+                            }
+                        })
+                    }
+
+                    if (data.restaurants) {
+                        form.restaurants = data.restaurants.map((value: Partial<Restaurant>, index: number) => {
                             return {
                                 label: value.name ? value.name : '',
                                 value: value.id ? value.id : 0
