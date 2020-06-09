@@ -8,11 +8,9 @@
     padding: 10px 20px;
 }
 
-.img-ico-list {
+.img-ico {
     display: inline-block;
+    margin-left: 1em;
     margin-right: 1em;
-}
-
-.message-ico-list {
-    line-height: 61px;
+    margin-bottom: 1em;
 }

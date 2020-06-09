@@ -13,6 +13,7 @@ import {
   Container,
   Row,
   Col,
+  Tooltip 
 } from "reactstrap";
 
 import Header from "../../components/Headers/Header";
@@ -370,6 +371,10 @@ class Index extends React.Component<Props, State> {
     }
   }
 
+  toggleTooltip = (index: number) => {
+    
+  }
+
   render() {
 
     const icoStatus: IIcoStatus[] = [
@@ -400,29 +405,24 @@ class Index extends React.Component<Props, State> {
               <Card>
                 <CardBody>
                     <h3>Informasi Icon</h3>
-                    <Row className="mb-2">
-                        {_.chunk(icoStatus, 5).map((items: IIcoStatus[], index: number) => {
-                            return (
-                                <Col xs={12} sm={4} md={4} key={index}>
-                                    {items.map((item: IIcoStatus, index: number) => {
-                                        return (
-                                            <div key={index}>
-                                                <div className="img-ico-list"><img src={`${this.baseUrl}/api/icon/${item.code}.svg`} alt=""/></div>
-                                                <label className="message-ico-list">{item.message}</label>
-                                            </div>
-                                        );
-                                    })}
-                                </Col>
-                            )
-                        })}        
-                    </Row>
+                    <div>
+                      {icoStatus.map((item: IIcoStatus, index: number) => {
+                          return (
+                              <div className="img-ico" key={index}>
+                                  <div className="img-ico-list" id={`ico-${index}`}>
+                                    <img src={`${this.baseUrl}/api/icon/${item.code}.svg`} alt=""/>
+                                  </div>
+                              </div>
+                          );
+                      })}
+                    </div>
                     <h3>Maps Driver</h3>
                     <Row>
                         <Col xs={12}>
-                        <div id="map"></div>
+                          <div id="map"></div>
                         </Col>
                         <Col xs={12}>
-                        <div id="information"></div>
+                          <div id="information"></div>
                         </Col>
                     </Row>
                 </CardBody>

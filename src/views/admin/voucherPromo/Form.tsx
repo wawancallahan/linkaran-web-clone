@@ -584,7 +584,7 @@ class Form extends Component<Props> {
                                                     selected={FormikProps.values.startDateTime}
                                                     onChange={date => FormikProps.setFieldValue('startDateTime', date)}
                                                     onBlur={() => FormikProps.setFieldTouched('startDateTime', true)}
-                                                    dateFormat="yyyy-MM-dd hh:mm"
+                                                    dateFormat="yyyy-MM-dd H:mm"
                                                     showTimeSelect
                                                     className="form-control form-control-alternative"
                                                     required
@@ -608,7 +608,7 @@ class Form extends Component<Props> {
                                                         selected={FormikProps.values.endDateTime}
                                                         onChange={date => FormikProps.setFieldValue('endDateTime', date)}
                                                         onBlur={() => FormikProps.setFieldTouched('endDateTime', true)}
-                                                        dateFormat="yyyy-MM-dd hh:mm"
+                                                        dateFormat="yyyy-MM-dd H:mm"
                                                         showTimeSelect
                                                         className="form-control form-control-alternative"
                                                         required
