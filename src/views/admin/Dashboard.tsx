@@ -12,9 +12,10 @@ import {
   Table,
   Container,
   Row,
-  Col,
-  Tooltip 
+  Col
 } from "reactstrap";
+
+import Tooltip from '../../components/Tooltip/Tooltip'
 
 import Header from "../../components/Headers/Header";
 import withTitle from "../../hoc/WithTitle";
@@ -407,13 +408,11 @@ class Index extends React.Component<Props, State> {
                     <h3>Informasi Icon</h3>
                     <div>
                       {icoStatus.map((item: IIcoStatus, index: number) => {
-                          return (
-                              <div className="img-ico" key={index}>
-                                  <div className="img-ico-list" id={`ico-${index}`}>
-                                    <img src={`${this.baseUrl}/api/icon/${item.code}.svg`} alt=""/>
-                                  </div>
-                              </div>
-                          );
+                          return <Tooltip baseUrl={this.baseUrl} 
+                                          code={item.code} 
+                                          message={item.message} 
+                                          index={index} 
+                                          key={index} />
                       })}
                     </div>
                     <h3>Maps Driver</h3>
