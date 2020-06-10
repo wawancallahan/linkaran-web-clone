@@ -43,6 +43,7 @@ import DetailVoucher from './DetailVoucher'
 import DetailPengunaanVoucher from './DetailPengunaanVoucher'
 import DetailJumlahPenggunaanVoucher from './DetailJumlahPenggunaanVoucher'
 import DetailJumlahPenggunaanTicket from './DetailJumlahPenggunaanTicket'
+import DetailRestaurant from './DetailRestaurant';
 
 type DetailProps = RouteComponentProps<{
     id: string
@@ -148,8 +149,10 @@ class Detail extends Component<Props, State> {
                                             <DetailJumlahPenggunaanTicket voucher={this.state.data}/>                              
                                         </Col>
                                     </Row>
-                                </div>
+                                </div>    
+                            
                                 <div>
+                                    <DetailRestaurant data={this.state.data}/>
                                     <DetailPengunaanVoucher data={this.state.data} />
                                 </div>
                             </>
