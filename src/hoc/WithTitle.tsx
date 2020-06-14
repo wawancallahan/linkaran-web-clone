@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Title from './Title';
 
-const withTitle = <Props extends {}>(WrappedComponent: React.ComponentType<Props>, title: String) => {
+const WithTitle = <Props extends {}>(WrappedComponent: React.ComponentType<Props>, title: String) => {
     return class extends Component {
         render() {
             return (
@@ -14,4 +14,4 @@ const withTitle = <Props extends {}>(WrappedComponent: React.ComponentType<Props
     }
 }
 
-export default withTitle;
+export default WithTitle;

@@ -1,6 +1,6 @@
-import VoucherTypeList from './List';
-import VoucherTypeCreate from './Create';
-import VoucherTypeEdit from './Edit';
+import VoucherTypeList from './list/Index';
+import VoucherTypeCreate from './create/Index';
+import VoucherTypeEdit from './edit/Index';
 
 export default [
     {
