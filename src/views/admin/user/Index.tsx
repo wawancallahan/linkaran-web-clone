@@ -1,6 +1,6 @@
-import UserList from './List';
-import UserCreate from './Create';
-import UserEdit from './Edit';
+import UserList from './list/Index';
+import UserCreate from './create/Index';
+import UserEdit from './edit/Index';
 
 export default [
     {

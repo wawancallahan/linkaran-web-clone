@@ -9,7 +9,7 @@ import Table from './components/Table'
 import queryString from 'query-string';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { fetchVoucherTypeAction, setAlertVoucherTypeHideAction, clearFilterAction } from '../../../../actions/admin/voucherType';
+import { fetchFoodCategoryAction, setAlertFoodCategoryHideAction, clearFilterAction } from '../../../../actions/admin/foodCategory';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
 
@@ -24,7 +24,7 @@ const Index: React.FC<Props> = (props) => {
     const fetch = async (page: number) => {
         setLoader(true)
 
-        await props.fetchVoucherTypeAction(page);
+        await props.fetchFoodCategoryAction(page);
 
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.set('page', page.toString());
@@ -42,8 +42,8 @@ const Index: React.FC<Props> = (props) => {
         fetch(page)
 
         return () => {
-            props.setAlertVoucherTypeHideAction();
-            props.clearFilterVoucherTypeAction();
+            props.setAlertFoodCategoryHideAction();
+            props.clearFilterFoodCategoryAction();
         }
     }, [])
 
@@ -59,7 +59,7 @@ const Index: React.FC<Props> = (props) => {
                                 <Flash />
                                 <Row className="align-items-center mb-3">
                                     <div className="col">
-                                        <h3 className="mb-0">Daftar Tipe Voucher</h3>
+                                        <h3 className="mb-0">Daftar Kategori Makanan</h3>
                                     </div>
                                     <div className="col text-right">
                                     <Link to="/admin/voucher-type/create">
@@ -67,7 +67,7 @@ const Index: React.FC<Props> = (props) => {
                                             color="primary"
                                             size="sm"
                                         >
-                                            Tambah Tipe Voucher
+                                            Tambah Kategori Makanan
                                         </Button>
                                     </Link>
                                     </div>
@@ -89,19 +89,19 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    fetchVoucherTypeAction: (page: number) => Promise<Boolean>,
-    setAlertVoucherTypeHideAction: () => void,
-    clearFilterVoucherTypeAction: () => void
+    fetchFoodCategoryAction: (page: number) => Promise<Boolean>,
+    setAlertFoodCategoryHideAction: () => void,
+    clearFilterFoodCategoryAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
-        fetchVoucherTypeAction: (page: number) => dispatch(fetchVoucherTypeAction(page)),
-        setAlertVoucherTypeHideAction: () => dispatch(setAlertVoucherTypeHideAction()),
-        clearFilterVoucherTypeAction: () => dispatch(clearFilterAction())
+        fetchFoodCategoryAction: (page: number) => dispatch(fetchFoodCategoryAction(page)),
+        setAlertFoodCategoryHideAction: () => dispatch(setAlertFoodCategoryHideAction()),
+        clearFilterFoodCategoryAction: () => dispatch(clearFilterAction())
     }
 }
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))
-, "Daftar Tipe Voucher")
+, "Daftar Kategori Makanan")

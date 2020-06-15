@@ -9,7 +9,7 @@ import Table from './components/Table'
 import queryString from 'query-string';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { fetchUserAction } from '../../../../actions/admin/user';
+import { fetchUserAction, setAlertUserHideAction, clearFilterAction } from '../../../../actions/admin/user';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
 
@@ -40,6 +40,11 @@ const Index: React.FC<Props> = (props) => {
         const page = + (queryStringValue.page || 1);
 
         fetch(page)
+
+        return () => {
+            props.setAlertUserHideAction();
+            props.clearFilterUserAction();
+        }
     }, [])
 
     return (
@@ -84,12 +89,16 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    fetchUserAction: (page: number) => Promise<Boolean>
+    fetchUserAction: (page: number) => Promise<Boolean>,
+    setAlertUserHideAction: () => void,
+    clearFilterUserAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
-        fetchUserAction: (page: number) => dispatch(fetchUserAction(page))
+        fetchUserAction: (page: number) => dispatch(fetchUserAction(page)),
+        setAlertUserHideAction: () => dispatch(setAlertUserHideAction()),
+        clearFilterUserAction: () => dispatch(clearFilterAction())
     }
 }
 

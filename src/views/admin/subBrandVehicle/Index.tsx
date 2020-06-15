@@ -1,6 +1,6 @@
-import SubBrandVehicleList from './List';
-import SubBrandVehicleCreate from './Create';
-import SubBrandVehicleEdit from './Edit';
+import SubBrandVehicleList from './list/Index';
+import SubBrandVehicleCreate from './create/Index';
+import SubBrandVehicleEdit from './edit/Index';
 
 export default [
     {

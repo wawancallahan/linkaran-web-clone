@@ -1,6 +1,6 @@
-import BrandVehicleList from './List';
-import BrandVehicleCreate from './Create';
-import BrandVehicleEdit from './Edit';
+import BrandVehicleList from './list/Index';
+import BrandVehicleCreate from './create/Index';
+import BrandVehicleEdit from './edit/Index';
 
 export default [
     {

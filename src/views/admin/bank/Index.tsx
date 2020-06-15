@@ -1,6 +1,6 @@
-import BankList from './List';
-import BankCreate from './Create';
-import BankEdit from './Edit';
+import BankList from './list/Index';
+import BankCreate from './create/Index';
+import BankEdit from './edit/Index';
 
 export default [
     {
