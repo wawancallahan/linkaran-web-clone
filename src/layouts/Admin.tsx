@@ -1,5 +1,5 @@
-import React, { createRef, Component } from "react";
-import { Route, Switch, RouteComponentProps } from "react-router-dom";
+import * as React from "react";
+import { Route, Switch, RouteComponentProps, withRouter } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
@@ -77,6 +77,7 @@ const routeList: (SidebarRoute | null)[] = [
       name: "Transaksi",
       icon: "ni ni-collection text-primary",
       roles: ["super admin", "admin"],
+      activeRouteName: '/admin/transaction',
       child: [
           {
               path: "/admin/transaction/application",
@@ -97,6 +98,7 @@ const routeList: (SidebarRoute | null)[] = [
       name: "Akun",
       icon: "ni ni-circle-08 text-info",
       roles: ["super admin", "admin"],
+      activeRouteName: '/admin/account',
       child: [
           {
               path: "/admin/account/link-pay",
@@ -147,6 +149,7 @@ const routeList: (SidebarRoute | null)[] = [
       name: "Wilayah",
       icon: "ni ni-compass-04 text-success",
       roles: ["super admin"],
+      activeRouteName: '/admin/region',
       child: [
           {
               path: "/admin/region/country",
@@ -218,18 +221,16 @@ const routeList: (SidebarRoute | null)[] = [
   },
 ];
 
-type AdminProps = RouteComponentProps
-type Props = AdminProps
+type OwnProps = RouteComponentProps
+type Props = OwnProps
 
-class Admin extends Component<Props> {
+const Admin: React.FC<Props> = (props) => {
 
-  mainContent = createRef<HTMLDivElement>();
-
-  componentDidMount() {
+  React.useEffect(() => {
     document.body.classList.remove("bg-default");
-  }
+  }, [])
 
-  getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
+  const getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
     const roles = rolesToArray();
 
     return routes.map((item: SidebarRoute | null) => {
@@ -240,7 +241,7 @@ class Admin extends Component<Props> {
 
       if (constainRole) {
         if (item.child) {
-          const newItemChild = this.getRoutesForSidebar(item.child);
+          const newItemChild = getRoutesForSidebar(item.child);
 
           item.child = newItemChild
         }
@@ -256,7 +257,7 @@ class Admin extends Component<Props> {
     });
   }
 
-  getRoleRoutes = (routes: RouteInterface[]) => {
+  const getRoleRoutes = (routes: RouteInterface[]) => {
     const roles = rolesToArray();
     return routes.map((prop: RouteInterface, key: number) => {
         const rolesRoutes: string[] = prop.roles;
@@ -277,7 +278,7 @@ class Admin extends Component<Props> {
     });
   }
 
-  getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
+  const getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
     let brandText = 'Brand';
 
     for (const route of routes) {
@@ -292,33 +293,31 @@ class Admin extends Component<Props> {
     return brandText;
   };
 
-  render() {
-    return (
-      <>
-        <Sidebar
-          {...this.props}
-          routes={this.getRoutesForSidebar(routeList)}
-          logo={{
-            innerLink: "/admin/index",
-            imgSrc: logoLinkaran,
-            imgAlt: "..."
-          }}
+  return (
+    <React.Fragment>
+      <Sidebar
+        {...props}
+        routes={getRoutesForSidebar(routeList)}
+        logo={{
+          innerLink: "/admin/index",
+          imgSrc: logoLinkaran,
+          imgAlt: "..."
+        }}
+      />
+      <div className="main-content">
+        <AdminNavbar
+          {...props}
+          brandText={getBrandText(routeList, props.location.pathname)}
         />
-        <div className="main-content" ref={this.mainContent}>
-          <AdminNavbar
-            {...this.props}
-            brandText={this.getBrandText(routeList, this.props.location.pathname)}
-          />
-          <Switch>
-            {this.getRoleRoutes(roleRoutes)}
-          </Switch>
-          <Container fluid>
-            <AdminFooter />
-          </Container>
-        </div>
-      </>
-    );
-  }
+        <Switch>
+          {getRoleRoutes(roleRoutes)}
+        </Switch>
+        <Container fluid>
+          <AdminFooter />
+        </Container>
+      </div>
+    </React.Fragment>
+  )
 }
 
-export default Admin;
+export default withRouter(Admin);

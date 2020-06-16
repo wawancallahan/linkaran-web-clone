@@ -4,10 +4,10 @@ import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 import Flash from './components/Flash'
 import Form from './components/Form'
-import { FormField, FoodCategoryShow } from '../../../../types/admin/foodCategory';
+import { FormField, SubBrandVehicleShow } from '../../../../types/admin/subBrandVehicle';
 import {
-    findFoodCategoryAction
-} from '../../../../actions/admin/foodCategory';
+    findSubBrandVehicleAction
+} from '../../../../actions/admin/subBrandVehicle';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ApiResponse } from '../../../../types/api';
@@ -27,27 +27,37 @@ const Index: React.FC<Props> = (props) => {
     const [loaded, setLoaded] = React.useState(false)
     const [loadMessage, setLoadMessage] = React.useState('')
     const [formField, setFormField] = React.useState<FormField>({
-        name: ''
+        name: '',
+        brandVehicle: {
+            label: '',
+            value: 0
+        }
     })
 
     React.useEffect(() => {
         const id = Number.parseInt(props.match.params.id)
 
         const find = async () => {
-            await props.findFoodCategoryAction(id)
-                .then((response: ApiResponse<FoodCategoryShow>) => {
+            await props.findSubBrandVehicleAction(id)
+                .then((response: ApiResponse<SubBrandVehicleShow>) => {
                     const form: FormField = {
                         ...formField
                     }
 
-                    const data: FoodCategoryShow = response.response!.result;
+                    const data: SubBrandVehicleShow = response.response!.result;
 
                     form.name = data.name;
+                    if (data.brandVehicle) {
+                        form.brandVehicle = {
+                            value: data.brandVehicle.id ? data.brandVehicle.id : 0,
+                            label: data.brandVehicle.name ? data.brandVehicle.name : ''
+                        }
+                    }
 
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<FoodCategoryShow>) => {
+                .catch((response: ApiResponse<SubBrandVehicleShow>) => {
                     setLoadMessage(response.error!.metaData.message)
                 })
         }
@@ -88,12 +98,12 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    findFoodCategoryAction: (id: number) => Promise<ApiResponse<FoodCategoryShow>>
+    findSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicleShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
     return {
-        findFoodCategoryAction: (id: number) => dispatch(findFoodCategoryAction(id))
+        findSubBrandVehicleAction: (id: number) => dispatch(findSubBrandVehicleAction(id))
     }
 }
 

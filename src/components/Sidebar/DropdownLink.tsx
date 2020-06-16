@@ -1,36 +1,40 @@
 import * as React from 'react'
 import { NavLink, Collapse } from 'reactstrap';
 import SingleLink from './SingleLink';
-import { SidebarRoute, SidebarDropdown } from './Sidebar';
+import { SidebarRoute } from './Sidebar';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     key: string,
     index: number,
     item: SidebarRoute,
-    SidebarDropdown: SidebarDropdown[],
     closeCollapse: () => void,
-    toggleCollapseSidebar: (index: number, key: string) => void,
 }
 
 type Props = OwnProps
 
 const DropdownLink: React.FC<Props> = (props) => {
-    const collapseSidebarDropdown: SidebarDropdown[] = {
-        ...props.SidebarDropdown
-    };
 
-    let isOpen = false;
+    const activeRoute = (): boolean => {
+        if (props.item.activeRouteName) {
+            return props.location.pathname.indexOf(props.item.activeRouteName) > -1;
+        }
+        
+        return false;
+    }
 
-    if (collapseSidebarDropdown[props.index]) {
-        isOpen = collapseSidebarDropdown[props.index].collapseOpen;
+    const [collapseVisible, setCollapseVisible] = React.useState(activeRoute())
+
+    const toggleCollapseSidebar = () => {
+        setCollapseVisible( ! collapseVisible)
     }
 
     return (
         <>
             <NavLink
-                onClick={() => props.toggleCollapseSidebar(props.index, `nav_dropdown_${props.index}`)}
+                onClick={() => toggleCollapseSidebar()}
                 id={`nav_dropdown_${props.index}`}
-                className={`SidebarDropdown ${isOpen ? 'ActiveDropdown' : ''}`}
+                className={`SidebarDropdown ${collapseVisible ? 'ActiveDropdown' : ''}`}
             >
                 <i className={props.item.icon} />
                 {props.item.name}
@@ -38,7 +42,7 @@ const DropdownLink: React.FC<Props> = (props) => {
                     <i className="fa fa-angle-right"></i>
                 </span>
             </NavLink>
-            <Collapse isOpen={isOpen}>
+            <Collapse isOpen={collapseVisible}>
                 {props.item.child ? props.item.child.map((item: any, index: number) => {
                     return <SingleLink key={`nav_dropdown_${props.index}_${index}`}
                                     index={index}
@@ -53,4 +57,4 @@ const DropdownLink: React.FC<Props> = (props) => {
     );
 }
 
-export default DropdownLink
+export default withRouter(DropdownLink)

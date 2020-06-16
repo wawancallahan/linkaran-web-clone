@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import Helmet from 'react-helmet';
 
 type TitleProps = {
     title?: String
 }
 
-const Title = (props: TitleProps) => {
+const Title: React.FC<TitleProps> = (props) => {
     const defaultTitle = 'App';
 
     return (

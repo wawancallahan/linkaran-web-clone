@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import * as React from 'react'
 import AdminRoutes from "./views/admin/Index";
 import AdminUserRoutes from './views/admin/user/Index';
 import AdminFoodRoutes from './views/admin/food/Index';

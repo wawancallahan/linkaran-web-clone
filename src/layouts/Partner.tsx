@@ -1,5 +1,5 @@
-import React, { createRef, Component } from "react";
-import { Route, Switch, RouteComponentProps } from "react-router-dom";
+import * as React from "react";
+import { Route, Switch, RouteComponentProps, withRouter } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
@@ -20,18 +20,16 @@ const routeList: (SidebarRoute | null)[] = [
 },
 ];
 
-type PartnerProps = RouteComponentProps
-type Props = PartnerProps
+type OwnProps = RouteComponentProps
+type Props = OwnProps
 
-class Partner extends Component<Props> {
+const Partner: React.FC<Props> = (props) => {
 
-  mainContent = createRef<HTMLDivElement>();
-
-  componentDidMount() {
+  React.useEffect(() => {
     document.body.classList.remove("bg-default");
-  }
+  }, [])
 
-  getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
+  const getRoutesForSidebar = (routes: (SidebarRoute | null)[]) => {
     const roles = rolesToArray();
 
     return routes.map((item: SidebarRoute | null) => {
@@ -42,7 +40,7 @@ class Partner extends Component<Props> {
 
       if (constainRole) {
         if (item.child) {
-          const newItemChild = this.getRoutesForSidebar(item.child);
+          const newItemChild = getRoutesForSidebar(item.child);
 
           item.child = newItemChild
         }
@@ -58,13 +56,13 @@ class Partner extends Component<Props> {
     });
   }
 
-  getRoleRoutes = (routes: RouteInterface[]) => {
+  const getRoleRoutes = (routes: RouteInterface[]) => {
     const roles = rolesToArray();
     return routes.map((prop: RouteInterface, key: number) => {
         const rolesRoutes: string[] = prop.roles;
         const constainRole = rolesRoutes.some((value: string) => roles.includes(value))
 
-        if (prop.layout === "partner" && constainRole) {
+        if (prop.layout === "admin" && constainRole) {
             return (
                 <Route
                     exact={prop.exact}
@@ -79,7 +77,7 @@ class Partner extends Component<Props> {
     });
   }
 
-  getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
+  const getBrandText = (routes: (SidebarRoute | null)[], path: string) => {
     let brandText = 'Brand';
 
     for (const route of routes) {
@@ -94,33 +92,31 @@ class Partner extends Component<Props> {
     return brandText;
   };
 
-  render() {
-    return (
-      <>
-        <Sidebar
-          {...this.props}
-          routes={this.getRoutesForSidebar(routeList)}
-          logo={{
-            innerLink: "/admin/index",
-            imgSrc: logoLinkaran,
-            imgAlt: "..."
-          }}
+  return (
+    <React.Fragment>
+      <Sidebar
+        {...props}
+        routes={getRoutesForSidebar(routeList)}
+        logo={{
+          innerLink: "/admin/index",
+          imgSrc: logoLinkaran,
+          imgAlt: "..."
+        }}
+      />
+      <div className="main-content">
+        <PartnerNavbar
+          {...props}
+          brandText={getBrandText(routeList, props.location.pathname)}
         />
-        <div className="main-content" ref={this.mainContent}>
-          <PartnerNavbar
-            {...this.props}
-            brandText={this.getBrandText(routeList, this.props.location.pathname)}
-          />
-          <Switch>
-            {this.getRoleRoutes(roleRoutes)}
-          </Switch>
-          <Container fluid>
-            <PartnerFooter />
-          </Container>
-        </div>
-      </>
-    );
-  }
+        <Switch>
+          {getRoleRoutes(roleRoutes)}
+        </Switch>
+        <Container fluid>
+          <PartnerFooter />
+        </Container>
+      </div>
+    </React.Fragment>
+  )
 }
 
-export default Partner;
+export default withRouter(Partner);
