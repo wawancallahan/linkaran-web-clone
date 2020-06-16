@@ -34,7 +34,7 @@ class Index extends React.Component<Props, State> {
     if (window.location.host == "admin.linkaran.co.id") {
       return "https://app.linkaran.co.id";
     }
-    return "https://linkaran.demo.thortech.asia";
+    return "https://linkaran-api.thortech.asia";
   }
 
   state = {
