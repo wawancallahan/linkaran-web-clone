@@ -12,8 +12,10 @@ import {
   Table,
   Container,
   Row,
-  Col,
+  Col
 } from "reactstrap";
+
+import Tooltip from '../../components/Tooltip/Tooltip'
 
 import Header from "../../components/Headers/Header";
 import withTitle from "../../hoc/WithTitle";
@@ -21,7 +23,13 @@ import withTitle from "../../hoc/WithTitle";
 import io from "socket.io-client";
 import { OptionObjectString } from "../../helpers/utils";
 import "./Dashboard.css";
-import { join } from "path";
+import _ from 'lodash'
+import * as renderjson from 'renderjson'
+
+type IIcoStatus = {
+    code: string,
+    message: string
+}
 
 type State = {
   mapIsReady: boolean;
@@ -364,7 +372,30 @@ class Index extends React.Component<Props, State> {
     }
   }
 
+  toggleTooltip = (index: number) => {
+    
+  }
+
   render() {
+
+    const icoStatus: IIcoStatus[] = [
+        { code: "car/large/iddle", message: "Car Large Idle" },
+        { code: "car/large/drop-off", message: "Car Large Drop Off" },
+        { code: "car/large/on-the-way", message: "Car Large On The Way" },
+        { code: "car/large/waiting", message: "Car Large Waiting" },
+        { code: "car/large/delivery-item", message: "Car Large Delivery Item" },
+        { code: "car/reguler/iddle", message: "Car Idle" },
+        { code: "car/reguler/drop-off", message: "Car Drop Off" },
+        { code: "car/reguler/on-the-way", message: "Car On The Way" },
+        { code: "car/reguler/waiting", message: "Car Waiting" },
+        { code: "car/reguler/delivery-item", message: "Car Delivery Item" },
+        { code: "motocycle/iddle", message: "Motorcycle Idle" },
+        { code: "motocycle/drop-off", message: "Motorcycle Drop Off" },
+        { code: "motocycle/on-the-way", message: "Motorcycle On The Way" },
+        { code: "motocycle/waiting", message: "Motorcycle Waiting" },
+        { code: "motocycle/delivery-item", message: "Motorcycle Delivery Item" },
+    ];
+
     return (
       <>
         <Header />
@@ -374,14 +405,25 @@ class Index extends React.Component<Props, State> {
             <Col>
               <Card>
                 <CardBody>
-                  <Row>
-                    <Col xs={12}>
-                      <div id="map"></div>
-                    </Col>
-                    <Col xs={12}>
-                      <div id="information"></div>
-                    </Col>
-                  </Row>
+                    <h3>Informasi Icon</h3>
+                    <div>
+                      {icoStatus.map((item: IIcoStatus, index: number) => {
+                          return <Tooltip baseUrl={this.baseUrl} 
+                                          code={item.code} 
+                                          message={item.message} 
+                                          index={index} 
+                                          key={index} />
+                      })}
+                    </div>
+                    <h3>Maps Driver</h3>
+                    <Row>
+                        <Col xs={12}>
+                          <div id="map"></div>
+                        </Col>
+                        <Col xs={12}>
+                          <div id="information"></div>
+                        </Col>
+                    </Row>
                 </CardBody>
               </Card>
             </Col>

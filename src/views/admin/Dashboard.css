@@ -7,3 +7,10 @@
 #information {
     padding: 10px 20px;
 }
+
+.img-ico {
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}

@@ -58,7 +58,9 @@ class Create extends Component<Props, State> {
             startDateTime: null,
             endDateTime: null,
             image: null,
-            image_preview: ''
+            image_preview: '',
+            isAutoSet: '0',
+            restaurants: []
         },
         alert_visible: false,
         alert_message: ''

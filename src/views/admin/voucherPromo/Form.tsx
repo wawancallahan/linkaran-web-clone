@@ -1,14 +1,16 @@
 import React, { FormEvent, Component } from 'react';
 
 import * as Yup from 'yup';
-import { Formik, getIn, FormikProps } from 'formik';
+import { Formik, getIn, FormikProps, FieldArray } from 'formik';
 import {
     Button,
     Form as FormReactStrap,
     FormGroup,
     Input,
     Row,
-    Col
+    Col,
+    InputGroup,
+    InputGroupAddon
 } from 'reactstrap';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../types';
@@ -30,6 +32,9 @@ import { getOnlyDateFromDate, getTimeFromDate } from '../../../helpers/utils';
 import swal from 'sweetalert'
 import BlockUi from '../../../components/BlockUi/BlockUi'
 import { toast, TypeOptions } from 'react-toastify'
+import { SelectType } from '../../../types/select';
+import { RestaurantList } from '../../../types/admin/restaurant';
+import { fetchListRestaurantAction } from '../../../actions/admin/restaurant';
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -112,7 +117,9 @@ const createSchema = Yup.object().shape({
     voucherType: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan tipe voucher wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan tipe voucher wajib diisi').required("Bidang pilihan tipe voucher wajib diisi")
-    })
+    }),
+    isLimited: Yup.string().required('Bidang pilihan target pengunaan wajib diisi'),
+    isAutoSet: Yup.string().required('Bidang pilihan auto set wajib diisi')
 });
 
 type FormProps = {
@@ -216,6 +223,46 @@ class Form extends Component<Props> {
             });
     }
 
+    loadRestaurantHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
+        page: number
+    }) => {
+        return this.props.fetchListRestaurantAction(search, options.page)
+            .then((response: ApiResponseList<RestaurantList>) => {
+
+                const data: ApiResponseSuccessList<RestaurantList> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: RestaurantList) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
+    }
+
     onFilesAdded = (files: any[], FormikProps: FormikProps<FormField>, setPreview: any, setValue: any) => {
         const file: {
             lastModified: number,
@@ -241,6 +288,10 @@ class Form extends Component<Props> {
                     let isLimited: boolean = false
 
                     if (values.isLimited == '1') isLimited = true
+
+                    let isAutoSet: boolean = false
+
+                    if (values.isAutoSet == '1') isAutoSet = true
 
                     let startDateTime = ''
                     let endDateTime = ''
@@ -269,7 +320,13 @@ class Form extends Component<Props> {
                         type: {
                             id: values.voucherType.value
                         },
-                        service: values.service
+                        service: values.service,
+                        isAutoSet: isAutoSet,
+                        restaurants: values.restaurants.filter((value: any) => {
+                            return typeof value === 'object' && value !== null;
+                        }).map((value: SelectType) => {
+                            return value.value
+                        })
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {
@@ -527,7 +584,7 @@ class Form extends Component<Props> {
                                                     selected={FormikProps.values.startDateTime}
                                                     onChange={date => FormikProps.setFieldValue('startDateTime', date)}
                                                     onBlur={() => FormikProps.setFieldTouched('startDateTime', true)}
-                                                    dateFormat="yyyy-MM-dd hh:mm"
+                                                    dateFormat="yyyy-MM-dd H:mm"
                                                     showTimeSelect
                                                     className="form-control form-control-alternative"
                                                     required
@@ -551,7 +608,7 @@ class Form extends Component<Props> {
                                                         selected={FormikProps.values.endDateTime}
                                                         onChange={date => FormikProps.setFieldValue('endDateTime', date)}
                                                         onBlur={() => FormikProps.setFieldTouched('endDateTime', true)}
-                                                        dateFormat="yyyy-MM-dd hh:mm"
+                                                        dateFormat="yyyy-MM-dd H:mm"
                                                         showTimeSelect
                                                         className="form-control form-control-alternative"
                                                         required
@@ -613,6 +670,52 @@ class Form extends Component<Props> {
                                     <FormGroup>
                                         <label
                                         className="form-control-label"
+                                        htmlFor="input-isAutoSet"
+                                        >
+                                            Auto Set
+                                        </label>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <fieldset>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    defaultChecked
+                                                    id="isAutoSet_no"
+                                                    name="isAutoSet"
+                                                    type="radio"
+                                                    value="0"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="isAutoSet_no">
+                                                    Tidak
+                                                </label>
+                                            </div>
+                                            <div className="custom-control custom-radio mb-3">
+                                                <input
+                                                    className="custom-control-input"
+                                                    id="isAutoSet_yes"
+                                                    name="isAutoSet"
+                                                    type="radio"
+                                                    value="1"
+                                                    onChange={FormikProps.handleChange}
+                                                    onBlur={FormikProps.handleBlur}
+                                                />
+                                                <label className="custom-control-label" htmlFor="isAutoSet_yes">
+                                                    Ya
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                        <div>
+                                            {FormikProps.errors.isAutoSet && FormikProps.touched.isAutoSet ? FormikProps.errors.isAutoSet : ''}
+                                        </div>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
                                         htmlFor="input-service"
                                         >
                                             Layanan
@@ -631,7 +734,64 @@ class Form extends Component<Props> {
                                         <div>
                                             { FormikProps.errors.service && FormikProps.touched.service ? FormikProps.errors.service : '' }
                                         </div>
-                                    </FormGroup>    
+                                    </FormGroup>   
+
+                                    <FormGroup>
+                                        <label
+                                        className="form-control-label"
+                                        htmlFor="input-restaurants"
+                                        >
+                                            Restoran
+                                        </label>
+                                        <FieldArray
+                                            name="restaurants" 
+                                            render={(arrayHelpers) => (
+                                                <>
+                                                    <FormGroup>
+                                                        <Button 
+                                                            type="button"
+                                                            color="primary"
+                                                            onClick={() => arrayHelpers.push('')}>
+                                                            Tambah Restoran
+                                                        </Button>
+                                                    </FormGroup>
+
+                                                    {FormikProps.values.restaurants && FormikProps.values.restaurants.length > 0 ? (
+                                                        FormikProps.values.restaurants.map((restaurant: SelectType, index: number) => (
+                                                            <FormGroup key={index}>
+                                                                <Row>
+                                                                    <Col xs={8}>
+                                                                        <ReactSelectAsyncPaginate 
+                                                                            value={restaurant}
+                                                                            name={`restaurants.${index}`}
+                                                                            loadOptions={this.loadRestaurantHandler}
+                                                                            onChange={(option) => {
+                                                                                FormikProps.setFieldValue(`restaurants.${index}`, option)
+                                                                            }}
+                                                                            onBlur={() => {
+                                                                                FormikProps.setFieldTouched(`restaurants.${index}`, true)
+                                                                            }}
+                                                                            additional={{
+                                                                                page: 1
+                                                                            }}
+                                                                            debounceTimeout={250}
+                                                                            />
+                                                                    </Col>
+                                                                    <Col xs={4}>
+                                                                        <Button type="button" color="danger" onClick={() => arrayHelpers.remove(index)}>-</Button>
+                                                                    </Col>
+                                                                </Row>
+                                                                    
+                                                                <div>
+                                                                    {FormikProps.errors.restaurants && FormikProps.errors.restaurants[index] && FormikProps.touched.restaurants ? FormikProps.errors.restaurants[index] : ''}
+                                                                </div>
+                                                            </FormGroup>
+                                                        ))
+                                                    ) : null}
+                                                </>
+                                            )}
+                                            />
+                                    </FormGroup> 
 
                                     <FormGroup>
                                         <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>
@@ -651,6 +811,7 @@ type LinkDispatchToProps = {
     setAlertVoucherPromoShowAction: (message: string, color: string) => void,
     fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<Service>>,
     fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherTypeList>>,
+    fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<RestaurantList>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
@@ -659,6 +820,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
         setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
         fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
         fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),
+        fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))
     }
 }
 

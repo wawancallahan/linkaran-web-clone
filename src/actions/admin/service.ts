@@ -140,7 +140,15 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
 
 export const fetchListServiceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServiceList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.get(process.env.REACT_APP_API_URL + `/web/service?page=${page}`)
+
+        let paramsObject: OptionObjectString = {
+            page: page.toString(),
+            name: search
+        }
+
+        return axiosService.get(process.env.REACT_APP_API_URL + `/web/service`, {
+                params: paramsObject
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccessList<ServiceList> = response.data;
 
