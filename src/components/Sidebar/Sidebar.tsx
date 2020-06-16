@@ -18,7 +18,7 @@ import {
 } from "reactstrap"
 import { name as authName} from '../../services/auth'
 import { profileImage } from "../../helpers/Assets"
-import DropdownLink from "./DropdownLunk"
+import DropdownLink from "./DropdownLink"
 import SingleLink from "./SingleLink"
 
 import './Sidebar.css';
