@@ -42,9 +42,3 @@ jobs:
             yarn 
             yarn build
             echo "deployed to $PUBLIC_URL"
-      - name: Telegram Notify
-        uses: appleboy/telegram-action@0.0.3
-        with:
-          to: "1001156670029"
-          token: "1286986055:AAE6SOZwcWSFmKyntlq2BFDn4-wkttKYkKE"
-          args: The ${{ github.event_name }} event triggered first step ${{ matrix.target }}.
