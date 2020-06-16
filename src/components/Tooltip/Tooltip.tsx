@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import * as React from 'react'
 import {
     Tooltip as TooltipReactstrap
 } from 'reactstrap'
@@ -10,10 +10,10 @@ type Props = {
     message: string
 }
 
-const Tooltip = (props: Props) => {
-    const [tooltipOpen, setTooltipOpen] = useState(false);
+const Tooltip: React.FC<Props> = (props) => {
+    const [tooltipOpen, setTooltipOpen] = React.useState(false);
   
-    const toggle = () => setTooltipOpen(!tooltipOpen);
+    const toggle = () => setTooltipOpen( ! tooltipOpen);
   
     return (
       <div className="img-ico">

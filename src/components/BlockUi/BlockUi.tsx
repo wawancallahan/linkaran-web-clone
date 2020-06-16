@@ -1,24 +1,23 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import ReactBlockUi, { BlockUiProps } from 'react-block-ui';
 import 'react-block-ui/style.css';
 
 type Props = BlockUiProps
 
-class BlockUi extends Component<Props> {
-    render() {
-        let tag: any = "div"
+const BlockUi: React.FC<Props> = (props) => {
 
-        if (this.props.tag) {
-            tag = this.props.tag
-        }
+    let tag: any = "div"
 
-        return (
-            <ReactBlockUi {...this.props} 
-                          tag={tag} >
-                {this.props.children}
-            </ReactBlockUi>
-        )
+    if (props.tag) {
+        tag = props.tag
     }
+
+    return (
+        <ReactBlockUi {...props} 
+                        tag={tag} >
+            {props.children}
+        </ReactBlockUi>
+    )
 }
 
 export default BlockUi

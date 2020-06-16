@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 
 import Loader from 'react-loader-spinner'
 
@@ -31,32 +31,27 @@ export type LoaderProps = {
     visible?: boolean | string;
 }
 
-class Spinner extends Component<LoaderProps> {
-
-    public static defaultProps = {
-        type: "Puff",
-        color: "#00BFFF",
-        timeout: 0,
-        height: 150,
-        width: 150,
-        visible: true,
-    };
-
-    render() {
-        return (
-            <div className={this.props.visible ? 'd-block' : 'd-none'}>
-                <div className="mt-3 mb-3 d-flex justify-content-center">
-                    <Loader type={this.props.type}
-                            color={this.props.color}
-                            height={this.props.height}
-                            width={this.props.width}
-                            visible={this.props.visible}
-                            timeout={this.props.timeout}
-                        />
-                </div>
+const Spinner: React.FC<LoaderProps> = (props, {
+    visible = true,
+    width = 150,
+    height = 150,
+    timeout = 0,
+    color = "#00BFFF",
+    type = "Puff"
+}) => {
+    return (
+        <div className={visible ? 'd-block' : 'd-none'}>
+            <div className="mt-3 mb-3 d-flex justify-content-center">
+                <Loader type={type}
+                        color={color}
+                        height={height}
+                        width={width}
+                        visible={visible}
+                        timeout={timeout}
+                    />
             </div>
-        );
-    }
+        </div>
+    )
 }
 
 export default Spinner

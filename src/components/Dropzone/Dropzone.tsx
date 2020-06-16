@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import * as React from "react";
 import "./Dropzone.css";
 import { Button } from "reactstrap";
 import '../../react-lazyload.d.ts'
@@ -10,6 +10,10 @@ type DropzoneProps = {
     multiple: boolean
 }
 
+type FilePreview = File & {
+    preview: string;
+}
+
 type Props = DropzoneProps & {
     previewUrl?: string,
     removeFile?: boolean
@@ -18,132 +22,110 @@ type Props = DropzoneProps & {
     }, index: number) => void
 };
 
-type State = {
-    hightlight: boolean,
-    files: any[],
-    firstRender: boolean
-}
+const Dropzone: React.FC<Props> = (props) => {
+    
+    const [highlight, setHighlight] = React.useState(false)
+    const [files, setFiles] = React.useState<FilePreview[]>([])
+    const [firstRender, setFirstRender] = React.useState(true)
+    const fileInputRef = React.createRef<HTMLInputElement>()
 
-class Dropzone extends Component<Props, State> {
+    const openFileDialog = () => {
+        if (props.disabled) return;
 
-    state = {
-        hightlight: false,
-        files: [],
-        firstRender: true
+        fileInputRef.current!.click();
     }
 
-    private fileInputRef = createRef<HTMLInputElement>();
-
-
-  openFileDialog = () => {
-    if (this.props.disabled) return;
-
-    this.fileInputRef.current!.click();
-  }
-
-  onFilesAdded = (e: React.FormEvent<HTMLInputElement>) => {
-    if (this.props.disabled) return;
-    
-    const files = e.currentTarget.files;
-    
-    if (this.props.onFilesAdded) {
-        const fileList = this.fileListToArray(files);
-
-        this.props.onFilesAdded(fileList);
-        this.setState({
-            files: fileList,
-            firstRender: false
-        });
-    }
-  }
-
-  onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
-    if (this.props.disabled) return;
-
-    this.setState({ hightlight: true });
-  }
-
-  onDragLeave() {
-    this.setState({ hightlight: false });
-  }
-
-  onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
-    if (this.props.disabled) return;
-
-    const files = e.dataTransfer.files;
-
-    if (this.props.onFilesAdded) {
-        const array = this.fileListToArray(files);
-        this.props.onFilesAdded(array);
-        this.setState({
-            files: array
-        });
+    const onFilesAdded = (e: React.FormEvent<HTMLInputElement>) => {
+        if (props.disabled) return;
         
-    }
+        const files = e.currentTarget.files;
+        
+        if (props.onFilesAdded) {
+            const fileList = fileListToArray(files);
 
-    this.setState({ hightlight: false });
-  }
-
-  removeSelectedFile(file: File) {
-
-    console.log('remove');
-
-    this.setState(prevState => {
-        const index = prevState.files.indexOf(file);
-        const files = prevState.files.slice(0);
-        files.splice(index, 1);
-        return {
-            files
-        }; 
-    });
-  }
-
-  removeAllFile = () => {
-    this.setState({
-        files: [],
-        firstRender: false
-    });
-  }
-
-  fileListToArray = (list: FileList | null) => {
-    const array = [];
-
-    if (list) {
-        for (var i = 0; i < list.length; i++) {
-            array.push(list.item(i));
+            props.onFilesAdded(fileList);
+            setFiles(fileList)
+            setFirstRender(false)
         }
     }
+    
+    const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
 
-    const newArray = array.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-    }));
+        if (props.disabled) return;
 
-    return newArray;
-  }
+        setHighlight(true)
+    }
+    
+    const onDragLeave = () => {
+        setHighlight(false)
+    }
+    
+    const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+    
+        if (props.disabled) return;
+    
+        const files = e.dataTransfer.files;
+    
+        if (props.onFilesAdded) {
+            const fileList = fileListToArray(files);
+            props.onFilesAdded(fileList);
+            
+            setFiles(fileList)
+        }
+        
+        setHighlight(false)
+    }
+    
+    const removeSelectedFile = (file: FilePreview) => {
+        const prevState = {
+            ...files
+        }
 
-  render() {
+        const index = prevState.indexOf(file);
+        const prevStateFiles = prevState.slice(0);
+        prevStateFiles.splice(index, 1);
+
+        setFiles(prevStateFiles)
+    }
+    
+    const removeAllFile = () => {
+        setFiles([])
+        setFirstRender(false)
+    }
+    
+    const fileListToArray = (list: FileList | null) => {
+        const fileList = [];
+    
+        if (list) {
+            for (var i = 0; i < list.length; i++) {
+                fileList.push(list.item(i));
+            }
+        }
+    
+        const newFileList = fileList.map(file => Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        }));
+    
+        return newFileList;
+    }
 
     let previewImage = null;
 
-    if (this.state.files.length > 0) {
+    if (files.length > 0) {
         previewImage = (
-            <>
+            <React.Fragment>
                 <h3>Previews</h3>
-                {this.state.files.map((file: File & {
-                    preview: string
-                }, index: number) => {
+                {files.map((file: FilePreview, index: number) => {
 
-                    const removeFileButton = this.props.removeFile && this.props.removeFile === true ? 
+                    const removeFileButton = props.removeFile && props.removeFile === true ? 
                     (
                         <Button type="button" color="danger" size="sm" onClick={() => {
-                            if (this.props.onClickRemove) {
-                                this.props.onClickRemove(file, index);
+                            if (props.onClickRemove) {
+                                props.onClickRemove(file, index);
                             }
-                            this.removeSelectedFile(file);
+                            removeSelectedFile(file);
                         }}>
                             <i className="fa fa-trash"></i> Hapus Upload Gambar
                         </Button>
@@ -164,44 +146,42 @@ class Dropzone extends Component<Props, State> {
                         </div>
                     );
                 })}
-
-                
-            </>
+            </React.Fragment>
         );
-    } else if (this.props.previewUrl && this.state.firstRender) {
+    } else if (props.previewUrl && firstRender) {
         previewImage = (
-            <>
+            <React.Fragment>
                 <h3>Previews</h3>
                 <div className="thumb">
                     <div className="thumbInner">
                         <LazyLoad debounce={250}>
                             <img
-                                src={this.props.previewUrl}
+                                src={props.previewUrl}
                                 className="imgPreview"
                             />
                         </LazyLoad>
                     </div>
                 </div>
-            </>
+            </React.Fragment>
         );
     }
 
     return (
-        <>
+        <React.Fragment>
             <div
-                className={`Dropzone ${this.state.hightlight ? "Highlight" : ""}`}
-                onDragOver={this.onDragOver}
-                onDragLeave={this.onDragLeave}
-                onDrop={this.onDrop}
-                onClick={this.openFileDialog}
-                style={{ cursor: this.props.disabled ? "default" : "pointer" }}
+                className={`Dropzone ${highlight ? "Highlight" : ""}`}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+                onClick={openFileDialog}
+                style={{ cursor: props.disabled ? "default" : "pointer" }}
             >
                 <input
-                ref={this.fileInputRef}
+                ref={fileInputRef}
                 className="FileInput"
                 type="file"
-                multiple={this.props.multiple}
-                onChange={this.onFilesAdded}
+                multiple={props.multiple}
+                onChange={onFilesAdded}
                 accept="image/*"
                 />
                 <img
@@ -215,9 +195,8 @@ class Dropzone extends Component<Props, State> {
             <div className="thumbsContainer">
                {previewImage}
             </div>
-      </>
-    );
-  }
+        </React.Fragment>
+    )
 }
 
 export default Dropzone;
