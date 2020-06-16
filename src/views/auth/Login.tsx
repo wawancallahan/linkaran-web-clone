@@ -1,6 +1,5 @@
-import React from "react";
+import * as React from "react";
 
-// reactstrap components
 import {
   Button,
   Card,
@@ -14,7 +13,6 @@ import {
   InputGroup,
   Row,
   Col,
-  Alert,
   Container
 } from "reactstrap";
 import { ThunkDispatch } from "redux-thunk";
@@ -37,32 +35,32 @@ import {
   import { authLogin, authValidate } from "../../actions/auth";
 import { Role } from "../../types/admin/role";
 
-import Select, { ValueType } from 'react-select'
+import Select from 'react-select'
 
 import AuthNavbar from "../../components/Navbars/AuthNavbar";
 import AuthFooter from "../../components/Footers/AuthFooter";
 import { accessToken } from '../../services/auth'
 import { SelectStringType } from "../../types/select";
+import Flash from './components/Flash'
+import WithTitle from '../../hoc/WithTitle'
 
-type LoginProps = RouteComponentProps & {
+type OwnProps = RouteComponentProps
 
-}
-
-type Props = LoginProps & LinkDispatchToProps & {
-    
-};
+type Props = OwnProps & LinkDispatchToProps
 
 type OptionsStringType<T> = ReadonlyArray<T>;
 type ValueStringType<T> = T | OptionsStringType<T> | null | undefined;
 
+type FormField = {
+    email: string;
+    token: string;
+    pin: string;
+    role: SelectStringType;
+}
+
 type State = {
     isEmailSubmited: boolean,
-    form: {
-        email: string;
-        token: string;
-        pin: string;
-        role: SelectStringType;
-    },
+    form: FormField
     alert_visible: boolean,
     alert_message: string,
     isSubmitting: boolean
@@ -74,196 +72,160 @@ const roleOptions: SelectStringType[] = [
     { value: 'financial manager', label: 'Financial Manager' }
 ]
 
-class Login extends React.Component<Props, State> {
+const Login: React.FC<Props> = (props) => {
 
-    state = {
-        isEmailSubmited: false,
-        form: {
-          email: "",
-          token: "",
-          pin: "",
-          role: {
-            value: 'admin', 
-            label: 'Admin'
-          },
+    const [isEmailSubmited, setIsEmailSubmited] = React.useState(false)
+    const [isSubmitting, setIsSubmitting] = React.useState(false)
+    const [formField, setFormField] = React.useState<FormField>({
+        email: "",
+        token: "",
+        pin: "",
+        role: {
+          value: 'admin', 
+          label: 'Admin'
         },
-        alert_visible: false,
-        alert_message: '',
-        isSubmitting: false
-    }
-
-    componentDidMount() {
+    })
+    const [alertMessage, setAlertMessage] = React.useState('')
+    const [alertVisible, setAlertVisible] = React.useState(false)
+    
+    React.useEffect(() => {
         if (accessToken()) {
-            this.props.history.push('/admin');
+            props.history.push('/admin');
         }
 
         document.body.classList.add("bg-default");
-    } 
+    }, [])
 
-    cancelEmailOnSubmit = () => {
-        this.setState({
-            isEmailSubmited: false,
-            form: {
-                email: "",
-                token: "",
-                pin: "",
-                role: {
-                    value: 'admin', 
-                    label: 'Admin'
-                }
-            }
-        });
-    }
-
-    handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
-        const value = e.currentTarget.value;
-        const id = e.currentTarget.id;
-    
-        this.setState({
-          ...this.state,
-          form: {
-                ...this.state.form,
-                [id]: value
-            }
-        });
-    }
-
-    handleOnSubmit = () => {
-
-        this.setState({
-            isSubmitting: true
-        }, () => {
-            if (this.state.isEmailSubmited) {
-                if (this.state.form.pin.trim().length > 0) {
-                    const item: ValidateLogin = {
-                        pin: this.state.form.pin,
-                        token: this.state.form.token
-                    };
-          
-                    this.props
-                        .authValidate(item)
-                        .then((response: ValidateLoginResponse) => {
-                            const data: ValidateLoginResult = response.response as ValidateLoginResult;
-    
-                            if (data.result) {
-    
-                                const result = data.result;
-    
-                                localStorage.setItem("accessToken", result.accessToken);
-                                localStorage.setItem("name", result.name);
-                                localStorage.setItem("phoneNumber", result.phoneNumber);
-                                localStorage.setItem("email", result.email);
-
-                                if (result.roles) {
-                                    const roles = JSON.stringify(Object.assign({}, result.roles.map((value: Role) => value.title)));
-
-                                    localStorage.setItem("roles", roles)
-                                }
-                            }
-    
-                            this.goDashboard("Admin");
-                        })
-                        .catch((response: ValidateLoginResponse) => {
-                            const data = response.response as ValidateLoginFailResult;
-    
-                            let message = "Gagal mendapatkan response"
-    
-                            if (data) {
-                                message = data.metaData.message
-                            }
-    
-                            this.setState({
-                                alert_message: message,
-                                alert_visible: true,
-                                isSubmitting: false
-                            });
-                        });
-                }
-            } else {
-                if (this.state.form.email.trim().length > 0) {
-                    const item: LoginInterface = {
-                        identity: this.state.form.email,
-                        type: "email",
-                        role: this.state.form.role.value
-                    };
-            
-                    this.props
-                        .authLogin(item)
-                        .then((response: LoginResponse) => {
-                            const data: LoginResult = response.response as LoginResult;
-                            
-                            if (data && data.result) {
-                                const result = data.result;
-                                
-                                this.setState({
-                                    isEmailSubmited: true,
-                                    form: {
-                                        ...this.state.form,
-                                        email: this.state.form.email,
-                                        token: result.token
-                                    },
-                                    alert_message: '',
-                                    alert_visible: false,
-                                    isSubmitting: false
-                                });
-                            } else {
-                                this.setState({
-                                    alert_message: '',
-                                    alert_visible: false,
-                                    isSubmitting: false
-                                });
-                            }
-                        })
-                        .catch((response: LoginResponse) => {
-                            const data: LoginFailResult = response.response as LoginFailResult;
-                            
-                            let message = "Gagal mendapatkan response"
-    
-                            if (data) {
-                                message = data.metaData.message
-                            }
-    
-                            this.setState({
-                                alert_message: message,
-                                alert_visible: true,
-                                isSubmitting: false
-                            });
-                        });
-                }
+    const cancelEmailOnSubmit = () => {
+        setIsEmailSubmited(false)
+        setFormField({
+            email: "",
+            token: "",
+            pin: "",
+            role: {
+                value: 'admin', 
+                label: 'Admin'
             }
         })
+    }
 
+    const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value;
+        const id = e.currentTarget.id;
+        
+        setFormField({
+            ...formField,
+            [id]: value
+        })
+    }
+
+    const handleOnSubmit = () => {
+        setIsSubmitting(true)
+
+        if (isEmailSubmited) {
+            if (formField.pin.trim().length > 0) {
+                const item: ValidateLogin = {
+                    pin: formField.pin,
+                    token: formField.token
+                };
+      
+                props.authValidate(item)
+                    .then((response: ValidateLoginResponse) => {
+                        const data: ValidateLoginResult = response.response as ValidateLoginResult;
+
+                        if (data.result) {
+
+                            const result = data.result;
+
+                            localStorage.setItem("accessToken", result.accessToken);
+                            localStorage.setItem("name", result.name);
+                            localStorage.setItem("phoneNumber", result.phoneNumber);
+                            localStorage.setItem("email", result.email);
+
+                            if (result.roles) {
+                                const roles = JSON.stringify(Object.assign({}, result.roles.map((value: Role) => value.title)));
+
+                                localStorage.setItem("roles", roles)
+                            }
+                        }
+
+                        goDashboard("Admin");
+                    })
+                    .catch((response: ValidateLoginResponse) => {
+                        const data = response.response as ValidateLoginFailResult;
+
+                        let message = "Gagal mendapatkan response"
+
+                        if (data) {
+                            message = data.metaData.message
+                        }
+
+                        setAlertMessage(message)
+                        setAlertVisible(true)
+                        setIsSubmitting(false)
+                    });
+            }
+        } else {
+            if (formField.email.trim().length > 0) {
+                const item: LoginInterface = {
+                    identity: formField.email,
+                    type: "email",
+                    role: formField.role.value
+                };
+        
+                props
+                    .authLogin(item)
+                    .then((response: LoginResponse) => {
+                        const data: LoginResult = response.response as LoginResult;
+                        
+                        if (data && data.result) {
+                            const result = data.result;
+
+                            setIsEmailSubmited(true)
+                            setFormField({
+                                ...formField,
+                                email: formField.email,
+                                token: result.token
+                            })
+                            setAlertMessage('')
+                            setAlertVisible(false)
+                            setIsSubmitting(false)
+                        } else {
+                            setAlertMessage('')
+                            setAlertVisible(false)
+                            setIsSubmitting(false)
+                        }
+                    })
+                    .catch((response: LoginResponse) => {
+                        const data: LoginFailResult = response.response as LoginFailResult;
+                        
+                        let message = "Gagal mendapatkan response"
+
+                        if (data) {
+                            message = data.metaData.message
+                        }
+
+                        setAlertMessage(message)
+                        setAlertVisible(true)
+                        setIsSubmitting(false)
+                    });
+            }
+        }
         
     }
 
-    goDashboard = (title: string | null) => {
+    const goDashboard = (title: string | null) => {
         switch (title) {
             case "Admin":
-                this.props.history.push("/admin/index");
+                props.history.push("/admin/index");
                 break;
             default:
-                this.props.history.push("/logout");
+                props.history.push("/logout");
         }
     };
 
-    closeErrorAlert = () => {
-        this.setState({
-            alert_visible: false,
-            alert_message: ''
-        })
-    }
-
-
-    render() {
-
-        const errorAlert = (
-            <Alert color="danger" isOpen={this.state.alert_visible} toggle={() => this.closeErrorAlert()} fade={false}>
-                <div>{this.state.alert_message}</div>
-            </Alert>
-        );
-
-        return (
-            <>
+    return (
+        <React.Fragment>
             <div className="main-content">
                 <AuthNavbar />
                 <div className="header bg-gradient-info py-7 py-lg-8">
@@ -293,19 +255,19 @@ class Login extends React.Component<Props, State> {
                                     </div>
                                 </CardHeader>
                                 <CardBody className="px-lg-5 py-lg-5">
-                                    {errorAlert}
+                                    <Flash alertMessage={alertMessage} alertVisible={alertVisible} setAlertVisible={setAlertVisible} />
                                     <Form
                                         role="form"
                                         onSubmit={e => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            this.handleOnSubmit();
+                                            handleOnSubmit();
                                         }}>
 
                                         <FormGroup className="mb-3">
                                             <Select options={roleOptions}
                                                 defaultValue={roleOptions[0]}
-                                                isDisabled={this.state.isEmailSubmited}
+                                                isDisabled={isEmailSubmited}
                                                 isClearable={false}
                                                 isRtl={false}
                                                 isSearchable={false}
@@ -324,13 +286,9 @@ class Login extends React.Component<Props, State> {
                                                         optionTypes = value as SelectStringType;
                                                     }
 
-                                                    this.setState(prevState => {
-                                                        return {
-                                                            form: {
-                                                                ...prevState.form,
-                                                                role: optionTypes
-                                                            }
-                                                        }
+                                                    setFormField({
+                                                        ...formField,
+                                                        role: optionTypes
                                                     })
                                                 }}
                                             />
@@ -345,15 +303,15 @@ class Login extends React.Component<Props, State> {
                                                 </InputGroupAddon>
                                                 <Input
                                                 placeholder="Email"
-                                                disabled={this.state.isEmailSubmited}
+                                                disabled={isEmailSubmited}
                                                 type="text"
-                                                onChange={this.handleOnChange}
+                                                onChange={handleOnChange}
                                                 id="email"
                                                 />
                                             </InputGroup>
                                         </FormGroup>
 
-                                        {this.state.isEmailSubmited ? (
+                                        {isEmailSubmited ? (
                                             <FormGroup>
                                                 <InputGroup className="input-group-alternative">
                                                 <InputGroupAddon addonType="prepend">
@@ -365,7 +323,7 @@ class Login extends React.Component<Props, State> {
                                                 <Input
                                                     placeholder="Pin"
                                                     type="text"
-                                                    onChange={this.handleOnChange}
+                                                    onChange={handleOnChange}
                                                     id="pin"
                                                 />
                                                 </InputGroup>
@@ -377,8 +335,8 @@ class Login extends React.Component<Props, State> {
                                         <div>
                                             <Row>
                                                 <Col>
-                                                    {this.state.isEmailSubmited ? (
-                                                        <a href="#" onClick={this.cancelEmailOnSubmit}>
+                                                    {isEmailSubmited ? (
+                                                        <a href="#" onClick={cancelEmailOnSubmit}>
                                                         Ganti Email
                                                         </a>
                                                     ) : (
@@ -390,8 +348,8 @@ class Login extends React.Component<Props, State> {
                                                         className=""
                                                         color="primary"
                                                         type="button"
-                                                        onClick={this.handleOnSubmit}
-                                                        disabled={this.state.isSubmitting}>
+                                                        onClick={handleOnSubmit}
+                                                        disabled={isSubmitting}>
                                                         Next
                                                     </Button>
                                                 </Col>
@@ -405,9 +363,8 @@ class Login extends React.Component<Props, State> {
                 </Container>
             </div>
             <AuthFooter />
-            </>
-        );
-    }
+        </React.Fragment>
+    )
 }
 
 type LinkDispatchToProps = {
@@ -415,11 +372,13 @@ type LinkDispatchToProps = {
     authValidate: (item: ValidateLogin) => Promise<ValidateLoginResponse>;
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: LoginProps): LinkDispatchToProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
         authLogin: (item: LoginInterface) => dispatch(authLogin(item)),
         authValidate: (item: ValidateLogin) => dispatch(authValidate(item))
     };
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default WithTitle(
+    withRouter(connect(null, mapDispatchToProps)(Login))
+, "Login")

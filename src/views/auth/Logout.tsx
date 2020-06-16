@@ -1,12 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 
-type Props = {
-
-}
-
-const Logout = (props: Props) => {
-
+const Logout: React.FC = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("name");
     localStorage.removeItem("phoneNumber");

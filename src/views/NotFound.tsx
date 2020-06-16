@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Container,
@@ -9,12 +9,11 @@ import {
 
 import Header from "../components/Headers/Header";
 
-class NotFound extends Component {
-    render() {
-        return (
-            <>
+const NotFound: React.FC = () => {
+    return (
+        <React.Fragment>
             <Header />
-            {/* Page content */}
+
             <Container className="mt--7" fluid>
                 <Row>
                     <div className="col">
@@ -26,9 +25,8 @@ class NotFound extends Component {
                     </div>
                 </Row>
             </Container>
-          </>
-        );
-    }
+        </React.Fragment>
+    )
 }
 
 export default NotFound;
