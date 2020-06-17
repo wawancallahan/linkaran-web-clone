@@ -30,4 +30,4 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-export default connect(mapStateToProps, {})(Paginate)
+export default connect(mapStateToProps)(Paginate)

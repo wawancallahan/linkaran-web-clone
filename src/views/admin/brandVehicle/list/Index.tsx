@@ -62,7 +62,7 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Model Kendaraan</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/voucher-type/create">
+                                    <Link to="/admin/brand-vehicle/create">
                                         <Button
                                             color="primary"
                                             size="sm"

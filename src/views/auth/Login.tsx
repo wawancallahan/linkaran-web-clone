@@ -58,14 +58,6 @@ type FormField = {
     role: SelectStringType;
 }
 
-type State = {
-    isEmailSubmited: boolean,
-    form: FormField
-    alert_visible: boolean,
-    alert_message: string,
-    isSubmitting: boolean
-}
-
 const roleOptions: SelectStringType[] = [
     { value: 'admin', label: 'Admin' },
     { value: 'super admin', label: 'Super Admin' },

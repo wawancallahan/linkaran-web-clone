@@ -1,6 +1,6 @@
-import FoodList from './List';
-import FoodCreate from './Create';
-import FoodEdit from './Edit';
+import FoodList from './list/Index';
+import FoodCreate from './create/Index';
+import FoodEdit from './edit/Index';
 
 export default [
     {

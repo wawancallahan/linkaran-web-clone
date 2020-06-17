@@ -1,6 +1,6 @@
-import PriceList from './List';
-import PriceCreate from './Create';
-import PriceEdit from './Edit';
+import PriceList from './list/Index';
+import PriceCreate from './create/Index';
+import PriceEdit from './edit/Index';
 
 export default [
     {

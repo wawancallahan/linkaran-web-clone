@@ -1,6 +1,6 @@
-import CountryList from './List';
-import CountryCreate from './Create';
-import CountryEdit from './Edit';
+import CountryList from './list/Index';
+import CountryCreate from './create/Index';
+import CountryEdit from './edit/Index';
 
 export default [
     {

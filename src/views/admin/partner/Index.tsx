@@ -1,6 +1,6 @@
-import PartnerList from './List';
-import PartnerCreate from './Create';
-import PartnerEdit from './Edit';
+import PartnerList from './list/Index';
+import PartnerCreate from './create/Index';
+import PartnerEdit from './edit/Index';
 
 export default [
     {

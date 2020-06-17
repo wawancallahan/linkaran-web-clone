@@ -62,7 +62,7 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Bank</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/voucher-type/create">
+                                    <Link to="/admin/bank/create">
                                         <Button
                                             color="primary"
                                             size="sm"

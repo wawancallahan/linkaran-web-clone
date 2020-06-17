@@ -44,19 +44,7 @@ class Create extends Component<Props, State> {
         form: {
             basePrice: '',
             perKilometer: '',
-            minKm: '',
-            district: {
-                value: 0,
-                label: ''
-            },
-            service: {
-                value: 0,
-                label: ''
-            },
-            vechicleType: {
-                value: 0,
-                label: ''
-            }
+            minKm: ''
         },
         alert_visible: false,
         alert_message: ''

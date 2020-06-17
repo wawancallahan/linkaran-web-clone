@@ -54,4 +54,4 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-export default connect(mapStateToProps, {})(Table)
+export default connect(mapStateToProps)(Table)
