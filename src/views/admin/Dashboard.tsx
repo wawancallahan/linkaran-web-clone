@@ -273,29 +273,31 @@ class Index extends React.Component<Props, State> {
 
                   const icon = this.getIconOrder(service, vehicleType, 1, 1, 1);
 
-                  destinationMarker = new google.maps.Marker({
-                    position: new google.maps.LatLng(lat, lng),
-                    map,
-                    icon,
-                  });
-
-                  destinationMarker.set("orderId", getOrder.id);
-
-                  destinationMarker.addListener("click", function () {
-                    if (map.getZoom() < 20) {
-                      map.panTo(destinationMarker.getPosition());
-                      map.setZoom(20);
-                    } else {
-                      map.fitBounds(boundDestinationMarker, 0);
-                    }
-                  });
-
-                  boundDestinationMarker.extend(
-                    destinationMarker.getPosition()
-                  );
-
-                  boundDestinationMarker.extend(marker.getPosition());
-                  map.fitBounds(boundDestinationMarker, 0);
+                  if ( ! isNaN(lng) && ! isNaN(lat) && lng !== null && lat !== null) {
+                    destinationMarker = new google.maps.Marker({
+                      position: new google.maps.LatLng(lat, lng),
+                      map,
+                      icon,
+                    });
+  
+                    destinationMarker.set("orderId", getOrder.id);
+  
+                    destinationMarker.addListener("click", function () {
+                      if (map.getZoom() < 20) {
+                        map.panTo(destinationMarker.getPosition());
+                        map.setZoom(20);
+                      } else {
+                        map.fitBounds(boundDestinationMarker, 0);
+                      }
+                    });
+  
+                    boundDestinationMarker.extend(
+                      destinationMarker.getPosition()
+                    );
+  
+                    boundDestinationMarker.extend(marker.getPosition());
+                    map.fitBounds(boundDestinationMarker, 0);
+                  }
                 } else {
                   if (map.getZoom() >= 20) {
                     map.setZoom(defaultZoom);
@@ -307,13 +309,16 @@ class Index extends React.Component<Props, State> {
                 }
               });
             }
-            const pos = new google.maps.LatLng(coordinates[1], coordinates[0]);
 
-            driverMarker.set(id, marker);
-            marker.setIcon(icon);
-            marker.setPosition(pos);
-            marker.set("order", order);
-            marker.set("driver", response.driver);
+            if ( ! isNaN(coordinates[1]) && ! isNaN(coordinates[0]) && coordinates[1] !== null && coordinates[0] !== null) {
+              const pos = new google.maps.LatLng(coordinates[1], coordinates[0]);
+
+              driverMarker.set(id, marker);
+              marker.setIcon(icon);
+              marker.setPosition(pos);
+              marker.set("order", order);
+              marker.set("driver", response.driver);
+            }
           } else if (
             response.event === "delete" &&
             driverMarker.has(response.driver.id)
@@ -339,29 +344,31 @@ class Index extends React.Component<Props, State> {
             response.data.maxDriverDistanceRadius
           );
 
-          const pos = new google.maps.LatLng(
-            dataViewDetailOrder.transaction.destination.lat,
-            dataViewDetailOrder.transaction.destination.lng
-          );
-
-          let marker;
-          if (response.event !== "remove") {
-            if (response.event == "initial" || response.event == "add") {
-              marker = new google.maps.Marker({
-                map: map,
-                position: pos,
-              });
-              broadcastMarker.set(response.data.id, marker);
+          if ( ! isNaN(dataViewDetailOrder.transaction.destination.lat) && ! isNaN(dataViewDetailOrder.transaction.destination.lng) && dataViewDetailOrder.transaction.destination.lat !== null && dataViewDetailOrder.transaction.destination.lng !== null) {
+            const pos = new google.maps.LatLng(
+              dataViewDetailOrder.transaction.destination.lat,
+              dataViewDetailOrder.transaction.destination.lng
+            );
+  
+            let marker;
+            if (response.event !== "remove") {
+              if (response.event == "initial" || response.event == "add") {
+                marker = new google.maps.Marker({
+                  map: map,
+                  position: pos,
+                });
+                broadcastMarker.set(response.data.id, marker);
+              } else {
+                marker = broadcastMarker.get(response.data.id);
+              }
+              marker.setIcon(icon);
             } else {
               marker = broadcastMarker.get(response.data.id);
+              if (marker) {
+                marker.setMap(null);
+              }
+              broadcastMarker.delete(response.data.id);
             }
-            marker.setIcon(icon);
-          } else {
-            marker = broadcastMarker.get(response.data.id);
-            if (marker) {
-              marker.setMap(null);
-            }
-            broadcastMarker.delete(response.data.id);
           }
           // const color = '#FF0000';
         });
