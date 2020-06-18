@@ -97,20 +97,15 @@ class Index extends React.Component<Props, State> {
 
   componentDidMount() {
     // Load the Google Maps API
-    const API = "AIzaSyDVVH8FAlEV9UWK0dKxWwkUSola2Ll24Hs";
-    this.script.src = `https://maps.googleapis.com/maps/api/js?key=${API}`;
-    this.script.async = true;
+    // const API = "AIzaSyDVVH8FAlEV9UWK0dKxWwkUSola2Ll24Hs";
+    // this.script.src = `https://maps.googleapis.com/maps/api/js?key=${API}`;
+    // this.script.async = true;
 
-    this.script.addEventListener("load", () => {
+    // this.script.addEventListener("load", () => {
       this.setState({ mapIsReady: true });
-    });
+    // });
 
-    document.body.appendChild(this.script);
-  }
-
-  componentWillUnmount() {
-    this.socket.disconnect();
-    this.script.remove();
+    // document.body.appendChild(this.script);
   }
 
   componentDidUpdate() {
