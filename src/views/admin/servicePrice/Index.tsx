@@ -1,6 +1,6 @@
-import ServicePriceList from './List';
-import ServicePriceCreate from './Create';
-import ServicePriceEdit from './Edit';
+import ServicePriceList from './list/Index';
+import ServicePriceCreate from './create/Index';
+import ServicePriceEdit from './edit/Index';
 
 export default [
     {

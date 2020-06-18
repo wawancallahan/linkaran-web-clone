@@ -4,10 +4,10 @@ import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 import Flash from './components/Flash'
 import Form from './components/Form'
-import { FormField, SubBrandVehicleShow } from '../../../../types/admin/subBrandVehicle';
+import { FormField, ServicePriceShow } from '../../../../types/admin/servicePrice';
 import {
-    findSubBrandVehicleAction
-} from '../../../../actions/admin/subBrandVehicle';
+    findServicePriceAction
+} from '../../../../actions/admin/servicePrice';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ApiResponse } from '../../../../types/api';
@@ -27,37 +27,83 @@ const Index: React.FC<Props> = (props) => {
     const [loaded, setLoaded] = React.useState(false)
     const [loadMessage, setLoadMessage] = React.useState('')
     const [formField, setFormField] = React.useState<FormField>({
-        name: '',
-        brandVehicle: {
-            label: '',
-            value: 0
-        }
+        price: {
+            value: 0,
+            label: ''
+        },
+        district: {
+            value: 0,
+            label: ''
+        },
+        service: {
+            value: 0,
+            label: ''
+        },
+        vehicleType: {
+            value: 0,
+            label: ''
+        },
+        driverPaymentDeductions: "",
+        servicePaymentDeductions: "",
+        maxDriverDistanceRadius: ""
     })
 
     React.useEffect(() => {
         const id = Number.parseInt(props.match.params.id)
 
         const find = async () => {
-            await props.findSubBrandVehicleAction(id)
-                .then((response: ApiResponse<SubBrandVehicleShow>) => {
+            await props.findServicePriceAction(id)
+                .then((response: ApiResponse<ServicePriceShow>) => {
                     const form: FormField = {
                         ...formField
                     }
 
-                    const data: SubBrandVehicleShow = response.response!.result;
+                    const data: ServicePriceShow = response.response!.result;
 
-                    form.name = data.name;
-                    if (data.brandVehicle) {
-                        form.brandVehicle = {
-                            value: data.brandVehicle.id ? data.brandVehicle.id : 0,
-                            label: data.brandVehicle.name ? data.brandVehicle.name : ''
+                    if (data.priceId && data.basePrice) {
+                        form.price = {
+                            value: data.priceId,
+                            label: data.basePrice.toString()
                         }
+                    }
+
+                    if (data.district) {
+                        form.district = {
+                            value: data.district.id ? data.district.id : 0,
+                            label: data.district.name ? data.district.name : ''
+                        }
+                    }
+
+                    if (data.service) {
+                        form.service = {
+                            value: data.service.id ? data.service.id : 0,
+                            label: data.service.name ? data.service.name : ''
+                        }
+                    }
+
+                    if (data.vehicleType) {
+                        form.vehicleType = {
+                            value: data.vehicleType.id ? data.vehicleType.id : 0,
+                            label: data.vehicleType.name ? data.vehicleType.name : ''
+                        }
+                    }
+
+                    if (data.driverPaymentDeductions) {
+                        form.driverPaymentDeductions = data.driverPaymentDeductions.toString()
+                    }
+
+                    if (data.servicePaymentDeductions) {
+                        form.servicePaymentDeductions = data.servicePaymentDeductions.toString()
+                    }
+
+                    if (data.maxDriverDistanceRadius) {
+                        form.maxDriverDistanceRadius = data.maxDriverDistanceRadius.toString()
                     }
 
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<SubBrandVehicleShow>) => {
+                .catch((response: ApiResponse<ServicePriceShow>) => {
                     setLoadMessage(response.error!.metaData.message)
                 })
         }
@@ -66,7 +112,7 @@ const Index: React.FC<Props> = (props) => {
     }, [])
 
     const redirectOnSuccess = () => {
-        props.history.push('/admin/sub-brand-vehicle');
+        props.history.push('/admin/service-price');
     }
 
     return (
@@ -77,7 +123,7 @@ const Index: React.FC<Props> = (props) => {
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col>
-                                <h3 className="mb-0">Edit Kategori Makanan</h3>
+                                <h3 className="mb-0">Edit Harga Layanan</h3>
                             </Col>
                         </Row>
                     </CardHeader>
@@ -98,15 +144,15 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    findSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicleShow>>
+    findServicePriceAction: (id: number) => Promise<ApiResponse<ServicePriceShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
     return {
-        findSubBrandVehicleAction: (id: number) => dispatch(findSubBrandVehicleAction(id))
+        findServicePriceAction: (id: number) => dispatch(findServicePriceAction(id))
     }
 }
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))
-, "Edit Kategori Makanan")
+, "Edit Harga Layanan")

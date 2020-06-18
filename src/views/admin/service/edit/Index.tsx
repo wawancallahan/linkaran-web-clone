@@ -4,10 +4,10 @@ import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 import Flash from './components/Flash'
 import Form from './components/Form'
-import { FormField, SubBrandVehicleShow } from '../../../../types/admin/subBrandVehicle';
+import { FormField, ServiceShow } from '../../../../types/admin/service';
 import {
-    findSubBrandVehicleAction
-} from '../../../../actions/admin/subBrandVehicle';
+    findServiceAction
+} from '../../../../actions/admin/service';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ApiResponse } from '../../../../types/api';
@@ -28,36 +28,34 @@ const Index: React.FC<Props> = (props) => {
     const [loadMessage, setLoadMessage] = React.useState('')
     const [formField, setFormField] = React.useState<FormField>({
         name: '',
-        brandVehicle: {
-            label: '',
-            value: 0
-        }
+        code: '',
+        canBeMultiple: '0',
+        passangerWithDriver: '0',
+        maxServiceDistanceInKm: 0
     })
 
     React.useEffect(() => {
         const id = Number.parseInt(props.match.params.id)
 
         const find = async () => {
-            await props.findSubBrandVehicleAction(id)
-                .then((response: ApiResponse<SubBrandVehicleShow>) => {
+            await props.findServiceAction(id)
+                .then((response: ApiResponse<ServiceShow>) => {
                     const form: FormField = {
                         ...formField
                     }
 
-                    const data: SubBrandVehicleShow = response.response!.result;
+                    const data: ServiceShow = response.response!.result;
 
-                    form.name = data.name;
-                    if (data.brandVehicle) {
-                        form.brandVehicle = {
-                            value: data.brandVehicle.id ? data.brandVehicle.id : 0,
-                            label: data.brandVehicle.name ? data.brandVehicle.name : ''
-                        }
-                    }
+                    form.name = data.name
+                    form.code = data.code
+                    form.maxServiceDistanceInKm = data.maxServiceDistanceInKm
+                    form.canBeMultiple = data.canBeMultiple ? '1' : '0'
+                    form.passangerWithDriver = data.passangerWithDriver ? '1' : '0'
 
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<SubBrandVehicleShow>) => {
+                .catch((response: ApiResponse<ServiceShow>) => {
                     setLoadMessage(response.error!.metaData.message)
                 })
         }
@@ -66,7 +64,7 @@ const Index: React.FC<Props> = (props) => {
     }, [])
 
     const redirectOnSuccess = () => {
-        props.history.push('/admin/sub-brand-vehicle');
+        props.history.push('/admin/service');
     }
 
     return (
@@ -77,7 +75,7 @@ const Index: React.FC<Props> = (props) => {
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col>
-                                <h3 className="mb-0">Edit Kategori Makanan</h3>
+                                <h3 className="mb-0">Edit Layanan</h3>
                             </Col>
                         </Row>
                     </CardHeader>
@@ -98,15 +96,15 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    findSubBrandVehicleAction: (id: number) => Promise<ApiResponse<SubBrandVehicleShow>>
+    findServiceAction: (id: number) => Promise<ApiResponse<ServiceShow>>
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
     return {
-        findSubBrandVehicleAction: (id: number) => dispatch(findSubBrandVehicleAction(id))
+        findServiceAction: (id: number) => dispatch(findServiceAction(id))
     }
 }
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))
-, "Edit Kategori Makanan")
+, "Edit Layanan")

@@ -1,6 +1,6 @@
-import ServiceList from './List';
-import ServiceCreate from './Create';
-import ServiceEdit from './Edit';
+import ServiceList from './list/Index';
+import ServiceCreate from './create/Index';
+import ServiceEdit from './edit/Index';
 
 export default [
     {
