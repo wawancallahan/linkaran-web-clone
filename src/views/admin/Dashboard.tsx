@@ -45,6 +45,12 @@ class Index extends React.Component<Props, State> {
     return "https://linkaran-api.thortech.asia";
   }
 
+  private script = document.createElement("script");
+  private socket: SocketIOClient.Socket = io(`${this.baseUrl}/admin`, {
+    path: "/ws/socket.io",
+    transports: ["websocket"],
+  });
+
   state = {
     mapIsReady: false,
   };
@@ -91,16 +97,20 @@ class Index extends React.Component<Props, State> {
 
   componentDidMount() {
     // Load the Google Maps API
-    const script = document.createElement("script");
     const API = "AIzaSyDVVH8FAlEV9UWK0dKxWwkUSola2Ll24Hs";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API}`;
-    script.async = true;
+    this.script.src = `https://maps.googleapis.com/maps/api/js?key=${API}`;
+    this.script.async = true;
 
-    script.addEventListener("load", () => {
+    this.script.addEventListener("load", () => {
       this.setState({ mapIsReady: true });
     });
 
-    document.body.appendChild(script);
+    document.body.appendChild(this.script);
+  }
+
+  componentWillUnmount() {
+    this.socket.disconnect();
+    this.script.remove();
   }
 
   componentDidUpdate() {
@@ -114,12 +124,7 @@ class Index extends React.Component<Props, State> {
       const broadcastMarker = new Map();
       const broadcastData = new Map();
 
-      const socket = io(`${this.baseUrl}/admin`, {
-        path: "/ws/socket.io",
-        transports: ["websocket"],
-      });
-
-      socket.on("connect", () => {
+      this.socket.on("connect", () => {
         const samarinda = new google.maps.LatLng(-0.450917, 117.169534);
 
         const map = new google.maps.Map(document.getElementById("map"), {
@@ -133,7 +138,7 @@ class Index extends React.Component<Props, State> {
           position: samarinda,
         });
 
-        socket.on("driver-location", (response: any) => {
+        this.socket.on("driver-location", (response: any) => {
           if (["new", "update"].find((it) => it === response.event)) {
             const {
               driver: {
@@ -326,7 +331,7 @@ class Index extends React.Component<Props, State> {
           }
         });
 
-        socket.on("broadcast-location", (response: any) => {
+        this.socket.on("broadcast-location", (response: any) => {
           const { dataViewDetailOrder } = response.data;
 
           const { service, vehicleType } = dataViewDetailOrder.transaction;
@@ -366,8 +371,8 @@ class Index extends React.Component<Props, State> {
           // const color = '#FF0000';
         });
 
-        socket.emit("sub-broadcast-location", "kota samarinda");
-        socket.emit("sub-driver-location");
+        this.socket.emit("sub-broadcast-location", "kota samarinda");
+        this.socket.emit("sub-driver-location");
       });
     }
   }

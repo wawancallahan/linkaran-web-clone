@@ -1,6 +1,6 @@
-import DistrictList from './List';
-import DistrictCreate from './Create';
-import DistrictEdit from './Edit';
+import DistrictList from './list/Index';
+import DistrictCreate from './create/Index';
+import DistrictEdit from './edit/Index';
 
 export default [
     {

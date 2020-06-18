@@ -21,7 +21,7 @@ export type Page = {
 
 const Pagination: React.FC<Props> = (props) => {
     const [sidePageLimit, setSidePageLimit] = React.useState(2)
-    const [pages, setPages] = React.useState<Page[]>([])
+    const pages: Page[] = []
 
     const paginationItemClicked = (page: number) => {
         props.itemClicked(page)
@@ -41,62 +41,47 @@ const Pagination: React.FC<Props> = (props) => {
             const end = (current_page + side_page_limit) > last_page ? last_page : current_page + side_page_limit;
             
             if (start != 1) {
-                setPages([
-                    ...pages,
-                    {
-                        text: '1', 
-                        active: false, 
-                        disabled: false,
-                        page: 1
-                    }
-                ])
+                pages.push({
+                    text: '1', 
+                    active: false, 
+                    disabled: false,
+                    page: 1
+                })
             }
 
             if (start > 2) {
-                setPages([
-                    ...pages,
-                    {
-                        text: `...`, 
-                        active: false, 
-                        disabled: true,
-                        page: null
-                    }
-                ])
+                pages.push({
+                    text: `...`, 
+                    active: false, 
+                    disabled: true,
+                    page: null
+                })
             } 
 
             for (let page = start; page <= end; page++) {
-                setPages([
-                    ...pages,
-                    {
-                        text: `${page}`, 
-                        active: page == current_page, 
-                        disabled: page == current_page,
-                        page: page
-                    }
-                ])
+                pages.push({
+                    text: `${page}`, 
+                    active: page == current_page, 
+                    disabled: page == current_page,
+                    page: page
+                })
             }
 
             if (end < last_page - 1) {
-                setPages([
-                    ...pages,
-                    {
-                        text: `...`, 
-                        active: false,
-                        disabled: true,
-                        page: null
-                    }
-                ])
+                pages.push({
+                    text: `...`, 
+                    active: false,
+                    disabled: true,
+                    page: null
+                })
             } 
             if (end != last_page) {
-                setPages([
-                    ...pages,
-                    {
-                        text: `${last_page}`, 
-                        active: false,
-                        disabled: false,
-                        page: last_page
-                    }
-                ])
+                pages.push({
+                    text: `${last_page}`, 
+                    active: false,
+                    disabled: false,
+                    page: last_page
+                })
             } 
 
             const paginationList = pages.map((item, index: number) => (
