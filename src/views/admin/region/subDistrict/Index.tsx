@@ -1,6 +1,6 @@
-import SubDistrictList from './List';
-import SubDistrictCreate from './Create';
-import SubDistrictEdit from './Edit';
+import SubDistrictList from './list/Index';
+import SubDistrictCreate from './create/Index';
+import SubDistrictEdit from './edit/Index';
 
 export default [
     {

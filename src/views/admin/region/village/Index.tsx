@@ -1,6 +1,6 @@
-import VillageList from './List';
-import VillageCreate from './Create';
-import VillageEdit from './Edit';
+import VillageList from './list/Index';
+import VillageCreate from './create/Index';
+import VillageEdit from './edit/Index';
 
 export default [
     {

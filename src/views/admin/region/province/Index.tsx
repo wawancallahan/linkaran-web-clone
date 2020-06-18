@@ -1,6 +1,6 @@
-import ProvinceList from './List';
-import ProvinceCreate from './Create';
-import ProvinceEdit from './Edit';
+import ProvinceList from './list/Index';
+import ProvinceCreate from './create/Index';
+import ProvinceEdit from './edit/Index';
 
 export default [
     {
