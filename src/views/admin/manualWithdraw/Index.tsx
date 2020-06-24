@@ -1,6 +1,6 @@
-import ManualWithdrawList from './List';
-import ManualWithdrawCreate from './Create';
-import ManualWithdrawEdit from './Edit';
+import ManualWithdrawList from './list/Index';
+import ManualWithdrawCreate from './create/Index';
+import ManualWithdrawEdit from './edit/Index';
 
 export default [
     {

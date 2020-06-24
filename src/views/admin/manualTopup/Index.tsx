@@ -1,6 +1,6 @@
-import ManualTopupList from './List';
-import ManualTopupCreate from './Create';
-import ManualTopupEdit from './Edit';
+import ManualTopupList from './list/Index';
+import ManualTopupCreate from './create/Index';
+import ManualTopupEdit from './edit/Index';
 
 export default [
     {
