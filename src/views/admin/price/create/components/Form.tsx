@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as Yup from 'yup';
-import { Formik, FormikProps, FieldArray } from 'formik';
+import { Formik } from 'formik';
 import {
     Button,
     Form as FormReactStrap,

@@ -1,6 +1,6 @@
-import RestaurantList from './List';
-import RestaurantCreate from './Create';
-import RestaurantEdit from './Edit';
+import RestaurantList from './list/Index';
+import RestaurantCreate from './create/Index';
+import RestaurantEdit from './edit/Index';
 
 export default [
     {

@@ -9,7 +9,7 @@ import Table from './components/Table'
 import queryString from 'query-string';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { fetchPriceAction, setAlertPriceHideAction, clearFilterAction } from '../../../../actions/admin/price';
+import { fetchRestaurantAction, setAlertRestaurantHideAction, clearFilterAction } from '../../../../actions/admin/restaurant';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
 
@@ -24,7 +24,7 @@ const Index: React.FC<Props> = (props) => {
     const fetch = async (page: number) => {
         setLoader(true)
 
-        await props.fetchPriceAction(page);
+        await props.fetchRestaurantAction(page);
 
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.set('page', page.toString());
@@ -42,8 +42,8 @@ const Index: React.FC<Props> = (props) => {
         fetch(page)
 
         return () => {
-            props.setAlertPriceHideAction();
-            props.clearFilterPriceAction();
+            props.setAlertRestaurantHideAction();
+            props.clearFilterRestaurantAction();
         }
     }, [])
 
@@ -59,15 +59,15 @@ const Index: React.FC<Props> = (props) => {
                                 <Flash />
                                 <Row className="align-items-center mb-3">
                                     <div className="col">
-                                        <h3 className="mb-0">Daftar Harga</h3>
+                                        <h3 className="mb-0">Daftar Restoran</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/price/create">
+                                    <Link to="/admin/restaurant/create">
                                         <Button
                                             color="primary"
                                             size="sm"
                                         >
-                                            Tambah Harga
+                                            Tambah Restoran
                                         </Button>
                                     </Link>
                                     </div>
@@ -89,19 +89,19 @@ const Index: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    fetchPriceAction: (page: number) => Promise<Boolean>,
-    setAlertPriceHideAction: () => void,
-    clearFilterPriceAction: () => void
+    fetchRestaurantAction: (page: number) => Promise<Boolean>,
+    setAlertRestaurantHideAction: () => void,
+    clearFilterRestaurantAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
-        fetchPriceAction: (page: number) => dispatch(fetchPriceAction(page)),
-        setAlertPriceHideAction: () => dispatch(setAlertPriceHideAction()),
-        clearFilterPriceAction: () => dispatch(clearFilterAction())
+        fetchRestaurantAction: (page: number) => dispatch(fetchRestaurantAction(page)),
+        setAlertRestaurantHideAction: () => dispatch(setAlertRestaurantHideAction()),
+        clearFilterRestaurantAction: () => dispatch(clearFilterAction())
     }
 }
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))
-, "Daftar Harga")
+, "Daftar Restoran")
