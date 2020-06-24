@@ -8,7 +8,7 @@ import Table from './components/Table'
 import queryString from 'query-string';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { fetchAccountLinkPayAction, setAlertAccountLinkPayHideAction, clearFilterAction } from '../../../../../actions/admin/account/linkPay';
+import { fetchAccountLinkPayAction, setAlertAccountLinkPayHideAction } from '../../../../../actions/admin/account/linkPay';
 import { AppActions } from '../../../../../types';
 import WithTitle from '../../../../../hoc/WithTitle';
 
@@ -42,7 +42,6 @@ const Index: React.FC<Props> = (props) => {
 
         return () => {
             props.setAlertAccountLinkPayHideAction();
-            props.clearFilterAccountLinkPayAction();
         }
     }, [])
 
@@ -78,15 +77,13 @@ const Index: React.FC<Props> = (props) => {
 
 type LinkDispatchToProps = {
     fetchAccountLinkPayAction: (page: number) => Promise<Boolean>,
-    setAlertAccountLinkPayHideAction: () => void,
-    clearFilterAccountLinkPayAction: () => void
+    setAlertAccountLinkPayHideAction: () => void
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
         fetchAccountLinkPayAction: (page: number) => dispatch(fetchAccountLinkPayAction(page)),
-        setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction()),
-        clearFilterAccountLinkPayAction: () => dispatch(clearFilterAction())
+        setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction())
     }
 }
 

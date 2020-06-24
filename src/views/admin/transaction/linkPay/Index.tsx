@@ -1,5 +1,4 @@
-import LinkPayList from './List';
-import LinkPayDetail from './Detail';
+import LinkPayList from './list/Index';
 
 export default [
     {
@@ -8,12 +7,5 @@ export default [
         component: LinkPayList,
         layout: "admin",
         roles: ["super admin", "admin"]
-    },
-    {
-        path: "/admin/transaction/link-pay/:id",
-        exact: true,
-        component: LinkPayDetail,
-        layout: "admin",
-        roles: ["super admin", "admin"]
-    },
+    }
 ];

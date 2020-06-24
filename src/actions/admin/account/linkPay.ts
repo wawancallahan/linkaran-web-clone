@@ -4,6 +4,7 @@ import { Paginator } from '../../../types/paginator';
 import { AppState } from "../../../store/configureStore";
 import {
     AccountLinkPay,
+    AccountLinkPayList,
     SET_PAGINATOR_ACCOUNT_LINK_PAY,
     FETCH_ACCOUNT_LINK_PAY_SUCCESS,
     FETCH_ACCOUNT_LINK_PAY_ERROR,
@@ -11,14 +12,11 @@ import {
     FetchAccountLinkPayActionType,
     FetchAccountLinkPayErrorActionType,
     FetchAccountLinkPaySuccessActionType,
-    AccountLinkPayCreate,
-    AccountLinkPayEdit,
     AlertAccountLinkPayHideActionType,
     ALERT_ACCOUNT_LINK_PAY_HIDE,
     AlertAccountLinkPayShowActionType,
     ALERT_ACCOUNT_LINK_PAY_SHOW,
-    AccountLinkPayCreateResult,
-    AccountLinkPayEditResult
+    AccountLinkPayShow
 } from '../../../types/admin/account/linkPay';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
@@ -64,7 +62,7 @@ export const fetchAccountLinkPayAction = (page: number) : ThunkResult<Promise<Bo
     return async (dispatch: Dispatch, getState: () => AppState) => {
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/list?page=${page}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccessList<AccountLinkPay> = response.data;
+                const data: ApiResponseSuccessList<AccountLinkPayList> = response.data;
 
                 dispatch(setFetchAccountLinkPaySuccessAction(data.result));
 
@@ -150,11 +148,11 @@ export const fetchListAccountLinkPayAction = (search: string, page: number): Thu
     }
 }
 
-export const findAccountLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<AccountLinkPay>>> => {
+export const findAccountLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<AccountLinkPayShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<AccountLinkPay> = response.data;
+                const data: ApiResponseSuccess<AccountLinkPayShow> = response.data;
 
                 return Promise.resolve({
                     response: data,

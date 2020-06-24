@@ -1,4 +1,5 @@
 import {  
+    Filter,
     FETCH_APPLICATION,
     FETCH_APPLICATION_ERROR,
     FETCH_APPLICATION_SUCCESS,
@@ -21,7 +22,9 @@ import { Alert } from '../../../types/alert';
 type initialStateInterface = {
     list: ApplicationList[],
     paginate: Paginator,
-    alert: Alert
+    alert: Alert,
+    filter: Filter,
+    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -36,7 +39,17 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    }
+    },
+    filter: {
+        date: null,
+        driverName: '',
+        numberTransaction: '',
+        serviceCode: '',
+        statusOrder: '',
+        type: 'complete',
+        userName: ''
+    },
+    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertApplicationHideActionType) => {

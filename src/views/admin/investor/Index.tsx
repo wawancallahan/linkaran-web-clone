@@ -1,6 +1,6 @@
-import InvestorList from './List';
-import InvestorCreate from './Create';
-import InvestorEdit from './Edit';
+import InvestorList from './list/Index';
+import InvestorCreate from './create/Index';
+import InvestorEdit from './edit/Index';
 
 export default [
     {

@@ -1,8 +1,8 @@
-import DriverList from './List';
-import DriverCreate from './Create';
+import DriverList from './list/Index';
+import DriverCreate from './create/Index';
 import DriverCreateFromCustomer from './fromCustomer/CreateFromCustomer';
-import DriverEdit from './Edit';
-import DriverDetail from './Detail';
+import DriverEdit from './edit/Index';
+import DriverDetail from './detail/Index';
 
 export default [
     {

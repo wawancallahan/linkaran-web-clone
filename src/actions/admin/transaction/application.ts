@@ -91,55 +91,25 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
 
         const querySearch = queryString.parse(window.location.search);
 
-        let filterOmit: { [key: string]: string } = {
-            type: (querySearch.type as string) || 'complete'
+        let dateQuery = (querySearch.date as string) || '';
+        const date = moment(dateQuery, "YYYY-MM-DD", true);
+
+        const filterOmit: FilterOmit = {
+            date: date.isValid() ? date.format("YYYY-MM-DD") : '',
+            driverName: (querySearch.driverName as string) || '',
+            numberTransaction: (querySearch.numberTransaction as string) || '',
+            serviceCode: (querySearch.serviceCode as string) || '',
+            statusOrder: (querySearch.statusOrder as string) || '',
+            type: (querySearch.type as string) || 'complete',
+            userName: (querySearch.userName as string) || ''
         }
 
-        if (querySearch.driverName) {
-            filterOmit = {
-                ...filterOmit,
-                driverName: (querySearch.driverName as string) || '',
-            }
+        const filter: Filter = {
+            ...filterOmit,
+            date: date.isValid() ? date.toDate() : null
         }
 
-        if (querySearch.date) {
-            const dateQuery = (querySearch.date as string) || '';
-
-            const date = moment(dateQuery, "YYYY-MM-DD", true);
-
-            filterOmit = {
-                ...filterOmit,
-                date: date.isValid() ? date.format("YYYY-MM-DD") : '',
-            }
-        }
-
-        if (querySearch.numberTransaction) {
-            filterOmit = {
-                ...filterOmit,
-                numberTransaction: (querySearch.numberTransaction as string) || '',
-            }
-        }
-
-        if (querySearch.serviceCode) {
-            filterOmit = {
-                ...filterOmit,
-                serviceCode: (querySearch.serviceCode as string) || '',
-            }
-        }
-
-        if (querySearch.statusOrder) {
-            filterOmit = {
-                ...filterOmit,
-                statusOrder: (querySearch.statusOrder as string) || '',
-            }
-        }
-
-        if (querySearch.userName) {
-            filterOmit = {
-                ...filterOmit,
-                userName: (querySearch.userName as string) || '',
-            }
-        }
+        dispatch(setFilterAction(filter));
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),

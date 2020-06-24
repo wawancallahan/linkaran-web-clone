@@ -1,17 +1,19 @@
-import React from 'react'
+import * as React from 'react'
 import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 import { Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowComplete
+    data: ApplicationShowComplete
 }
 
-const SendTransaction = (props: Props) => {
+type Props = OwnProps
+
+const SendTransaction: React.FC<Props> = (props) => {
     
     const { 
         sendTransaction
-    } = props.application
+    } = props.data
      
     if (sendTransaction) {
         return (

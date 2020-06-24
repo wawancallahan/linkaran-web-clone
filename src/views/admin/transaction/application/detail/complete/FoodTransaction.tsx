@@ -1,19 +1,21 @@
-import React from 'react'
+import * as React from 'react'
 import { ApplicationShowComplete, FoodTransactionDetail } from '../../../../../../types/admin/transaction/application';
 import { Card, CardHeader, Row, Col, CardBody, Table } from 'reactstrap';
 import ModalImage from 'react-modal-image';
 import NumberFormat from 'react-number-format';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowComplete
+    data: ApplicationShowComplete
 }
 
-const FoodTransaction = (props: Props) => {
+type Props = OwnProps
+
+const FoodTransaction: React.FC<Props> = (props) => {
     
     const {
         foodTransaction
-    } = props.application
+    } = props.data
 
     if (foodTransaction) {
         return (

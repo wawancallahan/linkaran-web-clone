@@ -23,6 +23,8 @@ export type LinkPay = {
 
 export type LinkPayList = LinkPay;
 
+export type LinkPayShow = LinkPay
+
 export type FetchLinkPayActionType = {
     type: typeof FETCH_LINK_PAY
 }

@@ -1,29 +1,25 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
-    Button,
     CardBody,
-    Badge
 } from 'reactstrap';
 
-import {
-    Link
-} from 'react-router-dom';
 import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowInprogress
+    data: ApplicationShowInprogress
 }
 
-const Transaction = (props: Props) => {
+type Props = OwnProps
 
-    const { application } = props;
+const Transaction: React.FC<Props> = (props) => {
+
+    const { data } = props;
 
     return (
         <div className={props.className}>
@@ -38,7 +34,7 @@ const Transaction = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Tarif</label></Col>
-                        <Col>Rp. {application.transaction ? application.transaction.cost : ''}</Col>
+                        <Col>Rp. {data.transaction ? data.transaction.cost : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Pembayaran Lain</label></Col>
@@ -50,7 +46,7 @@ const Transaction = (props: Props) => {
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Total Transaksi</label></Col>
-                        <Col>Rp. {application.transaction ? application.transaction.totalCost : ''}</Col>
+                        <Col>Rp. {data.transaction ? data.transaction.totalCost : ''}</Col>
                     </Row>
                     <hr />
                     <Row className="mb-2">

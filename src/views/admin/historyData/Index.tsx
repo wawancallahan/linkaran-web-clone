@@ -1,4 +1,4 @@
-import HistoryDataList from './List';
+import HistoryDataList from './list/Index';
 
 export default [
     {

@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
     Button,
     CardBody
 } from 'reactstrap';
@@ -15,14 +14,15 @@ import {
 } from 'react-router-dom';
 import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowComplete
+    data: ApplicationShowComplete
 }
 
-const Customer = (props: Props) => {
+type Props = OwnProps
 
-    const { application } = props;
+const Customer: React.FC<Props> = (props) => {
+    const { data } = props
 
     return (
         <div className={props.className}>
@@ -47,11 +47,11 @@ const Customer = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>{application.costumer.id}</Col>
+                        <Col>{data.costumer.id}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>{application.costumer.userInfo.name}</Col>
+                        <Col>{data.costumer.userInfo.name}</Col>
                     </Row>
                 </CardBody>
             </Card>

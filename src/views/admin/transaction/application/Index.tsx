@@ -1,5 +1,5 @@
-import ApplicationList from './List';
-import ApplicationDetail from './Detail';
+import ApplicationList from './list/Index';
+import ApplicationDetail from './detail/Index';
 
 export default [
     {

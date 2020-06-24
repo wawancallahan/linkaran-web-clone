@@ -4,6 +4,8 @@ import { Paginator } from '../../../types/paginator';
 import { AppState } from "../../../store/configureStore";
 import {
     LinkPay,
+    LinkPayList,
+    LinkPayShow,
     SET_PAGINATOR_LINK_PAY,
     FETCH_LINK_PAY_SUCCESS,
     FETCH_LINK_PAY_ERROR,
@@ -11,14 +13,10 @@ import {
     FetchLinkPayActionType,
     FetchLinkPayErrorActionType,
     FetchLinkPaySuccessActionType,
-    LinkPayCreate,
-    LinkPayEdit,
     AlertLinkPayHideActionType,
     ALERT_LINK_PAY_HIDE,
     AlertLinkPayShowActionType,
-    ALERT_LINK_PAY_SHOW,
-    LinkPayCreateResult,
-    LinkPayEditResult
+    ALERT_LINK_PAY_SHOW
 } from '../../../types/admin/transaction/linkPay';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../../types/api';
@@ -65,7 +63,7 @@ export const fetchLinkPayAction = (page: number) : ThunkResult<Promise<Boolean>>
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/list?page=${page}`)
             .then( (response: AxiosResponse) => {
                 
-                const data: ApiResponseSuccessList<LinkPay> = response.data;
+                const data: ApiResponseSuccessList<LinkPayList> = response.data;
 
                 dispatch(setFetchLinkPaySuccessAction(data.result));
 
@@ -152,11 +150,11 @@ export const fetchListLinkPayAction = (search: string, page: number): ThunkResul
     }
 }
 
-export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPay>>> => {
+export const findLinkPayAction = (id: number): ThunkResult<Promise<ApiResponse<LinkPayShow>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.get(process.env.REACT_APP_API_URL + `/web/link-pay/transaction/${id}`)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<LinkPay> = response.data;
+                const data: ApiResponseSuccess<LinkPayShow> = response.data;
 
                 return Promise.resolve({
                     response: data,

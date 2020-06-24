@@ -1,37 +1,33 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
-    Button,
     CardBody
 } from 'reactstrap';
-
-import {
-    Link
-} from 'react-router-dom';
 
 import {
     starImage
 } from '../../../../../../helpers/Assets'
 import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowComplete
+    data: ApplicationShowComplete
 }
 
-const Feedback = (props: Props) => {
+type Props = OwnProps
 
-    const { application } = props;
+const Feedback: React.FC<Props> = (props) => {
+
+    const { data } = props;
 
     let rating = 0;
 
-    if (application.costumerFeedback) {
-        rating = application.costumerFeedback.rating;
+    if (data.costumerFeedback) {
+        rating = data.costumerFeedback.rating;
     }
 
     const starFeed = [...Array.from(Array(rating).keys())].map(() => (
@@ -58,7 +54,7 @@ const Feedback = (props: Props) => {
                     <Row>
                         <Col><label htmlFor="">Pesan Customer</label></Col>
                         <Col>
-                            <p>{application.costumerFeedback ? application.costumerFeedback.description : ''}</p>
+                            <p>{data.costumerFeedback ? data.costumerFeedback.description : ''}</p>
                         </Col>
                     </Row>
                 </CardBody>

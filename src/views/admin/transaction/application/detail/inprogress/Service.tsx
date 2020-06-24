@@ -1,28 +1,25 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
-    Button,
     CardBody
 } from 'reactstrap';
 
-import {
-    Link
-} from 'react-router-dom';
 import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowInprogress
+    data: ApplicationShowInprogress
 }
 
-const Service = (props: Props) => {
+type Props = OwnProps
 
-    const { application } = props;
+const Service: React.FC<Props> = (props) => {
+
+    const { data } = props;
 
     return (
         <div className={props.className}>
@@ -37,24 +34,24 @@ const Service = (props: Props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Layanan</label></Col>
-                        <Col>{application.transaction ? application.transaction.service.name : ''}</Col>
+                        <Col>{data.transaction ? data.transaction.service.name : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Jemput</label></Col>
                         <Col>
-                            <p>{application.transaction ? application.transaction.addressOrigin : ''}</p>
+                            <p>{data.transaction ? data.transaction.addressOrigin : ''}</p>
                         </Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Tujuan</label></Col>
                         <Col>
-                            <p>{application.transaction ? application.transaction.addressDestination : ''}</p>
+                            <p>{data.transaction ? data.transaction.addressDestination : ''}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Deskripsi</label></Col>
                         <Col>
-                            <p>{application.transaction ? application.transaction.note : ''}</p>
+                            <p>{data.transaction ? data.transaction.note : ''}</p>
                         </Col>
                     </Row>
                 </CardBody>

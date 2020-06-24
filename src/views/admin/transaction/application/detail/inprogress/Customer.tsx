@@ -1,28 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
-    Button,
     CardBody
 } from 'reactstrap';
 
-import {
-    Link
-} from 'react-router-dom';
 import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowInprogress
+    data: ApplicationShowInprogress
 }
 
-const Customer = (props: Props) => {
+type Props = OwnProps
 
-    const { application } = props;
+const Customer: React.FC<Props> = (props) => {
+
+    const { data } = props;
 
     return (
         <div className={props.className}>
@@ -32,26 +29,16 @@ const Customer = (props: Props) => {
                         <Col>
                             <h3 className="mb-0">Customer</h3>
                         </Col>
-                        <Col className="text-right">
-                            <Link to="">
-                                <Button
-                                    color="info"
-                                    size="sm"
-                                >
-                                    Detail
-                                </Button>
-                            </Link>
-                        </Col>
                     </Row>
                 </CardHeader>
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>{application.costumer.id}</Col>
+                        <Col>{data.costumer.id}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>{application.costumer.userInfo.name}</Col>
+                        <Col>{data.costumer.userInfo.name}</Col>
                     </Row>
                 </CardBody>
             </Card>

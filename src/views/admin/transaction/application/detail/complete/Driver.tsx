@@ -1,27 +1,25 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import {
     Row,
     Col,
     Card,
     CardHeader,
-    CardFooter,
     Button,
     CardBody
 } from 'reactstrap';
 
-import {
-    Link
-} from 'react-router-dom';
 import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
-type Props = {
+type OwnProps = {
     className?: string,
-    application: ApplicationShowComplete
+    data: ApplicationShowComplete
 }
 
-const Driver = (props: Props) => {
-    const { application } = props;
+type Props = OwnProps
+
+const Driver: React.FC<Props> = (props) => {
+    const { data } = props
 
     return (
         <div className={props.className}>
@@ -31,34 +29,24 @@ const Driver = (props: Props) => {
                         <Col>
                             <h3 className="mb-0">Driver</h3>
                         </Col>
-                        <Col className="text-right">
-                            <Link to="">
-                                <Button
-                                    color="info"
-                                    size="sm"
-                                >
-                                    Detail
-                                </Button>
-                            </Link>
-                        </Col>
                     </Row>
                 </CardHeader>
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">ID</label></Col>
-                        <Col>{application.driverId}</Col>
+                        <Col>{data.driverId}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Nama</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.name : ''}</Col>
+                        <Col>{data.driverInformation ? data.driverInformation.name : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">No. Polisi</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.policeNumber : ''}</Col>
+                        <Col>{data.driverInformation ? data.driverInformation.policeNumber : ''}</Col>
                     </Row>
                     <Row>
                         <Col><label htmlFor="">Kendaraan</label></Col>
-                        <Col>{application.driverInformation ? application.driverInformation.vehicleMerk : ''}</Col>
+                        <Col>{data.driverInformation ? data.driverInformation.vehicleMerk : ''}</Col>
                     </Row>
                 </CardBody>
             </Card>
@@ -66,4 +54,4 @@ const Driver = (props: Props) => {
     )
 }
 
-export default Driver;
+export default Driver
