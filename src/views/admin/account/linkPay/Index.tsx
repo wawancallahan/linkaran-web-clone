@@ -1,5 +1,5 @@
-import LinkPayList from './List';
-import LinkPayDetail from './Detail';
+import LinkPayList from './list/Index';
+import LinkPayDetail from './detail/Index';
 
 export default [
     {

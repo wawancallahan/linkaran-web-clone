@@ -1,5 +1,5 @@
-import CustomerList from './List';
-import CustomerDetail from './Detail';
+import CustomerList from './list/Index';
+import CustomerDetail from './detail/Index';
 
 export default [
     {

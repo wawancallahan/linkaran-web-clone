@@ -8,15 +8,8 @@ export const SET_PAGINATOR_LINK_PAY = "SET_PAGINATOR_LINK_PAY";
 export const ALERT_LINK_PAY_SHOW = "ALERT_LINK_PAY_SHOW";
 export const ALERT_LINK_PAY_HIDE = "ALERT_LINK_PAY_HIDE";
 
-export type FormField = {
-   
-}
-
-export type LinkPayField = {
-    
-}
-
-export type LinkPayList = {
+export type LinkPay = {
+    id: number,
     linkpay_id: number,
     payment_id: number,
     amount: number,
@@ -28,19 +21,7 @@ export type LinkPayList = {
     datetime_transaction: string
 }
 
-export type LinkPayResult = {
-   id: number
-}
-
-export type LinkPay = LinkPayResult & LinkPayList;
-
-export type LinkPayCreate = LinkPayField;
-
-export type LinkPayEdit = LinkPayField;
-
-export type LinkPayCreateResult = LinkPayResult;
-
-export type LinkPayEditResult = LinkPayResult;
+export type LinkPayList = LinkPay;
 
 export type FetchLinkPayActionType = {
     type: typeof FETCH_LINK_PAY

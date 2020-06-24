@@ -8,15 +8,8 @@ export const SET_PAGINATOR_ACCOUNT_LINK_PAY = "SET_PAGINATOR_ACCOUNT_LINK_PAY";
 export const ALERT_ACCOUNT_LINK_PAY_SHOW = "ALERT_ACCOUNT_LINK_PAY_SHOW";
 export const ALERT_ACCOUNT_LINK_PAY_HIDE = "ALERT_ACCOUNT_LINK_PAY_HIDE";
 
-export type FormField = {
-   
-}
-
-export type AccountLinkPayField = {
-    
-}
-
-export type AccountLinkPayList = {
+export type AccountLinkPay = {
+    id: number,
     user_id: number,
     name: string,
     balance: number,
@@ -24,19 +17,9 @@ export type AccountLinkPayList = {
     type: string
 }
 
-export type AccountLinkPayResult = {
-   id: number
-}
+export type AccountLinkPayList = AccountLinkPay
 
-export type AccountLinkPay = AccountLinkPayResult & AccountLinkPayList;
-
-export type AccountLinkPayCreate = AccountLinkPayField;
-
-export type AccountLinkPayEdit = AccountLinkPayField;
-
-export type AccountLinkPayCreateResult = AccountLinkPayResult;
-
-export type AccountLinkPayEditResult = AccountLinkPayResult;
+export type AccountLinkPayShow = AccountLinkPay
 
 export type FetchAccountLinkPayActionType = {
     type: typeof FETCH_ACCOUNT_LINK_PAY
