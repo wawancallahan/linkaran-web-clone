@@ -1,5 +1,5 @@
-import TopUpList from './List'
-import TopUpDetail from './Detail'
+import TopUpList from './list/Index'
+import TopUpDetail from './detail/Index'
 
 export default [
     {

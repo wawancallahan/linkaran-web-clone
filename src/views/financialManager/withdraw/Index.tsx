@@ -1,5 +1,5 @@
-import WithDrawList from './List'
-import WithDrawDetail from './Detail'
+import WithDrawList from './list/Index'
+import WithDrawDetail from './detail/Index'
 
 export default [
     {
