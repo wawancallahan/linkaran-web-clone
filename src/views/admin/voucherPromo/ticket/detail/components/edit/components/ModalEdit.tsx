@@ -2,28 +2,29 @@ import * as React from 'react'
 import { Form, Modal, FormGroup, Button, Input } from 'reactstrap'
 import { Formik } from 'formik'
 import { ApiResponse, ApiResponseSuccess } from '../../../../../../../../types/api'
-import { TicketGenerateResult, TicketGenerateField, FormField } from '../../../../../../../../types/admin/ticket'
-import { VoucherPromoShow } from '../../../../../../../../types/admin/voucherPromo'
+import { TicketEditResult, TicketEditField, FormField, TicketList } from '../../../../../../../../types/admin/ticket'
 import { toast, TypeOptions } from 'react-toastify'
 import { Schema } from './Schema'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../../../../types'
 import { connect } from 'react-redux'
-import { generateTicketAction } from '../../../../../../../../actions/admin/ticket'
+import { editTicketAction } from '../../../../../../../../actions/admin/ticket'
+import { VoucherPromoShow } from '../../../../../../../../types/admin/voucherPromo'
 
 type OwnProps = {
     modalVisible: boolean,
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    data: VoucherPromoShow | null,
+    data: TicketList,
+    voucher: VoucherPromoShow | null,
     fetch: (page: number, id: number) => void
 }
 
 type Props = OwnProps & LinkDispatchToProps
 
-const ModalGenerate: React.FC<Props> = (props) => {
+const ModalEdit: React.FC<Props> = (props) => {
 
     const [formField, setFormField] = React.useState<FormField>({
-        redeemCode: ''
+        redeemCode: props.data.redeemCode
     })
 
     const toastNotify = (message: string, type: TypeOptions) => {
@@ -36,7 +37,7 @@ const ModalGenerate: React.FC<Props> = (props) => {
         })
     }
     
-    const { data } = props
+    const { data, voucher } = props
 
     return (
         <Modal
@@ -46,7 +47,7 @@ const ModalGenerate: React.FC<Props> = (props) => {
             >
             <div className="modal-header">
                 <h5 className="modal-title" id="modal-ticket">
-                    Generate Tiket
+                    Edit Tiket
                 </h5>
                 <button
                     aria-label="Close"
@@ -61,37 +62,37 @@ const ModalGenerate: React.FC<Props> = (props) => {
             <div className="modal-body">
                 <Formik initialValues={formField}
                         onSubmit={(values, action) => {
-                            if (data) {
-                                const ticketForm: TicketGenerateField = {
+                            if (voucher) {
+                                const ticketForm: TicketEditField = {
                                     redeemCode: values.redeemCode,
                                     voucher: {
-                                        id: data.id
+                                        id: voucher.id
                                     }
                                 }
-
-                                props.generateTicketAction(ticketForm)
-                                    .then( (response: ApiResponse<TicketGenerateResult>) => {
-                                        const dataTicket: ApiResponseSuccess<TicketGenerateResult> = response.response!;
+    
+                                props.editTicketAction(ticketForm, data.id)
+                                    .then( (response: ApiResponse<TicketEditResult>) => {
+                                        const dataTicket: ApiResponseSuccess<TicketEditResult> = response.response!;
                                         
-                                        toastNotify("Tiket Berhasil Digenerate", "success");
+                                        toastNotify("Tiket Berhasil Ditambah", "success");
                                         props.setModalVisible( ! props.modalVisible);
                                         
-                                        props.fetch(1, data.id)
+                                        props.fetch(1, voucher.id)
                                     })
-                                    .catch( (error: ApiResponse<TicketGenerateResult>) => {
+                                    .catch( (error: ApiResponse<TicketEditResult>) => {
                                         let message = "Gagal Mendapatkan Response";
-
+    
                                         if (error.error) {
                                             message = error.error.metaData.message;
                                         }
-
+    
                                         toastNotify(message, "error");
-
+    
                                         props.setModalVisible( ! props.modalVisible)
                                         action.setSubmitting(false)
                                     });
                             } else {
-                                toastNotify("Tiket Gagal Digenerate", "error");
+                                toastNotify("Tiket Gagal Diedit", "error");
                                 props.setModalVisible( ! props.modalVisible);
                                 action.setSubmitting(false)
                             }
@@ -137,7 +138,7 @@ const ModalGenerate: React.FC<Props> = (props) => {
                                         FormikProps.setSubmitting(true)
                                         FormikProps.submitForm();
                                     }} disabled={FormikProps.isSubmitting}>
-                                        Generate
+                                        Edit
                                     </Button>
                                 </div>
                             </Form>
@@ -150,13 +151,13 @@ const ModalGenerate: React.FC<Props> = (props) => {
 }
 
 type LinkDispatchToProps = {
-    generateTicketAction: (ticket: TicketGenerateField) => Promise<ApiResponse<TicketGenerateResult>>
+    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>,
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
     return {
-        generateTicketAction: (ticket: TicketGenerateField) => dispatch(generateTicketAction(ticket))
+        editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id)),
     }
 }
 
-export default connect(null, mapDispatchToProps)(ModalGenerate)
+export default connect(null, mapDispatchToProps)(ModalEdit)

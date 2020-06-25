@@ -10,6 +10,7 @@ import { Ticket, TicketList } from '../../../../../../../../types/admin/ticket'
 import { parseDateTimeFormat } from '../../../../../../../../helpers/utils'
 import { Button } from 'reactstrap'
 import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo'
+import TicketEdit from '../../edit/Index'
 
 type OwnProps = {
     data: VoucherPromo | null,
@@ -67,6 +68,8 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.redeemCode}</td>
             <td>{props.item.claimAt ? parseDateTimeFormat(props.item.claimAt) : ''}</td>
             <td>
+                <TicketEdit fetch={props.fetch} data={props.item} voucher={props.data} />
+
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i>
                 </Button>

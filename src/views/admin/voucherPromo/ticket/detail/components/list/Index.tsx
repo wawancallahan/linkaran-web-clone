@@ -7,14 +7,14 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { fetchTicketVoucherAction } from '../../../../../../../actions/admin/ticket';
 import { AppActions } from '../../../../../../../types';
-import { VoucherPromo } from '../../../../../../../types/admin/voucherPromo';
+import { VoucherPromoShow } from '../../../../../../../types/admin/voucherPromo';
 import Paginate from './components/Paginate'
 import Table from './components/Table'
 import TicketGenerate from '../generate/Index'
 import TicketCreate from '../create/Index'
 
 type OwnProps = RouteComponentProps & {
-    data: VoucherPromo | null
+    data: VoucherPromoShow | null
 }
 
 type Props = OwnProps & LinkDispatchToProps

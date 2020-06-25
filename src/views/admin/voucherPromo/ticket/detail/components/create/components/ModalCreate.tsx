@@ -3,7 +3,7 @@ import { Form, Modal, FormGroup, Button, Input } from 'reactstrap'
 import { Formik } from 'formik'
 import { ApiResponse, ApiResponseSuccess } from '../../../../../../../../types/api'
 import { TicketCreateResult, TicketCreateField, FormField } from '../../../../../../../../types/admin/ticket'
-import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo'
+import { VoucherPromoShow } from '../../../../../../../../types/admin/voucherPromo'
 import { toast, TypeOptions } from 'react-toastify'
 import { Schema } from './Schema'
 import { ThunkDispatch } from 'redux-thunk'
@@ -14,7 +14,7 @@ import { createTicketAction } from '../../../../../../../../actions/admin/ticket
 type OwnProps = {
     modalVisible: boolean,
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    data: VoucherPromo | null,
+    data: VoucherPromoShow | null,
     fetch: (page: number, id: number) => void
 }
 

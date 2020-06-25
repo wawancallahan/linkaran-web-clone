@@ -1,11 +1,13 @@
 import * as React from 'react'
 import { Button } from 'reactstrap'
-import ModalCreate from './components/ModalCreate'
+import ModalEdit from './components/ModalEdit'
+import { TicketList } from '../../../../../../../types/admin/ticket'
 import { VoucherPromoShow } from '../../../../../../../types/admin/voucherPromo'
 
 type OwnProps = {
-    fetch: (page: number, id: number) => void
-    data: VoucherPromoShow | null
+    data: TicketList,
+    voucher: VoucherPromoShow | null,
+    fetch: (page: number, id: number) => void,
 }
 
 type Props = OwnProps
@@ -17,14 +19,14 @@ const Index: React.FC<Props> = (props) => {
     return (
         <React.Fragment>
             <Button
-                color="info"
+                color="warning"
                 size="sm"
                 onClick={() => setModalVisible( ! modalVisible)}
             >
-                Tambah Tiket
+                Edit
             </Button>
 
-            <ModalCreate fetch={props.fetch} data={props.data} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <ModalEdit fetch={props.fetch} voucher={props.voucher} data={props.data} modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </React.Fragment>
         
     )

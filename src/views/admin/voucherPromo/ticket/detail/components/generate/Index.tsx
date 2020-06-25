@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { Button } from 'reactstrap'
 import ModalGenerate from './components/ModalGenerate'
-import { VoucherPromo } from '../../../../../../../types/admin/voucherPromo'
+import { VoucherPromoShow } from '../../../../../../../types/admin/voucherPromo'
 
 type OwnProps = {
     fetch: (page: number, id: number) => void
-    data: VoucherPromo | null
+    data: VoucherPromoShow | null
 }
 
 type Props = OwnProps
