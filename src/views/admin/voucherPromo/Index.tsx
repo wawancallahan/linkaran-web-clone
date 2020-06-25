@@ -1,7 +1,7 @@
-import VoucherPromoList from './List';
-import VoucherPromoDetail from './Detail';
-import VoucherPromoCreate from './Create';
-import VoucherPromoEdit from './Edit';
+import VoucherPromoList from './list/Index';
+import VoucherPromoDetail from './detail/Index';
+import VoucherPromoCreate from './create/Index';
+import VoucherPromoEdit from './edit/Index';
 import Ticket from './DetailTicket';
 
 export default [
