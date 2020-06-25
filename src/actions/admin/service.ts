@@ -140,7 +140,6 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
 
 export const fetchListServiceAction = (search: string, page: number): ThunkResult<Promise<ApiResponseList<ServiceList>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             name: search

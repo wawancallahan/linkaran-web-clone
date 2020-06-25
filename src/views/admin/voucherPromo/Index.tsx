@@ -2,7 +2,7 @@ import VoucherPromoList from './list/Index';
 import VoucherPromoDetail from './detail/Index';
 import VoucherPromoCreate from './create/Index';
 import VoucherPromoEdit from './edit/Index';
-import Ticket from './DetailTicket';
+import Ticket from './ticket/detail/Index';
 
 export default [
     {

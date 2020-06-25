@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from 'reactstrap'
-import ModalGenerate from './components/ModalGenerate'
+import ModalCreate from './components/ModalCreate'
 import { VoucherPromo } from '../../../../../../../types/admin/voucherPromo'
 
 type OwnProps = {
@@ -21,10 +21,10 @@ const Index: React.FC<Props> = (props) => {
                 size="sm"
                 onClick={() => setModalVisible( ! modalVisible)}
             >
-                Generate Tiket
+                Tambah Tiket
             </Button>
 
-            <ModalGenerate fetch={props.fetch} data={props.data} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <ModalCreate fetch={props.fetch} data={props.data} modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </React.Fragment>
         
     )

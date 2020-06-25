@@ -10,6 +10,8 @@ import { AppActions } from '../../../../../../../types';
 import { VoucherPromo } from '../../../../../../../types/admin/voucherPromo';
 import Paginate from './components/Paginate'
 import Table from './components/Table'
+import TicketGenerate from '../generate/Index'
+import TicketCreate from '../create/Index'
 
 type OwnProps = RouteComponentProps & {
     data: VoucherPromo | null
@@ -58,7 +60,8 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Tiket</h3>
                                     </div>
                                     <div className="col text-right">
-                                       
+                                        <TicketCreate fetch={fetch} data={props.data} />
+                                        <TicketGenerate fetch={fetch} data={props.data} />
                                     </div>
                                 </Row>
                             </CardHeader>
