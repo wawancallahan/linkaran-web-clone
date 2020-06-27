@@ -113,7 +113,8 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
 
         let paramsObject: OptionObjectString = {
             page: page.toString(),
-            ...filterOmit
+            // ...filterOmit
+            type: (querySearch.type as string) || 'complete',
         }
 
         return await axiosService.get(process.env.REACT_APP_API_URL + `/web/transaction`, {
