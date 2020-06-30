@@ -13,7 +13,11 @@ import {
     AlertApplicationShowActionType,
     AlertApplicationHideActionType,
     ALERT_APPLICATION_HIDE,
-    ALERT_APPLICATION_SHOW
+    ALERT_APPLICATION_SHOW,
+    SetFilterApplicationActionType,
+    ClearFilterApplicationActionType,
+    SET_FILTER_APPLICATION,
+    CLEAR_FILTER_APPLICATION
 } from '../../../types/admin/transaction/application';
 
 import { Paginator } from '../../../types/paginator';
@@ -97,6 +101,26 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorApplicat
     }
 }
 
+const setFilter = (state: initialStateInterface, action: SetFilterApplicationActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...action.filter
+        },
+        filtered: true
+    }
+}
+
+const clearFilter = (state: initialStateInterface, action: ClearFilterApplicationActionType) => {
+    return {
+        ...state,
+        filter: {
+            ...initialState.filter
+        },
+        filtered: false
+    }
+}
+
 const reducer = (state = initialState, action: ApplicationActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_APPLICATION: return setPaginator(state, action);
@@ -104,6 +128,8 @@ const reducer = (state = initialState, action: ApplicationActionTypes) => {
         case FETCH_APPLICATION_ERROR: return fetchError(state, action);
         case ALERT_APPLICATION_HIDE: return alertHide(state, action);
         case ALERT_APPLICATION_SHOW: return alertShow(state, action);
+        case SET_FILTER_APPLICATION: return setFilter(state, action);
+        case CLEAR_FILTER_APPLICATION: return clearFilter(state, action);
         default:
             return state;
     }
