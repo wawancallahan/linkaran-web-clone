@@ -55,46 +55,6 @@ class Index extends React.Component<Props, State> {
     mapIsReady: false,
   };
 
-  getIconOrder = (
-    service: any,
-    vehicleType: any,
-    maxRadius: any,
-    minRadius: any,
-    maxDriverDistanceRadius: any
-  ) => {
-    let serviceCode;
-    if (service.code == "linksend") {
-      serviceCode = "send";
-    }
-
-    if (service.code == "linkfood") {
-      serviceCode = "food";
-    }
-
-    if (service.code == "linkcar") {
-      if (vehicleType.code === "car") {
-        serviceCode = "car_reguler";
-      } else {
-        serviceCode = "car_large";
-      }
-    }
-
-    if (service.code == "linkride") {
-      serviceCode = "bike";
-    }
-
-    const MaxRad = maxRadius;
-    const MinRad = minRadius;
-    const MBRad = maxDriverDistanceRadius;
-
-    return {
-      anchor: new google.maps.Point(31, 72),
-      size: new google.maps.Size(62, 72),
-      origin: new google.maps.Point(0, 0),
-      url: `${this.baseUrl}/api/icon/req/${MaxRad}-${MBRad}/${serviceCode}.svg`,
-    };
-  };
-
   componentDidMount() {
     // Load the Google Maps API
     // const API = "AIzaSyDVVH8FAlEV9UWK0dKxWwkUSola2Ll24Hs";
@@ -109,6 +69,47 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidUpdate() {
+
+    const getIconOrder = (
+      service: any,
+      vehicleType: any,
+      maxRadius: any,
+      minRadius: any,
+      maxDriverDistanceRadius: any
+    ) => {
+      let serviceCode;
+      if (service.code == "linksend") {
+        serviceCode = "send";
+      }
+  
+      if (service.code == "linkfood") {
+        serviceCode = "food";
+      }
+  
+      if (service.code == "linkcar") {
+        if (vehicleType.code === "car") {
+          serviceCode = "car_reguler";
+        } else {
+          serviceCode = "car_large";
+        }
+      }
+  
+      if (service.code == "linkride") {
+        serviceCode = "bike";
+      }
+  
+      const MaxRad = maxRadius;
+      const MinRad = minRadius;
+      const MBRad = maxDriverDistanceRadius;
+  
+      return {
+        anchor: new google.maps.Point(31, 72),
+        size: new google.maps.Size(62, 72),
+        origin: new google.maps.Point(0, 0),
+        url: `${this.baseUrl}/api/icon/req/${MaxRad}-${MBRad}/${serviceCode}.svg`,
+      };
+    };
+
     if (this.state.mapIsReady) {
       const colors = ["#97CA56", "#56A0CA", "#EF9F8D", "#CA56B0", "#FDCE54"];
       let destinationMarker: any = null;
@@ -271,7 +272,7 @@ class Index extends React.Component<Props, State> {
 
                   const [lng, lat] = getOrder.transaction.origin.coordinates;
 
-                  const icon = this.getIconOrder(service, vehicleType, 1, 1, 1);
+                  const icon = getIconOrder(service, vehicleType, 1, 1, 1);
 
                   if ( ! isNaN(lng) && ! isNaN(lat) && lng !== null && lat !== null) {
                     destinationMarker = new google.maps.Marker({
@@ -336,7 +337,7 @@ class Index extends React.Component<Props, State> {
 
           const { service, vehicleType } = dataViewDetailOrder.transaction;
 
-          const icon = this.getIconOrder(
+          const icon = getIconOrder(
             service,
             vehicleType,
             response.data.maxRadius,
