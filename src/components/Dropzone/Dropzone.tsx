@@ -38,10 +38,10 @@ const Dropzone: React.FC<Props> = (props) => {
     const onFilesAdded = (e: React.FormEvent<HTMLInputElement>) => {
         if (props.disabled) return;
         
-        const files = e.currentTarget.files;
+        const currentFiles = e.currentTarget.files;
         
         if (props.onFilesAdded) {
-            const fileList = fileListToArray(files);
+            const fileList = fileListToArray(currentFiles);
 
             props.onFilesAdded(fileList);
             setFiles(fileList)
@@ -66,10 +66,10 @@ const Dropzone: React.FC<Props> = (props) => {
     
         if (props.disabled) return;
     
-        const files = e.dataTransfer.files;
+        const dataTransferFiles = e.dataTransfer.files;
     
         if (props.onFilesAdded) {
-            const fileList = fileListToArray(files);
+            const fileList = fileListToArray(dataTransferFiles);
             props.onFilesAdded(fileList);
             
             setFiles(fileList)
@@ -79,15 +79,22 @@ const Dropzone: React.FC<Props> = (props) => {
     }
     
     const removeSelectedFile = (file: FilePreview) => {
-        const prevState = {
+        let prevState: FilePreview[] = [
             ...files
-        }
+        ]
 
         const index = prevState.indexOf(file);
-        const prevStateFiles = prevState.slice(0);
-        prevStateFiles.splice(index, 1);
 
-        setFiles(prevStateFiles)
+        if (index > -1) {
+            const prevStateFiles = prevState.slice(0);
+            prevStateFiles.splice(index, 1);
+
+            prevState = {
+                ...prevStateFiles
+            }
+        }
+
+        setFiles(prevState)
     }
     
     const removeAllFile = () => {

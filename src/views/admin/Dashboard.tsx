@@ -270,7 +270,7 @@ class Index extends React.Component<Props, State> {
 
                   const { service, vehicleType } = getOrder.transaction;
 
-                  const [lng, lat] = getOrder.transaction.origin.coordinates;
+                  const [lng = null, lat = null] = getOrder.transaction.origin.coordinates;
 
                   const icon = getIconOrder(service, vehicleType, 1, 1, 1);
 
