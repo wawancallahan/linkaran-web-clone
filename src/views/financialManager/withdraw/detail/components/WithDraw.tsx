@@ -9,6 +9,7 @@ import { WithDrawShow } from '../../../../../types/financialManager/withdraw'
 
 import '../../../../../react-modal-image.d.ts'
 import { Lightbox } from 'react-modal-image'
+import { parseDateFormat } from '../../../../../helpers/utils'
 
 type OwnProps = {
     data: WithDrawShow | null
@@ -26,6 +27,50 @@ const WithDraw: React.FC<Props> = (props) => {
 
     if (data && data.evidance) {
         evidenceImage = data.evidance
+    }
+
+    let declineInformation: React.ReactChild = ''
+
+    if (data && data.decline && data.decline !== null) {
+        declineInformation = (
+            <div>
+                <div className="form-group">
+                    <label htmlFor="">Tanggal Dibatalkan</label>
+                    <div>
+                        {data && data.decline && data.decline.declineAt ? parseDateFormat(data.decline.declineAt as string) : '' }
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="">Dibatalkan Oleh</label>
+                    <div>
+                        { data && data.decline && data.decline.userDecline ? data.decline.userDecline.name : '' }
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    let approveInformation: React.ReactChild = ''
+
+    if (data && data.approvedAt !== null && data.approvedBy && data.approvedBy !== null) {
+        approveInformation = (
+            <div>
+                <div className="form-group">
+                    <label htmlFor="">Tanggal Disetujui</label>
+                    <div>
+                        {data ? data.approvedAt : '' }
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="">Disetujui Oleh</label>
+                    <div>
+                        { data && data.approvedBy ? data.approvedBy.name : '' }
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -67,19 +112,8 @@ const WithDraw: React.FC<Props> = (props) => {
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="">Tanggal Disetujui</label>
-                            <div>
-                                {data ? data.approvedAt : '' }
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="">Disetujui Oleh</label>
-                            <div>
-                                { data && data.approvedBy ? data.approvedBy.name : '' }
-                            </div>
-                        </div>
+                        {approveInformation}
+                        {declineInformation}
                     </div>
                 </CardBody>
             </Card>

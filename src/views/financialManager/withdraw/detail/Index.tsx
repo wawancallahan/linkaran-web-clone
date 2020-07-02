@@ -23,7 +23,7 @@ import { findWithDrawAction } from '../../../../actions/financialManager/withdra
 import WithDraw from './components/WithDraw'
 import Profile from './components/Profile'
 import Bank from './components/Bank'
-import Approve from './components/Approve'
+import Approval from './components/Approval'
 
 type OwnProps = RouteComponentProps<{
     id: string
@@ -72,7 +72,7 @@ const Index: React.FC<Props> = (props) => {
                         </Col>
                         <Col>
                             {needApprove ? (
-                                <Approve data={item} setNeedReload={setNeedReload} setLoaded={setLoaded} />
+                                <Approval data={item} setNeedReload={setNeedReload} setLoaded={setLoaded} />
                             ) : null}
                             <Bank data={item} />
                         </Col>

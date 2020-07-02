@@ -21,12 +21,15 @@ import {
     WithDrawCreateResult,
     WithDrawList,
     WithDrawShow,
-    WithDrawApprove,
+    WithDrawApproveResult,
     Filter,
     SetFilterWithDrawActionType,
     SET_FILTER_WITHDRAW,
     ClearFilterWithDrawActionType,
-    CLEAR_FILTER_WITHDRAW
+    CLEAR_FILTER_WITHDRAW,
+    WithDrawApproveField,
+    WithDrawDeclineField,
+    WithDrawDeclineResult
 } from '../../types/financialManager/withdraw';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';
@@ -201,9 +204,9 @@ export const fetchListWithDrawAction = (search: string, page: number): ThunkResu
     }
 }
 
-export const createWithDrawAction = (topUp: WithDrawCreateField): ThunkResult<Promise<ApiResponse<WithDrawCreateResult>>> => {
+export const createWithDrawAction = (withDraw: WithDrawCreateField): ThunkResult<Promise<ApiResponse<WithDrawCreateResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + '/web/financial-manager/withdraw', topUp)
+        return axiosService.post(process.env.REACT_APP_API_URL + '/web/financial-manager/withdraw', withDraw)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<WithDrawCreateResult> = response.data;
                 
@@ -307,9 +310,9 @@ export const findWithDrawAction = (id: number): ThunkResult<Promise<ApiResponse<
     }
 }
 
-export const editWithDrawAction = (topUp: WithDrawEditField, id: number): ThunkResult<Promise<ApiResponse<WithDrawEditResult>>> => {
+export const editWithDrawAction = (withDraw: WithDrawEditField, id: number): ThunkResult<Promise<ApiResponse<WithDrawEditResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/${id}`, topUp)
+        return axiosService.patch(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/${id}`, withDraw)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<WithDrawEditResult> = response.data;
                 
@@ -414,11 +417,71 @@ export const deleteWithDrawAction = (id: number): ThunkResult<Promise<ApiRespons
     }
 }
 
-export const approveWithDrawAction = (id: number): ThunkResult<Promise<ApiResponse<WithDrawApprove>>> => {
+export const approveWithDrawAction = (withDraw: WithDrawApproveField, id: number): ThunkResult<Promise<ApiResponse<WithDrawApproveResult>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/${id}/approved`)
+
+        const data = new FormData;
+
+        if (withDraw.image) {
+            data.append('image', withDraw.image);
+        }
+
+        return axiosService.post(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/${id}/approved`, data)
             .then( (response: AxiosResponse) => {
-                const data: ApiResponseSuccess<WithDrawApprove> = response.data;
+                const data: ApiResponseSuccess<WithDrawApproveResult> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const declineWithDrawAction = (withDraw: WithDrawDeclineField, id: number): ThunkResult<Promise<ApiResponse<WithDrawDeclineResult>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.post(process.env.REACT_APP_API_URL + `/web/financial-manager/withdraw/${id}/cancel`, withDraw)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<WithDrawDeclineResult> = response.data;
 
                 return Promise.resolve({
                     response: data,
