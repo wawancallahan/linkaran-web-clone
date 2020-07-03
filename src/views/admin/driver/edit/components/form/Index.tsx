@@ -127,7 +127,7 @@ const Form: React.FC<Props> = (props) => {
                     no_rangka: values.no_rangka,
                     no_sim: '',
                     no_stnk: values.no_stnk,
-                    no_telepon: `62${values.no_telepon}`,
+                    no_telepon: `${values.no_telepon}`,
                     provinsi: {
                         id: values.provinsi.value
                     },

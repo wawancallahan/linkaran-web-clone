@@ -351,24 +351,19 @@ const Driver: React.FC<Props> = (props) => {
                 >
                     No Telepon
                 </label>
-                <InputGroup>
-                    <InputGroupAddon addonType="prepend">
-                        <InputGroupText className="font-size-control no-border">+62</InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                        className="form-control-alternative"
-                        id="input-no_telepon"
-                        placeholder="No Telepon"
-                        type="text"
-                        name="no_telepon"
-                        maxLength={255}
-                        value={form.values.no_telepon}
-                        required
-                        onChange={form.handleChange}
-                        onBlur={form.handleBlur}
-                        invalid={ !!(form.touched.no_telepon && form.errors.no_telepon) }
-                        />
-                </InputGroup>
+                <Input
+                    className="form-control-alternative"
+                    id="input-no_telepon"
+                    placeholder="No Telepon"
+                    type="text"
+                    name="no_telepon"
+                    maxLength={255}
+                    value={form.values.no_telepon}
+                    required
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                    invalid={ !!(form.touched.no_telepon && form.errors.no_telepon) }
+                    />
                 <div>
                     {form.errors.no_telepon && form.touched.no_telepon ? form.errors.no_telepon : ''}
                 </div>
