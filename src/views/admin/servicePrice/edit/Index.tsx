@@ -43,9 +43,9 @@ const Index: React.FC<Props> = (props) => {
             value: 0,
             label: ''
         },
-        driverPaymentDeductions: "",
-        servicePaymentDeductions: "",
-        maxDriverDistanceRadius: ""
+        driverPaymentDeductions: "0",
+        servicePaymentDeductions: "0",
+        maxDriverDistanceRadius: "0"
     })
 
     React.useEffect(() => {
@@ -60,7 +60,7 @@ const Index: React.FC<Props> = (props) => {
 
                     const data: ServicePriceShow = response.response!.result;
 
-                    if (data.priceId && data.basePrice) {
+                    if (data.priceId !== undefined && data.basePrice !== undefined) {
                         form.price = {
                             value: data.priceId,
                             label: data.basePrice.toString()

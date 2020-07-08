@@ -32,9 +32,9 @@ const Index: React.FC<Props> = (props) => {
             value: 0,
             label: ''
         },
-        driverPaymentDeductions: "",
-        servicePaymentDeductions: "",
-        maxDriverDistanceRadius: ""
+        driverPaymentDeductions: "0",
+        servicePaymentDeductions: "0",
+        maxDriverDistanceRadius: "0"
     })
 
     const redirectOnSuccess = () => {
