@@ -114,17 +114,25 @@ export const midnightDate = () => {
     return d
 }
 
-export const voucherUsedFormat = (date_start: string, date_end: string) => {
-    let label = 'Sedang Berlangsung';
+export const voucherUsedFormat = (dateStart: string, dateEnd: string) => {
+    const dateStartParse = moment(dateStart);
+    const dateEndParse = moment(dateEnd);
 
-    const dateStartParse = new Date(date_start);
-    const dateEndParse = new Date(date_end);
+    const now = moment();
 
-    if (dateStartParse > dateEndParse) {
-        label = 'Sudah Berakhir'
+    if (now.diff(dateStartParse) >= 0 && now.diff(dateEndParse) <= 0) {
+        return 'Sedang Berlangsung'
     }
 
-    return label;
+    if (now.diff(dateStartParse) <= 0) {
+        return 'Belum Berlangsung'
+    }
+
+    if (now.diff(dateEndParse) >= 0) {
+        return "Telah Selesai"
+    }
+
+    return ''
 }
 
 export const objectToParamsUrl = (params: OptionObjectString | OptionObjectNumber) => {
