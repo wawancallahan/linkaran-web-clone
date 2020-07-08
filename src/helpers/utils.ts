@@ -1,5 +1,4 @@
 import moment from 'moment'
-import 'moment/locale/id'
 import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
 
 moment.locale('id');
@@ -74,7 +73,7 @@ export const parseDateTimeFormat = (date: string) => {
     if (date !== '') {
         const dateParse = moment(date)
 
-        return dateParse.format('D MMMM YYYY hh:mm');
+        return dateParse.format('D MMMM YYYY hh:mm A');
     }
     
     return null;
