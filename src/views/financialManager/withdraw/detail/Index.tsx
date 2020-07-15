@@ -49,8 +49,8 @@ const Index: React.FC<Props> = (props) => {
                     setItem(data)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<WithDrawShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<WithDrawShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

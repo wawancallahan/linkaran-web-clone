@@ -147,7 +147,7 @@ class CreateFromCustomer extends Component<Props, State> {
                         }
                     });
                 })
-                .catch((response: ApiResponse<CustomerShow>) => {
+                .catch((error: ApiResponse<CustomerShow>) => {
                     this.setState({
                         isLoaded: true
                     })

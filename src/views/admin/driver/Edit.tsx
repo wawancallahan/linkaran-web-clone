@@ -279,12 +279,9 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<DriverShow>) => {
-
-                    const error = response.error as ApiResponseError
-
+                .catch((error: ApiResponse<DriverShow>) => {
                     this.setState({
-                        loadedMessage: error ? error.metaData.message : 'Gagal mengedit data'
+                        loadedMessage: error.error!.metaData.message
                     })
                 })
     }

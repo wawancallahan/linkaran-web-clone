@@ -42,8 +42,8 @@ const Index: React.FC<Props> = (props) => {
                     setTypeTransaction(type)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<ApplicationShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<ApplicationShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

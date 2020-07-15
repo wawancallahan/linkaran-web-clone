@@ -84,12 +84,12 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ServiceShow>) => {
+                .catch((error: ApiResponse<ServiceShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
-                    if (response.error) {
-                        message = response.error.metaData.message;
+                    if (error.error) {
+                        message = error.error.metaData.message;
                     }
 
                     this.setState({

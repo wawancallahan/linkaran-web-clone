@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertFoodCategoryShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<FoodCategory>) => {
-                    props.setAlertFoodCategoryShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<FoodCategory>) => {
+                    props.setLoader(false)
+
+                    props.setAlertFoodCategoryShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

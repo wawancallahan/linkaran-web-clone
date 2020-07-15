@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertBrandVehicleShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<BrandVehicle>) => {
-                    props.setAlertBrandVehicleShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<BrandVehicle>) => {
+                    props.setLoader(false)
+
+                    props.setAlertBrandVehicleShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

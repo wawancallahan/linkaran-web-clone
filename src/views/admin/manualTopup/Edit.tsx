@@ -103,9 +103,9 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<ManualTopUpShow>) => {
+                .catch((error: ApiResponse<ManualTopUpShow>) => {
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: error.error!.metaData.message
                     })
                 })
     }

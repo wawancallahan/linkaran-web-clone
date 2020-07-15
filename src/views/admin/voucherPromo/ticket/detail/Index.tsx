@@ -40,8 +40,8 @@ const Index: React.FC<Props> = (props) => {
                     setItem(data)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<VoucherPromoShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<VoucherPromoShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

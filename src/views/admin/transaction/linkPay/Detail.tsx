@@ -112,9 +112,9 @@ class Detail extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<LinkPay>) => {
+                .catch((error: ApiResponse<LinkPay>) => {
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: error.error!.metaData.message
                     })
                 })
     }

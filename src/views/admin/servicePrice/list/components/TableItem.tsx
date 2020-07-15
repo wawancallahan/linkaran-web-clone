@@ -35,8 +35,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertServicePriceShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<ServicePrice>) => {
-                    props.setAlertServicePriceShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<ServicePrice>) => {
+                    props.setLoader(false)
+
+                    props.setAlertServicePriceShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

@@ -84,12 +84,12 @@ class Detail extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<VoucherPromo>) => {
+                .catch((error: ApiResponse<VoucherPromo>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
-                    if (response.error) {
-                        message = response.error.metaData.message;
+                    if (error.error) {
+                        message = error.error.metaData.message;
                     }
 
                     this.setState({

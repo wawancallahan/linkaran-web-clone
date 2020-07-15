@@ -134,8 +134,8 @@ const Index: React.FC<Props> = (props) => {
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<InvestorShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<InvestorShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

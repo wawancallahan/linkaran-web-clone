@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertUserShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<User>) => {
-                    props.setAlertUserShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<User>) => {
+                    props.setLoader(false)
+
+                    props.setAlertUserShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

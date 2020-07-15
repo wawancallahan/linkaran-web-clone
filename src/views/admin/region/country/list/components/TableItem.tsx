@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertCountryShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<Country>) => {
-                    props.setAlertCountryShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<Country>) => {
+                    props.setLoader(false)
+
+                    props.setAlertCountryShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

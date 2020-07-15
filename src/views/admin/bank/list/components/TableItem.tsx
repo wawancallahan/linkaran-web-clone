@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<Bank>) => {
-                    props.setAlertBankShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<Bank>) => {
+                    props.setLoader(false)
+
+                    props.setAlertBankShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

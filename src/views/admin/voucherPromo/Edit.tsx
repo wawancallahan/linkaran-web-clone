@@ -131,9 +131,9 @@ class Edit extends Component<Props, State> {
                     });
                     
                 })
-                .catch((response: ApiResponse<VoucherPromoShow>) => {
+                .catch((error: ApiResponse<VoucherPromoShow>) => {
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: error.error!.metaData.message
                     })
                 })
     }

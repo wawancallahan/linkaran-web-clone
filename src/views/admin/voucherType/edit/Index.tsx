@@ -47,8 +47,8 @@ const Index: React.FC<Props> = (props) => {
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<VoucherTypeShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<VoucherTypeShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

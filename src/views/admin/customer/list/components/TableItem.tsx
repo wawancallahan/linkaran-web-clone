@@ -34,6 +34,8 @@ const TableItem: React.FC<Props> = (props) => {
                     props.setAlertCustomerShowAction("Berhasil Mengaktifkan Customer", 'success');
                 })
                 .catch( (response: ApiResponse<Customer>) => {
+                    props.fetch(1);
+
                     props.setAlertCustomerShowAction(response.error!.metaData.message, 'danger');
                 });
             }
@@ -53,8 +55,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertCustomerShowAction("Berhasil Menonaktifkan Customer", 'success');
                 })
-                .catch( (response: ApiResponse<Customer>) => {
-                    props.setAlertCustomerShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<Customer>) => {
+                    props.fetch(1);
+
+                    props.setAlertCustomerShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

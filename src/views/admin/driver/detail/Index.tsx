@@ -41,8 +41,8 @@ const Index: React.FC<Props> = (props) => {
                     setItem(data)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<DriverShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<DriverShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

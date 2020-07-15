@@ -86,12 +86,12 @@ class Create extends Component<Props, State> {
                         isLoaded: true
                     });
                 })
-                .catch((response: ApiResponse<SubDistrictShow>) => {
+                .catch((error: ApiResponse<SubDistrictShow>) => {
                     
                     let message = "Gagal Mendapatkan Response"
 
-                    if (response.error) {
-                        message = response.error.metaData.message
+                    if (error.error) {
+                        message = error.error.metaData.message
                     }
 
                     this.setState({

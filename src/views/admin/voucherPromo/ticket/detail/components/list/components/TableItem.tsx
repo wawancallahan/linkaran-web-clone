@@ -51,6 +51,8 @@ const TableItem: React.FC<Props> = (props) => {
                     }
                 })
                 .catch( (error: ApiResponse<Ticket>) => {
+                    props.setLoader(false)
+
                     let message = "Gagal Mendapatkan Response";
 
                     if (error.error) {

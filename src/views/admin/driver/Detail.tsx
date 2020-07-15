@@ -68,12 +68,12 @@ class Detail extends Component<Props, State> {
                         });
                     }
                 })
-                .catch((response: ApiResponse<DriverShow>) => {
+                .catch((error: ApiResponse<DriverShow>) => {
 
                     let message = "Gagal Mendapatkan Response";
 
-                    if (response.error) {
-                        message = response.error.metaData.message;
+                    if (error.error) {
+                        message = error.error.metaData.message;
                     }
 
                     this.setState({

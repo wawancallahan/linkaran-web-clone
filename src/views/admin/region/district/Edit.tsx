@@ -88,9 +88,9 @@ class Create extends Component<Props, State> {
                         isLoaded: true
                     });
                 })
-                .catch((response: ApiResponse<DistrictShow>) => {
+                .catch((error: ApiResponse<DistrictShow>) => {
                     this.setState({
-                        loadedMessage: response.error!.metaData.message
+                        loadedMessage: error.error!.metaData.message
                     })
                 })
     }

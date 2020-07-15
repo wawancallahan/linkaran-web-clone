@@ -38,8 +38,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<Driver>) => {
-                    props.setAlertDriverShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<Driver>) => {
+                    props.setLoader(false)
+
+                    props.setAlertDriverShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })

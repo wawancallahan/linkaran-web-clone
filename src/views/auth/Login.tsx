@@ -143,8 +143,8 @@ const Login: React.FC<Props> = (props) => {
 
                         goDashboard("Admin");
                     })
-                    .catch((response: ValidateLoginResponse) => {
-                        const data = response.response as ValidateLoginFailResult;
+                    .catch((error: ValidateLoginResponse) => {
+                        const data = error.response as ValidateLoginFailResult;
 
                         let message = "Gagal mendapatkan response"
 
@@ -188,8 +188,8 @@ const Login: React.FC<Props> = (props) => {
                             setIsSubmitting(false)
                         }
                     })
-                    .catch((response: LoginResponse) => {
-                        const data: LoginFailResult = response.response as LoginFailResult;
+                    .catch((error: LoginResponse) => {
+                        const data: LoginFailResult = error.response as LoginFailResult;
                         
                         let message = "Gagal mendapatkan response"
 

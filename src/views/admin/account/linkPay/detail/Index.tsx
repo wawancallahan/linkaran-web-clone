@@ -37,8 +37,8 @@ const Index: React.FC<Props> = (props) => {
                     setItem(data)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<AccountLinkPayShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<AccountLinkPayShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

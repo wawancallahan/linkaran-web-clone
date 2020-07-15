@@ -57,8 +57,8 @@ const Index: React.FC<Props> = (props) => {
                     setFormField(form)
                     setLoaded(true)
                 })
-                .catch((response: ApiResponse<SubDistrictShow>) => {
-                    setLoadMessage(response.error!.metaData.message)
+                .catch((error: ApiResponse<SubDistrictShow>) => {
+                    setLoadMessage(error.error!.metaData.message)
                 })
         }
 

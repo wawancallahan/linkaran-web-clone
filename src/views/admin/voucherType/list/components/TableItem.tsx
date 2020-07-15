@@ -34,8 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
 
                     props.setAlertVoucherTypeShowAction("Data Berhasil Dihapus", 'success');
                 })
-                .catch( (response: ApiResponse<VoucherType>) => {
-                    props.setAlertVoucherTypeShowAction(response.error!.metaData.message, 'danger');
+                .catch( (error: ApiResponse<VoucherType>) => {
+                    props.setLoader(false)
+
+                    props.setAlertVoucherTypeShowAction(error.error!.metaData.message, 'danger');
                 });
             }
         })
