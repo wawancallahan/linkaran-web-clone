@@ -31,6 +31,7 @@ import { RestaurantList } from '../../../../../types/admin/restaurant';
 import { fetchListServiceAction } from '../../../../../actions/admin/service';
 import { fetchListVoucherTypeAction } from '../../../../../actions/admin/voucherType';
 import { fetchListRestaurantAction } from '../../../../../actions/admin/restaurant';
+import NumberFormat, { NumberFormatValues } from 'react-number-format';
 import "react-datepicker/dist/react-datepicker.css";
 
 type OwnProps = {
@@ -375,18 +376,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Nominal Potongan
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-amount"
-                                    placeholder="Nominal Potongan"
-                                    type="text"
-                                    name="amount"
-                                    maxLength={255}
-                                    value={FormikProps.values.amount}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-amount"
+                                        placeholder="Nominal Potongan"
+                                        name="amount"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.amount}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('amount', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}
@@ -399,18 +404,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Minimal Pembelian
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-minimumPurchase"
-                                    placeholder="Minimal Pembelian"
-                                    type="text"
-                                    name="minimumPurchase"
-                                    maxLength={255}
-                                    value={FormikProps.values.minimumPurchase}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.minimumPurchase && FormikProps.errors.minimumPurchase) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-minimumPurchase"
+                                        placeholder="Minimal Pembelian"
+                                        name="minimumPurchase"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.minimumPurchase}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('minimumPurchase', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.minimumPurchase && FormikProps.touched.minimumPurchase ? FormikProps.errors.minimumPurchase : ''}

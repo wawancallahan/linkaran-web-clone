@@ -17,6 +17,7 @@ import swal from 'sweetalert'
 import BlockUi from '../../../../../components/BlockUi/BlockUi'
 import { toast, TypeOptions } from 'react-toastify'
 import { Schema } from './Schema'
+import NumberFormat, { NumberFormatValues } from 'react-number-format';
 
 type OwnProps = {
     form: FormField,
@@ -95,18 +96,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Harga Dasar
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-basePrice"
-                                    placeholder="Harga Dasar"
-                                    type="text"
-                                    name="basePrice"
-                                    maxLength={255}
-                                    value={FormikProps.values.basePrice}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.basePrice && FormikProps.errors.basePrice) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-basePrice"
+                                        placeholder="Harga Dasar"
+                                        name="basePrice"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.basePrice}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('basePrice', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.basePrice && FormikProps.touched.basePrice ? FormikProps.errors.basePrice : ''}
@@ -119,18 +124,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Harga Per Kilometer
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-perKilometer"
-                                    placeholder="Harga Per Kilometer"
-                                    type="text"
-                                    name="perKilometer"
-                                    maxLength={255}
-                                    value={FormikProps.values.perKilometer}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.perKilometer && FormikProps.errors.perKilometer) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-perKilometer"
+                                        placeholder="Harga Per Kilometer"
+                                        name="perKilometer"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.perKilometer}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('perKilometer', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.perKilometer && FormikProps.touched.perKilometer ? FormikProps.errors.perKilometer : ''}

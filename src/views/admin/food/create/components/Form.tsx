@@ -25,6 +25,7 @@ import { Schema } from './Schema'
 import { FoodCategoryList } from '../../../../../types/admin/foodCategory';
 import { fetchListFoodCategoryAction } from '../../../../../actions/admin/foodCategory';
 import Dropzone from '../../../../../components/Dropzone/Dropzone';
+import NumberFormat, { NumberFormatValues } from 'react-number-format';
 
 type OwnProps = {
     form: FormField,
@@ -274,18 +275,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Harga
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-price"
-                                    placeholder="Harga"
-                                    type="number"
-                                    name="price"
-                                    maxLength={255}
-                                    value={FormikProps.values.price}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.price && FormikProps.errors.price) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-price"
+                                        placeholder="Harga"
+                                        name="price"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.price}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('price', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.price && FormikProps.touched.price ? FormikProps.errors.price : ''}

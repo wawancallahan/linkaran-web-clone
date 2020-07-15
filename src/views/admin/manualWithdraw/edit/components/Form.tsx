@@ -25,6 +25,7 @@ import { fetchListBankAction } from '../../../../../actions/admin/bank';
 import { BankList } from '../../../../../types/admin/bank';
 import { fetchListDriverAction } from '../../../../../actions/admin/driver';
 import { DriverList } from '../../../../../types/admin/driver';
+import NumberFormat, { NumberFormatValues } from 'react-number-format';
 
 type OwnProps = {
     form: FormField,
@@ -204,18 +205,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Jumlah
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-amount"
-                                    placeholder="Jumlah"
-                                    type="text"
-                                    name="amount"
-                                    maxLength={255}
-                                    value={FormikProps.values.amount}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.amount && FormikProps.errors.amount) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-amount"
+                                        placeholder="Jumlah"
+                                        name="amount"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.amount}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('amount', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.amount && FormikProps.touched.amount ? FormikProps.errors.amount : ''}

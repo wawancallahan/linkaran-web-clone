@@ -27,6 +27,7 @@ import { DistrictList } from '../../../../../types/admin/region/district';
 import { fetchListDistrictAction } from '../../../../../actions/admin/region/district';
 import { ServiceList } from '../../../../../types/admin/service';
 import { fetchListServiceAction } from '../../../../../actions/admin/service';
+import NumberFormat, { NumberFormatValues } from 'react-number-format';
 
 type OwnProps = {
     form: FormField,
@@ -297,18 +298,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Pengurangan Pembayaran driver
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-driverPaymentDeductions"
-                                    placeholder="Pengurangan Pembayaran driver"
-                                    type="text"
-                                    name="driverPaymentDeductions"
-                                    maxLength={255}
-                                    value={FormikProps.values.driverPaymentDeductions}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.driverPaymentDeductions && FormikProps.errors.driverPaymentDeductions) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-driverPaymentDeductions"
+                                        placeholder="Pengurangan Pembayaran driver"
+                                        name="driverPaymentDeductions"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.driverPaymentDeductions}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('driverPaymentDeductions', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.driverPaymentDeductions && FormikProps.touched.driverPaymentDeductions ? FormikProps.errors.driverPaymentDeductions : ''}
@@ -321,18 +326,22 @@ const Form: React.FC<Props> = (props) => {
                                     >
                                         Pengurangan Pembayaran Layanan
                                     </label>
-                                    <Input
-                                    className="form-control-alternative"
-                                    id="input-servicePaymentDeductions"
-                                    placeholder="Pengurangan Pembayaran Layanan"
-                                    type="text"
-                                    name="servicePaymentDeductions"
-                                    maxLength={255}
-                                    value={FormikProps.values.servicePaymentDeductions}
-                                    required
-                                    onChange={FormikProps.handleChange}
-                                    onBlur={FormikProps.handleBlur}
-                                    invalid={ !!(FormikProps.touched.servicePaymentDeductions && FormikProps.errors.servicePaymentDeductions) }
+                                    <NumberFormat
+                                        className="form-control form-control-alternative"
+                                        id="input-servicePaymentDeductions"
+                                        placeholder="Pengurangan Pembayaran Layanan"
+                                        name="servicePaymentDeductions"
+                                        maxLength={255}
+                                        decimalScale={0}
+                                        thousandSeparator={true}
+                                        value={FormikProps.values.servicePaymentDeductions}
+                                        isNumericString={true}
+                                        required
+                                        allowNegative={false}
+                                        onValueChange={(values: NumberFormatValues) => {
+                                            FormikProps.setFieldValue('servicePaymentDeductions', values.value)
+                                        }}
+                                        onBlur={FormikProps.handleBlur}
                                     />
                                     <div>
                                         {FormikProps.errors.servicePaymentDeductions && FormikProps.touched.servicePaymentDeductions ? FormikProps.errors.servicePaymentDeductions : ''}
