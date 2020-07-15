@@ -69,6 +69,8 @@ const Index: React.FC<Props> = (props) => {
 
                     form.accountName = data.request && data.request.accountName ? data.request.accountName : '';
                     form.accountNumber = data.request && data.request.accountNumber ? data.request.accountNumber : '';
+                    form.bankName = data.request && data.request.bankName ? data.request.bankName : '';
+                    form.amount = data.request && data.request.amount ? data.request.amount.toString() : '';
 
                     setFormField(form)
                     setLoaded(true)

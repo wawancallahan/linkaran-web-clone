@@ -54,7 +54,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
             <td>
-                <Link to={`/admin/manual-topup/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <Link to={`/admin/manual-withdraw/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
                 </Link>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
