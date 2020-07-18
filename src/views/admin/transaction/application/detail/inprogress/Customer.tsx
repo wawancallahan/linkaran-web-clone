@@ -5,10 +5,12 @@ import {
     Col,
     Card,
     CardHeader,
-    CardBody
+    CardBody,
+    Button
 } from 'reactstrap';
 
 import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
+import { Link } from 'react-router-dom';
 
 type OwnProps = {
     className?: string,
@@ -24,6 +26,23 @@ const Customer: React.FC<Props> = (props) => {
     return (
         <div className={props.className}>
             <Card>
+                <CardHeader>
+                    <Row className="align-items-center">
+                        <Col>
+                            <h3 className="mb-0">Customer</h3>
+                        </Col>
+                        <Col className="text-right">
+                            <Link to={`/admin/customer/${data.costumer.id}`}>
+                                <Button
+                                    color="info"
+                                    size="sm"
+                                >
+                                    Detail
+                                </Button>
+                            </Link>
+                        </Col>
+                    </Row>
+                </CardHeader>
                 <CardHeader>
                     <Row className="align-items-center">
                         <Col>
