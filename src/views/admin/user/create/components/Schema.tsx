@@ -23,6 +23,6 @@ export const Schema = Yup.object().shape({
                         label: Yup.string().required('Bidang pilihan role wajib diisi'),
                         value: Yup.number().notOneOf([0], 'Bidang pilihan role wajib diisi').required('Bidang pilihan role wajib diisi')
                     })
-                ),
+                ).required("Bidang pilihan role wajib diisi"),
     telegramuser: Yup.string().nullable(true)
 });

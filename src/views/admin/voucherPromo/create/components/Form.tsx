@@ -642,7 +642,9 @@ const Form: React.FC<Props> = (props) => {
                                     <ReactSelectAsyncPaginate 
                                         value={FormikProps.values.service}
                                         loadOptions={loadServiceHandler}
-                                        onChange={(option) => FormikProps.setFieldValue('service', option)}
+                                        onChange={(option) => {
+                                            FormikProps.setFieldValue('roles', option !== null ? option : "")
+                                        }}
                                         onBlur={() => FormikProps.setFieldTouched('service', true)}
                                         additional={{
                                             page: 1

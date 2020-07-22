@@ -78,7 +78,7 @@ export const Schema = Yup.object().shape({
                     label: Yup.string().required('Bidang pilihan layanan wajib diisi'),
                     value: Yup.number().notOneOf([0], 'Bidang pilihan layanan wajib diisi').required('Bidang pilihan layanan wajib diisi')
                 })
-            ),
+            ).required("Bidang pilihan layanan wajib diisi"),
     voucherType: Yup.object().shape({
         label: Yup.string().required("Bidang pilihan tipe voucher wajib diisi"),
         value: Yup.number().notOneOf([0], 'Bidang pilihan tipe voucher wajib diisi').required("Bidang pilihan tipe voucher wajib diisi")
