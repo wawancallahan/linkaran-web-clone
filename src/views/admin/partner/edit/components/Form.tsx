@@ -50,6 +50,10 @@ const Form: React.FC<Props> = (props) => {
             
             onSubmit={(values, action) => {
                 props.setAlertVisible(false);
+
+                let ips = values.ips;
+
+                if ( ! ips) ips = [];
                 
                 let startWorkingTogether = '';
 
@@ -71,7 +75,7 @@ const Form: React.FC<Props> = (props) => {
                     secret: values.secret,
                     startWorkingTogether: startWorkingTogether,
                     endWorkingTogether: endWorkingTogether,
-                    ips: values.ips
+                    ips: ips
                 }
 
                 swal("Apakah anda yakin?", "Data akan diubah!", {
