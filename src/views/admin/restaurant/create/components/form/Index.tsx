@@ -110,12 +110,14 @@ const Form: React.FC<Props> = (props) => {
                 operatingTime.push(saturdayOperationTime)
                 operatingTime.push(sundayOperationTime)
 
+                const [lat, lng] = values.point.split(',')
+
                 const restaurant: RestaurantCreateField = {
                     name: values.name,
                     address: values.address,
                     point: {
-                        lat: values.point.lat,
-                        lng: values.point.lng
+                        lat: lat,
+                        lng: lng
                     },
                     rating: values.rating,
                     photo_preview: values.photo_preview,

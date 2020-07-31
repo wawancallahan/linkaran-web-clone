@@ -18,7 +18,7 @@ export const ALERT_RESTAURANT_HIDE = "ALERT_RESTAURANT_HIDE";
 export type FormField = {
     name: string,
     address: string,
-    point: LocationPoint,
+    point: string,
     rating: number,
     photo: File | null,
     photo_preview: string,

@@ -228,74 +228,26 @@ const Information: React.FC<Props> = (props) => {
                     <FormGroup>
                         <label
                         className="form-control-label"
-                        htmlFor="input-point-lat"
+                        htmlFor="input-point"
                         >
-                            Latitude
+                            Point
                         </label>
                         <Input
                         className="form-control-alternative"
-                        id="input-point-lat"
-                        placeholder="Lat"
+                        id="input-point"
+                        placeholder="Point"
                         type="text"
-                        name="lat"
-                        value={form.values.point.lat}
+                        name="point"
+                        value={form.values.point}
                         required
-                        onChange={e => {
-                            form.handleChange(e)
-
-                            let value = e.currentTarget.value
-
-                            form.setFieldValue('point.lat', value, true)
-                        }}
-                        onBlur={e => {
-                            form.handleBlur(e)
-
-                            let value = e.currentTarget.value
-
-                            form.setFieldValue('point.lat', value, true)
-                        }}
-                        invalid={ !!(form.touched.point && form.errors.point && form.touched.point.lat && form.errors.point.lat) }
+                        onChange={form.handleChange}
+                        onBlur={form.handleBlur}
+                        invalid={ !!(form.touched.point && form.errors.point) }
                         />
                         <div>
-                            {form.touched.point && form.errors.point && form.touched.point.lat && form.errors.point.lat ? form.errors.point.lat : ''}
+                            {form.errors.point && form.touched.point ? form.errors.point : ''}
                         </div>
                     </FormGroup>
-                    <FormGroup>
-                        <label
-                        className="form-control-label"
-                        htmlFor="input-point-lng"
-                        >
-                            Longtitude
-                        </label>
-                        <Input
-                        className="form-control-alternative"
-                        id="input-point-lng"
-                        placeholder="Lng"
-                        type="text"
-                        name="lng"
-                        value={form.values.point.lng}
-                        required
-                        onChange={e => {
-                            form.handleChange(e)
-
-                            let value = e.currentTarget.value
-
-                            form.setFieldValue('point.lng', value, true)
-                        }}
-                        onBlur={e => {
-                            form.handleBlur(e)
-
-                            let value = e.currentTarget.value
-
-                            form.setFieldValue('point.lng', value, true)
-                        }}
-                        invalid={ !!(form.touched.point && form.errors.point && form.touched.point.lng && form.errors.point.lng) }
-                        />
-                        <div>
-                            {form.touched.point && form.errors.point && form.touched.point.lng && form.errors.point.lng ? form.errors.point.lng : ''}
-                        </div>
-                    </FormGroup>
-
                     <FormGroup>
                         <label
                         className="form-control-label"

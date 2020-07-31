@@ -29,10 +29,7 @@ const Index: React.FC<Props> = (props) => {
     const [formField, setFormField] = React.useState<FormField>({
         name: '',
         address: '',
-        point: {
-            lat: '',
-            lng: ''
-        },
+        point: "",
         rating: 0,
         photo: null,
         photo_preview: '',
@@ -99,13 +96,10 @@ const Index: React.FC<Props> = (props) => {
 
                     form.name = data.name;
                     form.address = data.address ? data.address : '';
-                    form.point = {
-                        lat: data.point.lat,
-                        lng: data.point.lng
-                    }
+                    form.point = `${data.point.lat},${data.point.lng}`;
                     form.rating = data.rating;
                     form.photo_preview = data.image ? data.image : '';
-                    form.phoneNumber = data.phoneNumber ? data.phoneNumber : '';;
+                    form.phoneNumber = data.phoneNumber ? data.phoneNumber : '';
 
                     if (data.district) {
                         if (data.district.province) {
@@ -193,7 +187,7 @@ const Index: React.FC<Props> = (props) => {
         <React.Fragment>
             <HeaderView />
             <Container className="mt--7" fluid>
-                <Card className="bg-secondary shadow">
+                <Card className="bg-secondary shadow mb-3">
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col>
@@ -201,17 +195,15 @@ const Index: React.FC<Props> = (props) => {
                             </Col>
                         </Row>
                     </CardHeader>
-                    <CardBody>
-                        <Flash alertMessage={alertMessage} alertVisible={alertVisible} setAlertVisible={setAlertVisible}/>
-                        {loaded ? (
-                            <Form form={formField} 
-                                setAlertVisible={setAlertVisible} 
-                                setAlertMessage={setAlertMessage}
-                                redirectOnSuccess={redirectOnSuccess} 
-                                id={Number.parseInt(props.match.params.id)} />
-                        ) : loadMessage}
-                    </CardBody>
                 </Card>
+                <Flash alertMessage={alertMessage} alertVisible={alertVisible} setAlertVisible={setAlertVisible}/>
+                {loaded ? (
+                    <Form form={formField} 
+                        setAlertVisible={setAlertVisible} 
+                        setAlertMessage={setAlertMessage}
+                        redirectOnSuccess={redirectOnSuccess} 
+                        id={Number.parseInt(props.match.params.id)} />
+                ) : loadMessage}
             </Container>
         </React.Fragment>
     )

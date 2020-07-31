@@ -13,12 +13,9 @@ export const Schema = Yup.object().shape({
              .required('Bidang isian nama wajib diiisi'),
     address: Yup.string()
              .required('Bidang isian alamat wajib diiisi'),
-    point: Yup.object().shape({
-        lat: Yup.string()
-                .required('Bidang isian lat wajib diiisi'),
-        lng: Yup.string()
-                .required('Bidang isian lng wajib diisi')
-    }),
+    point: Yup.string()
+            .matches(/^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$/, "Wajib diisi dengan lokasi lat,lng")
+            .required('Bidang isian point wajib diisi'),
     rating: Yup.number()
              .min(0, 'Bidang isian rating tidak boleh kurang dari 0')
              .required('Bidang isian rating wajib diiisi'),
