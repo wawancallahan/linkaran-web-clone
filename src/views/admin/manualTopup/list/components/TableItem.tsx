@@ -8,6 +8,7 @@ import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { parseDateTimeFormat } from '../../../../../helpers/utils'
 
 type OwnProps = {
     index: number,
@@ -53,6 +54,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.request && props.item.request.accountName}</td>
             <td>{props.item.request && props.item.request.uniqueCodeWithAmount}</td>
             <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
+            <td>{parseDateTimeFormat(props.item.transactionDate)}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
             <td>
                 <Link to={`/admin/manual-topup/${props.item.id}/edit`} className="btn btn-warning btn-sm">

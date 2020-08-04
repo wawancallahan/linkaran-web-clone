@@ -29,6 +29,7 @@ const Table: React.FC<Props> = (props) => {
                         <th>Bank/Akun</th>
                         <th>Nama Akun</th>
                         <th>Bank Tujuan</th>
+                        <th>Tanggal</th>
                         <th>Manual</th>
                         <th>Option</th>
                     </tr>
