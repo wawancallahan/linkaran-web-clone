@@ -5,6 +5,7 @@ import { setAlertWithDrawShowAction } from '../../../../../actions/financialMana
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
+import { Badge } from 'reactstrap'
 
 type OwnProps = {
     index: number,
@@ -15,6 +16,18 @@ type OwnProps = {
 }
 
 type Props = LinkDispatchToProps & OwnProps
+
+const statusApproved = (item: WithDrawList) => {
+    if (item.decline) {
+        return <Badge color="danger">Ditolak</Badge>
+    }
+
+    if (item.approvedBy) {
+        return <Badge color="success">Disetujui</Badge>
+    }
+
+    return <Badge color="info">Menunggu</Badge>
+}
 
 const TableItem: React.FC<Props> = (props) => {
     return (
@@ -27,6 +40,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.request && props.item.request.accountName}</td>
             <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
+            <td>{statusApproved(props.item)}</td>
             <td>
                 <Link to={`/admin/withdraw/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i> Detail
