@@ -115,7 +115,7 @@ const Form: React.FC<Props> = (props) => {
                     result = data.result.map((item: PriceList) => {
                         return {
                             value: item.id,
-                            label: `${item.basePrice}`
+                            label: `Rp. ${item.basePrice}, Minimal ${item.minKm} Km dengan Rp. ${item.perKilometer}/Km`
                         };
                     });
                 }

@@ -259,7 +259,7 @@ const Login: React.FC<Props> = (props) => {
                                         <FormGroup className="mb-3">
                                             <Select options={roleOptions}
                                                 defaultValue={roleOptions[0]}
-                                                isDisabled={isEmailSubmited}
+                                                isDisabled={isSubmitting || isEmailSubmited}
                                                 isClearable={false}
                                                 isRtl={false}
                                                 isSearchable={false}
@@ -295,7 +295,7 @@ const Login: React.FC<Props> = (props) => {
                                                 </InputGroupAddon>
                                                 <Input
                                                 placeholder="Email"
-                                                disabled={isEmailSubmited}
+                                                disabled={isSubmitting || isEmailSubmited}
                                                 type="text"
                                                 onChange={handleOnChange}
                                                 id="email"
@@ -317,6 +317,7 @@ const Login: React.FC<Props> = (props) => {
                                                     type="text"
                                                     onChange={handleOnChange}
                                                     id="pin"
+                                                    disabled={isSubmitting}
                                                 />
                                                 </InputGroup>
                                             </FormGroup>
@@ -328,8 +329,12 @@ const Login: React.FC<Props> = (props) => {
                                             <Row>
                                                 <Col>
                                                     {isEmailSubmited ? (
-                                                        <a href="#" onClick={cancelEmailOnSubmit}>
-                                                        Ganti Email
+                                                        <a href="#" onClick={() => {
+                                                            if ( ! isSubmitting) {
+                                                                cancelEmailOnSubmit();
+                                                            }
+                                                        }}>
+                                                            Ganti Email
                                                         </a>
                                                     ) : (
                                                         ""

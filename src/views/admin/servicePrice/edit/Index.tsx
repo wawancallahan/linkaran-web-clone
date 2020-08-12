@@ -60,10 +60,13 @@ const Index: React.FC<Props> = (props) => {
 
                     const data: ServicePriceShow = response.response!.result;
 
-                    if (data.priceId !== undefined && data.basePrice !== undefined) {
+                    if (data.priceId !== undefined && 
+                        data.basePrice !== undefined && 
+                        data.minKm !== undefined && 
+                        data.pricePerKm !== undefined) {
                         form.price = {
                             value: data.priceId,
-                            label: data.basePrice.toString()
+                            label: `Rp. ${data.basePrice}, Minimal ${data.minKm} Km dengan Rp. ${data.pricePerKm}/Km`
                         }
                     }
 
