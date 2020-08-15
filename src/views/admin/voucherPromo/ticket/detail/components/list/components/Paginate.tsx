@@ -1,16 +1,13 @@
 import * as React from 'react'
-import Pagination from '../../../../../../../../components/Pagination/Pagination';
+import Pagination from '../../../../../../../../components/Pagination/PaginationOnLink';
 import { Paginator } from '../../../../../../../../types/paginator';
 import { AppState } from '../../../../../../../../store/configureStore';
 import { connect } from 'react-redux';
-import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
-    fetch: (page: number, id: number) => void,
-    data: VoucherPromo | null
-}
+type OwnProps = {}
 
-type Props = OwnProps & LinkStateToProps
+type Props = OwnProps & LinkStateToProps & RouteComponentProps
 
 const Paginate: React.FC<Props> = (props) => {
 
@@ -18,11 +15,7 @@ const Paginate: React.FC<Props> = (props) => {
         <Pagination pageCount={props.paginate.pageCount}
                 currentPage={props.paginate.currentPage}
                 itemCount={props.paginate.itemCount}
-                itemClicked={(page: number) => {
-                    if (props.data) {
-                        props.fetch(page, props.data.id)
-                    }
-                }} />
+                url={props.location.pathname} />
     )
 }
 
@@ -36,4 +29,4 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     }
 }
 
-export default connect(mapStateToProps)(Paginate)
+export default withRouter(connect(mapStateToProps)(Paginate))

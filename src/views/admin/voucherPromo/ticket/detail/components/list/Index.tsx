@@ -28,11 +28,6 @@ const Index: React.FC<Props> = (props) => {
 
         await props.fetchTicketVoucherAction(page, id);
 
-        let currentUrlParams = new URLSearchParams(window.location.search);
-        currentUrlParams.set('page', page.toString());
-
-        props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-
         setLoader(false)
     }
 
@@ -69,7 +64,7 @@ const Index: React.FC<Props> = (props) => {
                             <Table loader={loader} fetch={fetch} setLoader={setLoader} data={props.data} />
                             
                             <CardFooter className="py-4">
-                                <Paginate fetch={fetch} data={props.data} />
+                                <Paginate />
                             </CardFooter>
                         </Card>
                     </div>
