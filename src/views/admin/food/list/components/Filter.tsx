@@ -45,6 +45,8 @@ const Filter: React.FC<Props> = (props) => {
         props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
 
         props.fetchFoodAction(1);
+
+        modalOnChange(false);
     }
 
     
