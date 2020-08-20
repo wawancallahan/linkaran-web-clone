@@ -25,7 +25,7 @@ type LinkStateToProps = {
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
     return {
-        paginate: state.price.paginate
+        paginate: state.restaurant.paginate
     }
 }
 
