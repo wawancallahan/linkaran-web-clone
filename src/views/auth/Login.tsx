@@ -252,7 +252,7 @@ const Login: React.FC<Props> = (props) => {
                                         role="form"
                                         onSubmit={e => {
                                             e.preventDefault();
-                                            e.stopPropagation();
+                                            
                                             handleOnSubmit();
                                         }}>
 

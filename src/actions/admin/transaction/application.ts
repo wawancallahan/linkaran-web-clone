@@ -109,8 +109,6 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
             date: date.isValid() ? date.toDate() : null
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filterOmit

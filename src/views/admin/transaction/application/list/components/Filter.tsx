@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,57 +10,75 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../../types';
-import { fetchApplicationAction, setFilterAction, clearFilterAction } from '../../../../../../actions/admin/transaction/application';
-import { Filter as IFilter, FilterKeys, FilterOmit } from '../../../../../../types/admin/transaction/application';
+import { Filter as IFilter } from '../../../../../../types/admin/transaction/application';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../../helpers/utils';
-import { AppState } from '../../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../../helpers/utils';
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 import ReactSelect, { ValueType } from 'react-select';
+import queryString from "query-string";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        date: null,
+        driverName: '',
+        numberTransaction: '',
+        serviceCode: '',
+        statusOrder: '',
+        type: 'complete',
+        userName: ''
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        const dateQuery = decodeURIComponent((querySearch.date as string) || '');
+        const date = moment(dateQuery, "YYYY-MM-DD", true);
+
+        setFormField({
+            date: date.isValid() ? date.toDate() : null,
+            driverName: decodeURIComponent((querySearch.driverName as string) || ''),
+            numberTransaction: decodeURIComponent((querySearch.numberTransaction as string) || ''),
+            serviceCode: decodeURIComponent((querySearch.serviceCode as string) || ''),
+            statusOrder: decodeURIComponent((querySearch.statusOrder as string) || ''),
+            type: decodeURIComponent((querySearch.type as string) || 'complete'),
+            userName: decodeURIComponent((querySearch.userName as string) || '')
+        });
+    }, []);
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
-        const date = props.filter.date && moment(props.filter.date).isValid() ? (
-            moment(props.filter.date).format("YYYY-MM-DD")
+        const date = filter.date && moment(filter.date).isValid() ? (
+            moment(filter.date).format("YYYY-MM-DD")
         ) : ''
 
-        let newFilter = {
+        const newFilter = {
             ...filter,
             date: date
         }
 
-        let filterOmit = newFilter as FilterOmit;
-
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filterOmit).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, FilterOmit>(obj as FilterKeys)(filterOmit));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchApplicationAction(1);
-
-        modalOnChange(false);
+        createFormSearch(props.location.pathname, {
+            ...newFilter
+        } as OptionObjectString);
     }
 
     
@@ -69,33 +86,37 @@ const Filter: React.FC<Props> = (props) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const handleOnDateChange = (date: Date | null, id: string) => {
-        props.setFilterAction({
-            ...props.filter,
-            [id]: date
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: date
+            }
+        });
     }
 
     const handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
-        props.setFilterAction({
-            ...props.filter,
-            [id]: option.value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: option.value
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchApplicationAction(1);
-        props.clearFilterApplicationAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -184,7 +205,7 @@ const Filter: React.FC<Props> = (props) => {
                                 type="text"
                                 name="numberTransaction"
                                 maxLength={255}
-                                value={props.filter.numberTransaction}
+                                value={formField.numberTransaction}
                                 onChange={handleOnChange}
                                 bsSize="sm"
                             />
@@ -192,7 +213,7 @@ const Filter: React.FC<Props> = (props) => {
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -242,7 +263,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="numberTransaction"
                             maxLength={255}
-                            value={props.filter.numberTransaction}
+                            value={formField.numberTransaction}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -256,7 +277,7 @@ const Filter: React.FC<Props> = (props) => {
                             </label>
                             <div>
                                 <DatePicker
-                                    selected={props.filter.date}
+                                    selected={formField.date}
                                     onChange={(date) => handleOnDateChange(date, 'date')}
                                     dateFormat="yyyy-MM-dd"
                                     className="form-control form-control-alternative"
@@ -278,7 +299,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="userName"
                             maxLength={255}
-                            value={props.filter.userName}
+                            value={formField.userName}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -297,7 +318,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="driverName"
                             maxLength={255}
-                            value={props.filter.driverName}
+                            value={formField.driverName}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -314,7 +335,7 @@ const Filter: React.FC<Props> = (props) => {
                                     {value: 'complete', label: 'Complete'},
                                     {value: 'inorder', label: 'In Order'},
                                 ]}
-                                defaultValue={updateToOptionSelectType(props.filter.type)}
+                                defaultValue={updateToOptionSelectType(formField.type)}
                                 onChange={(option) => {
 
                                     const optionSelected = option as {
@@ -341,7 +362,7 @@ const Filter: React.FC<Props> = (props) => {
                                     {value: 'linkfood', label: 'Link Food'},
                                     {value: 'linksend', label: 'Link Send'}
                                 ]}
-                                defaultValue={updateToOptionSelectServiceCode(props.filter.serviceCode)}
+                                defaultValue={updateToOptionSelectServiceCode(formField.serviceCode)}
                                 onChange={(option) => {
 
                                     const optionSelected = option as {
@@ -371,7 +392,7 @@ const Filter: React.FC<Props> = (props) => {
                                     {value: 'cancel', label: 'Cancel'},
                                     {value: 'expired', label: 'Expired'}
                                 ]}
-                                defaultValue={updateToOptionSelectStatusOrder(props.filter.statusOrder)}
+                                defaultValue={updateToOptionSelectStatusOrder(formField.statusOrder)}
                                 onChange={(option) => {
 
                                     const optionSelected = option as {
@@ -403,30 +424,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.transactionApplication.filter,
-        filtered: state.transactionApplication.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchApplicationAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterApplicationAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchApplicationAction: (page: number) => dispatch(fetchApplicationAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterApplicationAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

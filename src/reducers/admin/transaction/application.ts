@@ -1,11 +1,8 @@
 import {  
-    Filter,
-    FETCH_APPLICATION,
     FETCH_APPLICATION_ERROR,
     FETCH_APPLICATION_SUCCESS,
     ApplicationList,
     ApplicationActionTypes,
-    FetchApplicationActionType,
     FetchApplicationSuccessActionType,
     FetchApplicationErrorActionType,
     SetPaginatorApplicationActionType,
@@ -14,10 +11,6 @@ import {
     AlertApplicationHideActionType,
     ALERT_APPLICATION_HIDE,
     ALERT_APPLICATION_SHOW,
-    SetFilterApplicationActionType,
-    ClearFilterApplicationActionType,
-    SET_FILTER_APPLICATION,
-    CLEAR_FILTER_APPLICATION
 } from '../../../types/admin/transaction/application';
 
 import { Paginator } from '../../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: ApplicationList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -43,17 +34,7 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    },
-    filter: {
-        date: null,
-        driverName: '',
-        numberTransaction: '',
-        serviceCode: '',
-        statusOrder: '',
-        type: 'complete',
-        userName: ''
-    },
-    filtered: false
+    }
 }
 
 const alertHide = (state: initialStateInterface, action: AlertApplicationHideActionType) => {
@@ -101,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorApplicat
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterApplicationActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterApplicationActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: ApplicationActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_APPLICATION: return setPaginator(state, action);
@@ -128,8 +89,6 @@ const reducer = (state = initialState, action: ApplicationActionTypes) => {
         case FETCH_APPLICATION_ERROR: return fetchError(state, action);
         case ALERT_APPLICATION_HIDE: return alertHide(state, action);
         case ALERT_APPLICATION_SHOW: return alertShow(state, action);
-        case SET_FILTER_APPLICATION: return setFilter(state, action);
-        case CLEAR_FILTER_APPLICATION: return clearFilter(state, action);
         default:
             return state;
     }
