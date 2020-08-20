@@ -100,8 +100,6 @@ export const fetchWithDrawAction = (page: number, needApproved: number = 1): Thu
             isDecline: (querySearch.isDecline as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

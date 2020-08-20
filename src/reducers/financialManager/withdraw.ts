@@ -1,10 +1,8 @@
 import {  
-    FETCH_WITHDRAW,
     FETCH_WITHDRAW_ERROR,
     FETCH_WITHDRAW_SUCCESS,
     WithDrawList,
     WithDrawActionTypes,
-    FetchWithDrawActionType,
     FetchWithDrawSuccessActionType,
     FetchWithDrawErrorActionType,
     SetPaginatorWithDrawActionType,
@@ -13,11 +11,6 @@ import {
     AlertWithDrawHideActionType,
     ALERT_WITHDRAW_HIDE,
     ALERT_WITHDRAW_SHOW,
-    SET_FILTER_WITHDRAW,
-    Filter,
-    SetFilterWithDrawActionType,
-    ClearFilterWithDrawActionType,
-    CLEAR_FILTER_WITHDRAW
 } from '../../types/financialManager/withdraw';
 
 import { Paginator } from '../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: WithDrawList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,15 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: '',
-        accountNumber: '',
-        bankName: '',
-        needApproved: '0',
-        isManual: '0',
-        isDecline: '0'
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertWithDrawHideActionType) => {
@@ -100,27 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorWithDraw
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterWithDrawActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterWithDrawActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
-
 const reducer = (state = initialState, action: WithDrawActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_WITHDRAW: return setPaginator(state, action);
@@ -128,8 +89,6 @@ const reducer = (state = initialState, action: WithDrawActionTypes) => {
         case FETCH_WITHDRAW_ERROR: return fetchError(state, action);
         case ALERT_WITHDRAW_HIDE: return alertHide(state, action);
         case ALERT_WITHDRAW_SHOW: return alertShow(state, action);
-        case SET_FILTER_WITHDRAW: return setFilter(state, action);
-        case CLEAR_FILTER_WITHDRAW: return clearFilter(state, action);
         default:
             return state;
     }

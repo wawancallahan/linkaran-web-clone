@@ -96,8 +96,6 @@ export const fetchTopUpAction = (page: number, needApproved: number = 1): ThunkR
             isManual: (querySearch.isManual as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter
