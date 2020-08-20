@@ -1,3 +1,4 @@
+import * as React from 'react';
 import moment from 'moment'
 import { icoLinkRide, icoLinkCar, icoLinkBox, icoLinkFood } from './Assets'
 
@@ -172,4 +173,24 @@ export const setUrlParams = <U extends keyof T, T extends object>(objParams: T, 
     });
 
     return window.location.pathname + "?" + currentUrlParams.toString();
+}
+
+export const createFormSearch = (action: string, options?: OptionObjectString) => {
+    const form = document.createElement('form');
+    form.action = action;
+    form.method = "GET";
+
+    if (options) {
+        Object.keys(options).map((key: string) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = encodeURIComponent(options[key]);
+
+            form.appendChild(input);
+        })
+    }
+
+    document.body.appendChild(form);   
+    form.submit();
 }
