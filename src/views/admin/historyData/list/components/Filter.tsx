@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,80 +10,89 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../types';
-import { fetchHistoryDataAction, setFilterAction, clearFilterAction } from '../../../../../actions/admin/historyData';
-import { Filter as IFilter, FilterKeys, FilterOmit } from '../../../../../types/admin/historyData/historyData';
+import { Filter as IFilter } from '../../../../../types/admin/historyData/historyData';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../helpers/utils';
-import { AppState } from '../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
+import queryString from "query-string";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        dateCreate: null,
+        userName: ''
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        const dateCreateQuery = decodeURIComponent((querySearch.dateCreate as string) || '');
+        const dateCreate = moment(dateCreateQuery, "YYYY-MM-DD", true);
+
+        setFormField({
+            dateCreate: dateCreate.isValid() ? dateCreate.toDate() : null,
+            userName: decodeURIComponent((querySearch.userName as string) || "")
+        });
+    }, []);
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
         const dateCreate = filter.dateCreate && moment(filter.dateCreate).isValid() ? (
             moment(filter.dateCreate).format("YYYY-MM-DD")
         ) : ''
 
-        let newFilter = {
+        const newFilter = {
             ...filter,
             dateCreate: dateCreate
         }
 
-        let filterOmit = newFilter as FilterOmit;
-
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filterOmit).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, FilterOmit>(obj as FilterKeys)(filterOmit));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchHistoryDataAction(1);
-
-        modalOnChange(false);
+        createFormSearch(props.location.pathname, {
+            ...newFilter
+        } as OptionObjectString);
     }
-
     
     const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const handleOnDateChange = (date: Date | null, id: string) => {
-        props.setFilterAction({
-            ...props.filter,
-            [id]: date
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: date
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchHistoryDataAction(1);
-        props.clearFilterHistoryDataAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -109,7 +117,7 @@ const Filter: React.FC<Props> = (props) => {
                                 type="text"
                                 name="userName"
                                 maxLength={255}
-                                value={props.filter.userName}
+                                value={formField.userName}
                                 onChange={handleOnChange}
                                 bsSize="sm"
                             />
@@ -117,7 +125,7 @@ const Filter: React.FC<Props> = (props) => {
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -167,7 +175,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="userName"
                             maxLength={255}
-                            value={props.filter.userName}
+                            value={formField.userName}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -181,7 +189,7 @@ const Filter: React.FC<Props> = (props) => {
                             </label>
                             <div>
                                 <DatePicker
-                                    selected={props.filter.dateCreate}
+                                    selected={formField.dateCreate}
                                     onChange={(date) => handleOnDateChange(date, 'dateCreate')}
                                     dateFormat="yyyy-MM-dd"
                                     className="form-control form-control-alternative"
@@ -208,30 +216,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.historyData.filter,
-        filtered: state.historyData.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchHistoryDataAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterHistoryDataAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchHistoryDataAction: (page: number) => dispatch(fetchHistoryDataAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterHistoryDataAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

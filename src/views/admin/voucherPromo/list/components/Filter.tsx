@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,41 +10,60 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../types';
-import { fetchVoucherPromoAction, setFilterAction, clearFilterAction } from '../../../../../actions/admin/voucherPromo';
-import { Filter as IFilter, FilterKeys } from '../../../../../types/admin/voucherPromo';
+import { Filter as IFilter } from '../../../../../types/admin/voucherPromo';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../helpers/utils';
-import { AppState } from '../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
 import ReactSelect, { ValueType } from 'react-select';
+import queryString from "query-string";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        amount: '',
+        code: '',
+        minimumPurchase: '',
+        name: '',
+        isLimited: '0',
+        quantity: '',
+        quota: ''
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        setFormField({
+            amount: decodeURIComponent((querySearch.amount as string) || ''),
+            code: decodeURIComponent((querySearch.code as string) || ''),
+            isLimited: decodeURIComponent((querySearch.isLimited as string) || ''),
+            minimumPurchase: decodeURIComponent((querySearch.minimumPurchase as string) || ''),
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            quantity: decodeURIComponent((querySearch.quantity as string) || ''),
+            quota: decodeURIComponent((querySearch.quota as string) || '')
+        });
+    }, []);
+
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filter).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchVoucherPromoAction(1);
+        createFormSearch(props.location.pathname, {
+            ...filter
+        } as OptionObjectString);
     }
 
     
@@ -53,26 +71,28 @@ const Filter: React.FC<Props> = (props) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const handleOnSelectChange = (option: {
         value: string,
         label: string
     }, id: string) => {
-        props.setFilterAction({
-            ...props.filter,
-            [id]: option.value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: option.value
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchVoucherPromoAction(1);
-        props.clearFilterVoucherPromoAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -116,7 +136,7 @@ const Filter: React.FC<Props> = (props) => {
                                 type="text"
                                 name="name"
                                 maxLength={255}
-                                value={props.filter.name}
+                                value={formField.name}
                                 onChange={handleOnChange}
                                 bsSize="sm"
                             />
@@ -124,7 +144,7 @@ const Filter: React.FC<Props> = (props) => {
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -174,7 +194,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="name"
                             maxLength={255}
-                            value={props.filter.name}
+                            value={formField.name}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -193,7 +213,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="code"
                             maxLength={255}
-                            value={props.filter.code}
+                            value={formField.code}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -212,7 +232,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="amount"
                             maxLength={255}
-                            value={props.filter.amount}
+                            value={formField.amount}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -231,7 +251,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="quota"
                             maxLength={255}
-                            value={props.filter.quota}
+                            value={formField.quota}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -250,7 +270,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="minimumPurchase"
                             maxLength={255}
-                            value={props.filter.minimumPurchase}
+                            value={formField.minimumPurchase}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -269,7 +289,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="quantity"
                             maxLength={255}
-                            value={props.filter.quantity}
+                            value={formField.quantity}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -286,7 +306,7 @@ const Filter: React.FC<Props> = (props) => {
                                     {value: '1', label: 'Terbatas'},
                                     {value: '0', label: 'Publik'}
                                 ]}
-                                defaultValue={updateToOptionSelect(props.filter.isLimited)}
+                                defaultValue={updateToOptionSelect(formField.isLimited)}
                                 onChange={(option) => {
 
                                     const optionSelected = option as {
@@ -318,30 +338,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.voucherPromo.filter,
-        filtered: state.voucherPromo.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchVoucherPromoAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterVoucherPromoAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchVoucherPromoAction: (page: number) => dispatch(fetchVoucherPromoAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterVoucherPromoAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

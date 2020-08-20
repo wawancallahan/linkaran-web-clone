@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,40 +10,46 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../types';
-import { fetchServicePriceAction, setFilterAction, clearFilterAction } from '../../../../../actions/admin/servicePrice';
-import { Filter as IFilter, FilterKeys } from '../../../../../types/admin/servicePrice';
+import { Filter as IFilter } from '../../../../../types/admin/servicePrice';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../helpers/utils';
-import { AppState } from '../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
+import queryString from "query-string";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        districtName: '',
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        setFormField({
+            districtName: decodeURIComponent((querySearch.districtName as string) || ""),
+        });
+    }, []);
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filter).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchServicePriceAction(1);
+        createFormSearch(props.location.pathname, {
+            ...filter
+        } as OptionObjectString);
     }
 
     
@@ -52,16 +57,16 @@ const Filter: React.FC<Props> = (props) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchServicePriceAction(1);
-        props.clearFilterServicePriceAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -80,21 +85,21 @@ const Filter: React.FC<Props> = (props) => {
                     <Col>
                         <InputGroup>
                             <Input 
-                                    className=""
-                                    id="input-districtName"
-                                    placeholder="Kabupaten/ Kota"
-                                    type="text"
-                                    name="districtName"
-                                    maxLength={255}
-                                    value={props.filter.districtName}
-                                    onChange={handleOnChange}
-                                    bsSize="sm"
-                                />
+                                className=""
+                                id="input-districtName"
+                                placeholder="Kabupaten/ Kota"
+                                type="text"
+                                name="districtName"
+                                maxLength={255}
+                                value={formField.districtName}
+                                onChange={handleOnChange}
+                                bsSize="sm"
+                            />
                             <InputGroupAddon addonType="append">
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -144,7 +149,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="districtName"
                             maxLength={255}
-                            value={props.filter.districtName}
+                            value={formField.districtName}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -168,30 +173,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.servicePrice.filter,
-        filtered: state.servicePrice.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchServicePriceAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterServicePriceAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchServicePriceAction: (page: number) => dispatch(fetchServicePriceAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterServicePriceAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

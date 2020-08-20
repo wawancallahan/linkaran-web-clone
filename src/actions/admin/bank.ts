@@ -91,8 +91,6 @@ export const fetchBankAction = (page: number): ThunkResult<Promise<Boolean>> => 
             nama: (querySearch.nama as string) || ''
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

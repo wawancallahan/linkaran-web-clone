@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,33 +10,62 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../types';
-import { fetchPartnerAction, setFilterAction, clearFilterAction } from '../../../../../actions/admin/partner';
-import { Filter as IFilter, FilterKeys, FilterOmit } from '../../../../../types/admin/partner';
+import { Filter as IFilter } from '../../../../../types/admin/partner';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../helpers/utils';
-import { AppState } from '../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
+import queryString from "query-string";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        companyName: '',
+        email: '',
+        endWorkingTogether: null,
+        name: '',
+        phoneNumber: '',
+        startWorkingTogether: null
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        const startWorkingTogetherQuery = decodeURIComponent((querySearch.startWorkingTogether as string) || '');
+        const startWorkingTogether = moment(startWorkingTogetherQuery, "YYYY-MM-DD", true);
+
+        const endWorkingTogetherQuery = decodeURIComponent((querySearch.endWorkingTogether as string) || '');
+        const endWorkingTogether = moment(endWorkingTogetherQuery, "YYYY-MM-DD", true);
+
+        setFormField({
+            startWorkingTogether: startWorkingTogether.isValid() ? startWorkingTogether.toDate() : null,
+            endWorkingTogether: endWorkingTogether.isValid() ? endWorkingTogether.toDate() : null,
+            companyName: decodeURIComponent((querySearch.companyName as string) || ""),
+            email: decodeURIComponent((querySearch.email as string) || ""),
+            name: decodeURIComponent((querySearch.name as string) || ""),
+            phoneNumber: decodeURIComponent((querySearch.phoneNumber as string) || "")
+        });
+    }, []);
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
         const startWorkingTogether = filter.startWorkingTogether && moment(filter.startWorkingTogether).isValid() ? (
             moment(filter.startWorkingTogether).format("YYYY-MM-DD")
@@ -47,25 +75,15 @@ const Filter: React.FC<Props> = (props) => {
             moment(filter.endWorkingTogether).format("YYYY-MM-DD")
         ) : ''
 
-        let newFilter = {
+        const newFilter = {
             ...filter,
             startWorkingTogether: startWorkingTogether,
             endWorkingTogether: endWorkingTogether
         }
 
-        let filterOmit = newFilter as FilterOmit;
-
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filterOmit).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, FilterOmit>(obj as FilterKeys)(filterOmit));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchPartnerAction(1);
-
-        modalOnChange(false);
+        createFormSearch(props.location.pathname, {
+            ...newFilter
+        } as OptionObjectString);
     }
 
     
@@ -73,23 +91,25 @@ const Filter: React.FC<Props> = (props) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const handleOnDateChange = (date: Date | null, id: string) => {
-        props.setFilterAction({
-            ...props.filter,
-            [id]: date
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: date
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchPartnerAction(1);
-        props.clearFilterPartnerAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -114,7 +134,7 @@ const Filter: React.FC<Props> = (props) => {
                                 type="text"
                                 name="companyName"
                                 maxLength={255}
-                                value={props.filter.companyName}
+                                value={formField.companyName}
                                 onChange={handleOnChange}
                                 bsSize="sm"
                             />
@@ -122,7 +142,7 @@ const Filter: React.FC<Props> = (props) => {
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -172,7 +192,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="companyName"
                             maxLength={255}
-                            value={props.filter.companyName}
+                            value={formField.companyName}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -191,7 +211,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="email"
                             maxLength={255}
-                            value={props.filter.email}
+                            value={formField.email}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -210,7 +230,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="name"
                             maxLength={255}
-                            value={props.filter.name}
+                            value={formField.name}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -229,7 +249,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="phoneNumber"
                             maxLength={255}
-                            value={props.filter.phoneNumber}
+                            value={formField.phoneNumber}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -242,7 +262,7 @@ const Filter: React.FC<Props> = (props) => {
                             </label>
                             <div>
                                 <DatePicker
-                                    selected={props.filter.startWorkingTogether}
+                                    selected={formField.startWorkingTogether}
                                     onChange={(date) => handleOnDateChange(date, 'startWorkingTogether')}
                                     dateFormat="yyyy-MM-dd"
                                     className="form-control form-control-alternative"
@@ -258,7 +278,7 @@ const Filter: React.FC<Props> = (props) => {
                             </label>
                             <div>
                                 <DatePicker
-                                    selected={props.filter.endWorkingTogether}
+                                    selected={formField.endWorkingTogether}
                                     onChange={(date) => handleOnDateChange(date, 'endWorkingTogether')}
                                     dateFormat="yyyy-MM-dd"
                                     className="form-control form-control-alternative"
@@ -285,30 +305,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.partner.filter,
-        filtered: state.partner.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchPartnerAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterPartnerAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchPartnerAction: (page: number) => dispatch(fetchPartnerAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterPartnerAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

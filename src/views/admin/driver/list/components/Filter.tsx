@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
 import { 
     InputGroupAddon, 
     Col, 
@@ -11,57 +10,68 @@ import {
     FormGroup,
     Modal
 } from 'reactstrap'
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../../../../../types';
-import { fetchDriverAction, setFilterAction, clearFilterAction } from '../../../../../actions/admin/driver';
 import { Filter as IFilter, FilterKeys } from '../../../../../types/admin/driver';
 import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { getKeyValue } from '../../../../../helpers/utils';
-import { AppState } from '../../../../../store/configureStore';
+import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
+import queryString from "query-string";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps & LinkStateToProps;
+type Props = OwnProps
 
 const Filter: React.FC<Props> = (props) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [filtered, setFiltered] = React.useState(false);
+    const [formField, setFormField] = React.useState<IFilter>({
+        address: '',
+        email: '',
+        name: '',
+        phoneNumber: ''
+    });
+
+    React.useEffect(() => {
+        const querySearch = queryString.parse(props.location.search);
+
+        if (Object.keys(querySearch).length > 0) {
+            setFiltered(true);
+        }
+
+        setFormField({
+            address: decodeURIComponent((querySearch.address as string) || ""),
+            email: decodeURIComponent((querySearch.email as string) || ""),
+            name: decodeURIComponent((querySearch.name as string) || ""),
+            phoneNumber: decodeURIComponent((querySearch.phoneNumber as string) || "")
+        });
+    }, []);
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        e.stopPropagation();
 
-        let filter = props.filter as IFilter;
+        let filter = formField;
 
-        let currentUrlParams = new URLSearchParams(window.location.search);
-
-        Object.keys(filter).forEach((obj: string, index: number) => {
-            currentUrlParams.set(obj, getKeyValue<FilterKeys, IFilter>(obj as FilterKeys)(filter));
-        });
-
-        props.history.push(`${window.location.pathname}?${currentUrlParams.toString()}`);
-
-        props.fetchDriverAction(1);
+        createFormSearch(props.location.pathname, {
+            ...filter
+        } as OptionObjectString);
     }
-
     
     const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         const id = e.currentTarget.name;
     
-        props.setFilterAction({
-            ...props.filter,
-            [id]: value
-        } as IFilter);
+        setFormField(prevState => {
+            return {
+                ...prevState,
+                [id]: value
+            }
+        });
     }
 
     const clearFilter = () => {
-        props.history.push(`${window.location.pathname}`);
-        props.fetchDriverAction(1);
-        props.clearFilterDriverAction();
+        createFormSearch(props.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -86,7 +96,7 @@ const Filter: React.FC<Props> = (props) => {
                                 type="text"
                                 name="name"
                                 maxLength={255}
-                                value={props.filter.name}
+                                value={formField.name}
                                 onChange={handleOnChange}
                                 bsSize="sm"
                             />
@@ -94,7 +104,7 @@ const Filter: React.FC<Props> = (props) => {
                                 <Button type="submit" color="primary" size="sm">
                                     <i className="fa fa-search" /> Cari
                                 </Button>
-                                { props.filtered ? (
+                                { filtered ? (
                                     <Button
                                         type="button"
                                         color="danger"
@@ -144,7 +154,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="name"
                             maxLength={255}
-                            value={props.filter.name}
+                            value={formField.name}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -163,7 +173,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="email"
                             maxLength={255}
-                            value={props.filter.email}
+                            value={formField.email}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -182,7 +192,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="text"
                             name="phoneNumber"
                             maxLength={255}
-                            value={props.filter.phoneNumber}
+                            value={formField.phoneNumber}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -201,7 +211,7 @@ const Filter: React.FC<Props> = (props) => {
                             type="textarea"
                             name="address"
                             maxLength={255}
-                            value={props.filter.address}
+                            value={formField.address}
                             onChange={handleOnChange}
                             />
                         </FormGroup>
@@ -225,30 +235,4 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    filter: IFilter,
-    filtered: boolean
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        filter: state.driver.filter,
-        filtered: state.driver.filtered
-    }
-}
-
-type LinkDispatchToProps = {
-    fetchDriverAction: (page: number) => Promise<Boolean>,
-    setFilterAction: (filter: IFilter) => void,
-    clearFilterDriverAction: () => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchDriverAction: (page: number) => dispatch(fetchDriverAction(page)),
-        setFilterAction: (filter: IFilter) => dispatch(setFilterAction(filter)),
-        clearFilterDriverAction: () => dispatch(clearFilterAction())
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filter));
+export default withRouter(Filter);

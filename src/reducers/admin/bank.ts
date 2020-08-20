@@ -1,10 +1,8 @@
 import {  
-    FETCH_BANK,
     FETCH_BANK_ERROR,
     FETCH_BANK_SUCCESS,
     BankList,
     BankActionTypes,
-    FetchBankActionType,
     FetchBankSuccessActionType,
     FetchBankErrorActionType,
     SetPaginatorBankActionType,
@@ -13,11 +11,6 @@ import {
     AlertBankHideActionType,
     ALERT_BANK_HIDE,
     ALERT_BANK_SHOW,
-    SET_FILTER_BANK,
-    Filter,
-    SetFilterBankActionType,
-    ClearFilterBankActionType,
-    CLEAR_FILTER_BANK
 } from '../../types/admin/bank';
 
 import { Paginator } from '../../types/paginator';
@@ -26,9 +19,7 @@ import { Alert } from '../../types/alert';
 type initialStateInterface = {
     list: BankList[],
     paginate: Paginator,
-    alert: Alert,
-    filter: Filter,
-    filtered: boolean
+    alert: Alert
 };
 
 const initialState: initialStateInterface = {
@@ -43,11 +34,7 @@ const initialState: initialStateInterface = {
         message: '',
         color: '',
         visible: false
-    },
-    filter: {
-        nama: ''
-    },
-    filtered: false
+    }
 }
 
 const alertHide = (state: initialStateInterface, action: AlertBankHideActionType) => {
@@ -95,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorBankActi
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterBankActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterBankActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: BankActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_BANK: return setPaginator(state, action);
@@ -122,8 +89,6 @@ const reducer = (state = initialState, action: BankActionTypes) => {
         case FETCH_BANK_ERROR: return fetchError(state, action);
         case ALERT_BANK_HIDE: return alertHide(state, action);
         case ALERT_BANK_SHOW: return alertShow(state, action);
-        case SET_FILTER_BANK: return setFilter(state, action);
-        case CLEAR_FILTER_BANK: return clearFilter(state, action);
         default:
             return state;
     }
