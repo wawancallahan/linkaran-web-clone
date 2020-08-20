@@ -91,8 +91,6 @@ export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolea
             name: (querySearch.name as string) || ''
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

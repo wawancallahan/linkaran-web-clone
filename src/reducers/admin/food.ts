@@ -1,10 +1,8 @@
 import {  
-    FETCH_FOOD,
     FETCH_FOOD_ERROR,
     FETCH_FOOD_SUCCESS,
     FoodList,
     FoodActionTypes,
-    FetchFoodActionType,
     FetchFoodSuccessActionType,
     FetchFoodErrorActionType,
     SetPaginatorFoodActionType,
@@ -13,11 +11,6 @@ import {
     AlertFoodHideActionType,
     ALERT_FOOD_HIDE,
     ALERT_FOOD_SHOW,
-    SET_FILTER_FOOD,
-    Filter,
-    SetFilterFoodActionType,
-    ClearFilterFoodActionType,
-    CLEAR_FILTER_FOOD
 } from '../../types/admin/food';
 
 import { Paginator } from '../../types/paginator';
@@ -26,9 +19,7 @@ import { Alert } from '../../types/alert';
 type initialStateInterface = {
     list: FoodList[],
     paginate: Paginator,
-    alert: Alert,
-    filter: Filter,
-    filtered: boolean
+    alert: Alert
 };
 
 const initialState: initialStateInterface = {
@@ -44,13 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: '',
-        provinceName: '',
-        districtName: '',
-        restaurantName: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertFoodHideActionType) => {
@@ -98,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorFoodActi
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterFoodActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterFoodActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: FoodActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_FOOD: return setPaginator(state, action);
@@ -125,8 +89,6 @@ const reducer = (state = initialState, action: FoodActionTypes) => {
         case FETCH_FOOD_ERROR: return fetchError(state, action);
         case ALERT_FOOD_HIDE: return alertHide(state, action);
         case ALERT_FOOD_SHOW: return alertShow(state, action);
-        case SET_FILTER_FOOD: return setFilter(state, action);
-        case CLEAR_FILTER_FOOD: return clearFilter(state, action);
         default:
             return state;
     }

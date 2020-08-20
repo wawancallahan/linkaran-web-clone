@@ -1,10 +1,8 @@
 import {  
-    FETCH_SUB_BRAND_VEHICLE,
     FETCH_SUB_BRAND_VEHICLE_ERROR,
     FETCH_SUB_BRAND_VEHICLE_SUCCESS,
     SubBrandVehicleList,
     SubBrandVehicleActionTypes,
-    FetchSubBrandVehicleActionType,
     FetchSubBrandVehicleSuccessActionType,
     FetchSubBrandVehicleErrorActionType,
     SetPaginatorSubBrandVehicleActionType,
@@ -13,11 +11,6 @@ import {
     AlertSubBrandVehicleHideActionType,
     ALERT_SUB_BRAND_VEHICLE_HIDE,
     ALERT_SUB_BRAND_VEHICLE_SHOW,
-    SET_FILTER_SUB_BRAND_VEHICLE,
-    Filter,
-    SetFilterSubBrandVehicleActionType,
-    ClearFilterSubBrandVehicleActionType,
-    CLEAR_FILTER_SUB_BRAND_VEHICLE
 } from '../../types/admin/subBrandVehicle';
 
 import { Paginator } from '../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: SubBrandVehicleList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,11 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: '',
-        brandName: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertSubBrandVehicleHideActionType) => {
@@ -96,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorSubBrand
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterSubBrandVehicleActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterSubBrandVehicleActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: SubBrandVehicleActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_SUB_BRAND_VEHICLE: return setPaginator(state, action);
@@ -123,8 +89,6 @@ const reducer = (state = initialState, action: SubBrandVehicleActionTypes) => {
         case FETCH_SUB_BRAND_VEHICLE_ERROR: return fetchError(state, action);
         case ALERT_SUB_BRAND_VEHICLE_HIDE: return alertHide(state, action);
         case ALERT_SUB_BRAND_VEHICLE_SHOW: return alertShow(state, action);
-        case SET_FILTER_SUB_BRAND_VEHICLE: return setFilter(state, action);
-        case CLEAR_FILTER_SUB_BRAND_VEHICLE: return clearFilter(state, action);
         default:
             return state;
     }

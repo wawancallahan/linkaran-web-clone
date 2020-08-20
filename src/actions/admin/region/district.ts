@@ -94,8 +94,6 @@ export const fetchDistrictAction = (page: number): ThunkResult<Promise<Boolean>>
             provinceName: (querySearch.provinceName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

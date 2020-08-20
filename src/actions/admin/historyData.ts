@@ -99,8 +99,6 @@ export const fetchHistoryDataAction = (page: number): ThunkResult<Promise<Boolea
             dateCreate: dateCreate.isValid() ? dateCreate.toDate() : null
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filterOmit

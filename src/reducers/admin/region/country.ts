@@ -1,10 +1,8 @@
 import {  
-    FETCH_COUNTRY,
     FETCH_COUNTRY_ERROR,
     FETCH_COUNTRY_SUCCESS,
     CountryList,
     CountryActionTypes,
-    FetchCountryActionType,
     FetchCountrySuccessActionType,
     FetchCountryErrorActionType,
     SetPaginatorCountryActionType,
@@ -13,11 +11,6 @@ import {
     AlertCountryHideActionType,
     ALERT_COUNTRY_HIDE,
     ALERT_COUNTRY_SHOW,
-    SET_FILTER_COUNTRY,
-    Filter,
-    SetFilterCountryActionType,
-    ClearFilterCountryActionType,
-    CLEAR_FILTER_COUNTRY
 } from '../../../types/admin/region/country';
 
 import { Paginator } from '../../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: CountryList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,10 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertCountryHideActionType) => {
@@ -95,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorCountryA
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterCountryActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterCountryActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: CountryActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_COUNTRY: return setPaginator(state, action);
@@ -122,8 +89,6 @@ const reducer = (state = initialState, action: CountryActionTypes) => {
         case FETCH_COUNTRY_ERROR: return fetchError(state, action);
         case ALERT_COUNTRY_HIDE: return alertHide(state, action);
         case ALERT_COUNTRY_SHOW: return alertShow(state, action);
-        case SET_FILTER_COUNTRY: return setFilter(state, action);
-        case CLEAR_FILTER_COUNTRY: return clearFilter(state, action);
         default:
             return state;
     }

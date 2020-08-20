@@ -94,8 +94,6 @@ export const fetchPriceAction = (page: number) : ThunkResult<Promise<Boolean>> =
             perKilometer: (querySearch.perKilometer as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

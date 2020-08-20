@@ -1,10 +1,8 @@
 import {  
-    FETCH_VOUCHER_PROMO,
     FETCH_VOUCHER_PROMO_ERROR,
     FETCH_VOUCHER_PROMO_SUCCESS,
     VoucherPromoList,
     VoucherPromoActionTypes,
-    FetchVoucherPromoActionType,
     FetchVoucherPromoSuccessActionType,
     FetchVoucherPromoErrorActionType,
     SetPaginatorVoucherPromoActionType,
@@ -13,11 +11,6 @@ import {
     AlertVoucherPromoHideActionType,
     ALERT_VOUCHER_PROMO_HIDE,
     ALERT_VOUCHER_PROMO_SHOW,
-    SET_FILTER_VOUCHER_PROMO,
-    Filter,
-    SetFilterVoucherPromoActionType,
-    ClearFilterVoucherPromoActionType,
-    CLEAR_FILTER_VOUCHER_PROMO
 } from '../../types/admin/voucherPromo';
 
 import { Paginator } from '../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: VoucherPromoList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,16 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        amount: '',
-        code: '',
-        minimumPurchase: '',
-        name: '',
-        isLimited: '0',
-        quantity: '',
-        quota: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertVoucherPromoHideActionType) => {
@@ -101,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorVoucherP
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterVoucherPromoActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterVoucherPromoActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: VoucherPromoActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_VOUCHER_PROMO: return setPaginator(state, action);
@@ -128,8 +89,6 @@ const reducer = (state = initialState, action: VoucherPromoActionTypes) => {
         case FETCH_VOUCHER_PROMO_ERROR: return fetchError(state, action);
         case ALERT_VOUCHER_PROMO_HIDE: return alertHide(state, action);
         case ALERT_VOUCHER_PROMO_SHOW: return alertShow(state, action);
-        case SET_FILTER_VOUCHER_PROMO: return setFilter(state, action);
-        case CLEAR_FILTER_VOUCHER_PROMO: return clearFilter(state, action);
         default:
             return state;
     }

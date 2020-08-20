@@ -96,8 +96,6 @@ export const fetchRestaurantAction = (page: number) : ThunkResult<Promise<Boolea
             provinceName: (querySearch.provinceName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

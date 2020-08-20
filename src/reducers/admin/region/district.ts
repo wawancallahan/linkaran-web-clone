@@ -1,10 +1,8 @@
 import {  
-    FETCH_DISTRICT,
     FETCH_DISTRICT_ERROR,
     FETCH_DISTRICT_SUCCESS,
     DistrictList,
     DistrictActionTypes,
-    FetchDistrictActionType,
     FetchDistrictSuccessActionType,
     FetchDistrictErrorActionType,
     SetPaginatorDistrictActionType,
@@ -13,11 +11,6 @@ import {
     AlertDistrictHideActionType,
     ALERT_DISTRICT_HIDE,
     ALERT_DISTRICT_SHOW,
-    SET_FILTER_DISTRICT,
-    Filter,
-    SetFilterDistrictActionType,
-    ClearFilterDistrictActionType,
-    CLEAR_FILTER_DISTRICT
 } from '../../../types/admin/region/district';
 
 import { Paginator } from '../../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: DistrictList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,11 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: '',
-        provinceName: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertDistrictHideActionType) => {
@@ -96,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorDistrict
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterDistrictActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterDistrictActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: DistrictActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_DISTRICT: return setPaginator(state, action);
@@ -123,8 +89,6 @@ const reducer = (state = initialState, action: DistrictActionTypes) => {
         case FETCH_DISTRICT_ERROR: return fetchError(state, action);
         case ALERT_DISTRICT_HIDE: return alertHide(state, action);
         case ALERT_DISTRICT_SHOW: return alertShow(state, action);
-        case SET_FILTER_DISTRICT: return setFilter(state, action);
-        case CLEAR_FILTER_DISTRICT: return clearFilter(state, action);
         default:
             return state;
     }

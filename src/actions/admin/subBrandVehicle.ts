@@ -92,8 +92,6 @@ export const fetchSubBrandVehicleAction = (page: number): ThunkResult<Promise<Bo
             brandName: (querySearch.brandName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

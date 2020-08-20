@@ -95,8 +95,6 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
             passangerWithDriver: (querySearch.passangerWithDriver as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

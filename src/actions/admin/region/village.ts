@@ -94,8 +94,6 @@ export const fetchVillageAction = (page: number): ThunkResult<Promise<Boolean>> 
             subDistrictName: (querySearch.subDistrictName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

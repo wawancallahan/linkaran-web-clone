@@ -94,8 +94,6 @@ export const fetchSubDistrictAction = (page: number): ThunkResult<Promise<Boolea
             districtName: (querySearch.districtName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

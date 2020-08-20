@@ -96,8 +96,6 @@ export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> =>
             restaurantName: (querySearch.restaurantName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

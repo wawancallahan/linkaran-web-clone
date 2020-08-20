@@ -1,10 +1,8 @@
 import {  
-    FETCH_MANUAL_WITHDRAW,
     FETCH_MANUAL_WITHDRAW_ERROR,
     FETCH_MANUAL_WITHDRAW_SUCCESS,
     ManualWithDrawList,
     ManualWithDrawActionTypes,
-    FetchManualWithDrawActionType,
     FetchManualWithDrawSuccessActionType,
     FetchManualWithDrawErrorActionType,
     SetPaginatorManualWithDrawActionType,
@@ -13,11 +11,6 @@ import {
     AlertManualWithDrawHideActionType,
     ALERT_MANUAL_WITHDRAW_HIDE,
     ALERT_MANUAL_WITHDRAW_SHOW,
-    SET_FILTER_MANUAL_WITHDRAW,
-    Filter,
-    SetFilterManualWithDrawActionType,
-    ClearFilterManualWithDrawActionType,
-    CLEAR_FILTER_MANUAL_WITHDRAW
 } from '../../types/admin/manualWithdraw';
 
 import { Paginator } from '../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: ManualWithDrawList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,13 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        accountName: '',
-        accountNumber: '',
-        bankName: '',
-        isManual: '0'
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertManualWithDrawHideActionType) => {
@@ -98,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorManualWi
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterManualWithDrawActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterManualWithDrawActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: ManualWithDrawActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_MANUAL_WITHDRAW: return setPaginator(state, action);
@@ -125,8 +89,6 @@ const reducer = (state = initialState, action: ManualWithDrawActionTypes) => {
         case FETCH_MANUAL_WITHDRAW_ERROR: return fetchError(state, action);
         case ALERT_MANUAL_WITHDRAW_HIDE: return alertHide(state, action);
         case ALERT_MANUAL_WITHDRAW_SHOW: return alertShow(state, action);
-        case SET_FILTER_MANUAL_WITHDRAW: return setFilter(state, action);
-        case CLEAR_FILTER_MANUAL_WITHDRAW: return clearFilter(state, action);
         default:
             return state;
     }

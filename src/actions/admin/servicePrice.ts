@@ -93,8 +93,6 @@ export const fetchServicePriceAction = (page: number) : ThunkResult<Promise<Bool
             districtName: (querySearch.districtName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

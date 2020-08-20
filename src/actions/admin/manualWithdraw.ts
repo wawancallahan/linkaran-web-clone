@@ -94,8 +94,6 @@ export const fetchManualWithDrawAction = (page: number): ThunkResult<Promise<Boo
             isManual: (querySearch.isManual as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

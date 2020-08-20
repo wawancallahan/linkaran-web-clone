@@ -104,8 +104,6 @@ export const fetchDriverAction = (page: number) : ThunkResult<Promise<Boolean>> 
             phoneNumber: (querySearch.phoneNumber as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

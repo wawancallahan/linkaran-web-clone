@@ -112,8 +112,6 @@ export const fetchPartnerAction = (page: number): ThunkResult<Promise<Boolean>> 
             startWorkingTogether: startWorkingTogether.isValid() ? startWorkingTogether.toDate() : null
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filterOmit

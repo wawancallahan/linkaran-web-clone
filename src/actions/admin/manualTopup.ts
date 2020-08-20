@@ -93,8 +93,6 @@ export const fetchManualTopUpAction = (page: number): ThunkResult<Promise<Boolea
             bankName: (querySearch.bankName as string) || '',
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter

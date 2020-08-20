@@ -1,10 +1,8 @@
 import {  
-    FETCH_VILLAGE,
     FETCH_VILLAGE_ERROR,
     FETCH_VILLAGE_SUCCESS,
     VillageList,
     VillageActionTypes,
-    FetchVillageActionType,
     FetchVillageSuccessActionType,
     FetchVillageErrorActionType,
     SetPaginatorVillageActionType,
@@ -13,11 +11,6 @@ import {
     AlertVillageHideActionType,
     ALERT_VILLAGE_HIDE,
     ALERT_VILLAGE_SHOW,
-    SET_FILTER_VILLAGE,
-    Filter,
-    SetFilterVillageActionType,
-    ClearFilterVillageActionType,
-    CLEAR_FILTER_VILLAGE
 } from '../../../types/admin/region/village';
 
 import { Paginator } from '../../../types/paginator';
@@ -27,8 +20,6 @@ type initialStateInterface = {
     list: VillageList[],
     paginate: Paginator,
     alert: Alert,
-    filter: Filter,
-    filtered: boolean
 };
 
 const initialState: initialStateInterface = {
@@ -44,11 +35,6 @@ const initialState: initialStateInterface = {
         color: '',
         visible: false
     },
-    filter: {
-        name: '',
-        subDistrictName: ''
-    },
-    filtered: false
 }
 
 const alertHide = (state: initialStateInterface, action: AlertVillageHideActionType) => {
@@ -96,26 +82,6 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorVillageA
     }
 }
 
-const setFilter = (state: initialStateInterface, action: SetFilterVillageActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...action.filter
-        },
-        filtered: true
-    }
-}
-
-const clearFilter = (state: initialStateInterface, action: ClearFilterVillageActionType) => {
-    return {
-        ...state,
-        filter: {
-            ...initialState.filter
-        },
-        filtered: false
-    }
-}
-
 const reducer = (state = initialState, action: VillageActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_VILLAGE: return setPaginator(state, action);
@@ -123,8 +89,6 @@ const reducer = (state = initialState, action: VillageActionTypes) => {
         case FETCH_VILLAGE_ERROR: return fetchError(state, action);
         case ALERT_VILLAGE_HIDE: return alertHide(state, action);
         case ALERT_VILLAGE_SHOW: return alertShow(state, action);
-        case SET_FILTER_VILLAGE: return setFilter(state, action);
-        case CLEAR_FILTER_VILLAGE: return clearFilter(state, action);
         default:
             return state;
     }

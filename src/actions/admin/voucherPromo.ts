@@ -126,8 +126,6 @@ export const fetchVoucherPromoAction = (page: number): ThunkResult<Promise<Boole
             quota: (querySearch.quota as string) || ''
         }
 
-        dispatch(setFilterAction(filter));
-
         let paramsObject: OptionObjectString = {
             page: page.toString(),
             ...filter
