@@ -88,8 +88,8 @@ export const fetchSubBrandVehicleAction = (page: number): ThunkResult<Promise<Bo
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || '',
-            brandName: (querySearch.brandName as string) || '',
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            brandName: decodeURIComponent((querySearch.brandName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

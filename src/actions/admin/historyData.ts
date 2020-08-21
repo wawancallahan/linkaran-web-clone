@@ -85,12 +85,12 @@ export const fetchHistoryDataAction = (page: number): ThunkResult<Promise<Boolea
 
         const querySearch = queryString.parse(window.location.search);
 
-        let dateCreateQuery = (querySearch.dateCreate as string) || '';
+        let dateCreateQuery = decodeURIComponent((querySearch.dateCreate as string) || '');
 
         const dateCreate = moment(dateCreateQuery, "YYYY-MM-DD", true);
 
         const filterOmit: FilterOmit = {
-            userName: (querySearch.userName as string) || '',
+            userName: decodeURIComponent((querySearch.userName as string) || ''),
             dateCreate: dateCreate.isValid() ? dateCreate.format("YYYY-MM-DD") : ''
         }
 

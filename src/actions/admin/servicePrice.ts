@@ -90,7 +90,7 @@ export const fetchServicePriceAction = (page: number) : ThunkResult<Promise<Bool
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            districtName: (querySearch.districtName as string) || '',
+            districtName: decodeURIComponent((querySearch.districtName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

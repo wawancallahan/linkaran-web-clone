@@ -91,18 +91,18 @@ export const fetchPartnerAction = (page: number): ThunkResult<Promise<Boolean>> 
 
         const querySearch = queryString.parse(window.location.search);
 
-        let startWorkingTogetherQuery = (querySearch.startWorkingTogether as string) || '';
-        let endWorkingTogetherQuery = (querySearch.endWorkingTogether as string) || '';
+        let startWorkingTogetherQuery = decodeURIComponent((querySearch.startWorkingTogether as string) || '');
+        let endWorkingTogetherQuery = decodeURIComponent((querySearch.endWorkingTogether as string) || '');
 
         const startWorkingTogether = moment(startWorkingTogetherQuery, "YYYY-MM-DD", true);
         const endWorkingTogether = moment(endWorkingTogetherQuery, "YYYY-MM-DD", true);
 
         const filterOmit: FilterOmit = {
-            name: (querySearch.name as string) || '',
-            companyName: (querySearch.companyName as string) || '',
-            email: (querySearch.email as string) || '',
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            companyName: decodeURIComponent((querySearch.companyName as string) || ''),
+            email: decodeURIComponent((querySearch.email as string) || ''),
             endWorkingTogether: endWorkingTogether.isValid() ? endWorkingTogether.format("YYYY-MM-DD") : '',
-            phoneNumber: (querySearch.phoneNumber as string) || '',
+            phoneNumber: decodeURIComponent((querySearch.phoneNumber as string) || ''),
             startWorkingTogether: startWorkingTogether.isValid() ? startWorkingTogether.format("YYYY-MM-DD") : ''
         }
 

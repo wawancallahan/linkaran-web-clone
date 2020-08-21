@@ -91,17 +91,17 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
 
         const querySearch = queryString.parse(window.location.search);
 
-        let dateQuery = (querySearch.date as string) || '';
+        let dateQuery = decodeURIComponent((querySearch.date as string) || '');
         const date = moment(dateQuery, "YYYY-MM-DD", true);
 
         const filterOmit: FilterOmit = {
             date: date.isValid() ? date.format("YYYY-MM-DD") : '',
-            driverName: (querySearch.driverName as string) || '',
-            numberTransaction: (querySearch.numberTransaction as string) || '',
-            serviceCode: (querySearch.serviceCode as string) || '',
-            statusOrder: (querySearch.statusOrder as string) || '',
-            type: (querySearch.type as string) || 'complete',
-            userName: (querySearch.userName as string) || ''
+            driverName: decodeURIComponent((querySearch.driverName as string) || ''),
+            numberTransaction: decodeURIComponent((querySearch.numberTransaction as string) || ''),
+            serviceCode: decodeURIComponent((querySearch.serviceCode as string) || ''),
+            statusOrder: decodeURIComponent((querySearch.statusOrder as string) || ''),
+            type: decodeURIComponent((querySearch.type as string) || 'complete'),
+            userName: decodeURIComponent((querySearch.userName as string) || '')
         }
 
         const filter: Filter = {

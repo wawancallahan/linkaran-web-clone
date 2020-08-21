@@ -88,7 +88,7 @@ export const fetchBankAction = (page: number): ThunkResult<Promise<Boolean>> => 
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            nama: (querySearch.nama as string) || ''
+            nama: decodeURIComponent((querySearch.nama as string) || '')
         }
 
         let paramsObject: OptionObjectString = {

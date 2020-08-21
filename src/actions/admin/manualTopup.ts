@@ -88,9 +88,9 @@ export const fetchManualTopUpAction = (page: number): ThunkResult<Promise<Boolea
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            accountNumber: (querySearch.accountNumber as string) || '',
-            accountName: (querySearch.accountName as string) || '',
-            bankName: (querySearch.bankName as string) || '',
+            accountNumber: decodeURIComponent((querySearch.accountNumber as string) || ''),
+            accountName: decodeURIComponent((querySearch.accountName as string) || ''),
+            bankName: decodeURIComponent((querySearch.bankName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

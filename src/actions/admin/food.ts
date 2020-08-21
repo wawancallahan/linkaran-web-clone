@@ -90,10 +90,10 @@ export const fetchFoodAction = (page: number) : ThunkResult<Promise<Boolean>> =>
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            districtName: (querySearch.districtName as string) || '',
-            name: (querySearch.name as string) || '',
-            provinceName: (querySearch.provinceName as string) || '',
-            restaurantName: (querySearch.restaurantName as string) || '',
+            districtName: decodeURIComponent((querySearch.districtName as string) || ''),
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            provinceName: decodeURIComponent((querySearch.provinceName as string) || ''),
+            restaurantName: decodeURIComponent((querySearch.restaurantName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

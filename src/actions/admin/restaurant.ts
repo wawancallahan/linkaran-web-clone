@@ -91,9 +91,9 @@ export const fetchRestaurantAction = (page: number) : ThunkResult<Promise<Boolea
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            districtName: (querySearch.districtName as string) || '',
-            name: (querySearch.name as string) || '',
-            provinceName: (querySearch.provinceName as string) || '',
+            districtName: decodeURIComponent((querySearch.districtName as string) || ''),
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            provinceName: decodeURIComponent((querySearch.provinceName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

@@ -88,7 +88,7 @@ export const fetchVoucherTypeAction = (page: number): ThunkResult<Promise<Boolea
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || ''
+            name: decodeURIComponent((querySearch.name as string) || '')
         }
 
         let paramsObject: OptionObjectString = {

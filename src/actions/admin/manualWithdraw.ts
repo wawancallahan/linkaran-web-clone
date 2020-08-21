@@ -88,10 +88,10 @@ export const fetchManualWithDrawAction = (page: number): ThunkResult<Promise<Boo
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            accountNumber: (querySearch.accountNumber as string) || '',
-            accountName: (querySearch.accountName as string) || '',
-            bankName: (querySearch.bankName as string) || '',
-            isManual: (querySearch.isManual as string) || '',
+            accountNumber: decodeURIComponent((querySearch.accountNumber as string) || ''),
+            accountName: decodeURIComponent((querySearch.accountName as string) || ''),
+            bankName: decodeURIComponent((querySearch.bankName as string) || ''),
+            isManual: decodeURIComponent((querySearch.isManual as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

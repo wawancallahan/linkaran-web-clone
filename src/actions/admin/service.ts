@@ -89,10 +89,10 @@ export const fetchServiceAction = (page: number): ThunkResult<Promise<Boolean>> 
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || '',
-            canBeMultiple: (querySearch.canBeMultiple as string) || '',
-            code: (querySearch.code as string) || '',
-            passangerWithDriver: (querySearch.passangerWithDriver as string) || '',
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            canBeMultiple: decodeURIComponent((querySearch.canBeMultiple as string) || ''),
+            code: decodeURIComponent((querySearch.code as string) || ''),
+            passangerWithDriver: decodeURIComponent((querySearch.passangerWithDriver as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

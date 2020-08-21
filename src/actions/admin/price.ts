@@ -89,9 +89,9 @@ export const fetchPriceAction = (page: number) : ThunkResult<Promise<Boolean>> =
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            basePrice: (querySearch.basePrice as string) || '',
-            minKm: (querySearch.minKm as string) || '',
-            perKilometer: (querySearch.perKilometer as string) || '',
+            basePrice: decodeURIComponent((querySearch.basePrice as string) || ''),
+            minKm: decodeURIComponent((querySearch.minKm as string) || ''),
+            perKilometer: decodeURIComponent((querySearch.perKilometer as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

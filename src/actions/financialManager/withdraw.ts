@@ -92,12 +92,12 @@ export const fetchWithDrawAction = (page: number, needApproved: number = 1): Thu
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            accountNumber: (querySearch.accountNumber as string) || '',
-            name: (querySearch.name as string) || '',
-            bankName: (querySearch.bankName as string) || '',
-            needApproved: (querySearch.needApproved as string) || '',
-            isManual: (querySearch.isManual as string) || '',
-            isDecline: (querySearch.isDecline as string) || '',
+            accountNumber: decodeURIComponent((querySearch.accountNumber as string) || ''),
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            bankName: decodeURIComponent((querySearch.bankName as string) || ''),
+            needApproved: decodeURIComponent((querySearch.needApproved as string) || ''),
+            isManual: decodeURIComponent((querySearch.isManual as string) || ''),
+            isDecline: decodeURIComponent((querySearch.isDecline as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

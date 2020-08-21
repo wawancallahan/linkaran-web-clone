@@ -90,8 +90,8 @@ export const fetchProvinceAction = (page: number): ThunkResult<Promise<Boolean>>
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || '',
-            countryName: (querySearch.countryName as string) || '',
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            countryName: decodeURIComponent((querySearch.countryName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

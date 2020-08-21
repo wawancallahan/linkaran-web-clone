@@ -117,13 +117,13 @@ export const fetchVoucherPromoAction = (page: number): ThunkResult<Promise<Boole
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            amount: (querySearch.amount as string) || '',
-            code: (querySearch.code as string) || '',
-            isLimited: (querySearch.isLimited as string) || '',
-            minimumPurchase: (querySearch.minimumPurchase as string) || '',
-            name: (querySearch.name as string) || '',
-            quantity: (querySearch.quantity as string) || '',
-            quota: (querySearch.quota as string) || ''
+            amount: decodeURIComponent((querySearch.amount as string) || ''),
+            code: decodeURIComponent((querySearch.code as string) || ''),
+            isLimited: decodeURIComponent((querySearch.isLimited as string) || ''),
+            minimumPurchase: decodeURIComponent((querySearch.minimumPurchase as string) || ''),
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            quantity: decodeURIComponent((querySearch.quantity as string) || ''),
+            quota: decodeURIComponent((querySearch.quota as string) || '')
         }
 
         let paramsObject: OptionObjectString = {

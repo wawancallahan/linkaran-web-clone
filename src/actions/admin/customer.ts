@@ -88,9 +88,9 @@ export const fetchCustomerAction = (page: number): ThunkResult<Promise<Boolean>>
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || '',
-            email: (querySearch.email as string) || '',
-            phoneNumber: (querySearch.phoneNumber as string) || ''
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            email: decodeURIComponent((querySearch.email as string) || ''),
+            phoneNumber: decodeURIComponent((querySearch.phoneNumber as string) || '')
         }
 
         let paramsObject: OptionObjectString = {

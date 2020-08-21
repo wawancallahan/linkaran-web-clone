@@ -90,8 +90,8 @@ export const fetchVillageAction = (page: number): ThunkResult<Promise<Boolean>> 
         const querySearch = queryString.parse(window.location.search);
 
         const filter: Filter = {
-            name: (querySearch.name as string) || '',
-            subDistrictName: (querySearch.subDistrictName as string) || '',
+            name: decodeURIComponent((querySearch.name as string) || ''),
+            subDistrictName: decodeURIComponent((querySearch.subDistrictName as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {
