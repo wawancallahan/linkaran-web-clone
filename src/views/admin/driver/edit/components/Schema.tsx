@@ -131,5 +131,7 @@ export const Schema = Yup.object().shape({
     isMeried: Yup.boolean()
                     .required('Bidang isian status pernikahan wajib diisi'),
     driverHelpCenter: Yup.boolean()
-                    .required('Bidang isian pusat bantuan pengemudi wajib diisi') 
+                    .required('Bidang isian pusat bantuan pengemudi wajib diisi'),
+    isActive: Yup.boolean()
+                    .required('Bidang pilihan status aktif wajib diisi') 
 });

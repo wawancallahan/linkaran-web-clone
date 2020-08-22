@@ -87,7 +87,8 @@ const Index: React.FC<Props> = (props) => {
         custom_interval_jam_kerja_start: null,
         custom_interval_jam_kerja_end: null,
         isMeried: false,
-        driverHelpCenter: false
+        driverHelpCenter: false,
+        isActive: false
     })
 
     const choiceOfActiveWorkHours = (choiceOfActiveWorkHoursText: string) : string => {
@@ -242,6 +243,7 @@ const Index: React.FC<Props> = (props) => {
                     form.custom_interval_jam_kerja_end = custom_interval_jam_kerja_end
                     form.isMeried = data.isMeried
                     form.driverHelpCenter = data.driverHelpCenter
+                    form.isActive = data.isActive
 
                     setFormField(form)
                     setLoaded(true)

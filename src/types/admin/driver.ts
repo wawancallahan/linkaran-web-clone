@@ -65,6 +65,7 @@ export type FormField = {
     custom_interval_jam_kerja_end: Date | null,
     isMeried: boolean,
     driverHelpCenter: boolean,
+    isActive: boolean
 }
 
 export type FormFieldFromCustomer = Omit<FormField, 'nama' | 'no_telepon' | 'email'> & {
@@ -126,6 +127,7 @@ export type DriverField = {
     choiceOfActiveWorkHours: string,
     isMeried: boolean,
     driverHelpCenter: boolean,
+    isActive: boolean
 }
 
 export type Driver = {
@@ -145,7 +147,8 @@ export type Driver = {
     isJoiningTheDriverCommunity: boolean,
     isJoiningLinkaranAsmainJob: boolean,
     choiceOfActiveWorkHours: string,
-    isMeried: boolean
+    isMeried: boolean,
+    isActive: boolean
 }
 
 export type DriverList = Driver & Partial<Timestamps> & {
@@ -283,7 +286,6 @@ export type SetFilterDriverActionType = {
 export type ClearFilterDriverActionType = {
     type: typeof CLEAR_FILTER_DRIVER
 }
-
 
 export type DriverActionTypes =
     | FetchDriverActionType

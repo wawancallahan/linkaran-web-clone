@@ -76,7 +76,8 @@ const Index: React.FC<Props> = (props) => {
         custom_interval_jam_kerja_start: null,
         custom_interval_jam_kerja_end: null,
         isMeried: false,
-        driverHelpCenter: false
+        driverHelpCenter: false,
+        isActive: false
     })
 
     const redirectOnSuccess = () => {

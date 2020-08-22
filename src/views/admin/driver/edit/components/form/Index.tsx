@@ -20,6 +20,7 @@ import { Schema } from '../Schema'
 import FormDriver from './components/Driver'
 import FormKendaraan from './components/Kendaraan'
 import FormPertanyaan from './components/Pertanyaan'
+import FormStatus from './components/Status'
 
 type OwnProps = {
     form: FormField,
@@ -144,7 +145,8 @@ const Form: React.FC<Props> = (props) => {
                     isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
                     choiceOfActiveWorkHours: choiceOfActiveWorkHours,
                     isMeried: values.isMeried,
-                    driverHelpCenter: values.driverHelpCenter
+                    driverHelpCenter: values.driverHelpCenter,
+                    isActive: values.isActive
                 }
 
                 swal("Apakah anda yakin?", "Data akan diubah!", {
@@ -199,7 +201,13 @@ const Form: React.FC<Props> = (props) => {
                                     <h3>Pertanyaan</h3>
                                 </FormGroup>
 
-                                <FormPertanyaan form={FormikProps}/>                             
+                                <FormPertanyaan form={FormikProps}/>   
+
+                                <FormGroup>
+                                    <h3>Status</h3>
+                                </FormGroup>  
+
+                                <FormStatus form={FormikProps} />                           
                             
                                 <FormGroup>
                                     <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>

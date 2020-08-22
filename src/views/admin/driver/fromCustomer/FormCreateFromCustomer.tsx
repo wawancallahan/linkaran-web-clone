@@ -26,6 +26,7 @@ import { toast, TypeOptions } from 'react-toastify'
 import FormDriverFromCustomer from './FormDriverFromCustomer';
 import FormKendaraan from './FormKendaraan';
 import FormPertanyaan from './FormPertanyaan';
+import FormStatus from './FormStatus';
 
 const createSchema = Yup.object().shape({
     customer: Yup.object().shape({
@@ -147,7 +148,9 @@ const createSchema = Yup.object().shape({
     isMeried: Yup.boolean()
                     .required('Bidang isian status pernikahan wajib diisi'),
     driverHelpCenter: Yup.boolean()
-                    .required('Bidang isian pusat bantuan pengemudi wajib diisi') 
+                    .required('Bidang pilihan pusat bantuan pengemudi wajib diisi'),
+    isActive: Yup.boolean()
+                    .required('Bidang pilihan status aktif wajib diisi') 
 });
 
 type FormProps = {
@@ -273,7 +276,8 @@ class Form extends Component<Props> {
                         isJoiningLinkaranAsmainJob: isJoiningLinkaranAsmainJob,
                         choiceOfActiveWorkHours: choiceOfActiveWorkHours,
                         isMeried: values.isMeried,
-                        driverHelpCenter: values.driverHelpCenter
+                        driverHelpCenter: values.driverHelpCenter,
+                        isActive: values.isActive
                     }
 
                     swal("Apakah anda yakin?", "Data akan ditambahkan!", {
@@ -328,7 +332,13 @@ class Form extends Component<Props> {
                                         <h3>Pertanyaan</h3>
                                     </FormGroup>
 
-                                    <FormPertanyaan FormikProps={FormikProps}/>                            
+                                    <FormPertanyaan FormikProps={FormikProps}/> 
+
+                                    <FormGroup>
+                                        <h3>Status</h3>
+                                    </FormGroup>  
+
+                                    <FormStatus form={FormikProps} />                            
                                 
                                     <FormGroup>
                                         <Button type="submit" disabled={FormikProps.isSubmitting} color="success">Simpan</Button>

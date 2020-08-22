@@ -500,56 +500,6 @@ const Driver: React.FC<Props> = (props) => {
             <FormGroup>
                 <label
                 className="form-control-label"
-                htmlFor="input-driverHelpCenter"
-                >
-                    Pusat Bantuan Pengemudi
-                </label>
-            </FormGroup>
-            <FormGroup>
-                <fieldset>
-                    <div className="custom-control custom-radio mb-3">
-                        <input
-                            className="custom-control-input"
-                            defaultChecked={ ! form.values.driverHelpCenter}
-                            id="driverHelpCenter_no"
-                            name="driverHelpCenter"
-                            type="radio"
-                            value="0"
-                            onChange={() => {
-                                form.setFieldValue('driverHelpCenter', false, true);
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                        <label className="custom-control-label" htmlFor="driverHelpCenter_no">
-                            Belum
-                        </label>
-                    </div>
-                    <div className="custom-control custom-radio mb-3">
-                        <input
-                            className="custom-control-input"
-                            defaultChecked={form.values.driverHelpCenter}
-                            id="driverHelpCenter_yes"
-                            name="driverHelpCenter"
-                            type="radio"
-                            value="1"
-                            onChange={() => {
-                                form.setFieldValue('driverHelpCenter', true, true);
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                        <label className="custom-control-label" htmlFor="driverHelpCenter_yes">
-                            Sudah
-                        </label>
-                    </div>
-                </fieldset>
-                <div>
-                    {form.errors.driverHelpCenter && form.touched.driverHelpCenter ? form.errors.driverHelpCenter : ''}
-                </div>
-            </FormGroup>
-
-            <FormGroup>
-                <label
-                className="form-control-label"
                 htmlFor="input-no-ktp"
                 >
                     No KTP
