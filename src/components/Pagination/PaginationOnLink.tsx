@@ -117,8 +117,8 @@ const Pagination: React.FC<Props> = (props: Props) => {
         return (
             <nav aria-label="...">
                 <PaginationContainer
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
+                    className="pagination justify-content-center mb-0"
+                    listClassName="justify-content-center mb-0"
                 >
                     {paginationList}
                 </PaginationContainer>
