@@ -29,7 +29,7 @@ import { HistoryDataActionTypes as AdminHistoryDataActionTypes } from './admin/h
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
 import { WithDrawActionTypes as FinancialManagerWithDrawActionTypes } from './financialManager/withdraw'
 
-export type AppActions = 
+export type AppActions =
     | AdminUserActionTypes
     | AdminFoodActionTypes
     | AdminFoodCategoryActionTypes

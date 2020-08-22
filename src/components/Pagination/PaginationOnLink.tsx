@@ -4,11 +4,13 @@ import {
     PaginationLink,
     PaginationItem
 } from 'reactstrap';
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import queryString from "query-string"
 import { OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
+import { connect } from 'react-redux';
+import { AppState } from '../../reducers';
+import { RouterState } from 'connected-react-router';
 
-type Props = RouteComponentProps & {
+type Props = LinkStateToProps & {
     pageCount: number,
     currentPage: number,
     itemCount: number,
@@ -103,7 +105,7 @@ const Pagination: React.FC<Props> = (props: Props) => {
                             className={item.active ? 'active' : ''}
                             disabled={item.disabled}>
                 <PaginationLink
-                    href={item.page !== null ? (props.url + "?" + setSearchQuery(props.location.search, item.page)) : ""}
+                    href={item.page !== null ? (props.url + "?" + setSearchQuery(props.router.location.search, item.page)) : ""}
                 >
                     {item.text}
                     
@@ -129,4 +131,14 @@ const Pagination: React.FC<Props> = (props: Props) => {
     return (null);
 }
 
-export default withRouter(Pagination);
+type LinkStateToProps = {
+    router: RouterState
+}
+
+const mapStateToProps = (state: AppState): LinkStateToProps => {
+    return {
+        router: state.router
+    }
+}
+
+export default connect(mapStateToProps)(Pagination);

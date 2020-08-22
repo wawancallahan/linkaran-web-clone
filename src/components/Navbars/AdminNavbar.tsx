@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownItem,
@@ -13,16 +13,20 @@ import {
 
 import { name as authName} from '../../services/auth'
 import { profileImage } from "../../helpers/Assets";
+import { ThunkDispatch } from "redux-thunk";
+import { AppActions } from "../../types";
+import { push, Push } from 'connected-react-router';
+import { connect } from "react-redux";
 
-type OwnProps = RouteComponentProps & {
+type OwnProps = {
   brandText?: String;
 }
 
-type Props = OwnProps
+type Props = OwnProps & LinkDispatchToProps
 
 const AdminNavbar: React.FC<Props> = (props) => {
   const logout = () => {
-    props.history.push('/logout');
+    props.push('/admin/food');
   }
 
   return (
@@ -64,4 +68,12 @@ const AdminNavbar: React.FC<Props> = (props) => {
   )
 }
 
-export default withRouter(AdminNavbar);
+type LinkDispatchToProps = {
+  push: Push
+}
+
+const mapDispatchToProps: LinkDispatchToProps = {
+    push
+}
+
+export default connect(null, mapDispatchToProps)(AdminNavbar);
