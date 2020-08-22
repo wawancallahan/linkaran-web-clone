@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: ProvinceList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertProvinceHideActionType) => {
+const alertHide = (state: State, action: AlertProvinceHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertProvinceShowActionType) => {
+const alertShow = (state: State, action: AlertProvinceShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertProvinceShowAction
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchProvinceSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchProvinceSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchProvinceErrorActionType) => {
+const fetchError = (state: State, action: FetchProvinceErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorProvinceActionType) => {
+const setPaginator = (state: State, action: SetPaginatorProvinceActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorProvince
     }
 }
 
-const reducer = (state = initialState, action: ProvinceActionTypes) => {
+const reducer = (state = defaultState, action: ProvinceActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_PROVINCE: return setPaginator(state, action);
         case FETCH_PROVINCE_SUCCESS: return fetchSuccess(state, action);

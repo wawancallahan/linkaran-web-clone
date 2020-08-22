@@ -9,7 +9,7 @@ import {
     ValidateLoginFailResult
 } from '../types/auth';
 import { Dispatch } from 'redux';
-import { AppState } from '../store/configureStore';
+import { AppState } from '../reducers/index';
 import axiosService from '../services/axiosService';
 import { ThunkResult } from '../types/thunk';
 import * as dotenv from 'dotenv';

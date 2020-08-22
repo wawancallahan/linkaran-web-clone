@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: SubDistrictList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertSubDistrictHideActionType) => {
+const alertHide = (state: State, action: AlertSubDistrictHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertSubDistrictShowActionType) => {
+const alertShow = (state: State, action: AlertSubDistrictShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertSubDistrictShowAct
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchSubDistrictSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchSubDistrictSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchSubDistrictErrorActionType) => {
+const fetchError = (state: State, action: FetchSubDistrictErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorSubDistrictActionType) => {
+const setPaginator = (state: State, action: SetPaginatorSubDistrictActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorSubDistr
     }
 }
 
-const reducer = (state = initialState, action: SubDistrictActionTypes) => {
+const reducer = (state = defaultState, action: SubDistrictActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_SUB_DISTRICT: return setPaginator(state, action);
         case FETCH_SUB_DISTRICT_SUCCESS: return fetchSuccess(state, action);

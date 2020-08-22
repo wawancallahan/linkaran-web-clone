@@ -2,7 +2,7 @@
 import axiosService from '../../services/axiosService';
 import { Dispatch } from "redux";
 import { Paginator } from '../../types/paginator';
-import { AppState } from "../../store/configureStore";
+import { AppState } from "../../reducers/index";
 import { VehicleTypeList } from '../../types/admin/vehicleType';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiResponseList, ApiResponseError, ApiResponseSuccess, ApiResponseSuccessList } from '../../types/api';

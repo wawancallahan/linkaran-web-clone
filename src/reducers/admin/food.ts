@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: FoodList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertFoodHideActionType) => {
+const alertHide = (state: State, action: AlertFoodHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertFoodShowActionType) => {
+const alertShow = (state: State, action: AlertFoodShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertFoodShowActionType
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchFoodSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchFoodSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchFoodErrorActionType) => {
+const fetchError = (state: State, action: FetchFoodErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorFoodActionType) => {
+const setPaginator = (state: State, action: SetPaginatorFoodActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorFoodActi
     }
 }
 
-const reducer = (state = initialState, action: FoodActionTypes) => {
+const reducer = (state = defaultState, action: FoodActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_FOOD: return setPaginator(state, action);
         case FETCH_FOOD_SUCCESS: return fetchSuccess(state, action);

@@ -5,7 +5,7 @@ import {
 import TableItem from './TableItem'
 import BlockUi from '../../../../../../../../components/BlockUi/BlockUi'
 import { TicketList } from '../../../../../../../../types/admin/ticket'
-import { AppState } from '../../../../../../../../store/configureStore'
+import { AppState } from '../../../../../../../../reducers/index'
 import { connect } from 'react-redux'
 import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo'
 

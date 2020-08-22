@@ -18,13 +18,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: DriverList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -39,16 +39,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertDriverHideActionType) => {
+const alertHide = (state: State, action: AlertDriverHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertDriverShowActionType) => {
+const alertShow = (state: State, action: AlertDriverShowActionType) => {
     return {
         ...state,
         alert: {
@@ -59,7 +59,7 @@ const alertShow = (state: initialStateInterface, action: AlertDriverShowActionTy
     }
 }
 
-const fetch = (state: initialStateInterface, action: FetchDriverActionType) => {
+const fetch = (state: State, action: FetchDriverActionType) => {
     return {
         ...state,
         list: action.list
@@ -67,23 +67,23 @@ const fetch = (state: initialStateInterface, action: FetchDriverActionType) => {
 }
 
 
-const fetchSuccess = (state: initialStateInterface, action: FetchDriverSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchDriverSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchDriverErrorActionType) => {
+const fetchError = (state: State, action: FetchDriverErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorDriverActionType) => {
+const setPaginator = (state: State, action: SetPaginatorDriverActionType) => {
     return {
         ...state,
         paginate: {
@@ -93,7 +93,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorDriverAc
     }
 }
 
-const reducer = (state = initialState, action: DriverActionTypes) => {
+const reducer = (state = defaultState, action: DriverActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_DRIVER: return setPaginator(state, action);
         case FETCH_DRIVER: return fetch(state, action);

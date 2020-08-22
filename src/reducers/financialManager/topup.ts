@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: TopUpList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertTopUpHideActionType) => {
+const alertHide = (state: State, action: AlertTopUpHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertTopUpShowActionType) => {
+const alertShow = (state: State, action: AlertTopUpShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertTopUpShowActionTyp
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchTopUpSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchTopUpSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchTopUpErrorActionType) => {
+const fetchError = (state: State, action: FetchTopUpErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorTopUpActionType) => {
+const setPaginator = (state: State, action: SetPaginatorTopUpActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorTopUpAct
     }
 }
 
-const reducer = (state = initialState, action: TopUpActionTypes) => {
+const reducer = (state = defaultState, action: TopUpActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_TOPUP: return setPaginator(state, action);
         case FETCH_TOPUP_SUCCESS: return fetchSuccess(state, action);

@@ -18,13 +18,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: LinkPay[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -39,16 +39,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertLinkPayHideActionType) => {
+const alertHide = (state: State, action: AlertLinkPayHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertLinkPayShowActionType) => {
+const alertShow = (state: State, action: AlertLinkPayShowActionType) => {
     return {
         ...state,
         alert: {
@@ -59,23 +59,23 @@ const alertShow = (state: initialStateInterface, action: AlertLinkPayShowActionT
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchLinkPaySuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchLinkPaySuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchLinkPayErrorActionType) => {
+const fetchError = (state: State, action: FetchLinkPayErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorLinkPayActionType) => {
+const setPaginator = (state: State, action: SetPaginatorLinkPayActionType) => {
     return {
         ...state,
         paginate: {
@@ -84,7 +84,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorLinkPayA
     }
 }
 
-const reducer = (state = initialState, action: LinkPayActionTypes) => {
+const reducer = (state = defaultState, action: LinkPayActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_LINK_PAY: return setPaginator(state, action);
         case FETCH_LINK_PAY_SUCCESS: return fetchSuccess(state, action);

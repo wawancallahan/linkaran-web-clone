@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: WithDrawList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertWithDrawHideActionType) => {
+const alertHide = (state: State, action: AlertWithDrawHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertWithDrawShowActionType) => {
+const alertShow = (state: State, action: AlertWithDrawShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertWithDrawShowAction
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchWithDrawSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchWithDrawSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchWithDrawErrorActionType) => {
+const fetchError = (state: State, action: FetchWithDrawErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorWithDrawActionType) => {
+const setPaginator = (state: State, action: SetPaginatorWithDrawActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorWithDraw
     }
 }
 
-const reducer = (state = initialState, action: WithDrawActionTypes) => {
+const reducer = (state = defaultState, action: WithDrawActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_WITHDRAW: return setPaginator(state, action);
         case FETCH_WITHDRAW_SUCCESS: return fetchSuccess(state, action);

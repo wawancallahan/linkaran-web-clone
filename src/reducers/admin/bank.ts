@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: BankList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertBankHideActionType) => {
+const alertHide = (state: State, action: AlertBankHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertBankShowActionType) => {
+const alertShow = (state: State, action: AlertBankShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertBankShowActionType
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchBankSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchBankSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchBankErrorActionType) => {
+const fetchError = (state: State, action: FetchBankErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorBankActionType) => {
+const setPaginator = (state: State, action: SetPaginatorBankActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorBankActi
     }
 }
 
-const reducer = (state = initialState, action: BankActionTypes) => {
+const reducer = (state = defaultState, action: BankActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_BANK: return setPaginator(state, action);
         case FETCH_BANK_SUCCESS: return fetchSuccess(state, action);

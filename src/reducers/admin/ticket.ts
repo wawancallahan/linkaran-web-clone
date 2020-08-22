@@ -18,13 +18,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: TicketList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -39,16 +39,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertTicketHideActionType) => {
+const alertHide = (state: State, action: AlertTicketHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertTicketShowActionType) => {
+const alertShow = (state: State, action: AlertTicketShowActionType) => {
     return {
         ...state,
         alert: {
@@ -59,23 +59,23 @@ const alertShow = (state: initialStateInterface, action: AlertTicketShowActionTy
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchTicketSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchTicketSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchTicketErrorActionType) => {
+const fetchError = (state: State, action: FetchTicketErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorTicketActionType) => {
+const setPaginator = (state: State, action: SetPaginatorTicketActionType) => {
     return {
         ...state,
         paginate: {
@@ -84,7 +84,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorTicketAc
     }
 }
 
-const reducer = (state = initialState, action: TicketActionTypes) => {
+const reducer = (state = defaultState, action: TicketActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_TICKET: return setPaginator(state, action);
         case FETCH_TICKET_SUCCESS: return fetchSuccess(state, action);

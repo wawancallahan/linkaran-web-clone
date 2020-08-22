@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: VoucherPromoList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertVoucherPromoHideActionType) => {
+const alertHide = (state: State, action: AlertVoucherPromoHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertVoucherPromoShowActionType) => {
+const alertShow = (state: State, action: AlertVoucherPromoShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertVoucherPromoShowAc
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchVoucherPromoSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchVoucherPromoSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchVoucherPromoErrorActionType) => {
+const fetchError = (state: State, action: FetchVoucherPromoErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorVoucherPromoActionType) => {
+const setPaginator = (state: State, action: SetPaginatorVoucherPromoActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorVoucherP
     }
 }
 
-const reducer = (state = initialState, action: VoucherPromoActionTypes) => {
+const reducer = (state = defaultState, action: VoucherPromoActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_VOUCHER_PROMO: return setPaginator(state, action);
         case FETCH_VOUCHER_PROMO_SUCCESS: return fetchSuccess(state, action);

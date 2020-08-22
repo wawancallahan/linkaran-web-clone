@@ -5,7 +5,7 @@ import { setAlertSubBrandVehicleHideAction } from '../../../../../actions/admin/
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../../../types';
 import { connect } from 'react-redux';
-import { AppState } from '../../../../../store/configureStore';
+import { AppState } from '../../../../../reducers/index';
 
 type OwnProps = {}
 

@@ -14,13 +14,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: TicketList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -35,23 +35,23 @@ const initialState: initialStateInterface = {
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchTicketVoucherSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchTicketVoucherSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchTicketVoucherErrorActionType) => {
+const fetchError = (state: State, action: FetchTicketVoucherErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorTicketVoucherActionType) => {
+const setPaginator = (state: State, action: SetPaginatorTicketVoucherActionType) => {
     return {
         ...state,
         paginate: {
@@ -60,7 +60,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorTicketVo
     }
 }
 
-const reducer = (state = initialState, action: TicketActionTypes) => {
+const reducer = (state = defaultState, action: TicketActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_TICKET_VOUCHER: return setPaginator(state, action);
         case FETCH_TICKET_VOUCHER_SUCCESS: return fetchSuccess(state, action);

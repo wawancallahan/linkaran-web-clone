@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: ServicePriceList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertServicePriceHideActionType) => {
+const alertHide = (state: State, action: AlertServicePriceHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertServicePriceShowActionType) => {
+const alertShow = (state: State, action: AlertServicePriceShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertServicePriceShowAc
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchServicePriceSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchServicePriceSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchServicePriceErrorActionType) => {
+const fetchError = (state: State, action: FetchServicePriceErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorServicePriceActionType) => {
+const setPaginator = (state: State, action: SetPaginatorServicePriceActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorServiceP
     }
 }
 
-const reducer = (state = initialState, action: ServicePriceActionTypes) => {
+const reducer = (state = defaultState, action: ServicePriceActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_SERVICE_PRICE: return setPaginator(state, action);
         case FETCH_SERVICE_PRICE_SUCCESS: return fetchSuccess(state, action);

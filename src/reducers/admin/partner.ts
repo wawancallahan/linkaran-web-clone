@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: PartnerList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertPartnerHideActionType) => {
+const alertHide = (state: State, action: AlertPartnerHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertPartnerShowActionType) => {
+const alertShow = (state: State, action: AlertPartnerShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertPartnerShowActionT
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchPartnerSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchPartnerSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchPartnerErrorActionType) => {
+const fetchError = (state: State, action: FetchPartnerErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorPartnerActionType) => {
+const setPaginator = (state: State, action: SetPaginatorPartnerActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorPartnerA
     }
 }
 
-const reducer = (state = initialState, action: PartnerActionTypes) => {
+const reducer = (state = defaultState, action: PartnerActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_PARTNER: return setPaginator(state, action);
         case FETCH_PARTNER_SUCCESS: return fetchSuccess(state, action);

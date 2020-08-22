@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Pagination from '../../../../../components/Pagination/PaginationOnLink';
 import { Paginator } from '../../../../../types/paginator';
-import { AppState } from '../../../../../store/configureStore';
+import { AppState } from '../../../../../reducers/index';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 

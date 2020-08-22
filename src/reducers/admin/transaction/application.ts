@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: ApplicationList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertApplicationHideActionType) => {
+const alertHide = (state: State, action: AlertApplicationHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertApplicationShowActionType) => {
+const alertShow = (state: State, action: AlertApplicationShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertApplicationShowAct
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchApplicationSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchApplicationSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchApplicationErrorActionType) => {
+const fetchError = (state: State, action: FetchApplicationErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorApplicationActionType) => {
+const setPaginator = (state: State, action: SetPaginatorApplicationActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorApplicat
     }
 }
 
-const reducer = (state = initialState, action: ApplicationActionTypes) => {
+const reducer = (state = defaultState, action: ApplicationActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_APPLICATION: return setPaginator(state, action);
         case FETCH_APPLICATION_SUCCESS: return fetchSuccess(state, action);

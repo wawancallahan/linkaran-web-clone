@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: ManualTopUpList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertManualTopUpHideActionType) => {
+const alertHide = (state: State, action: AlertManualTopUpHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertManualTopUpShowActionType) => {
+const alertShow = (state: State, action: AlertManualTopUpShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertManualTopUpShowAct
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchManualTopUpSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchManualTopUpSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchManualTopUpErrorActionType) => {
+const fetchError = (state: State, action: FetchManualTopUpErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorManualTopUpActionType) => {
+const setPaginator = (state: State, action: SetPaginatorManualTopUpActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorManualTo
     }
 }
 
-const reducer = (state = initialState, action: ManualTopUpActionTypes) => {
+const reducer = (state = defaultState, action: ManualTopUpActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_MANUAL_TOPUP: return setPaginator(state, action);
         case FETCH_MANUAL_TOPUP_SUCCESS: return fetchSuccess(state, action);

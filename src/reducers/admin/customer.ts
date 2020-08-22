@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: CustomerList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertCustomerHideActionType) => {
+const alertHide = (state: State, action: AlertCustomerHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertCustomerShowActionType) => {
+const alertShow = (state: State, action: AlertCustomerShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertCustomerShowAction
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchCustomerSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchCustomerSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchCustomerErrorActionType) => {
+const fetchError = (state: State, action: FetchCustomerErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorCustomerActionType) => {
+const setPaginator = (state: State, action: SetPaginatorCustomerActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorCustomer
     }
 }
 
-const reducer = (state = initialState, action: CustomerActionTypes) => {
+const reducer = (state = defaultState, action: CustomerActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_CUSTOMER: return setPaginator(state, action);
         case FETCH_CUSTOMER_SUCCESS: return fetchSuccess(state, action);

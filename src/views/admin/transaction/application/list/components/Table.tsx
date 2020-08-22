@@ -5,7 +5,7 @@ import {
 import TableItem from './TableItem'
 import BlockUi from '../../../../../../components/BlockUi/BlockUi'
 import { ApplicationList } from '../../../../../../types/admin/transaction/application'
-import { AppState } from '../../../../../../store/configureStore'
+import { AppState } from '../../../../../../reducers/index'
 import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { typeTransactionFormat } from '../../../../../../helpers/utils'

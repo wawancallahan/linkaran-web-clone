@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: VillageList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertVillageHideActionType) => {
+const alertHide = (state: State, action: AlertVillageHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertVillageShowActionType) => {
+const alertShow = (state: State, action: AlertVillageShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertVillageShowActionT
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchVillageSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchVillageSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchVillageErrorActionType) => {
+const fetchError = (state: State, action: FetchVillageErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorVillageActionType) => {
+const setPaginator = (state: State, action: SetPaginatorVillageActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorVillageA
     }
 }
 
-const reducer = (state = initialState, action: VillageActionTypes) => {
+const reducer = (state = defaultState, action: VillageActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_VILLAGE: return setPaginator(state, action);
         case FETCH_VILLAGE_SUCCESS: return fetchSuccess(state, action);

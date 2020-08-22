@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { toast } from 'react-toastify';
-import store from './store/configureStore';
-import history from './services/history';
+import configureStore, { history } from './store/configureStore';
 import App from './App';
 import * as Sentry from '@sentry/browser';
 
@@ -20,12 +18,11 @@ Sentry.init({
 });
 
 toast.configure();
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
+      <App history={history} />
   </Provider>,
   document.getElementById("root")
 );

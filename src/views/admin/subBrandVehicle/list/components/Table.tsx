@@ -5,7 +5,7 @@ import {
 import TableItem from './TableItem'
 import BlockUi from '../../../../../components/BlockUi/BlockUi'
 import { SubBrandVehicleList } from '../../../../../types/admin/subBrandVehicle'
-import { AppState } from '../../../../../store/configureStore'
+import { AppState } from '../../../../../reducers/index'
 import { connect } from 'react-redux'
 
 type OwnProps = {

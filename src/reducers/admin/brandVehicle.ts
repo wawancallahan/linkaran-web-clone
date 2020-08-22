@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: BrandVehicleList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertBrandVehicleHideActionType) => {
+const alertHide = (state: State, action: AlertBrandVehicleHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertBrandVehicleShowActionType) => {
+const alertShow = (state: State, action: AlertBrandVehicleShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertBrandVehicleShowAc
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchBrandVehicleSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchBrandVehicleSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchBrandVehicleErrorActionType) => {
+const fetchError = (state: State, action: FetchBrandVehicleErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorBrandVehicleActionType) => {
+const setPaginator = (state: State, action: SetPaginatorBrandVehicleActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorBrandVeh
     }
 }
 
-const reducer = (state = initialState, action: BrandVehicleActionTypes) => {
+const reducer = (state = defaultState, action: BrandVehicleActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_BRAND_VEHICLE: return setPaginator(state, action);
         case FETCH_BRAND_VEHICLE_SUCCESS: return fetchSuccess(state, action);

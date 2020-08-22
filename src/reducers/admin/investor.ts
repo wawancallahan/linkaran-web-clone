@@ -18,13 +18,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: InvestorList[],
     paginate: Paginator,
     alert: Alert
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -39,16 +39,16 @@ const initialState: initialStateInterface = {
     }
 }
 
-const alertHide = (state: initialStateInterface, action: AlertInvestorHideActionType) => {
+const alertHide = (state: State, action: AlertInvestorHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertInvestorShowActionType) => {
+const alertShow = (state: State, action: AlertInvestorShowActionType) => {
     return {
         ...state,
         alert: {
@@ -59,7 +59,7 @@ const alertShow = (state: initialStateInterface, action: AlertInvestorShowAction
     }
 }
 
-const fetch = (state: initialStateInterface, action: FetchInvestorActionType) => {
+const fetch = (state: State, action: FetchInvestorActionType) => {
     return {
         ...state,
         list: action.list
@@ -67,23 +67,23 @@ const fetch = (state: initialStateInterface, action: FetchInvestorActionType) =>
 }
 
 
-const fetchSuccess = (state: initialStateInterface, action: FetchInvestorSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchInvestorSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchInvestorErrorActionType) => {
+const fetchError = (state: State, action: FetchInvestorErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorInvestorActionType) => {
+const setPaginator = (state: State, action: SetPaginatorInvestorActionType) => {
     return {
         ...state,
         paginate: {
@@ -93,7 +93,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorInvestor
     }
 }
 
-const reducer = (state = initialState, action: InvestorActionTypes) => {
+const reducer = (state = defaultState, action: InvestorActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_INVESTOR: return setPaginator(state, action);
         case FETCH_INVESTOR: return fetch(state, action);

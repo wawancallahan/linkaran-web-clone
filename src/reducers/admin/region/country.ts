@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../../types/paginator';
 import { Alert } from '../../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: CountryList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertCountryHideActionType) => {
+const alertHide = (state: State, action: AlertCountryHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertCountryShowActionType) => {
+const alertShow = (state: State, action: AlertCountryShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertCountryShowActionT
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchCountrySuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchCountrySuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchCountryErrorActionType) => {
+const fetchError = (state: State, action: FetchCountryErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorCountryActionType) => {
+const setPaginator = (state: State, action: SetPaginatorCountryActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorCountryA
     }
 }
 
-const reducer = (state = initialState, action: CountryActionTypes) => {
+const reducer = (state = defaultState, action: CountryActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_COUNTRY: return setPaginator(state, action);
         case FETCH_COUNTRY_SUCCESS: return fetchSuccess(state, action);

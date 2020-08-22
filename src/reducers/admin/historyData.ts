@@ -16,13 +16,13 @@ import {
 import { Paginator } from '../../types/paginator';
 import { Alert } from '../../types/alert';
 
-type initialStateInterface = {
+export type State = {
     list: HistoryDataList[],
     paginate: Paginator,
     alert: Alert,
 };
 
-const initialState: initialStateInterface = {
+const defaultState: State = {
     list: [],
     paginate: {
         total: 0,
@@ -37,16 +37,16 @@ const initialState: initialStateInterface = {
     },
 }
 
-const alertHide = (state: initialStateInterface, action: AlertHistoryDataHideActionType) => {
+const alertHide = (state: State, action: AlertHistoryDataHideActionType) => {
     return {
         ...state,
         alert: {
-            ...initialState.alert
+            ...defaultState.alert
         }
     }
 }
 
-const alertShow = (state: initialStateInterface, action: AlertHistoryDataShowActionType) => {
+const alertShow = (state: State, action: AlertHistoryDataShowActionType) => {
     return {
         ...state,
         alert: {
@@ -57,23 +57,23 @@ const alertShow = (state: initialStateInterface, action: AlertHistoryDataShowAct
     }
 }
 
-const fetchSuccess = (state: initialStateInterface, action: FetchHistoryDataSuccessActionType) => {
+const fetchSuccess = (state: State, action: FetchHistoryDataSuccessActionType) => {
     return {
         ...state,
         list: action.list,
         paginate: {
-            ...initialState.paginate
+            ...defaultState.paginate
         }
     }
 }
 
-const fetchError = (state: initialStateInterface, action: FetchHistoryDataErrorActionType) => {
+const fetchError = (state: State, action: FetchHistoryDataErrorActionType) => {
     return {
-        ...initialState
+        ...defaultState
     }
 }
 
-const setPaginator = (state: initialStateInterface, action: SetPaginatorHistoryDataActionType) => {
+const setPaginator = (state: State, action: SetPaginatorHistoryDataActionType) => {
     return {
         ...state,
         paginate: {
@@ -82,7 +82,7 @@ const setPaginator = (state: initialStateInterface, action: SetPaginatorHistoryD
     }
 }
 
-const reducer = (state = initialState, action: HistoryDataActionTypes) => {
+const reducer = (state = defaultState, action: HistoryDataActionTypes) => {
     switch (action.type) {
         case SET_PAGINATOR_HISTORY_DATA: return setPaginator(state, action);
         case FETCH_HISTORY_DATA_SUCCESS: return fetchSuccess(state, action);
