@@ -29,7 +29,10 @@ import { HistoryDataActionTypes as AdminHistoryDataActionTypes } from './admin/h
 import { TopUpActionTypes as FinancialManagerTopUpActionTypes } from './financialManager/topup'
 import { WithDrawActionTypes as FinancialManagerWithDrawActionTypes } from './financialManager/withdraw'
 
+import { RouterAction } from 'connected-react-router'
+
 export type AppActions =
+    | RouterAction
     | AdminUserActionTypes
     | AdminFoodActionTypes
     | AdminFoodCategoryActionTypes

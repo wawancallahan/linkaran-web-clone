@@ -2,22 +2,23 @@ import * as React from 'react'
 import { NavLink, Collapse } from 'reactstrap';
 import SingleLink from './SingleLink';
 import { SidebarRoute } from './Sidebar';
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { AppState } from '../../reducers';
+import { connect } from 'react-redux';
 
-type OwnProps = RouteComponentProps & {
+type OwnProps = {
     key: string,
     index: number,
     item: SidebarRoute,
     closeCollapse: () => void,
 }
 
-type Props = OwnProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const DropdownLink: React.FC<Props> = (props) => {
 
     const activeRoute = (): boolean => {
         if (props.item.activeRouteName) {
-            return props.location.pathname.indexOf(props.item.activeRouteName) > -1;
+            return props.router.location.pathname.indexOf(props.item.activeRouteName) > -1;
         }
         
         return false;
@@ -57,4 +58,8 @@ const DropdownLink: React.FC<Props> = (props) => {
     );
 }
 
-export default withRouter(DropdownLink)
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
+
+export default connect(mapStateToProps)(DropdownLink)

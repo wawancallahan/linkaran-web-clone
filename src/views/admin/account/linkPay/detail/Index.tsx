@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import HeaderView from '../../../../../components/Headers/HeaderView';
 import { Container, Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 import { AccountLinkPayShow } from '../../../../../types/admin/account/linkPay';
@@ -12,12 +11,12 @@ import { ApiResponse } from '../../../../../types/api';
 import { AppActions } from '../../../../../types';
 import WithTitle from '../../../../../hoc/WithTitle';
 import Account from './components/Account'
+import { AppState } from '../../../../../reducers';
+import { createMatchSelector, RouterRootState } from 'connected-react-router';
 
-type OwnProps = RouteComponentProps<{
-    id: string
-}>
+type OwnProps = {}
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -26,23 +25,27 @@ const Index: React.FC<Props> = (props) => {
     const [item, setItem] = React.useState<AccountLinkPayShow | null>(null)
 
     React.useEffect(() => {
-        const id = Number.parseInt(props.match.params.id)
+        if (props.match) {
+            const id = Number.parseInt(props.match.params.id)
 
-        const find = async () => {
-            await props.findAccountLinkPayAction(id)
-                .then((response: ApiResponse<AccountLinkPayShow>) => {
+            const find = async () => {
+                await props.findAccountLinkPayAction(id)
+                    .then((response: ApiResponse<AccountLinkPayShow>) => {
 
-                    const data: AccountLinkPayShow = response.response!.result;
+                        const data: AccountLinkPayShow = response.response!.result;
 
-                    setItem(data)
-                    setLoaded(true)
-                })
-                .catch((error: ApiResponse<AccountLinkPayShow>) => {
-                    setLoadMessage(error.error!.metaData.message)
-                })
+                        setItem(data)
+                        setLoaded(true)
+                    })
+                    .catch((error: ApiResponse<AccountLinkPayShow>) => {
+                        setLoadMessage(error.error!.metaData.message)
+                    })
+            }
+
+            find()     
+        } else {
+            setLoadMessage("Data Tidak Ditemukan");
         }
-
-        find()        
     }, [])
 
     return (
@@ -68,16 +71,17 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findAccountLinkPayAction: (id: number) => Promise<ApiResponse<AccountLinkPayShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
+const mapStateToProps = (state: AppState) => {
+    const matchSelector = createMatchSelector<RouterRootState<any>, { id: string }>("/admin/account/link-pay/:id");
     return {
-        findAccountLinkPayAction: (id: number) => dispatch(findAccountLinkPayAction(id))
+        match: matchSelector(state)
     }
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    findAccountLinkPayAction: (id: number) => dispatch(findAccountLinkPayAction(id))
+})
+
 export default WithTitle(
-    withRouter(connect(null, mapDispatchToProps)(Index))
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Detail Akun Link Pay")

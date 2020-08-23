@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownItem,
@@ -13,16 +13,21 @@ import {
 
 import { name as authName} from '../../services/auth'
 import { profileImage } from "../../helpers/Assets";
+import { ThunkDispatch } from "redux-thunk";
+import { connect } from "react-redux";
+import { AppState } from "../../reducers";
+import { AppActions } from "../../types";
+import { push } from 'connected-react-router';
 
-type OwnProps = RouteComponentProps & {
+type OwnProps = {
   brandText?: String;
 }
 
-type Props = OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const PartnerNavbar: React.FC<Props> = (props) => {
   const logout = () => {
-    props.history.push('/logout');
+    props.push('/logout');
   }
 
   return (
@@ -64,4 +69,8 @@ const PartnerNavbar: React.FC<Props> = (props) => {
   )
 }
 
-export default withRouter(PartnerNavbar);
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+  push: push
+});
+
+export default connect(null, mapDispatchToProps)(PartnerNavbar);

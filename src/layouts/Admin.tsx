@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, Switch, RouteComponentProps, withRouter } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
@@ -10,6 +10,8 @@ import { logoLinkaran } from "../helpers/Assets";
 import { rolesToArray } from "../services/auth";
 import { SidebarRoute } from '../components/Sidebar/Sidebar'
 import roleRoutes, { Route as RouteInterface } from '../routes'
+import { connect } from "react-redux";
+import { AppState } from "../reducers";
 
 const routeList: (SidebarRoute | null)[] = [
   {
@@ -221,8 +223,9 @@ const routeList: (SidebarRoute | null)[] = [
   },
 ];
 
-type OwnProps = RouteComponentProps
-type Props = OwnProps
+type OwnProps = {}
+
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Admin: React.FC<Props> = (props) => {
 
@@ -296,7 +299,6 @@ const Admin: React.FC<Props> = (props) => {
   return (
     <React.Fragment>
       <Sidebar
-        {...props}
         routes={getRoutesForSidebar(routeList)}
         logo={{
           innerLink: "/admin/index",
@@ -306,8 +308,7 @@ const Admin: React.FC<Props> = (props) => {
       />
       <div className="main-content">
         <AdminNavbar
-          {...props}
-          brandText={getBrandText(routeList, props.location.pathname)}
+          brandText={getBrandText(routeList, props.router.location.pathname)}
         />
         <Switch>
           {getRoleRoutes(roleRoutes)}
@@ -320,4 +321,8 @@ const Admin: React.FC<Props> = (props) => {
   )
 }
 
-export default withRouter(Admin);
+const mapStateToProps = (state: AppState) => ({
+  router: state.router
+});
+
+export default connect(mapStateToProps)(Admin);

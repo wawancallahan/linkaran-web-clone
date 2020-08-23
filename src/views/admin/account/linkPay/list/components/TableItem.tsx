@@ -1,10 +1,9 @@
-import * as React from 'react'
-import { AccountLinkPayList } from '../../../../../../types/admin/account/linkPay'
-import { Link } from 'react-router-dom'
-import { setAlertAccountLinkPayShowAction } from '../../../../../../actions/admin/account/linkPay'
-import { ThunkDispatch } from 'redux-thunk'
-import { AppActions } from '../../../../../../types'
-import { connect } from 'react-redux'
+import * as React from 'react';
+import { AccountLinkPayList } from '../../../../../../types/admin/account/linkPay';
+import { setAlertAccountLinkPayShowAction } from '../../../../../../actions/admin/account/linkPay';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../../../../types';
+import { connect } from 'react-redux';
 
 type OwnProps = {
     index: number,
@@ -25,9 +24,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.code}</td>
             <td>{props.item.type}</td>
             <td>
-                <Link to={`/admin/account/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
+                <a href={`/admin/account/link-pay/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i> Detail
-                </Link>
+                </a>
             </td>
         </tr>
     )
