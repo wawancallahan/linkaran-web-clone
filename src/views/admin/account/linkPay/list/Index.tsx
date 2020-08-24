@@ -74,7 +74,7 @@ const mapStateToProps = (state: AppState) => ({
     router: state.router
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
     fetchAccountLinkPayAction: (page: number) => dispatch(fetchAccountLinkPayAction(page)),
     setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction())
 })

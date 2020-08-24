@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Link, RouteComponentProps } from "react-router-dom"
+import { Link, RouteComponentProps, withRouter } from "react-router-dom"
 import {
   Collapse,
   DropdownMenu,
@@ -20,12 +20,6 @@ import { profileImage } from "../../helpers/Assets"
 import DropdownLink from "./DropdownLink"
 import SingleLink from "./SingleLink"
 import './Sidebar.css';
-import { ThunkDispatch } from "redux-thunk"
-import { AppState } from "../../reducers"
-import { AppActions } from "../../types"
-import { connect } from "react-redux"
-import { push } from 'connected-react-router';
-
 export type SidebarRoute = {
   path: string,
   name: string,
@@ -42,13 +36,13 @@ export type logoInterface = {
   imgSrc?: string
 }
 
-export type OwnProps =  {
+export type OwnProps = RouteComponentProps & {
   bgColor?: string;
   routes: (SidebarRoute | null)[];
   logo?: logoInterface;
 }
 
-type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
+type Props = OwnProps
 
 const Sidebar: React.FC<Props> = (props) => {
 
@@ -89,7 +83,7 @@ const Sidebar: React.FC<Props> = (props) => {
   };
 
   const logout = () => {
-    props.push('/logout');
+    props.history.push('/logout');
   }
   
   let navbarBrandProps: any;
@@ -195,8 +189,4 @@ const Sidebar: React.FC<Props> = (props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
-  push: push
-});
-
-export default connect(null, mapDispatchToProps)(Sidebar);
+export default withRouter(Sidebar);

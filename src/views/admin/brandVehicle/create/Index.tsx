@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Card, CardHeader, Row, Col, CardBody } from 'reactstrap';
 import Flash from './components/Flash'
@@ -7,7 +6,7 @@ import Form from './components/Form'
 import { FormField } from '../../../../types/admin/brandVehicle';
 import WithTitle from '../../../../hoc/WithTitle';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
 type Props = OwnProps
 
@@ -18,10 +17,6 @@ const Index: React.FC<Props> = (props) => {
     const [formField, setFormField] = React.useState<FormField>({
         name: '',
     })
-
-    const redirectOnSuccess = () => {
-        props.history.push('/admin/brand-vehicle');
-    }
 
     return (
         <React.Fragment>
@@ -39,8 +34,7 @@ const Index: React.FC<Props> = (props) => {
                         <Flash alertMessage={alertMessage} alertVisible={alertVisible} setAlertVisible={setAlertVisible}/>
                         <Form form={formField} 
                             setAlertVisible={setAlertVisible} 
-                            setAlertMessage={setAlertMessage}
-                            redirectOnSuccess={redirectOnSuccess} />
+                            setAlertMessage={setAlertMessage} />
                     </CardBody>
                 </Card>
             </Container>
@@ -49,5 +43,5 @@ const Index: React.FC<Props> = (props) => {
 }
 
 export default WithTitle(
-    withRouter(Index)
+    Index
 , "Tambah Model Kendaraan")

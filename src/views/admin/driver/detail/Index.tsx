@@ -21,7 +21,7 @@ type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -82,15 +82,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findDriverAction: (id: number) => Promise<ApiResponse<DriverShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
-    return {
-        findDriverAction: (id: number) => dispatch(findDriverAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    findDriverAction: (id: number) => dispatch(findDriverAction(id))
+})
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))

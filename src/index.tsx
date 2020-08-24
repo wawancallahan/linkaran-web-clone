@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { toast } from 'react-toastify';
 import configureStore, { history } from './store/configureStore';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 import * as Sentry from '@sentry/browser';
 
 import "./assets/vendor/nucleo/css/nucleo.css"
@@ -22,7 +23,9 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-      <App history={history} />
+    <BrowserRouter>
+      <App history={history} /> 
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );

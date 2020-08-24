@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import Flash from './components/Flash'
 import Paginate from './components/Paginate'
 import Table from './components/Table'
@@ -11,10 +10,11 @@ import { connect } from 'react-redux';
 import { fetchInvestorAction, setAlertInvestorHideAction } from '../../../../actions/admin/investor';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
+import { AppState } from '../../../../reducers';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -29,7 +29,7 @@ const Index: React.FC<Props> = (props) => {
     }
 
     React.useEffect(() => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const page = + (queryStringValue.page || 1);
 
@@ -55,14 +55,14 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Investor</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/investor/create">
-                                        <Button
-                                            color="primary"
-                                            size="sm"
-                                        >
-                                            Tambah Investor
-                                        </Button>
-                                    </Link>
+                                        <a href="/admin/investor/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Investor
+                                            </Button>
+                                        </a>
                                     </div>
                                 </Row>
                             </CardHeader>
@@ -80,18 +80,15 @@ const Index: React.FC<Props> = (props) => {
     );
 }
 
-type LinkDispatchToProps = {
-    fetchInvestorAction: (page: number) => Promise<Boolean>,
-    setAlertInvestorHideAction: () => void
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchInvestorAction: (page: number) => dispatch(fetchInvestorAction(page)),
-        setAlertInvestorHideAction: () => dispatch(setAlertInvestorHideAction())
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchInvestorAction: (page: number) => dispatch(fetchInvestorAction(page)),
+    setAlertInvestorHideAction: () => dispatch(setAlertInvestorHideAction())
+});
 
 export default WithTitle(
-    withRouter(connect(null, mapDispatchToProps)(Index))
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar Investor")

@@ -18,7 +18,7 @@ type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -174,15 +174,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findInvestorAction: (id: number) => Promise<ApiResponse<InvestorShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
-    return {
-        findInvestorAction: (id: number) => dispatch(findInvestorAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    findInvestorAction: (id: number) => dispatch(findInvestorAction(id))
+});
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))

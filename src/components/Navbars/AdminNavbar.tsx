@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownItem,
@@ -13,32 +13,26 @@ import {
 
 import { name as authName} from '../../services/auth'
 import { profileImage } from "../../helpers/Assets";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "../../types";
-import { push } from 'connected-react-router';
-import { connect } from "react-redux";
-import { AppState } from "../../reducers";
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
   brandText?: String;
 }
 
-type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
+type Props = OwnProps
 
 const AdminNavbar: React.FC<Props> = (props) => {
   const logout = () => {
-    props.push('/logout');
+    props.history.push('/logout');
   }
 
   return (
     <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
       <Container fluid>
-        <Link
+        <span
           className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-          to="/"
         >
           {props.brandText}
-        </Link>
+        </span>
         <Nav className="align-items-center d-none d-md-flex" navbar>
           <UncontrolledDropdown nav>
             <DropdownToggle className="pr-0" nav>
@@ -69,8 +63,4 @@ const AdminNavbar: React.FC<Props> = (props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
-  push: push
-})
-
-export default connect(null, mapDispatchToProps)(AdminNavbar);
+export default withRouter(AdminNavbar);

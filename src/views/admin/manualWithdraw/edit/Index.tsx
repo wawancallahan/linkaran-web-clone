@@ -13,12 +13,13 @@ import { ThunkDispatch } from 'redux-thunk';
 import { ApiResponse } from '../../../../types/api';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
+import { AppState } from '../../../../reducers';
 
 type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -115,15 +116,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDrawShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
-    return {
-        findManualWithDrawAction: (id: number) => dispatch(findManualWithDrawAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findManualWithDrawAction: (id: number) => dispatch(findManualWithDrawAction(id))
+})
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))

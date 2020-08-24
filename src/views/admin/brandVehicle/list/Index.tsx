@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import Filter from './components/Filter'
 import Flash from './components/Flash'
 import Paginate from './components/Paginate'
@@ -12,10 +11,11 @@ import { connect } from 'react-redux';
 import { fetchBrandVehicleAction, setAlertBrandVehicleHideAction, clearFilterAction } from '../../../../actions/admin/brandVehicle';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
+import { AppState } from '../../../../reducers';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -30,7 +30,7 @@ const Index: React.FC<Props> = (props) => {
     }
 
     React.useEffect(() => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const page = + (queryStringValue.page || 1);
 
@@ -57,14 +57,14 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Model Kendaraan</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/brand-vehicle/create">
-                                        <Button
-                                            color="primary"
-                                            size="sm"
-                                        >
-                                            Tambah Model Kendaraan
-                                        </Button>
-                                    </Link>
+                                        <a href="/admin/brand-vehicle/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Model Kendaraan
+                                            </Button>
+                                        </a>
                                     </div>
                                 </Row>
                                 <Filter />
@@ -83,20 +83,16 @@ const Index: React.FC<Props> = (props) => {
     );
 }
 
-type LinkDispatchToProps = {
-    fetchBrandVehicleAction: (page: number) => Promise<Boolean>,
-    setAlertBrandVehicleHideAction: () => void,
-    clearFilterBrandVehicleAction: () => void
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchBrandVehicleAction: (page: number) => dispatch(fetchBrandVehicleAction(page)),
-        setAlertBrandVehicleHideAction: () => dispatch(setAlertBrandVehicleHideAction()),
-        clearFilterBrandVehicleAction: () => dispatch(clearFilterAction())
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchBrandVehicleAction: (page: number) => dispatch(fetchBrandVehicleAction(page)),
+    setAlertBrandVehicleHideAction: () => dispatch(setAlertBrandVehicleHideAction()),
+    clearFilterBrandVehicleAction: () => dispatch(clearFilterAction())
+});
 
 export default WithTitle(
-    withRouter(connect(null, mapDispatchToProps)(Index))
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar Model Kendaraan")

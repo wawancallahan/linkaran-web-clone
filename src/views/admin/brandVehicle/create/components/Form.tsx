@@ -1,6 +1,5 @@
-import * as React from 'react'
-import * as Yup from 'yup';
-import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import { Formik } from 'formik';
 import {
     Button,
     Form as FormReactStrap,
@@ -17,15 +16,15 @@ import swal from 'sweetalert'
 import BlockUi from '../../../../../components/BlockUi/BlockUi'
 import { toast, TypeOptions } from 'react-toastify'
 import { Schema } from './Schema'
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     form: FormField,
     setAlertVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    setAlertMessage: React.Dispatch<React.SetStateAction<string>>,
-    redirectOnSuccess: () => void
+    setAlertMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -58,7 +57,7 @@ const Form: React.FC<Props> = (props) => {
                             .then( (response: ApiResponse<BrandVehicleCreateResult>) => {
                                 const data: ApiResponseSuccess<BrandVehicleCreateResult> = response.response!;
                                 props.setAlertBrandVehicleShowAction('Data Berhasil Ditambah', 'success');
-                                props.redirectOnSuccess();
+                                props.history.push('/admin/brand-vehicle');
                             })
                             .catch( (error: ApiResponse<BrandVehicleCreateResult>) => {
                                 let message = "Gagal Mendapatkan Response";
@@ -119,16 +118,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createBrandVehicleAction: (brandVehicle:BrandVehicleCreateField) => Promise<ApiResponse<BrandVehicleCreateResult>>
-    setAlertBrandVehicleShowAction: (message: string, color: string) => void
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createBrandVehicleAction: (brandVehicle:BrandVehicleCreateField) => dispatch(createBrandVehicleAction(brandVehicle)),
+    setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color)),
+})
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createBrandVehicleAction: (brandVehicle:BrandVehicleCreateField) => dispatch(createBrandVehicleAction(brandVehicle)),
-        setAlertBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertBrandVehicleShowAction(message, color))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(Form);
+export default withRouter(connect(null, mapDispatchToProps)(Form));

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownItem,
@@ -12,33 +12,28 @@ import {
 } from "reactstrap";
 
 import { name as authName} from '../../services/auth'
-import { profileImage } from "../../helpers/Assets";
-import { ThunkDispatch } from "redux-thunk";
-import { connect } from "react-redux";
-import { AppState } from "../../reducers";
-import { AppActions } from "../../types";
-import { push } from 'connected-react-router';
+import { profileImage } from "../../helpers/Assets";;
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
   brandText?: String;
 }
 
-type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
+type Props = OwnProps
 
 const PartnerNavbar: React.FC<Props> = (props) => {
   const logout = () => {
-    props.push('/logout');
+    props.history.push('/logout');
   }
 
   return (
     <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
       <Container fluid>
-        <Link
+        <a
           className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-          to="/"
+          href="/"
         >
           {props.brandText}
-        </Link>
+        </a>
         <Nav className="align-items-center d-none d-md-flex" navbar>
           <UncontrolledDropdown nav>
             <DropdownToggle className="pr-0" nav>
@@ -69,8 +64,4 @@ const PartnerNavbar: React.FC<Props> = (props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
-  push: push
-});
-
-export default connect(null, mapDispatchToProps)(PartnerNavbar);
+export default withRouter(PartnerNavbar);

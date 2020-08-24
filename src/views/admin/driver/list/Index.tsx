@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import Filter from './components/Filter'
 import Flash from './components/Flash'
 import Paginate from './components/Paginate'
@@ -12,10 +11,11 @@ import { connect } from 'react-redux';
 import { fetchDriverAction, setAlertDriverHideAction, clearFilterAction } from '../../../../actions/admin/driver';
 import { AppActions } from '../../../../types';
 import WithTitle from '../../../../hoc/WithTitle';
+import { AppState } from '../../../../reducers';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -30,7 +30,7 @@ const Index: React.FC<Props> = (props) => {
     }
 
     React.useEffect(() => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const page = + (queryStringValue.page || 1);
 
@@ -57,23 +57,23 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Driver</h3>
                                     </div>
                                     <div className="col text-right">
-                                        <Link to="/admin/driver/create" className="mr-2">
+                                        <a href="/admin/driver/create" className="mr-2">
                                             <Button
                                                 color="primary"
                                                 size="sm"
                                             >
                                                 Tambah Driver
                                             </Button>
-                                        </Link>
+                                        </a>
 
-                                        <Link to="/admin/driver/create-from-customer">
+                                        <a href="/admin/driver/create-from-customer">
                                             <Button
                                                 color="primary"
                                                 size="sm"
                                             >
                                                 Tambah Driver Dari Customer
                                             </Button>
-                                        </Link>
+                                        </a>
                                     </div>
                                 </Row>
                                 <Filter />
@@ -92,20 +92,16 @@ const Index: React.FC<Props> = (props) => {
     );
 }
 
-type LinkDispatchToProps = {
-    fetchDriverAction: (page: number) => Promise<Boolean>,
-    setAlertDriverHideAction: () => void,
-    clearFilterDriverAction: () => void
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchDriverAction: (page: number) => dispatch(fetchDriverAction(page)),
-        setAlertDriverHideAction: () => dispatch(setAlertDriverHideAction()),
-        clearFilterDriverAction: () => dispatch(clearFilterAction())
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchDriverAction: (page: number) => dispatch(fetchDriverAction(page)),
+    setAlertDriverHideAction: () => dispatch(setAlertDriverHideAction()),
+    clearFilterDriverAction: () => dispatch(clearFilterAction())
+})
 
 export default WithTitle(
-    withRouter(connect(null, mapDispatchToProps)(Index))
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar Driver")

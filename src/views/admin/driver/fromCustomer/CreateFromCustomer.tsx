@@ -30,13 +30,11 @@ import { FormFieldFromCustomer } from '../../../../types/admin/driver';
 import { CustomerShow } from '../../../../types/admin/customer';
 import { findCustomerAction } from '../../../../actions/admin/customer';
 
-type CreateFromCustomerProps = RouteComponentProps<{
+type OwnProps = RouteComponentProps<{
     id?: string
-}> & {
+}>
 
-}
-
-type Props = CreateFromCustomerProps & LinkStateToProps & LinkDispatchToProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 type State = {
     form: FormFieldFromCustomer,
@@ -241,28 +239,10 @@ class CreateFromCustomer extends Component<Props, State> {
     }
 }
 
-type LinkStateToProps = {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findCustomerAction: (id: number) => dispatch(findCustomerAction(id))
+})
 
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-
-    }
-}
-
-type LinkDispatchToProps = {
-    findCustomerAction: (id: number) => Promise<ApiResponse<CustomerShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: CreateFromCustomerProps) => {
-    return {
-        findCustomerAction: (id: number) => dispatch(findCustomerAction(id))
-    }
-}
-
-export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(
-        withTitle(CreateFromCustomer, "Tambah Driver Dari Customer")
-    )
-);
+export default withTitle(
+    withRouter(connect(null, mapDispatchToProps)(CreateFromCustomer))
+, "Tambah Driver Dari Customer");
