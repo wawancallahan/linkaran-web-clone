@@ -5,15 +5,11 @@ import Flash from './components/Flash'
 import Form from './components/Form'
 import { FormField } from '../../../../types/admin/bank';
 import WithTitle from '../../../../hoc/WithTitle';
-import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../../../reducers';
-import { AppActions } from '../../../../types';
-import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-type OwnProps = {}
+type OwnProps = RouteComponentProps
 
-type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
+type Props = OwnProps
 
 const Index: React.FC<Props> = (props) => {
 
@@ -27,7 +23,7 @@ const Index: React.FC<Props> = (props) => {
     })
 
     const redirectOnSuccess = () => {
-        props.push('/admin/bank');
+        props.history.push('/admin/bank');
     }
 
     return (
@@ -55,10 +51,6 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
-    push: push
-});
-
 export default WithTitle(
-    connect(null, mapDispatchToProps)(Index)
+    withRouter(Index)
 , "Tambah Bank")

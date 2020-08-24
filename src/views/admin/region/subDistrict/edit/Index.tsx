@@ -18,7 +18,7 @@ type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -97,15 +97,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findSubDistrictAction: (id: number) => Promise<ApiResponse<SubDistrictShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => {
-    return {
-        findSubDistrictAction: (id: number) => dispatch(findSubDistrictAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    findSubDistrictAction: (id: number) => dispatch(findSubDistrictAction(id))
+})
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))
