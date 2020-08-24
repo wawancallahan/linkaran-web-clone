@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../../components/Headers/HeaderView';
-import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Container, Row, Card, CardHeader, CardFooter } from 'reactstrap';
 import Flash from './components/Flash'
 import Paginate from './components/Paginate'
 import Table from './components/Table'
@@ -11,10 +10,11 @@ import { connect } from 'react-redux';
 import { fetchAccountLinkPayAction, setAlertAccountLinkPayHideAction } from '../../../../../actions/admin/account/linkPay';
 import { AppActions } from '../../../../../types';
 import WithTitle from '../../../../../hoc/WithTitle';
+import { AppState } from '../../../../../reducers';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -29,7 +29,7 @@ const Index: React.FC<Props> = (props) => {
     }
 
     React.useEffect(() => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const page = + (queryStringValue.page || 1);
 
@@ -70,18 +70,15 @@ const Index: React.FC<Props> = (props) => {
     );
 }
 
-type LinkDispatchToProps = {
-    fetchAccountLinkPayAction: (page: number) => Promise<Boolean>,
-    setAlertAccountLinkPayHideAction: () => void
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchAccountLinkPayAction: (page: number) => dispatch(fetchAccountLinkPayAction(page)),
-        setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction())
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchAccountLinkPayAction: (page: number) => dispatch(fetchAccountLinkPayAction(page)),
+    setAlertAccountLinkPayHideAction: () => dispatch(setAlertAccountLinkPayHideAction())
+})
 
 export default WithTitle(
-    withRouter(connect(null, mapDispatchToProps)(Index))
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar AccountLinkPay")

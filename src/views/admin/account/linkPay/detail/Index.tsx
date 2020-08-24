@@ -11,12 +11,13 @@ import { ApiResponse } from '../../../../../types/api';
 import { AppActions } from '../../../../../types';
 import WithTitle from '../../../../../hoc/WithTitle';
 import Account from './components/Account'
-import { AppState } from '../../../../../reducers';
-import { createMatchSelector, RouterRootState } from 'connected-react-router';
+import { RouteComponentProps } from 'react-router-dom';
 
-type OwnProps = {}
+type OwnProps = RouteComponentProps<{
+    id: string
+}>
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -42,7 +43,7 @@ const Index: React.FC<Props> = (props) => {
                     })
             }
 
-            find()     
+            find(); 
         } else {
             setLoadMessage("Data Tidak Ditemukan");
         }
@@ -71,17 +72,10 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-const mapStateToProps = (state: AppState) => {
-    const matchSelector = createMatchSelector<RouterRootState<any>, { id: string }>("/admin/account/link-pay/:id");
-    return {
-        match: matchSelector(state)
-    }
-}
-
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
     findAccountLinkPayAction: (id: number) => dispatch(findAccountLinkPayAction(id))
 })
 
 export default WithTitle(
-    connect(mapStateToProps, mapDispatchToProps)(Index)
+    connect(null, mapDispatchToProps)(Index)
 , "Detail Akun Link Pay")
