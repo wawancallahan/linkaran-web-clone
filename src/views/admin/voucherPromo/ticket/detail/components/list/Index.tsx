@@ -7,10 +7,10 @@ import { connect } from 'react-redux';
 import { fetchTicketVoucherAction } from '../../../../../../../actions/admin/ticket';
 import { AppActions } from '../../../../../../../types';
 import { VoucherPromoShow } from '../../../../../../../types/admin/voucherPromo';
-import Paginate from './components/Paginate'
-import Table from './components/Table'
-import TicketGenerate from '../generate/Index'
-import TicketCreate from '../create/Index'
+import Paginate from './components/Paginate';
+import Table from './components/Table';
+import TicketGenerate from '../generate/Index';
+import TicketCreate from '../create/Index';
 import { AppState } from '../../../../../../../reducers';
 
 type OwnProps = {
@@ -82,4 +82,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, 
     fetchTicketVoucherAction: (page: number, id: number) => dispatch(fetchTicketVoucherAction(page, id)),
 });
 
-export default connect(null, mapDispatchToProps)(Index);
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

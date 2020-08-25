@@ -153,14 +153,14 @@ const createSchema = Yup.object().shape({
                     .required('Bidang pilihan status aktif wajib diisi') 
 });
 
-type FormProps = {
+type OwnProps = {
     form: FormFieldFromCustomer,
     setAlertOpen: (open: boolean) => void,
     setAlertMessage: (message: string) => void,
     redirectOnSuccess: () => void
 }
 
-type Props = LinkDispatchToProps & FormProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 class Form extends Component<Props> {
 
@@ -353,16 +353,9 @@ class Form extends Component<Props> {
     }
 }
 
-type LinkDispatchToProps = {
-    createDriverFromCustomerAction: (driver: DriverCreateFromCustomer) => Promise<ApiResponse<DriverCreateFromCustomerResult>>
-    setAlertDriverShowAction: (message: string, color: string) => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormProps): LinkDispatchToProps => {
-    return {
-        createDriverFromCustomerAction: (driver: DriverCreateFromCustomer) => dispatch(createDriverFromCustomerAction(driver)),
-        setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createDriverFromCustomerAction: (driver: DriverCreateFromCustomer) => dispatch(createDriverFromCustomerAction(driver)),
+    setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
+});
 
 export default connect(null, mapDispatchToProps)(Form);

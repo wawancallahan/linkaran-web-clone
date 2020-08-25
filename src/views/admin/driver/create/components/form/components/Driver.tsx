@@ -34,7 +34,7 @@ type OwnProps = {
     form: FormikProps<FormField>,
 };
 
-type Props = OwnProps & LinkDispatchToProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 const Driver: React.FC<Props> = (props) => {
 
@@ -838,22 +838,12 @@ const Driver: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
-    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
-    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
-    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrictList>>,
-    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<VillageList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
-        fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
-        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
-        fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
-        fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
+    fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
+    fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
+    fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
+    fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
+});
 
 export default connect(null, mapDispatchToProps)(Driver);

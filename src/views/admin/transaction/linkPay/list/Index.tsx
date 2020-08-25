@@ -80,5 +80,5 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, 
 });
 
 export default WithTitle(
-    connect(mapStateToProps, mapDispatchToProps)(Index
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar Transaksi Link Pay")

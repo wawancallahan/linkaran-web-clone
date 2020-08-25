@@ -13,7 +13,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     return (
@@ -32,14 +32,8 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    setAlertAccountLinkPayShowAction: (message: string, color: string) => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertAccountLinkPayShowAction: (message: string, color: string) => dispatch(setAlertAccountLinkPayShowAction(message, color)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertAccountLinkPayShowAction: (message: string, color: string) => dispatch(setAlertAccountLinkPayShowAction(message, color)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

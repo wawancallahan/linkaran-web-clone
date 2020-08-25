@@ -21,7 +21,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -84,16 +84,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    setAlertDriverShowAction: (message: string, color: string) => void,
-    deleteDriverAction: (id: number) => Promise<ApiResponse<Driver>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
-        deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertDriverShowAction: (message: string, color: string) => dispatch(setAlertDriverShowAction(message, color)),
+    deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

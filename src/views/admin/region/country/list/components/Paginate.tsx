@@ -17,7 +17,8 @@ const Paginate: React.FC<Props> = (props) => {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    paginate: state.country.paginate
+    paginate: state.country.paginate,
+    router: state.router
 })
 
 export default connect(mapStateToProps)(Paginate);

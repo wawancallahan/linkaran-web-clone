@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { CustomerList, Customer } from '../../../../../types/admin/customer'
-import { Link } from 'react-router-dom'
+import { CustomerList, Customer } from '../../../../../types/admin/customer';
 import { Button } from 'reactstrap'
 import { setAlertCustomerShowAction, activeCustomerAction, deactiveCustomerAction } from '../../../../../actions/admin/customer'
 import { ThunkDispatch } from 'redux-thunk'
@@ -17,7 +16,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const activeCustomer = (id: number) => {
@@ -84,30 +83,21 @@ const TableItem: React.FC<Props> = (props) => {
                     )
                 }
                 
-                <Link to={`/admin/customer/${props.item.id}`} className="btn btn-info btn-sm">
+                <a href={`/admin/customer/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
-                </Link>
-
-                <Link to={`/admin/driver/create-from-customer/${props.item.id}`} className="btn btn-primary btn-sm">
+                </a>
+                <a href={`/admin/driver/create-from-customer/${props.item.id}`} className="btn btn-primary btn-sm">
                     <i className="fa fa-motorcycle"></i> Driver
-                </Link>
-            </td>
+                </a>
+           </td>
         </tr>
     )
 }
 
-type LinkDispatchToProps = {
-    setAlertCustomerShowAction: (message: string, color: string) => void,
-    activeCustomerAction: (id: number) => Promise<ApiResponse<Customer>>,
-    deactiveCustomerAction: (id: number) => Promise<ApiResponse<Customer>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertCustomerShowAction: (message: string, color: string) => dispatch(setAlertCustomerShowAction(message, color)),
-        activeCustomerAction: (id: number) => dispatch(activeCustomerAction(id)),
-        deactiveCustomerAction: (id: number) => dispatch(deactiveCustomerAction(id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertCustomerShowAction: (message: string, color: string) => dispatch(setAlertCustomerShowAction(message, color)),
+    activeCustomerAction: (id: number) => dispatch(activeCustomerAction(id)),
+    deactiveCustomerAction: (id: number) => dispatch(deactiveCustomerAction(id)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

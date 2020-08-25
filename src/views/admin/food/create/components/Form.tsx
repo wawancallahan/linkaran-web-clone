@@ -34,7 +34,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -405,20 +405,11 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createFoodAction: (food:FoodCreateField) => Promise<ApiResponse<FoodCreateResult>>
-    setAlertFoodShowAction: (message: string, color: string) => void,
-    fetchListFoodCategoryAction: (search: string, page: number) => Promise<ApiResponseList<FoodCategoryList>>,
-    fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<RestaurantList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createFoodAction: (food:FoodCreateField) => dispatch(createFoodAction(food)),
-        setAlertFoodShowAction: (message: string, color: string) => dispatch(setAlertFoodShowAction(message, color)),
-        fetchListFoodCategoryAction: (search: string, page: number) => dispatch(fetchListFoodCategoryAction(search, page)),
-        fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createFoodAction: (food:FoodCreateField) => dispatch(createFoodAction(food)),
+    setAlertFoodShowAction: (message: string, color: string) => dispatch(setAlertFoodShowAction(message, color)),
+    fetchListFoodCategoryAction: (search: string, page: number) => dispatch(fetchListFoodCategoryAction(search, page)),
+    fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Form);
