@@ -25,7 +25,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -120,16 +120,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createVoucherTypeAction: (voucherType: VoucherTypeCreateField) => Promise<ApiResponse<VoucherTypeCreateResult>>
-    setAlertVoucherTypeShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createVoucherTypeAction: (voucherType: VoucherTypeCreateField) => dispatch(createVoucherTypeAction(voucherType)),
-        setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createVoucherTypeAction: (voucherType: VoucherTypeCreateField) => dispatch(createVoucherTypeAction(voucherType)),
+    setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

@@ -26,7 +26,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -121,16 +121,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editCountryAction: (country: CountryEditField, id: number) => Promise<ApiResponse<CountryEditResult>>
-    setAlertCountryShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editCountryAction: (country: CountryEditField, id: number) => dispatch(editCountryAction(country, id)),
-        setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editCountryAction: (country: CountryEditField, id: number) => dispatch(editCountryAction(country, id)),
+    setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

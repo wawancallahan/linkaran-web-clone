@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { DriverList, Driver } from '../../../../../types/admin/driver'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { setAlertDriverShowAction, deleteDriverAction } from '../../../../../actions/admin/driver'
 import { ThunkDispatch } from 'redux-thunk'
@@ -67,15 +66,15 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.user && props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? (<NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={saldo} />)  : '-'}</td>
             <td>{props.item.createdAt ? parseDateFormat(props.item.createdAt) : ''}</td>
             <td>
-                <Link to={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
+                <a href={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
-                </Link>
-                <Link to={`/admin/driver/${props.item.id}`} className="btn btn-info btn-sm">
+                </a>
+                <a href={`/admin/driver/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
-                </Link>
-                <Link to={`/admin/driver/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                </a>
+                <a href={`/admin/driver/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i>
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i>
                 </Button>

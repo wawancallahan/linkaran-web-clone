@@ -29,7 +29,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -274,18 +274,10 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createUserAction: (user:UserCreateField) => Promise<ApiResponse<UserCreateResult>>
-    setAlertUserShowAction: (message: string, color: string) => void,
-    fetchListRoleAction: (search: string, page: number) => Promise<ApiResponseList<Role>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createUserAction: (user:UserCreateField) => dispatch(createUserAction(user)),
-        setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color)),
-        fetchListRoleAction: (search: string, page: number) => dispatch(fetchListRoleAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createUserAction: (user:UserCreateField) => dispatch(createUserAction(user)),
+    setAlertUserShowAction: (message: string, color: string) => dispatch(setAlertUserShowAction(message, color)),
+    fetchListRoleAction: (search: string, page: number) => dispatch(fetchListRoleAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

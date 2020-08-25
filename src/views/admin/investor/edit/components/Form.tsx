@@ -41,7 +41,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -807,26 +807,14 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editInvestorAction: (investor: InvestorEditField, id: number) => Promise<ApiResponse<InvestorEditResult>>
-    setAlertInvestorShowAction: (message: string, color: string) => void,
-    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
-    fetchListProvinceAction: (search: string, page: number, id: number) => Promise<ApiResponseList<ProvinceList>>,
-    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
-    fetchListSubDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<SubDistrictList>>,
-    fetchListVillageAction: (search: string, page: number, id: number) => Promise<ApiResponseList<VillageList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editInvestorAction: (investor: InvestorEditField, id: number) => dispatch(editInvestorAction(investor, id)),
-        setAlertInvestorShowAction: (message: string, color: string) => dispatch(setAlertInvestorShowAction(message, color)),
-        fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
-        fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
-        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
-        fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
-        fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editInvestorAction: (investor: InvestorEditField, id: number) => dispatch(editInvestorAction(investor, id)),
+    setAlertInvestorShowAction: (message: string, color: string) => dispatch(setAlertInvestorShowAction(message, color)),
+    fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
+    fetchListProvinceAction: (search: string, page: number, id: number) => dispatch(fetchListProvinceAction(search, page, id)),
+    fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
+    fetchListSubDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListSubDistrictAction(search, page, id)),
+    fetchListVillageAction: (search: string, page: number, id: number) => dispatch(fetchListVillageAction(search, page, id))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

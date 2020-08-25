@@ -35,7 +35,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -357,20 +357,11 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editManualWithDrawAction: (manualWithdraw: ManualWithDrawEditField, id: number) => Promise<ApiResponse<ManualWithDrawEditResult>>
-    setAlertManualWithDrawShowAction: (message: string, color: string) => void,
-    fetchListBankAction: (search: string, page: number) => Promise<ApiResponseList<BankList>>,
-    fetchListDriverAction: (search: string, page: number) => Promise<ApiResponseList<DriverList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editManualWithDrawAction: (manualWithdraw: ManualWithDrawEditField, id: number) => dispatch(editManualWithDrawAction(manualWithdraw, id)),
-        setAlertManualWithDrawShowAction: (message: string, color: string) => dispatch(setAlertManualWithDrawShowAction(message, color)),
-        fetchListBankAction: (search: string, page: number) => dispatch(fetchListBankAction(search, page)),
-        fetchListDriverAction: (search: string, page: number) => dispatch(fetchListDriverAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editManualWithDrawAction: (manualWithdraw: ManualWithDrawEditField, id: number) => dispatch(editManualWithDrawAction(manualWithdraw, id)),
+    setAlertManualWithDrawShowAction: (message: string, color: string) => dispatch(setAlertManualWithDrawShowAction(message, color)),
+    fetchListBankAction: (search: string, page: number) => dispatch(fetchListBankAction(search, page)),
+    fetchListDriverAction: (search: string, page: number) => dispatch(fetchListDriverAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

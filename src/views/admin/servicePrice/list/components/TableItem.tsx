@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { ServicePriceList, ServicePrice } from '../../../../../types/admin/servicePrice'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteServicePriceAction, setAlertServicePriceShowAction } from '../../../../../actions/admin/servicePrice'
 import { ThunkDispatch } from 'redux-thunk'
@@ -18,7 +17,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -54,9 +53,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.service ? props.item.service.name : ''}</td>
             <td>{props.item.vehicleType ? props.item.vehicleType.name : ''}</td>
             <td>
-                <Link to={`/admin/service-price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/service-price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
@@ -65,16 +64,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deleteServicePriceAction: (id: number) => Promise<ApiResponse<ServicePrice>>,
-    setAlertServicePriceShowAction: (message: string, color: string) => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deleteServicePriceAction: (id: number) => dispatch(deleteServicePriceAction(id)),
-        setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deleteServicePriceAction: (id: number) => dispatch(deleteServicePriceAction(id)),
+    setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

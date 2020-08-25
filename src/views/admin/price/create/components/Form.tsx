@@ -26,7 +26,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -179,16 +179,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createPriceAction: (price:PriceCreateField) => Promise<ApiResponse<PriceCreateResult>>
-    setAlertPriceShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createPriceAction: (price:PriceCreateField) => dispatch(createPriceAction(price)),
-        setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createPriceAction: (price:PriceCreateField) => dispatch(createPriceAction(price)),
+    setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

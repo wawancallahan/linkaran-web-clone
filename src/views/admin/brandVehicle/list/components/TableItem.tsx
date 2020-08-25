@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { BrandVehicleList, BrandVehicle } from '../../../../../types/admin/brandVehicle'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteBrandVehicleAction, setAlertBrandVehicleShowAction } from '../../../../../actions/admin/brandVehicle'
 import { ThunkDispatch } from 'redux-thunk'
@@ -48,9 +47,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.index + 1}</td>
             <td>{props.item.name}</td>
             <td>
-                <Link to={`/admin/brand-vehicle/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/brand-vehicle/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>

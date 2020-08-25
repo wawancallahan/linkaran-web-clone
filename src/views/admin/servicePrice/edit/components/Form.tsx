@@ -37,7 +37,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -447,24 +447,13 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editServicePriceAction: (service: ServicePriceEditField, id: number) => Promise<ApiResponse<ServicePriceEditResult>>
-    setAlertServicePriceShowAction: (message: string, color: string) => void,
-    fetchListPriceAction: (search: string, page: number) => Promise<ApiResponseList<PriceList>>,
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>,
-    fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
-    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<ServiceList>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editServicePriceAction: (service: ServicePriceEditField, id: number) => dispatch(editServicePriceAction(service, id)),
-        setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
-        fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
-        fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
-        fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
-        fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editServicePriceAction: (service: ServicePriceEditField, id: number) => dispatch(editServicePriceAction(service, id)),
+    setAlertServicePriceShowAction: (message: string, color: string) => dispatch(setAlertServicePriceShowAction(message, color)),
+    fetchListPriceAction: (search: string, page: number) => dispatch(fetchListPriceAction(search, page)),
+    fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
+    fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
+    fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
+});
 
 export default connect(null, mapDispatchToProps)(Form);

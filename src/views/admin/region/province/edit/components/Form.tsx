@@ -30,7 +30,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -214,18 +214,10 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editProvinceAction: (province: ProvinceEditField, id: number) => Promise<ApiResponse<ProvinceEditResult>>
-    setAlertProvinceShowAction: (message: string, color: string) => void,
-    fetchListCountryAction: (search: string, page: number) => Promise<ApiResponseList<CountryList>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editProvinceAction: (province: ProvinceEditField, id: number) => dispatch(editProvinceAction(province, id)),
-        setAlertProvinceShowAction: (message: string, color: string) => dispatch(setAlertProvinceShowAction(message, color)),
-        fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editProvinceAction: (province: ProvinceEditField, id: number) => dispatch(editProvinceAction(province, id)),
+    setAlertProvinceShowAction: (message: string, color: string) => dispatch(setAlertProvinceShowAction(message, color)),
+    fetchListCountryAction: (search: string, page: number) => dispatch(fetchListCountryAction(search, page)),
+});
 
 export default connect(null, mapDispatchToProps)(Form);

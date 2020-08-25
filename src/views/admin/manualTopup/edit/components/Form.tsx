@@ -36,7 +36,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -298,20 +298,11 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editManualTopUpAction: (manualTopup: ManualTopUpEditField, id: number) => Promise<ApiResponse<ManualTopUpEditResult>>
-    setAlertManualTopUpShowAction: (message: string, color: string) => void,
-    fetchListBankAction: (search: string, page: number) => Promise<ApiResponseList<BankList>>,
-    fetchListDriverAction: (search: string, page: number) => Promise<ApiResponseList<DriverList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
         editManualTopUpAction: (manualTopup: ManualTopUpEditField, id: number) => dispatch(editManualTopUpAction(manualTopup, id)),
         setAlertManualTopUpShowAction: (message: string, color: string) => dispatch(setAlertManualTopUpShowAction(message, color)),
         fetchListBankAction: (search: string, page: number) => dispatch(fetchListBankAction(search, page)),
         fetchListDriverAction: (search: string, page: number) => dispatch(fetchListDriverAction(search, page))
-    }
-}
+});
 
 export default connect(null, mapDispatchToProps)(Form);

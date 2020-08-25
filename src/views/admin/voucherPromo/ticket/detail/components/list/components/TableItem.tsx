@@ -21,7 +21,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
 
@@ -80,14 +80,8 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deleteTicketAction: (id: number) => Promise<ApiResponse<Ticket>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import { Row, Col, Card, CardBody, Badge } from 'reactstrap'
-
-import {
-    Link
-} from 'react-router-dom'
 import { VoucherPromoShow } from '../../../../../types/admin/voucherPromo'
 import { Service } from '../../../../../types/admin/service'
 import { voucherUsedFormat, parseDateTimeFormat } from '../../../../../helpers/utils'
@@ -26,14 +22,14 @@ const Voucher: React.FC<Props> = (props) => {
             buttonLinkState = (
                 <React.Fragment>
                     <div className="mb-2">
-                        <Link to={`/admin/voucher-promo/${data.id}`} className="btn btn-info btn-sm">
+                        <a href={`/admin/voucher-promo/${data.id}`} className="btn btn-info btn-sm">
                             <i className="fa fa-eye"></i> Lihat Voucher
-                        </Link>
+                        </a>
                     </div>
                     <div>
-                        <Link to={`/admin/voucher-promo/create`} className="btn btn-primary btn-sm">
+                        <a href={`/admin/voucher-promo/create`} className="btn btn-primary btn-sm">
                             <i className="fa fa-plus"></i> Tambah Voucher
-                        </Link>
+                        </a>
                     </div>
                 </React.Fragment>
             )
@@ -43,9 +39,9 @@ const Voucher: React.FC<Props> = (props) => {
             buttonLinkState = (
                 <React.Fragment>
                     <div className="mb-2">
-                        <Link to={`/admin/voucher-promo/ticket/${data.id}`} className="btn btn-info btn-sm">
+                        <a href={`/admin/voucher-promo/ticket/${data.id}`} className="btn btn-info btn-sm">
                             <i className="fa fa-eye"></i> Lihat Tiket
-                        </Link>
+                        </a>
                     </div>
                 </React.Fragment>
             )

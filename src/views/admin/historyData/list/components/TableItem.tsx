@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { HistoryDataList } from '../../../../../types/admin/historyData/historyData'
-import { Link } from 'react-router-dom'
 import { setAlertHistoryDataShowAction } from '../../../../../actions/admin/historyData'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
@@ -15,7 +14,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     return (
@@ -28,22 +27,16 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{parseDateFormat(props.item.dateCreate)}</td>
             <td>{props.item.event}</td>
             <td>
-                <Link to={`/admin/history-data/${props.item.id}`} className="btn btn-info btn-sm">
+                <a href={`/admin/history-data/${props.item.id}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
-                </Link>
+                </a>
             </td>
         </tr>
     )
 }
 
-type LinkDispatchToProps = {
-    setAlertHistoryDataShowAction: (message: string, color: string) => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertHistoryDataShowAction: (message: string, color: string) => dispatch(setAlertHistoryDataShowAction(message, color)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertHistoryDataShowAction: (message: string, color: string) => dispatch(setAlertHistoryDataShowAction(message, color)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

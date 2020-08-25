@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { ManualWithDrawList, ManualWithDraw } from '../../../../../types/admin/manualWithdraw'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteManualWithDrawAction, setAlertManualWithDrawShowAction } from '../../../../../actions/admin/manualWithdraw'
 import { ThunkDispatch } from 'redux-thunk'
@@ -18,7 +17,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -56,9 +55,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{parseDateTimeFormat(props.item.transactionDate)}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
             <td>
-                <Link to={`/admin/manual-withdraw/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/manual-withdraw/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
@@ -67,16 +66,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deleteManualWithDrawAction: (id: number) => Promise<ApiResponse<ManualWithDraw>>,
-    setAlertManualWithDrawShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deleteManualWithDrawAction: (id: number) => dispatch(deleteManualWithDrawAction(id)),
-        setAlertManualWithDrawShowAction: (message: string, color: string) => dispatch(setAlertManualWithDrawShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deleteManualWithDrawAction: (id: number) => dispatch(deleteManualWithDrawAction(id)),
+    setAlertManualWithDrawShowAction: (message: string, color: string) => dispatch(setAlertManualWithDrawShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

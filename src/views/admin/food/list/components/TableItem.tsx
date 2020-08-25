@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { FoodList, Food } from '../../../../../types/admin/food'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteFoodAction, setAlertFoodShowAction } from '../../../../../actions/admin/food'
 import { ThunkDispatch } from 'redux-thunk'
@@ -55,9 +54,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.restaurant ? props.item.restaurant.name : ''}</td>
             <td>{props.item.restaurant && props.item.restaurant.district ? props.item.restaurant.district.name : ''}</td>
             <td>
-                <Link to={`/admin/food/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/food/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>

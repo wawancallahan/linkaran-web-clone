@@ -157,9 +157,9 @@ const Sidebar: React.FC<Props> = (props) => {
               {props.logo ? (
                 <Col className="collapse-brand" xs="6">
                   {props.logo.innerLink ? (
-                    <Link to={props.logo.innerLink}>
+                    <a href={props.logo.innerLink}>
                       <img alt={props.logo.imgAlt} src={props.logo.imgSrc} />
-                    </Link>
+                    </a>
                   ) : (
                     <a href={props.logo.outterLink}>
                       <img alt={props.logo.imgAlt} src={props.logo.imgSrc} />

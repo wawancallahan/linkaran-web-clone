@@ -18,7 +18,7 @@ type OwnProps = {
     fetch: (page: number, id: number) => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const ModalCreate: React.FC<Props> = (props) => {
 
@@ -149,14 +149,8 @@ const ModalCreate: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createTicketAction: (ticket: TicketCreateField) => Promise<ApiResponse<TicketCreateResult>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
         createTicketAction: (ticket: TicketCreateField) => dispatch(createTicketAction(ticket))
-    }
-}
+});
 
 export default connect(null, mapDispatchToProps)(ModalCreate)

@@ -30,7 +30,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -189,18 +189,10 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEditField, id: number) => Promise<ApiResponse<SubBrandVehicleEditResult>>
-    setAlertSubBrandVehicleShowAction: (message: string, color: string) => void,
-    fetchListBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<BrandVehicleList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEditField, id: number) => dispatch(editSubBrandVehicleAction(subBrandVehicle, id)),
-        setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color)),
-        fetchListBrandVehicleAction: (search: string, page: number) => dispatch(fetchListBrandVehicleAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editSubBrandVehicleAction: (subBrandVehicle: SubBrandVehicleEditField, id: number) => dispatch(editSubBrandVehicleAction(subBrandVehicle, id)),
+    setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color)),
+    fetchListBrandVehicleAction: (search: string, page: number) => dispatch(fetchListBrandVehicleAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

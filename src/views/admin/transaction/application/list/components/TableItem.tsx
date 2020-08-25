@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { ApplicationList, Application } from '../../../../../../types/admin/transaction/application'
-import { Link } from 'react-router-dom'
 import { deleteApplicationAction, setAlertApplicationShowAction } from '../../../../../../actions/admin/transaction/application'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../../types'
@@ -19,7 +18,7 @@ type OwnProps = {
     type: string
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     return (
@@ -37,24 +36,17 @@ const TableItem: React.FC<Props> = (props) => {
                 <Badge color={colorStatusFormat(props.item.status)}>{props.item.status}</Badge>
             </td>
             <td>
-                <Link to={`/admin/transaction/application/${props.type}/${props.item.numberTransaction}`} className="btn btn-info btn-sm">
+                <a href={`/admin/transaction/application/${props.type}/${props.item.numberTransaction}`} className="btn btn-info btn-sm">
                     <i className="fa fa-eye"></i>
-                </Link>
+                </a>
             </td>
         </tr>
     )
 }
 
-type LinkDispatchToProps = {
-    deleteApplicationAction: (id: number) => Promise<ApiResponse<Application>>,
-    setAlertApplicationShowAction: (message: string, color: string) => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deleteApplicationAction: (id: number) => dispatch(deleteApplicationAction(id)),
-        setAlertApplicationShowAction: (message: string, color: string) => dispatch(setAlertApplicationShowAction(message, color)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deleteApplicationAction: (id: number) => dispatch(deleteApplicationAction(id)),
+    setAlertApplicationShowAction: (message: string, color: string) => dispatch(setAlertApplicationShowAction(message, color)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)
