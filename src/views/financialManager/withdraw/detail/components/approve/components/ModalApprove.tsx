@@ -19,7 +19,7 @@ type OwnProps = {
     setLoaded: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const ModalGenerate: React.FC<Props> = (props) => {
 
@@ -158,14 +158,8 @@ const ModalGenerate: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    approveWithDrawAction: (withDraw: WithDrawApproveField, id: number) => Promise<ApiResponse<WithDrawApproveResult>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        approveWithDrawAction: (withDraw: WithDrawApproveField, id: number) => dispatch(approveWithDrawAction(withDraw, id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    approveWithDrawAction: (withDraw: WithDrawApproveField, id: number) => dispatch(approveWithDrawAction(withDraw, id))
+});
 
 export default connect(null, mapDispatchToProps)(ModalGenerate)

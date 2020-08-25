@@ -10,7 +10,6 @@ import {
 } from 'reactstrap';
 
 import { ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
-import { Link } from 'react-router-dom';
 
 type OwnProps = {
     className?: string,
@@ -32,14 +31,14 @@ const Customer: React.FC<Props> = (props) => {
                             <h3 className="mb-0">Customer</h3>
                         </Col>
                         <Col className="text-right">
-                            <Link to={`/admin/customer/${data.costumer.id}`}>
+                            <a href={`/admin/customer/${data.costumer.id}`}>
                                 <Button
                                     color="info"
                                     size="sm"
                                 >
                                     Detail
                                 </Button>
-                            </Link>
+                            </a>
                         </Col>
                     </Row>
                 </CardHeader>

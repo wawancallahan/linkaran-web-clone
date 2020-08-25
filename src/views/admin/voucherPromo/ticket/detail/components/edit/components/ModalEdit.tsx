@@ -19,7 +19,7 @@ type OwnProps = {
     fetch: (page: number, id: number) => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const ModalEdit: React.FC<Props> = (props) => {
 
@@ -150,14 +150,8 @@ const ModalEdit: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editTicketAction: (ticket: TicketEditField, id: number) => Promise<ApiResponse<TicketEditResult>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id)),
+});
 
 export default connect(null, mapDispatchToProps)(ModalEdit)

@@ -26,7 +26,7 @@ type OwnProps = {
     form: FormikProps<FormField>,
 };
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Information: React.FC<Props> = (props) => {
 
@@ -393,19 +393,12 @@ const Information: React.FC<Props> = (props) => {
                 </div>
             </CardBody>
         </Card>
-        )
+    )
 }
 
-type LinkDispatchToProps = {
-    fetchListProvinceAction: (search: string, page: number) => Promise<ApiResponseList<ProvinceList>>,
-    fetchListDistrictAction: (search: string, page: number, id: number) => Promise<ApiResponseList<DistrictList>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchListProvinceAction: (search: string, page: number) => dispatch(fetchListProvinceAction(search, page)),
-        fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListProvinceAction: (search: string, page: number) => dispatch(fetchListProvinceAction(search, page)),
+    fetchListDistrictAction: (search: string, page: number, id: number) => dispatch(fetchListDistrictAction(search, page, id)),
+});
 
 export default connect(null, mapDispatchToProps)(Information);

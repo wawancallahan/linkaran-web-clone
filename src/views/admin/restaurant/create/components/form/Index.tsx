@@ -24,7 +24,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
     const toastNotify = (message: string, type: TypeOptions) => {
@@ -173,16 +173,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createRestaurantAction: (price:RestaurantCreateField) => Promise<ApiResponse<RestaurantCreateResult>>
-    setAlertRestaurantShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createRestaurantAction: (price:RestaurantCreateField) => dispatch(createRestaurantAction(price)),
-        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createRestaurantAction: (price:RestaurantCreateField) => dispatch(createRestaurantAction(price)),
+    setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

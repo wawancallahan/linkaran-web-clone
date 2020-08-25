@@ -18,7 +18,7 @@ type OwnProps = {
     setLoaded: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const ModalGenerate: React.FC<Props> = (props) => {
 
@@ -145,14 +145,8 @@ const ModalGenerate: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    declineWithDrawAction: (withDraw: WithDrawDeclineField, id: number) => Promise<ApiResponse<WithDrawDeclineResult>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        declineWithDrawAction: (withDraw: WithDrawDeclineField, id: number) => dispatch(declineWithDrawAction(withDraw, id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    declineWithDrawAction: (withDraw: WithDrawDeclineField, id: number) => dispatch(declineWithDrawAction(withDraw, id))
+});
 
 export default connect(null, mapDispatchToProps)(ModalGenerate)

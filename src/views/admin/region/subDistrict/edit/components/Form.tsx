@@ -30,7 +30,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -189,18 +189,10 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editSubDistrictAction: (subDistrict: SubDistrictEditField, id: number) => Promise<ApiResponse<SubDistrictEditResult>>
-    setAlertSubDistrictShowAction: (message: string, color: string) => void,
-    fetchListDistrictAction: (search: string, page: number) => Promise<ApiResponseList<DistrictList>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editSubDistrictAction: (subDistrict: SubDistrictEditField, id: number) => dispatch(editSubDistrictAction(subDistrict, id)),
-        setAlertSubDistrictShowAction: (message: string, color: string) => dispatch(setAlertSubDistrictShowAction(message, color)),
-        fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editSubDistrictAction: (subDistrict: SubDistrictEditField, id: number) => dispatch(editSubDistrictAction(subDistrict, id)),
+    setAlertSubDistrictShowAction: (message: string, color: string) => dispatch(setAlertSubDistrictShowAction(message, color)),
+    fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
+});
 
 export default connect(null, mapDispatchToProps)(Form);

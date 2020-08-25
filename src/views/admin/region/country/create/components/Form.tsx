@@ -25,7 +25,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -120,16 +120,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createCountryAction: (country: CountryCreateField) => Promise<ApiResponse<CountryCreateResult>>
-    setAlertCountryShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createCountryAction: (country: CountryCreateField) => dispatch(createCountryAction(country)),
-        setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createCountryAction: (country: CountryCreateField) => dispatch(createCountryAction(country)),
+    setAlertCountryShowAction: (message: string, color: string) => dispatch(setAlertCountryShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

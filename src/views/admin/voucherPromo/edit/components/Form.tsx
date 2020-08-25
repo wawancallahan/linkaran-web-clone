@@ -42,7 +42,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -729,22 +729,12 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editVoucherPromoAction: (voucherPromo: VoucherPromoEditField, id: number) => Promise<ApiResponse<VoucherPromoEditResult>>
-    setAlertVoucherPromoShowAction: (message: string, color: string) => void,
-    fetchListServiceAction: (search: string, page: number) => Promise<ApiResponseList<ServiceList>>,
-    fetchListVoucherTypeAction: (search: string, page: number) => Promise<ApiResponseList<VoucherTypeList>>,
-    fetchListRestaurantAction: (search: string, page: number) => Promise<ApiResponseList<RestaurantList>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editVoucherPromoAction: (voucherPromo: VoucherPromoEditField, id: number) => dispatch(editVoucherPromoAction(voucherPromo, id)),
-        setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
-        fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
-        fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),
-        fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editVoucherPromoAction: (voucherPromo: VoucherPromoEditField, id: number) => dispatch(editVoucherPromoAction(voucherPromo, id)),
+    setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
+    fetchListServiceAction: (search: string, page: number) => dispatch(fetchListServiceAction(search, page)),
+    fetchListVoucherTypeAction: (search: string, page: number) => dispatch(fetchListVoucherTypeAction(search, page)),
+    fetchListRestaurantAction: (search: string, page: number) => dispatch(fetchListRestaurantAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

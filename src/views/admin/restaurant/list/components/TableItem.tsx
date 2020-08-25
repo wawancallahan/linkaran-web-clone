@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { RestaurantList, Restaurant } from '../../../../../types/admin/restaurant'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteRestaurantAction, setAlertRestaurantShowAction } from '../../../../../actions/admin/restaurant'
 import { ThunkDispatch } from 'redux-thunk'
@@ -17,7 +16,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -53,9 +52,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.address}</td>
             <td>{props.item.registered ? 'Ya' : 'Tidak'}</td>
             <td>
-                <Link to={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
@@ -64,16 +63,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deleteRestaurantAction: (id: number) => Promise<ApiResponse<Restaurant>>,
-    setAlertRestaurantShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id)),
-        setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deleteRestaurantAction: (id: number) => dispatch(deleteRestaurantAction(id)),
+    setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

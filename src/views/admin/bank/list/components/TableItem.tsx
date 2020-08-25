@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { BankList, Bank } from '../../../../../types/admin/bank'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deleteBankAction, setAlertBankShowAction } from '../../../../../actions/admin/bank'
 import { ThunkDispatch } from 'redux-thunk'
@@ -51,9 +50,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.accountName}</td>
             <td>{props.item.accountNumber}</td>
             <td>
-                <Link to={`/admin/bank/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/bank/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>

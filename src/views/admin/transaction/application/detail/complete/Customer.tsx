@@ -8,10 +8,6 @@ import {
     Button,
     CardBody
 } from 'reactstrap';
-
-import {
-    Link
-} from 'react-router-dom';
 import { ApplicationShowComplete } from '../../../../../../types/admin/transaction/application';
 
 type OwnProps = {
@@ -33,14 +29,14 @@ const Customer: React.FC<Props> = (props) => {
                             <h3 className="mb-0">Customer</h3>
                         </Col>
                         <Col className="text-right">
-                            <Link to={`/admin/customer/${data.costumer.id}`}>
+                            <a href={`/admin/customer/${data.costumer.id}`}>
                                 <Button
                                     color="info"
                                     size="sm"
                                 >
                                     Detail
                                 </Button>
-                            </Link>
+                            </a>
                         </Col>
                     </Row>
                 </CardHeader>

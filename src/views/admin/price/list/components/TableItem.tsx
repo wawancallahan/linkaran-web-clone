@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { PriceList, Price } from '../../../../../types/admin/price'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deletePriceAction, setAlertPriceShowAction } from '../../../../../actions/admin/price'
 import { ThunkDispatch } from 'redux-thunk'
@@ -18,7 +17,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -51,9 +50,9 @@ const TableItem: React.FC<Props> = (props) => {
             <td><NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.perKilometer} /></td>
             <td>{props.item.minKm}</td>
             <td>
-                <Link to={`/admin/price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/price/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i>
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i>
                 </Button>
@@ -62,16 +61,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deletePriceAction: (id: number) => Promise<ApiResponse<Price>>,
-    setAlertPriceShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deletePriceAction: (id: number) => dispatch(deletePriceAction(id)),
-        setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deletePriceAction: (id: number) => dispatch(deletePriceAction(id)),
+    setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

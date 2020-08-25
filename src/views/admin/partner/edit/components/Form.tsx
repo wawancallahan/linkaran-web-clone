@@ -30,7 +30,7 @@ type OwnProps = {
     id: number
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -330,16 +330,9 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    editPartnerAction: (partner: PartnerEditField, id: number) => Promise<ApiResponse<PartnerEditResult>>
-    setAlertPartnerShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        editPartnerAction: (partner: PartnerEditField, id: number) => dispatch(editPartnerAction(partner, id)),
-        setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    editPartnerAction: (partner: PartnerEditField, id: number) => dispatch(editPartnerAction(partner, id)),
+    setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { PartnerList, Partner } from '../../../../../types/admin/partner'
-import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { deletePartnerAction, setAlertPartnerShowAction, activePartnerAction, deactivePartnerAction } from '../../../../../actions/admin/partner'
 import { ThunkDispatch } from 'redux-thunk'
@@ -18,7 +17,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = LinkDispatchToProps & OwnProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const TableItem: React.FC<Props> = (props) => {
     const deleteItem = (id: number) => {
@@ -104,9 +103,9 @@ const TableItem: React.FC<Props> = (props) => {
                         </Button>
                     )
                 }
-                <Link to={`/admin/partner/${props.item.id}/edit`} className="btn btn-warning btn-sm">
+                <a href={`/admin/partner/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
-                </Link>
+                </a>
                 <Button color="danger" size="sm" onClick={() => deleteItem(props.item.id)}>
                     <i className="fa fa-trash"></i> Hapus
                 </Button>
@@ -115,20 +114,11 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    deletePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
-    setAlertPartnerShowAction: (message: string, color: string) => void,
-    activePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
-    deactivePartnerAction: (id: number) => Promise<ApiResponse<Partner>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        deletePartnerAction: (id: number) => dispatch(deletePartnerAction(id)),
-        setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color)),
-        activePartnerAction: (id: number) => dispatch(activePartnerAction(id)),
-        deactivePartnerAction: (id: number) => dispatch(deactivePartnerAction(id)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    deletePartnerAction: (id: number) => dispatch(deletePartnerAction(id)),
+    setAlertPartnerShowAction: (message: string, color: string) => dispatch(setAlertPartnerShowAction(message, color)),
+    activePartnerAction: (id: number) => dispatch(activePartnerAction(id)),
+    deactivePartnerAction: (id: number) => dispatch(deactivePartnerAction(id)),
+});
 
 export default connect(null, mapDispatchToProps)(TableItem)

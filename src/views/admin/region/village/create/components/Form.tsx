@@ -29,7 +29,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -188,18 +188,10 @@ const Form: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    createVillageAction: (village: VillageCreateField) => Promise<ApiResponse<VillageCreateResult>>
-    setAlertVillageShowAction: (message: string, color: string) => void,
-    fetchListSubDistrictAction: (search: string, page: number) => Promise<ApiResponseList<SubDistrictList>>,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createVillageAction: (village: VillageCreateField) => dispatch(createVillageAction(village)),
-        setAlertVillageShowAction: (message: string, color: string) => dispatch(setAlertVillageShowAction(message, color)),
-        fetchListSubDistrictAction: (search: string, page: number) => dispatch(fetchListSubDistrictAction(search, page)),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createVillageAction: (village: VillageCreateField) => dispatch(createVillageAction(village)),
+    setAlertVillageShowAction: (message: string, color: string) => dispatch(setAlertVillageShowAction(message, color)),
+    fetchListSubDistrictAction: (search: string, page: number) => dispatch(fetchListSubDistrictAction(search, page)),
+});
 
 export default connect(null, mapDispatchToProps)(Form);
