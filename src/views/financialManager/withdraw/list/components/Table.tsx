@@ -14,7 +14,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkStateToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Table: React.FC<Props> = (props) => {
     return (
@@ -51,14 +51,8 @@ const Table: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    list: WithDrawList[]
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        list: state.withdraw.list
-    }
-}
+const mapStateToProps = (state: AppState) => ({
+    list: state.withdraw.list
+});
 
 export default connect(mapStateToProps)(Table)

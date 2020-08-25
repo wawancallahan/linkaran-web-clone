@@ -9,7 +9,7 @@ import { AppState } from '../../../../../reducers/index';
 
 type OwnProps = {}
 
-type Props = OwnProps & LinkStateToProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Flash: React.FC<Props> = (props) => {
     return (
@@ -19,25 +19,13 @@ const Flash: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    alert: IAlert
-}
+const mapStateToProps = (state: AppState) => ({
+    alert: state.servicePrice.alert
+});
 
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        alert: state.servicePrice.alert
-    }
-}
-
-type LinkDispatchToProps = {
-    setAlertServicePriceHideAction: () => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
         setAlertServicePriceHideAction: () => dispatch(setAlertServicePriceHideAction()),
-    }
-}
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Flash);
 

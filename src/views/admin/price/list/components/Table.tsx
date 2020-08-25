@@ -14,7 +14,7 @@ type OwnProps = {
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkStateToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Table: React.FC<Props> = (props) => {
     return (
@@ -46,14 +46,8 @@ const Table: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    list: PriceList[]
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        list: state.price.list
-    }
-}
+const mapStateToProps = (state: AppState) => ({
+    list: state.price.list
+});
 
 export default connect(mapStateToProps)(Table)
