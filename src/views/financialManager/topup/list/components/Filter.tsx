@@ -11,17 +11,15 @@ import {
     Modal
 } from 'reactstrap'
 import { Filter as IFilter } from '../../../../../types/financialManager/topup';
-import {
-    RouteComponentProps,
-    withRouter
-} from 'react-router-dom';
 import { createFormSearch, OptionObjectString } from '../../../../../helpers/utils';
 import ReactSelect, { ValueType } from 'react-select';
 import queryString from "query-string";
+import { AppState } from '../../../../../reducers';
+import { connect } from 'react-redux';
 
-type OwnProps = RouteComponentProps
+type OwnProps = {}
 
-type Props = OwnProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Filter: React.FC<Props> = (props) => {
 
@@ -36,7 +34,7 @@ const Filter: React.FC<Props> = (props) => {
     });
 
     React.useEffect(() => {
-        const querySearch = queryString.parse(props.location.search);
+        const querySearch = queryString.parse(props.router.location.search);
 
         if (Object.keys(querySearch).length > 0) {
             setFiltered(true);
@@ -56,7 +54,7 @@ const Filter: React.FC<Props> = (props) => {
 
         let filter = formField;
 
-        createFormSearch(props.location.pathname, {
+        createFormSearch(props.router.location.pathname, {
             ...filter
         } as OptionObjectString);
     }
@@ -88,7 +86,7 @@ const Filter: React.FC<Props> = (props) => {
     }
 
     const clearFilter = () => {
-        createFormSearch(props.location.pathname);
+        createFormSearch(props.router.location.pathname);
     }
 
     const modalOnChange = (visible: boolean) => {
@@ -302,4 +300,8 @@ const Filter: React.FC<Props> = (props) => {
     )
 }
 
-export default withRouter(Filter);
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
+
+export default connect(mapStateToProps)(Filter);

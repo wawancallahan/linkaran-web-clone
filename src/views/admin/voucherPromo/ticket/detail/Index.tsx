@@ -15,12 +15,13 @@ import Voucher from '../../detail/components/Voucher';
 import JumlahPenggunaanVoucher from '../../detail/components/JumlahPenggunaanVoucher';
 import JumlahPenggunaanTicket from '../../detail/components/JumlahPenggunaanTicket';
 import TicketList from './components/list/Index'
+import { AppState } from '../../../../../reducers';
 
 type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -80,15 +81,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findVoucherPromoAction: (id: number) => Promise<ApiResponse<VoucherPromoShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        findVoucherPromoAction: (id: number) => dispatch(findVoucherPromoAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findVoucherPromoAction: (id: number) => dispatch(findVoucherPromoAction(id))
+});
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))

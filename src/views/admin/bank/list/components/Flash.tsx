@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Alert as IAlert } from '../../../../../types/alert';
 import { Alert } from 'reactstrap';
 import { setAlertBankHideAction } from '../../../../../actions/admin/bank';
 import { ThunkDispatch } from 'redux-thunk';
@@ -9,7 +8,7 @@ import { AppState } from '../../../../../reducers/index';
 
 type OwnProps = {}
 
-type Props = OwnProps & LinkStateToProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Flash: React.FC<Props> = (props) => {
     return (
@@ -19,25 +18,13 @@ const Flash: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    alert: IAlert
-}
+const mapStateToProps = (state: AppState) => ({
+    alert: state.bank.alert
+});
 
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        alert: state.bank.alert
-    }
-}
-
-type LinkDispatchToProps = {
-    setAlertBankHideAction: () => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertBankHideAction: () => dispatch(setAlertBankHideAction()),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertBankHideAction: () => dispatch(setAlertBankHideAction()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Flash);
 

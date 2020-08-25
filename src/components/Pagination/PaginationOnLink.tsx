@@ -8,14 +8,15 @@ import queryString from "query-string"
 import { OptionObjectString, objectToParamsUrl } from '../../helpers/utils';
 import { connect } from 'react-redux';
 import { AppState } from '../../reducers';
-import { RouterState } from 'connected-react-router';
 
-type Props = LinkStateToProps & {
+type OwnProps = {
     pageCount: number,
     currentPage: number,
     itemCount: number,
     url: string
 }
+
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 export type Page = {
     text: string,
@@ -131,14 +132,8 @@ const Pagination: React.FC<Props> = (props: Props) => {
     return (null);
 }
 
-type LinkStateToProps = {
-    router: RouterState
-}
-
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        router: state.router
-    }
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
 export default connect(mapStateToProps)(Pagination);

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Alert as IAlert } from '../../../../../types/alert';
 import { Alert } from 'reactstrap';
 import { setAlertFoodHideAction } from '../../../../../actions/admin/food';
 import { ThunkDispatch } from 'redux-thunk';
@@ -9,7 +8,7 @@ import { AppState } from '../../../../../reducers/index';
 
 type OwnProps = {}
 
-type Props = OwnProps & LinkStateToProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Flash: React.FC<Props> = (props) => {
     return (
@@ -19,25 +18,13 @@ const Flash: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    alert: IAlert
-}
+const mapStateToProps = (state: AppState) => ({
+    alert: state.food.alert
+});
 
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        alert: state.food.alert
-    }
-}
-
-type LinkDispatchToProps = {
-    setAlertFoodHideAction: () => void,
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        setAlertFoodHideAction: () => dispatch(setAlertFoodHideAction()),
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    setAlertFoodHideAction: () => dispatch(setAlertFoodHideAction()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Flash);
 

@@ -13,13 +13,14 @@ import { AppActions } from '../../../../../types';
 import WithTitle from '../../../../../hoc/WithTitle';
 import Complete from './complete/Index'
 import Inprogress from './inprogress/Index'
+import { AppState } from '../../../../../reducers';
 
 type OwnProps = RouteComponentProps<{
     type: string,
     numberTransaction: string
 }>
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -86,15 +87,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findApplicationAction: (type: string, numberTransaction: string) => Promise<ApiResponse<ApplicationShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        findApplicationAction: (type: string, numberTransaction: string) => dispatch(findApplicationAction(type, numberTransaction))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findApplicationAction: (type: string, numberTransaction: string) => dispatch(findApplicationAction(type, numberTransaction))
+});
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Index))

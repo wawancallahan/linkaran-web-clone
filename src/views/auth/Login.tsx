@@ -43,10 +43,11 @@ import { accessToken } from '../../services/auth'
 import { SelectStringType } from "../../types/select";
 import Flash from './components/Flash'
 import WithTitle from '../../hoc/WithTitle'
+import { AppState } from "../../reducers";
 
 type OwnProps = RouteComponentProps
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 type OptionsStringType<T> = ReadonlyArray<T>;
 type ValueStringType<T> = T | OptionsStringType<T> | null | undefined;
@@ -364,17 +365,10 @@ const Login: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    authLogin: (item: LoginInterface) => Promise<LoginResponse>;
-    authValidate: (item: ValidateLogin) => Promise<ValidateLoginResponse>;
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        authLogin: (item: LoginInterface) => dispatch(authLogin(item)),
-        authValidate: (item: ValidateLogin) => dispatch(authValidate(item))
-    };
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    authLogin: (item: LoginInterface) => dispatch(authLogin(item)),
+    authValidate: (item: ValidateLogin) => dispatch(authValidate(item))
+});
 
 export default WithTitle(
     withRouter(connect(null, mapDispatchToProps)(Login))

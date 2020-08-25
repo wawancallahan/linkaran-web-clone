@@ -7,22 +7,21 @@ import BlockUi from '../../../../../../components/BlockUi/BlockUi'
 import { ApplicationList } from '../../../../../../types/admin/transaction/application'
 import { AppState } from '../../../../../../reducers/index'
 import { connect } from 'react-redux'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { typeTransactionFormat } from '../../../../../../helpers/utils'
 import queryString from 'query-string';
 
-type OwnProps = RouteComponentProps & {
+type OwnProps =  {
     loader: boolean,
     fetch: (page: number) => void,
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkStateToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Table: React.FC<Props> = (props) => {
 
     const getTypeQuery = () => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const typeQuery = queryStringValue.type as string || undefined;
 
@@ -63,14 +62,9 @@ const Table: React.FC<Props> = (props) => {
     )
 }
 
-type LinkStateToProps = {
-    list: ApplicationList[]
-}
+const mapStateToProps = (state: AppState) => ({
+    list: state.transactionApplication.list,
+    router: state.router
+});
 
-const mapStateToProps = (state: AppState): LinkStateToProps => {
-    return {
-        list: state.transactionApplication.list
-    }
-}
-
-export default withRouter(connect(mapStateToProps)(Table))
+export default connect(mapStateToProps)(Table);

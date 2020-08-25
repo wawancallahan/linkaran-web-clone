@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../../../components/Headers/HeaderView';
-import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Container, Row, Card, CardHeader, CardFooter } from 'reactstrap';
 import Paginate from './components/Paginate'
 import Table from './components/Table'
 import queryString from 'query-string';
@@ -12,12 +11,13 @@ import {
     fetchVoucherPromoUserUsedAction,
 } from '../../../../../../actions/admin/voucherPromo';
 import { AppActions } from '../../../../../../types';
+import { AppState } from '../../../../../../reducers';
 
-type OwnProps = RouteComponentProps & {
+type OwnProps = {
     data: VoucherPromoShow | null
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Index: React.FC<Props> = (props) => {
 
@@ -34,7 +34,7 @@ const Index: React.FC<Props> = (props) => {
     }
 
     React.useEffect(() => {
-        const queryStringValue = queryString.parse(props.location.search);
+        const queryStringValue = queryString.parse(props.router.location.search);
     
         const page = + (queryStringValue.page || 1);
 
@@ -72,14 +72,12 @@ const Index: React.FC<Props> = (props) => {
     );
 }
 
-type LinkDispatchToProps = {
-    fetchVoucherPromoUserUsedAction: (page: number, id: number) => Promise<Boolean>
-}
+const mapStateToProps = (state: AppState) => ({
+    router: state.router
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchVoucherPromoUserUsedAction: (page: number, id: number) => dispatch(fetchVoucherPromoUserUsedAction(page, id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchVoucherPromoUserUsedAction: (page: number, id: number) => dispatch(fetchVoucherPromoUserUsedAction(page, id))
+});
 
-export default withRouter(connect(null, mapDispatchToProps)(Index))
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

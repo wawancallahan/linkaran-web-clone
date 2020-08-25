@@ -24,12 +24,13 @@ import Transfer from './components/Transfer'
 import Profile from './components/Profile'
 import Bank from './components/Bank'
 import Approve from './components/Approve'
+import { AppState } from '../../../../reducers';
 
 type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps  & LinkDispatchToProps;
+type Props = OwnProps  & ReturnType<typeof mapDispatchToProps>;
 
 const Index: React.FC<Props> = (props) => {
 
@@ -84,15 +85,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findTopUpAction: (id: number) => Promise<ApiResponse<TopUpShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        findTopUpAction: (id: number) => dispatch(findTopUpAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findTopUpAction: (id: number) => dispatch(findTopUpAction(id))
+});
 
 export default withTitle(
     withRouter(connect(null, mapDispatchToProps)(Index)),

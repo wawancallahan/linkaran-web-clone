@@ -2,13 +2,11 @@ import * as React from 'react'
 import withTitle from '../../../../hoc/WithTitle';
 import { 
     Container, 
-    Alert,
     Row,
     Col
  } from 'reactstrap'
 import HeaderView from '../../../../components/Headers/HeaderView'
 import {
-    Link,
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
@@ -24,12 +22,13 @@ import WithDraw from './components/WithDraw'
 import Profile from './components/Profile'
 import Bank from './components/Bank'
 import Approval from './components/Approval'
+import { AppState } from '../../../../reducers';
 
 type OwnProps = RouteComponentProps<{
     id: string
 }>
 
-type Props = OwnProps  & LinkDispatchToProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 const Index: React.FC<Props> = (props) => {
     const [loaded, setLoaded] = React.useState(false)
@@ -83,15 +82,9 @@ const Index: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    findWithDrawAction: (id: number) => Promise<ApiResponse<WithDrawShow>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        findWithDrawAction: (id: number) => dispatch(findWithDrawAction(id))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    findWithDrawAction: (id: number) => dispatch(findWithDrawAction(id))
+});
 
 export default withTitle(
     withRouter(connect(null, mapDispatchToProps)(Index)),

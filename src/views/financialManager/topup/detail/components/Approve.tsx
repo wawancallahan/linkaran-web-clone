@@ -7,21 +7,21 @@ import {
 } from 'reactstrap'
 import { TopUpShow, TopUpApprove } from '../../../../../types/financialManager/topup'
 import { connect } from 'react-redux'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
 import { approveTopUpAction } from '../../../../../actions/financialManager/topup'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
 import { toast, TypeOptions } from 'react-toastify'
+import { AppState } from '../../../../../reducers'
 
-type OwnProps = RouteComponentProps & {
+type OwnProps = {
     data: TopUpShow | null,
     setNeedReload: React.Dispatch<React.SetStateAction<boolean>>,
     setLoaded: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Approve: React.FC<Props> = (props) => {
 
@@ -89,14 +89,8 @@ const Approve: React.FC<Props> = (props) => {
     )
 }
 
-type LinkDispatchToProps = {
-    approveTopUpAction: (id: number) => Promise<ApiResponse<TopUpApprove>>
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    approveTopUpAction: (id: number) => dispatch(approveTopUpAction(id))
+});
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        approveTopUpAction: (id: number) => dispatch(approveTopUpAction(id))
-    }
-}
-
-export default  withRouter(connect(null, mapDispatchToProps)(Approve));
+export default  connect(null, mapDispatchToProps)(Approve);
