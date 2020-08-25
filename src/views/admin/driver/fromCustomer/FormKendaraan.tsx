@@ -26,11 +26,11 @@ import {
 import { Paginator } from '../../../../types/paginator';
 import { fetchListVehicleTypeAction } from '../../../../actions/admin/vehicleType';
 
-type FormKendaraanProps = {
+type OwnProps = {
     FormikProps: FormikProps<FormFieldFromCustomer>,
 };
 
-type Props = FormKendaraanProps & LinkDispatchToProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 class FormKendaraan extends Component<Props> {
 
@@ -320,17 +320,9 @@ class FormKendaraan extends Component<Props> {
 
 } 
 
-
-type LinkDispatchToProps = {
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>
-    fetchListSubBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<SubBrandVehicle>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: FormKendaraanProps): LinkDispatchToProps => {
-    return {
-        fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
-        fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
+    fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(FormKendaraan);

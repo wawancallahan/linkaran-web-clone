@@ -14,7 +14,7 @@ import WithTitle from '../../../../../hoc/WithTitle';
 import Voucher from '../../detail/components/Voucher';
 import JumlahPenggunaanVoucher from '../../detail/components/JumlahPenggunaanVoucher';
 import JumlahPenggunaanTicket from '../../detail/components/JumlahPenggunaanTicket';
-import TicketList from './components/list/Index'
+import TicketList from './components/list/Index';
 import { AppState } from '../../../../../reducers';
 
 type OwnProps = RouteComponentProps<{

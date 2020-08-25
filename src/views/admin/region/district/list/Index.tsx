@@ -57,14 +57,14 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Kabupaten/ Kota</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/region/district/create">
-                                        <Button
-                                            color="primary"
-                                            size="sm"
-                                        >
-                                            Tambah Kabupaten/ Kota
-                                        </Button>
-                                    </Link>
+                                        <a href="/admin/region/district/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Kabupaten/ Kota
+                                            </Button>
+                                        </a>
                                     </div>
                                 </Row>
                                 <Filter />

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Pagination from '../../../../../components/Pagination/PaginationOnLink';
-import { AppState } from '../../../../../reducers/index';
 import { connect } from 'react-redux';
+import { AppState } from '../../../../../reducers';
 
 type OwnProps = {}
 
@@ -17,7 +17,8 @@ const Paginate: React.FC<Props> = (props) => {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    paginate: state.servicePrice.paginate
+    paginate: state.servicePrice.paginate,
+    router: state.router
 });
 
 export default connect(mapStateToProps)(Paginate);

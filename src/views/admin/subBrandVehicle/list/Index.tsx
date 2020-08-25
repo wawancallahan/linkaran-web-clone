@@ -57,14 +57,14 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Merek Kendaraan</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <Link to="/admin/sub-brand-vehicle/create">
-                                        <Button
-                                            color="primary"
-                                            size="sm"
-                                        >
-                                            Tambah Merek Kendaraan
-                                        </Button>
-                                    </Link>
+                                        <a href="/admin/sub-brand-vehicle/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Merek Kendaraan
+                                            </Button>
+                                        </a>
                                     </div>
                                 </Row>
                                 <Filter />

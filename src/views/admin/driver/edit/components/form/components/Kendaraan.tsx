@@ -22,7 +22,7 @@ type OwnProps = {
     form: FormikProps<FormField>,
 };
 
-type Props = OwnProps & LinkDispatchToProps;
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>;
 
 const Kendaraan: React.FC<Props> = (props) => {
 
@@ -308,17 +308,9 @@ const Kendaraan: React.FC<Props> = (props) => {
     )
 }
 
-
-type LinkDispatchToProps = {
-    fetchListVehicleTypeAction: (search: string, page: number) => Promise<ApiResponseList<VehicleTypeList>>
-    fetchListSubBrandVehicleAction: (search: string, page: number) => Promise<ApiResponseList<SubBrandVehicle>>
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
-        fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListVehicleTypeAction: (search: string, page: number) => dispatch(fetchListVehicleTypeAction(search, page)),
+    fetchListSubBrandVehicleAction: (search: string, page: number) => dispatch(fetchListSubBrandVehicleAction(search, page))
+});
 
 export default connect(null, mapDispatchToProps)(Kendaraan);

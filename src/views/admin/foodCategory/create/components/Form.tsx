@@ -25,7 +25,7 @@ type OwnProps = {
     redirectOnSuccess: () => void
 }
 
-type Props = OwnProps & LinkDispatchToProps
+type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
 const Form: React.FC<Props> = (props) => {
 
@@ -118,17 +118,9 @@ const Form: React.FC<Props> = (props) => {
         </Formik>
     )
 }
-
-type LinkDispatchToProps = {
-    createFoodCategoryAction: (foodCategory:FoodCategoryCreateField) => Promise<ApiResponse<FoodCategoryCreateResult>>
-    setAlertFoodCategoryShowAction: (message: string, color: string) => void
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps): LinkDispatchToProps => {
-    return {
-        createFoodCategoryAction: (foodCategory:FoodCategoryCreateField) => dispatch(createFoodCategoryAction(foodCategory)),
-        setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
-    }
-}
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+    createFoodCategoryAction: (foodCategory:FoodCategoryCreateField) => dispatch(createFoodCategoryAction(foodCategory)),
+    setAlertFoodCategoryShowAction: (message: string, color: string) => dispatch(setAlertFoodCategoryShowAction(message, color))
+});
 
 export default connect(null, mapDispatchToProps)(Form);
