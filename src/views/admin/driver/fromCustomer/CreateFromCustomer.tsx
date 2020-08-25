@@ -19,7 +19,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { AppState } from '../../../../reducers/index';
+import { AppState } from '../../../../reducers';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../../types';
 

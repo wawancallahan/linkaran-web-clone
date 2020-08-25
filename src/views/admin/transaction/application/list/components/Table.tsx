@@ -5,7 +5,7 @@ import {
 import TableItem from './TableItem'
 import BlockUi from '../../../../../../components/BlockUi/BlockUi'
 import { ApplicationList } from '../../../../../../types/admin/transaction/application'
-import { AppState } from '../../../../../../reducers/index'
+import { AppState } from '../../../../../../reducers'
 import { connect } from 'react-redux'
 import { typeTransactionFormat } from '../../../../../../helpers/utils'
 import queryString from 'query-string';

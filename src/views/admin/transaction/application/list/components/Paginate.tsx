@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Pagination from '../../../../../../components/Pagination/PaginationOnLink';
-import { AppState } from '../../../../../../reducers/index';
+import { AppState } from '../../../../../../reducers';
 import { connect } from 'react-redux';
 
 type OwnProps = {}

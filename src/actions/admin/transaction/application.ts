@@ -1,7 +1,7 @@
 import axiosService from '../../../services/axiosService';
 import { Dispatch } from "redux";
 import { Paginator } from '../../../types/paginator';
-import { AppState } from "../../../reducers/index";
+import { AppState } from "../../../reducers";
 import {
     Application,
     SET_PAGINATOR_APPLICATION,

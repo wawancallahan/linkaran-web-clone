@@ -21,7 +21,7 @@ import {
     RouteComponentProps,
     withRouter
 } from 'react-router-dom';
-import { AppActions } from '../../types/index';
+import { AppActions } from '../../types';
 import {
     Login as LoginInterface,
     ValidateLogin,
@@ -43,7 +43,7 @@ import { accessToken } from '../../services/auth'
 import { SelectStringType } from "../../types/select";
 import Flash from './components/Flash'
 import WithTitle from '../../hoc/WithTitle'
-import { AppState } from "../../reducers";
+import { AppState } from '../../reducers';
 
 type OwnProps = RouteComponentProps
 

@@ -5,7 +5,7 @@ import { setAlertServicePriceHideAction } from '../../../../../actions/admin/ser
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../../../../../types';
 import { connect } from 'react-redux';
-import { AppState } from '../../../../../reducers/index';
+import { AppState } from '../../../../../reducers';
 
 type OwnProps = {}
 

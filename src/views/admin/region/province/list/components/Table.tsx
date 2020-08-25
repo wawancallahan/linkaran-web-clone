@@ -5,7 +5,7 @@ import {
 import TableItem from './TableItem'
 import BlockUi from '../../../../../../components/BlockUi/BlockUi'
 import { ProvinceList } from '../../../../../../types/admin/region/province'
-import { AppState } from '../../../../../../reducers/index'
+import { AppState } from '../../../../../../reducers'
 import { connect } from 'react-redux'
 
 type OwnProps = {

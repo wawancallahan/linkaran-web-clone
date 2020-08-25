@@ -108,4 +108,4 @@ export type AppState = {
     withdraw: WithDrawState
 };
 
-export default createRootReducer
+export default createRootReducer;
