@@ -7,8 +7,9 @@ import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: VoucherTypeList,
     key: number,
@@ -29,9 +30,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteVoucherTypeAction(id)
                 .then((response: ApiResponse<VoucherType>) => {
-                    props.fetch(1);
-
                     props.setAlertVoucherTypeShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<VoucherType>) => {
                     props.setLoader(false)
@@ -63,4 +65,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertVoucherTypeShowAction: (message: string, color: string) => dispatch(setAlertVoucherTypeShowAction(message, color)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

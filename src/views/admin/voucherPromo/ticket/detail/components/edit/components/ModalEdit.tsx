@@ -10,8 +10,9 @@ import { AppActions } from '../../../../../../../../types'
 import { connect } from 'react-redux'
 import { editTicketAction } from '../../../../../../../../actions/admin/ticket'
 import { VoucherPromoShow } from '../../../../../../../../types/admin/voucherPromo'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     modalVisible: boolean,
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
     data: TicketList,
@@ -76,7 +77,7 @@ const ModalEdit: React.FC<Props> = (props) => {
                                         
                                         toastNotify("Tiket Berhasil Ditambah", "success");
                                         props.setModalVisible( ! props.modalVisible);
-                                        
+                                        props.history.push(props.location.pathname);
                                         props.fetch(1, voucher.id)
                                     })
                                     .catch( (error: ApiResponse<TicketEditResult>) => {
@@ -154,4 +155,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     editTicketAction: (ticket: TicketEditField, id: number) => dispatch(editTicketAction(ticket, id)),
 });
 
-export default connect(null, mapDispatchToProps)(ModalEdit)
+export default withRouter(connect(null, mapDispatchToProps)(ModalEdit));

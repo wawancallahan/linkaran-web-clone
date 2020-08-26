@@ -7,8 +7,9 @@ import { AppActions } from '../../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../../types/api'
 import swal from 'sweetalert'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: DistrictList,
     key: number,
@@ -29,9 +30,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteDistrictAction(id)
                 .then((response: ApiResponse<District>) => {
-                    props.fetch(1);
-
                     props.setAlertDistrictShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<District>) => {
                     props.setLoader(false)
@@ -63,4 +65,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertDistrictShowAction: (message: string, color: string) => dispatch(setAlertDistrictShowAction(message, color)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

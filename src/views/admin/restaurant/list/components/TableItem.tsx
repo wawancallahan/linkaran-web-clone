@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { RestaurantList, Restaurant } from '../../../../../types/admin/restaurant'
-import { Button } from 'reactstrap'
+import { Button, Badge } from 'reactstrap'
 import { deleteRestaurantAction, setAlertRestaurantShowAction } from '../../../../../actions/admin/restaurant'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: RestaurantList,
     key: number,
@@ -29,9 +30,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteRestaurantAction(id)
                 .then((response: ApiResponse<Restaurant>) => {
-                    props.fetch(1);
-
                     props.setAlertRestaurantShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Restaurant>) => {
                     props.setLoader(false)
@@ -50,7 +52,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.point ? (props.item.point.lat + "," + props.item.point.lng) : ''}</td>
             <td>{props.item.rating}</td>
             <td>{props.item.address}</td>
-            <td>{props.item.registered ? 'Ya' : 'Tidak'}</td>
+            <td>{props.item.registered ? <Badge color="success">Ya</Badge> : <Badge color="danger">Tidak</Badge>}</td>
             <td>
                 <a href={`/admin/restaurant/${props.item.id}/edit`} className="btn btn-warning btn-sm">
                     <i className="fa fa-edit"></i> Edit
@@ -68,4 +70,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertRestaurantShowAction: (message: string, color: string) => dispatch(setAlertRestaurantShowAction(message, color))
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

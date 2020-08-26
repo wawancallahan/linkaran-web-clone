@@ -7,8 +7,10 @@ import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { AppState } from '../../../../../reducers'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: BankList,
     key: number,
@@ -29,9 +31,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteBankAction(id)
                 .then((response: ApiResponse<Bank>) => {
-                    props.fetch(1);
-
                     props.setAlertBankShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Bank>) => {
                     props.setLoader(false)
@@ -61,9 +64,9 @@ const TableItem: React.FC<Props> = (props) => {
     )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnProps: OwnProps) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
     deleteBankAction: (id: number) => dispatch(deleteBankAction(id)),
     setAlertBankShowAction: (message: string, color: string) => dispatch(setAlertBankShowAction(message, color)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem))

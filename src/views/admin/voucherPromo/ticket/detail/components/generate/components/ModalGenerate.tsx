@@ -10,8 +10,9 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../../../../types'
 import { connect } from 'react-redux'
 import { generateTicketAction } from '../../../../../../../../actions/admin/ticket'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     modalVisible: boolean,
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>,
     data: VoucherPromoShow | null,
@@ -75,7 +76,7 @@ const ModalGenerate: React.FC<Props> = (props) => {
                                         
                                         toastNotify("Tiket Berhasil Digenerate", "success");
                                         props.setModalVisible( ! props.modalVisible);
-                                        
+                                        props.history.push(props.location.pathname);
                                         props.fetch(1, data.id)
                                     })
                                     .catch( (error: ApiResponse<TicketGenerateResult>) => {
@@ -153,4 +154,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     generateTicketAction: (ticket: TicketGenerateField) => dispatch(generateTicketAction(ticket))
 });
 
-export default connect(null, mapDispatchToProps)(ModalGenerate)
+export default withRouter(connect(null, mapDispatchToProps)(ModalGenerate));

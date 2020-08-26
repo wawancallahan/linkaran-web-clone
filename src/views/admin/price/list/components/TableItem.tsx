@@ -8,8 +8,9 @@ import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
 import NumberFormat from 'react-number-format';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: PriceList,
     key: number,
@@ -30,9 +31,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deletePriceAction(id)
                 .then((response: ApiResponse<Price>) => {
-                    props.fetch(1);
-
                     props.setAlertPriceShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Price>) => {
                     props.setLoader(false)
@@ -66,4 +68,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertPriceShowAction: (message: string, color: string) => dispatch(setAlertPriceShowAction(message, color))
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

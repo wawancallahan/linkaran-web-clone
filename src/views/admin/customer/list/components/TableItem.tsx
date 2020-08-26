@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { CustomerList, Customer } from '../../../../../types/admin/customer';
-import { Button } from 'reactstrap'
+import { Button, Badge } from 'reactstrap'
 import { setAlertCustomerShowAction, activeCustomerAction, deactiveCustomerAction } from '../../../../../actions/admin/customer'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: CustomerList,
     key: number,
@@ -28,9 +29,10 @@ const TableItem: React.FC<Props> = (props) => {
             if (willDelete) {
                 props.activeCustomerAction(id)
                 .then( (response: ApiResponse<Customer>) => {
+                    props.setAlertCustomerShowAction("Data Mengaktifkan Customer", 'success');
+                    props.history.push(props.location.pathname);
                     props.fetch(1);
-
-                    props.setAlertCustomerShowAction("Berhasil Mengaktifkan Customer", 'success');
+                    props.setLoader(false);
                 })
                 .catch( (response: ApiResponse<Customer>) => {
                     props.fetch(1);
@@ -50,9 +52,10 @@ const TableItem: React.FC<Props> = (props) => {
             if (willDelete) {
                 props.deactiveCustomerAction(id)
                 .then( (response: ApiResponse<Customer>) => {
+                    props.setAlertCustomerShowAction("Data Menonaktifkan Customer", 'success');
+                    props.history.push(props.location.pathname);
                     props.fetch(1);
-
-                    props.setAlertCustomerShowAction("Berhasil Menonaktifkan Customer", 'success');
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Customer>) => {
                     props.fetch(1);
@@ -69,7 +72,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.name}</td>
             <td>{props.item.phoneNumber}</td>
             <td>{props.item.email}</td>
-            <td>{props.item.isActive ? "Aktif" : "Tidak Aktif"}</td>
+            <td>{props.item.isActive ? <Badge color="success">Aktif</Badge> : <Badge color="danger">Tidak Aktif</Badge>}</td>
             <td>
                 {
                     props.item.isActive ? (
@@ -100,4 +103,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     deactiveCustomerAction: (id: number) => dispatch(deactiveCustomerAction(id)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

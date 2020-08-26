@@ -11,8 +11,9 @@ import { parseDateTimeFormat } from '../../../../../../../../helpers/utils'
 import { Button } from 'reactstrap'
 import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo'
 import TicketEdit from '../../edit/Index'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     data: VoucherPromo | null,
     index: number,
     item: TicketList,
@@ -48,6 +49,8 @@ const TableItem: React.FC<Props> = (props) => {
                     toastNotify('Data Berhasil Dihapus', "success");
                     if (props.data) {
                         props.fetch(1, props.data.id);
+                        props.history.push(props.location.pathname);
+                        props.setLoader(false);
                     }
                 })
                 .catch( (error: ApiResponse<Ticket>) => {
@@ -84,4 +87,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     deleteTicketAction: (id: number) => dispatch(deleteTicketAction(id)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

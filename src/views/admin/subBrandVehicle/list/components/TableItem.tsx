@@ -7,8 +7,9 @@ import { AppActions } from '../../../../../types'
 import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: SubBrandVehicleList,
     key: number,
@@ -29,9 +30,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteSubBrandVehicleAction(id)
                 .then((response: ApiResponse<SubBrandVehicle>) => {
-                    props.fetch(1);
-
                     props.setAlertSubBrandVehicleShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<SubBrandVehicle>) => {
                     props.setLoader(false)
@@ -64,4 +66,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertSubBrandVehicleShowAction: (message: string, color: string) => dispatch(setAlertSubBrandVehicleShowAction(message, color)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

@@ -39,6 +39,7 @@ const Table: React.FC<Props> = (props) => {
                         <th>Tanggal Lahir</th>
                         <th>Saldo</th>
                         <th>Tanggal Didaftarkan</th>
+                        <th>Status</th>
                         <th>Option</th>
                     </tr>
                 </thead>

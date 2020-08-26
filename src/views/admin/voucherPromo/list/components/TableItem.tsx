@@ -10,8 +10,9 @@ import swal from 'sweetalert'
 import '../../../../../react-modal-image.d.ts'
 import ModalImage from 'react-modal-image'
 import { voucherUsedFormat, parseDateTimeFormat } from '../../../../../helpers/utils'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: VoucherPromoList,
     key: number,
@@ -32,9 +33,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteVoucherPromoAction(id)
                 .then((response: ApiResponse<VoucherPromo>) => {
-                    props.fetch(1);
-
                     props.setAlertVoucherPromoShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<VoucherPromo>) => {
                     props.setLoader(false)
@@ -162,4 +164,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     setAlertVoucherPromoShowAction: (message: string, color: string) => dispatch(setAlertVoucherPromoShowAction(message, color)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

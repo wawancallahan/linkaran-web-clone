@@ -8,8 +8,9 @@ import { connect } from 'react-redux'
 import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
 import { parseDateFormat, booleanToActiveStatus } from '../../../../../helpers/utils'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: PartnerList,
     key: number,
@@ -30,9 +31,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deletePartnerAction(id)
                 .then((response: ApiResponse<Partner>) => {
-                    props.fetch(1);
-
                     props.setAlertPartnerShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Partner>) => {
                     props.setLoader(false)
@@ -52,9 +54,10 @@ const TableItem: React.FC<Props> = (props) => {
             if (willDelete) {
                 props.activePartnerAction(id)
                 .then( (response: ApiResponse<Partner>) => {
+                    props.setAlertPartnerShowAction("Data Mengaktifkan Partner", 'success');
+                    props.history.push(props.location.pathname);
                     props.fetch(1);
-
-                    props.setAlertPartnerShowAction("Berhasil Mengaktifkan Partner", 'success');
+                    props.setLoader(false);
                 })
                 .catch( (response: ApiResponse<Partner>) => {
                     props.setAlertPartnerShowAction(response.error!.metaData.message, 'danger');
@@ -72,9 +75,10 @@ const TableItem: React.FC<Props> = (props) => {
             if (willDelete) {
                 props.deactivePartnerAction(id)
                 .then( (response: ApiResponse<Partner>) => {
+                    props.setAlertPartnerShowAction("Data Menonaktifkan Partner", 'success');
+                    props.history.push(props.location.pathname);
                     props.fetch(1);
-
-                    props.setAlertPartnerShowAction("Berhasil Menonaktifkan Partner", 'success');
+                    props.setLoader(false);
                 })
                 .catch( (response: ApiResponse<Partner>) => {
                     props.setAlertPartnerShowAction(response.error!.metaData.message, 'danger');
@@ -121,4 +125,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     deactivePartnerAction: (id: number) => dispatch(deactivePartnerAction(id)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));

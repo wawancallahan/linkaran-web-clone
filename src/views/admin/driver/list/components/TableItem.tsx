@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { DriverList, Driver } from '../../../../../types/admin/driver'
-import { Button } from 'reactstrap'
+import { Button, Badge } from 'reactstrap'
 import { setAlertDriverShowAction, deleteDriverAction } from '../../../../../actions/admin/driver'
 import { ThunkDispatch } from 'redux-thunk'
 import { AppActions } from '../../../../../types'
@@ -11,8 +11,9 @@ import { EMoneyUser } from '../../../../../types/admin/eMoneyUser'
 import { parseDateFormat } from '../../../../../helpers/utils'
 import NumberFormat from 'react-number-format'
 import _ from 'lodash'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-type OwnProps = {
+type OwnProps = RouteComponentProps & {
     index: number,
     item: DriverList,
     key: number,
@@ -33,9 +34,10 @@ const TableItem: React.FC<Props> = (props) => {
                 props.setLoader(true)
                 props.deleteDriverAction(id)
                 .then((response: ApiResponse<Driver>) => {
-                    props.fetch(1);
-
                     props.setAlertDriverShowAction("Data Berhasil Dihapus", 'success');
+                    props.history.push(props.location.pathname);
+                    props.fetch(1);
+                    props.setLoader(false);
                 })
                 .catch( (error: ApiResponse<Driver>) => {
                     props.setLoader(false)
@@ -65,6 +67,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{props.item.dateOfBirth}</td>
             <td>{props.item.user && props.item.user.eMoneyUser && props.item.user.eMoneyUser.length > 0 ? (<NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={saldo} />)  : '-'}</td>
             <td>{props.item.createdAt ? parseDateFormat(props.item.createdAt) : ''}</td>
+            <td>{props.item.isActive ? <Badge color="success">Aktif</Badge> : <Badge color="danger">Tidak Aktif</Badge>}</td>
             <td>
                 <a href={`/admin/driver/${props.item.id}/transaksi`} className="btn btn-success btn-sm">
                     <i className="fa fa-file"></i>
@@ -88,4 +91,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, OwnPr
     deleteDriverAction: (id: number) => dispatch(deleteDriverAction(id)),
 });
 
-export default connect(null, mapDispatchToProps)(TableItem)
+export default withRouter(connect(null, mapDispatchToProps)(TableItem));
