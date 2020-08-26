@@ -7,6 +7,7 @@ import BlockUi from '../../../../../components/BlockUi/BlockUi'
 import { DriverList } from '../../../../../types/admin/driver'
 import { AppState } from '../../../../../reducers'
 import { connect } from 'react-redux'
+import TableSkeleton from '../../../../../components/Skeleton/TableSkeleton'
 
 type OwnProps = {
     loader: boolean,
@@ -17,6 +18,13 @@ type OwnProps = {
 type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Table: React.FC<Props> = (props) => {
+
+    if (props.loader) return (
+        <BlockUi blocking={props.loader}>
+            <TableSkeleton headCount={5} withOption />
+        </BlockUi>
+    );
+
     return (
         <BlockUi blocking={props.loader}>
             <TableReactstrap className="align-items-center table-flush" responsive>

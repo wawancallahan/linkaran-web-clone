@@ -1,7 +1,6 @@
 import * as React from 'react'
 import HeaderView from '../../../../components/Headers/HeaderView';
 import { Container, Row, Card, CardHeader, Button, CardFooter } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import Filter from './components/Filter'
 import Flash from './components/Flash'
 import Paginate from './components/Paginate'
@@ -58,14 +57,14 @@ const Index: React.FC<Props> = (props) => {
                                         <h3 className="mb-0">Daftar Bank</h3>
                                     </div>
                                     <div className="col text-right">
-                                    <a href="/admin/bank/create">
-                                        <Button
-                                            color="primary"
-                                            size="sm"
-                                        >
-                                            Tambah Bank
-                                        </Button>
-                                    </a>
+                                        <a href="/admin/bank/create">
+                                            <Button
+                                                color="primary"
+                                                size="sm"
+                                            >
+                                                Tambah Bank
+                                            </Button>
+                                        </a>
                                     </div>
                                 </Row>
                                 <Filter />

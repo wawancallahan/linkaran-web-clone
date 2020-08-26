@@ -8,6 +8,7 @@ import { TicketList } from '../../../../../../../../types/admin/ticket'
 import { AppState } from '../../../../../../../../reducers'
 import { connect } from 'react-redux'
 import { VoucherPromo } from '../../../../../../../../types/admin/voucherPromo'
+import TableSkeleton from '../../../../../../../../components/Skeleton/TableSkeleton'
 
 type OwnProps = {
     data: VoucherPromo | null,
@@ -19,31 +20,36 @@ type OwnProps = {
 type Props = OwnProps & ReturnType<typeof mapStateToProps>
 
 const Table: React.FC<Props> = (props) => {
-    return (
+
+    if (props.loader) return (
         <BlockUi blocking={props.loader}>
-            <TableReactstrap className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>Tanggal Digunakan</th>
-                        <th>Option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.list.map((item: TicketList, index: number) => {
-                        return (
-                            <TableItem key={index}
-                                item={item}
-                                index={index}
-                                fetch={props.fetch}
-                                setLoader={props.setLoader}
-                                data={props.data}
-                                />
-                        )
-                    })}
-                </tbody>
-            </TableReactstrap>
+            <TableSkeleton headCount={2} withOption />
         </BlockUi>
+    );
+
+    return (
+        <TableReactstrap className="align-items-center table-flush" responsive>
+            <thead className="thead-light">
+                <tr>
+                    <th>Kode</th>
+                    <th>Tanggal Digunakan</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                {props.list.map((item: TicketList, index: number) => {
+                    return (
+                        <TableItem key={index}
+                            item={item}
+                            index={index}
+                            fetch={props.fetch}
+                            setLoader={props.setLoader}
+                            data={props.data}
+                            />
+                    )
+                })}
+            </tbody>
+        </TableReactstrap>
     )
 }
 
