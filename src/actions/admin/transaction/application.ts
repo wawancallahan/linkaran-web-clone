@@ -414,10 +414,62 @@ export const editApplicationAction = (country: ApplicationEditField, id: number)
     }
 }
 
-
 export const deleteApplicationAction = (id: number): ThunkResult<Promise<ApiResponse<Application>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         return axiosService.delete(process.env.REACT_APP_API_URL + `/web/transaction/${id}`)
+            .then( (response: AxiosResponse) => {
+                const data: ApiResponseSuccess<Application> = response.data;
+
+                return Promise.resolve({
+                    response: data,
+                    error: null
+                });
+            })
+            .catch( (error: AxiosError) => {
+                 if (error.response) {
+                    if (error.response.status == 500) {
+                        const errorResponse: ApiResponseError = {
+                            metaData: {
+                                isError: true,
+                                message: error.message,
+                                statusCode: 500
+                            },
+                            result: null
+                        }
+    
+                        return Promise.reject({
+                            response: null,
+                            error: errorResponse
+                        });
+                    } else {
+                        return Promise.reject({
+                            response: null,
+                            error: error.response.data
+                        });
+                    }
+                } else {
+
+                    const errorResponse: ApiResponseError = {
+                        metaData: {
+                            isError: true,
+                            message: error.message,
+                            statusCode: 500
+                        },
+                        result: null
+                    }
+
+                    return Promise.reject({
+                        response: null,
+                        error: errorResponse
+                    });
+                }
+            })
+    }
+}
+
+export const cancelOrderAction = (numberTransaction: string): ThunkResult<Promise<ApiResponse<Application>>> => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        return axiosService.post(process.env.REACT_APP_API_URL + `/web/transaction/${numberTransaction}/cancel`)
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Application> = response.data;
 
