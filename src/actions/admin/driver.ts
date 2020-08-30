@@ -264,7 +264,6 @@ export const createDriverAction = (driver: DriverCreateField): ThunkResult<Promi
                 });
             })
             .catch( (error: AxiosError) => {
-                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -363,7 +362,6 @@ export const createDriverFromCustomerAction = (driver: DriverCreateFromCustomer)
                 });
             })
             .catch( (error: AxiosError) => {
-                console.log(error.response)
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -417,9 +415,6 @@ export const findDriverAction = (id: number): ThunkResult<Promise<ApiResponse<Dr
                 });
             })
             .catch( (error: AxiosError) => {
-
-                console.log(error.response)
-
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {
@@ -517,9 +512,6 @@ export const editDriverAction = (driver: DriverEditField, id: number): ThunkResu
                 });
             })
             .catch( (error: AxiosError) => {
-
-                console.log(error.response)
-
                  if (error.response) {
                     if (error.response.status == 500) {
                         const errorResponse: ApiResponseError = {

@@ -18,6 +18,7 @@ import { ApplicationShow, ApplicationShowComplete } from '../../../../../../type
 import { colorStatusFormat, icoLinkImage } from '../../../../../../helpers/utils';
 import SendTransaction from './SendTransaction';
 import FoodTransaction from './FoodTransaction';
+import NotificationDriver from './NotificationDriver';
 
 type OwnProps = {
     data: ApplicationShow | null
@@ -98,33 +99,31 @@ const Complete: React.FC<Props> = (props) => {
                     </Col>
                 </Row>
 
-                <Row className="mb-3">
-                    <Col>
-                        <Service className="mb-3" data={item} />
-                    </Col>
-                </Row>
+                <div className="form-group">
+                    <Service className="mb-3" data={item} />
+                </div>
                 
                 {
                     item.sendTransaction && item.sendTransaction !== null ?
                         (
-                            <Row className="mb-3">
-                                <Col>
-                                    <SendTransaction data={item} />
-                                </Col>
-                            </Row>
+                            <div className="form-group">
+                                <SendTransaction data={item} />
+                            </div>
                         ) : null
                 }
 
                 {
                     item.foodTransaction && item.foodTransaction !== null ?
                         (
-                            <Row className="mb-3">
-                                <Col>
-                                    <FoodTransaction data={item} />
-                                </Col>
-                            </Row>
+                            <div className="form-group">
+                                <FoodTransaction data={item} />
+                            </div>
                         ) : null
                 }
+
+                <div className="form-group">
+                    <NotificationDriver item={item} />
+                </div>
             </React.Fragment>
         )
     }

@@ -44,7 +44,7 @@ const Index: React.FC<Props> = (props) => {
                     setLoaded(true)
                 })
                 .catch((error: ApiResponse<ApplicationShow>) => {
-                    setLoadMessage(error.error!.metaData.message)
+                    setLoadMessage(error.error!.metaData.message || "Terjadi Kesalahan Request")
                 })
         }
 

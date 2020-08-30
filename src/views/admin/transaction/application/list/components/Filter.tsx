@@ -18,11 +18,19 @@ import ReactSelect, { ValueType } from 'react-select';
 import queryString from "query-string";
 import { connect } from 'react-redux';
 import { AppState } from '../../../../../../reducers';
+import { SelectType } from '../../../../../../types/select';
+import { fetchListDistrictAction, findDistrictAction } from '../../../../../../actions/admin/region/district';
+import { AppActions } from '../../../../../../types';
+import { ThunkDispatch } from 'redux-thunk';
+import ReactSelectAsyncPaginate from 'react-select-async-paginate';
+import { ApiResponseList, ApiResponseSuccessList, ApiResponse } from '../../../../../../types/api';
+import { DistrictList, DistrictShow } from '../../../../../../types/admin/region/district';
+import { Paginator } from '../../../../../../types/paginator';
 import "react-datepicker/dist/react-datepicker.css";
 
 type OwnProps = {}
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps>
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Filter: React.FC<Props> = (props) => {
 
@@ -35,7 +43,12 @@ const Filter: React.FC<Props> = (props) => {
         serviceCode: '',
         statusOrder: '',
         type: 'complete',
-        userName: ''
+        userName: '',
+        districtId: ''
+    });
+    const [districtSelected, setDistrictSelected] = React.useState<SelectType>({
+        label: '',
+        value: 0
     });
 
     React.useEffect(() => {
@@ -48,6 +61,8 @@ const Filter: React.FC<Props> = (props) => {
         const dateQuery = decodeURIComponent((querySearch.date as string) || '');
         const date = moment(dateQuery, "YYYY-MM-DD", true);
 
+        const districtId = decodeURIComponent((querySearch.districtId as string) || '')
+
         setFormField({
             date: date.isValid() ? date.toDate() : null,
             driverName: decodeURIComponent((querySearch.driverName as string) || ''),
@@ -55,9 +70,66 @@ const Filter: React.FC<Props> = (props) => {
             serviceCode: decodeURIComponent((querySearch.serviceCode as string) || ''),
             statusOrder: decodeURIComponent((querySearch.statusOrder as string) || ''),
             type: decodeURIComponent((querySearch.type as string) || 'complete'),
-            userName: decodeURIComponent((querySearch.userName as string) || '')
+            userName: decodeURIComponent((querySearch.userName as string) || ''),
+            districtId: districtId
         });
+
+        const findDistrict = async () => {
+            if (districtId) {
+                await props.findDistrictAction(Number.parseInt(districtId))
+                    .then((response: ApiResponse<DistrictShow>) => {
+                        const data: DistrictShow = response.response!.result;
+
+                        setDistrictSelected({
+                            value: data.id,
+                            label: data.name
+                        })
+                    });
+            }
+        }
+
+        findDistrict()  
     }, []);
+
+    const loadDistrictHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
+        page: number
+    }) => {
+        return props.fetchListDistrictAction(search, options.page)
+            .then((response: ApiResponseList<DistrictList>) => {
+
+                const data: ApiResponseSuccessList<DistrictList> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: DistrictList) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
+    }
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -70,7 +142,8 @@ const Filter: React.FC<Props> = (props) => {
 
         const newFilter = {
             ...filter,
-            date: date
+            date: date,
+            districtId: districtSelected.value.toString()
         }
 
         createFormSearch(props.router.location.pathname, {
@@ -233,7 +306,7 @@ const Filter: React.FC<Props> = (props) => {
                 <Form onSubmit={handleOnSubmit}>
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">
-                        Filter
+                            Filter
                         </h5>
                         <button
                             aria-label="Close"
@@ -263,6 +336,26 @@ const Filter: React.FC<Props> = (props) => {
                             value={formField.numberTransaction}
                             onChange={handleOnChange}
                             />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
+                            htmlFor="input-district"
+                            >
+                                Kabupaten/ Kota
+                            </label>
+                            <ReactSelectAsyncPaginate 
+                                value={districtSelected}
+                                loadOptions={loadDistrictHandler}
+                                onChange={(option) => {
+                                    setDistrictSelected(option as SelectType)
+                                }}
+                                additional={{
+                                    page: 1
+                                }}
+                                debounceTimeout={250}
+                                />
                         </FormGroup>
 
                         <FormGroup>
@@ -425,4 +518,9 @@ const mapStateToProps = (state: AppState) => ({
     router: state.router
 });
 
-export default connect(mapStateToProps)(Filter);
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListDistrictAction: (search: string, page: number) => dispatch(fetchListDistrictAction(search, page)),
+    findDistrictAction: (id: number) => dispatch(findDistrictAction(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

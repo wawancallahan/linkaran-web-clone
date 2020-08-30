@@ -6,6 +6,8 @@ import { Restaurant } from '../restaurant';
 import { User } from '../user';
 import { Partner } from '../partner';
 import { Customer } from '../customer';
+import { LocationPoint } from '../locationPoint';
+import { DriverGetNotifTransaction } from '../driverGetNotifTransaction';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -95,7 +97,12 @@ export type ApplicationShowComplete = {
             type: string
         },
         distance: string,
-        destination: string
+        destination: LocationPoint,
+        servicePriceHistory: {
+            id: number,
+            districtId: number
+        },
+        driverGetNotif?: DriverGetNotifTransaction[]
     },
     driverFeedback?: null | {
         rating: number,
@@ -221,7 +228,8 @@ export type Filter = {
     type: string,
     serviceCode: string,
     statusOrder: string,
-    driverName: string
+    driverName: string,
+    districtId: string
 }
 
 export type FilterOmit = Omit<Filter, 'date'> & { 

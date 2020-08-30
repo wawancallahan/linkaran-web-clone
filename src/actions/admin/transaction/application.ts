@@ -101,7 +101,8 @@ export const fetchApplicationAction = (page: number): ThunkResult<Promise<Boolea
             serviceCode: decodeURIComponent((querySearch.serviceCode as string) || ''),
             statusOrder: decodeURIComponent((querySearch.statusOrder as string) || ''),
             type: decodeURIComponent((querySearch.type as string) || 'complete'),
-            userName: decodeURIComponent((querySearch.userName as string) || '')
+            userName: decodeURIComponent((querySearch.userName as string) || ''),
+            districtId: decodeURIComponent((querySearch.districtId as string) || '')
         }
 
         const filter: Filter = {

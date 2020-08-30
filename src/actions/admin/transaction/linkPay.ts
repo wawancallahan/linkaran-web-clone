@@ -68,8 +68,6 @@ export const fetchLinkPayAction = (page: number) : ThunkResult<Promise<Boolean>>
                 dispatch(setFetchLinkPaySuccessAction(data.result));
 
                 if (data.metaData.paginate) {
-                    console.log(data.metaData.paginate)
-
                     const paginate = data.metaData.paginate as Paginator;
 
                     dispatch(setPaginateAction({
