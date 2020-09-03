@@ -71,10 +71,12 @@ const Filter: React.FC<Props> = (props) => {
                     .then((response: ApiResponse<UserShow>) => {
                         const data: UserShow = response.response!.result;
 
-                        setApprovedBySelected({
-                            value: data.id,
-                            label: data.name
-                        })
+                        if (data) {
+                            setApprovedBySelected({
+                                value: data.id,
+                                label: data.name
+                            })
+                        }
                     });
             }
         }

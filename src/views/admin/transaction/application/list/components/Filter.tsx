@@ -80,10 +80,12 @@ const Filter: React.FC<Props> = (props) => {
                     .then((response: ApiResponse<DistrictShow>) => {
                         const data: DistrictShow = response.response!.result;
 
-                        setDistrictSelected({
-                            value: data.id,
-                            label: data.name
-                        })
+                        if (data) {
+                            setDistrictSelected({
+                                value: data.id,
+                                label: data.name
+                            })
+                        }
                     });
             }
         }
