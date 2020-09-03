@@ -42,10 +42,7 @@ const Filter: React.FC<Props> = (props) => {
         approvedById: ''
     });
 
-    const [approvedBySelected, setApprovedBySelected] = React.useState<SelectType>({
-        label: '',
-        value: 0
-    });
+    const [approvedBySelected, setApprovedBySelected] = React.useState<SelectType | null>(null);
 
     React.useEffect(() => {
         const querySearch = queryString.parse(props.router.location.search);
@@ -129,8 +126,13 @@ const Filter: React.FC<Props> = (props) => {
 
         let filter = formField;
 
+        const newFilter = {
+            ...filter,
+            approvedById: approvedBySelected ? approvedBySelected.value.toString() : ''
+        }
+
         createFormSearch(props.router.location.pathname, {
-            ...filter
+            ...newFilter
         } as OptionObjectString);
     }
 
@@ -316,13 +318,10 @@ const Filter: React.FC<Props> = (props) => {
                                 value={approvedBySelected}
                                 loadOptions={loadApprovedByHandler}
                                 onChange={(option) => {
-                                    if (option !== null) {
+                                    if (option) {
                                         setApprovedBySelected(option as SelectType)
                                     } else {
-                                        setApprovedBySelected({
-                                            value: 0,
-                                            label: ''
-                                        } as SelectType);
+                                        setApprovedBySelected(null);
                                     }
                                 }}
                                 additional={{

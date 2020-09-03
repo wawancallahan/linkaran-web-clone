@@ -46,10 +46,7 @@ const Filter: React.FC<Props> = (props) => {
         userName: '',
         districtId: ''
     });
-    const [districtSelected, setDistrictSelected] = React.useState<SelectType>({
-        label: '',
-        value: 0
-    });
+    const [districtSelected, setDistrictSelected] = React.useState<SelectType | null>(null);
 
     React.useEffect(() => {
         const querySearch = queryString.parse(props.router.location.search);
@@ -145,7 +142,7 @@ const Filter: React.FC<Props> = (props) => {
         const newFilter = {
             ...filter,
             date: date,
-            districtId: districtSelected.value.toString()
+            districtId: districtSelected ? districtSelected.value.toString() : ''
         }
 
         createFormSearch(props.router.location.pathname, {
@@ -351,12 +348,17 @@ const Filter: React.FC<Props> = (props) => {
                                 value={districtSelected}
                                 loadOptions={loadDistrictHandler}
                                 onChange={(option) => {
-                                    setDistrictSelected(option as SelectType)
+                                    if (option) {
+                                        setDistrictSelected(option as SelectType)
+                                    } else {
+                                        setDistrictSelected(null)
+                                    }
                                 }}
                                 additional={{
                                     page: 1
                                 }}
                                 debounceTimeout={250}
+                                isClearable
                                 />
                         </FormGroup>
 
