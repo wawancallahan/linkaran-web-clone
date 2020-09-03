@@ -16,10 +16,18 @@ import ReactSelect, { ValueType } from 'react-select';
 import queryString from "query-string";
 import { AppState } from '../../../../../reducers';
 import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../../../../../types';
+import { fetchListUserAction, findUserAction } from '../../../../../actions/admin/user';
+import { ApiResponseList, ApiResponseSuccessList, ApiResponse } from '../../../../../types/api';
+import { UserList, UserShow } from '../../../../../types/admin/user';
+import { Paginator } from '../../../../../types/paginator';
+import { SelectType } from '../../../../../types/select';
+import ReactSelectAsyncPaginate from 'react-select-async-paginate';
 
 type OwnProps = {}
 
-type Props = OwnProps & ReturnType<typeof mapStateToProps>
+type Props = OwnProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const Filter: React.FC<Props> = (props) => {
 
@@ -29,8 +37,14 @@ const Filter: React.FC<Props> = (props) => {
         name: '',
         accountNumber: '',
         bankName: '',
-        needApproved: '0',
-        isManual: '0'
+        needApproved: '',
+        isManual: '',
+        approvedById: ''
+    });
+
+    const [approvedBySelected, setApprovedBySelected] = React.useState<SelectType>({
+        label: '',
+        value: 0
     });
 
     React.useEffect(() => {
@@ -40,14 +54,73 @@ const Filter: React.FC<Props> = (props) => {
             setFiltered(true);
         }
 
+        const approvedById = decodeURIComponent((querySearch.approvedById as string) || '')
+
         setFormField({
             accountNumber: decodeURIComponent((querySearch.accountNumber as string) || ''),
             name: decodeURIComponent((querySearch.name as string) || ''),
             bankName: decodeURIComponent((querySearch.bankName as string) || ''),
-            needApproved: decodeURIComponent((querySearch.needApproved as string) || '0'),
-            isManual: decodeURIComponent((querySearch.isManual as string) || '0'),
+            needApproved: decodeURIComponent((querySearch.needApproved as string) || ''),
+            isManual: decodeURIComponent((querySearch.isManual as string) || ''),
+            approvedById: approvedById,
         });
+
+        const findApprovedBy = async () => {
+            if (approvedById) {
+                await props.findUserAction(Number.parseInt(approvedById))
+                    .then((response: ApiResponse<UserShow>) => {
+                        const data: UserShow = response.response!.result;
+
+                        setApprovedBySelected({
+                            value: data.id,
+                            label: data.name
+                        })
+                    });
+            }
+        }
+
+        findApprovedBy()  
     }, []);
+
+    const loadApprovedByHandler = (search: string, loadedOption: { label: string; value: number; }[], options: {
+        page: number
+    }) => {
+        return props.fetchListUserAction(search, options.page)
+            .then((response: ApiResponseList<UserList>) => {
+
+                const data: ApiResponseSuccessList<UserList> = response.response!;
+
+                let result: {
+                    value: number,
+                    label: string
+                }[] = [];
+
+                let hasMore = false;
+
+                if ( ! data.metaData.isError) {
+
+                    if (data.metaData.paginate) {
+                        const paginate = data.metaData.paginate as Paginator;
+                        hasMore = paginate.pageCount > options.page;
+                    }
+
+                    result = data.result.map((item: UserList) => {
+                        return {
+                            value: item.id,
+                            label: `${item.name}`
+                        };
+                    });
+                }
+
+                return {
+                    options: result,
+                    hasMore: hasMore,
+                    additional: {
+                      page: options.page + 1,
+                    },
+                };
+            });
+    }
 
     const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -72,15 +145,14 @@ const Filter: React.FC<Props> = (props) => {
         });
     }
 
-    
     const handleOnSelectChange = (option: {
         value: string,
         label: string
-    }, id: string) => {
+    } | null, id: string) => {
         setFormField(prevState => {
             return {
                 ...prevState,
-                [id]: option.value
+                [id]: option !== null ? option.value : ''
             }
         });
     }
@@ -234,6 +306,34 @@ const Filter: React.FC<Props> = (props) => {
                         <FormGroup>
                             <label
                             className="form-control-label"
+                            htmlFor="input-approvedBy"
+                            >
+                                Disetujui Oleh
+                            </label>
+                            <ReactSelectAsyncPaginate 
+                                value={approvedBySelected}
+                                loadOptions={loadApprovedByHandler}
+                                onChange={(option) => {
+                                    if (option !== null) {
+                                        setApprovedBySelected(option as SelectType)
+                                    } else {
+                                        setApprovedBySelected({
+                                            value: 0,
+                                            label: ''
+                                        } as SelectType);
+                                    }
+                                }}
+                                additional={{
+                                    page: 1
+                                }}
+                                debounceTimeout={250}
+                                isClearable
+                                />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label
+                            className="form-control-label"
                             htmlFor="input-needApproved"
                             >
                                 Butuh Persetujuan
@@ -253,6 +353,7 @@ const Filter: React.FC<Props> = (props) => {
 
                                     handleOnSelectChange(optionSelected, 'needApproved')
                                 }}  
+                                isClearable
                                 />
                         </FormGroup>
 
@@ -278,6 +379,7 @@ const Filter: React.FC<Props> = (props) => {
 
                                     handleOnSelectChange(optionSelected, 'isManual')
                                 }}  
+                                isClearable
                                 />
                         </FormGroup>
                     </div>
@@ -304,4 +406,9 @@ const mapStateToProps = (state: AppState) => ({
     router: state.router
 });
 
-export default connect(mapStateToProps)(Filter);
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, OwnProps: OwnProps) => ({
+    fetchListUserAction: (search: string, page: number) => dispatch(fetchListUserAction(search, page)),
+    findUserAction: (id: number) => dispatch(findUserAction(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

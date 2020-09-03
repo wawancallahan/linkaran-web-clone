@@ -94,6 +94,7 @@ export const fetchTopUpAction = (page: number, needApproved: number = 1): ThunkR
             bankName: decodeURIComponent((querySearch.bankName as string) || ''),
             needApproved: decodeURIComponent((querySearch.needApproved as string) || ''),
             isManual: decodeURIComponent((querySearch.isManual as string) || ''),
+            approvedById: decodeURIComponent((querySearch.approvedById as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

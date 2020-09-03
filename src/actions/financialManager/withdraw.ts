@@ -98,6 +98,7 @@ export const fetchWithDrawAction = (page: number, needApproved: number = 1): Thu
             needApproved: decodeURIComponent((querySearch.needApproved as string) || ''),
             isManual: decodeURIComponent((querySearch.isManual as string) || ''),
             isDecline: decodeURIComponent((querySearch.isDecline as string) || ''),
+            approvedById: decodeURIComponent((querySearch.approvedById as string) || ''),
         }
 
         let paramsObject: OptionObjectString = {

@@ -91,7 +91,8 @@ export type Filter = {
     accountNumber: string,
     bankName: string,
     needApproved: string,
-    isManual: string
+    isManual: string,
+    approvedById: string
 }
 
 export type FilterKeys = keyof Filter;
