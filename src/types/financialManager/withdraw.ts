@@ -3,12 +3,12 @@ import { Timestamps } from '../timestamps';
 import { Bank } from '../admin/bank';
 import { User } from '../admin/user';
 import { ManualWithDraw } from '../admin/manualWithdraw';
-import { ManualWithDrawRequest } from '../admin/ManualWithdrawRequest';
 import { Driver } from '../admin/driver';
 import { Decline } from '../admin/approval';
 import { ClaimIdentifies } from '../admin/claimIdentifies';
 import { Role } from '../admin/role';
 import { TokenFCM } from '../tokenFCM';
+import { ManualWithDrawRequest } from '../admin/manualWithDrawRequest';
 
 export const FETCH_WITHDRAW = "FETCH_WITHDRAW";
 export const FETCH_WITHDRAW_SUCCESS = "FETCH_WITHDRAW_SUCCESS";

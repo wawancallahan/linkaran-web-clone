@@ -48,10 +48,10 @@ const Index: React.FC<Props> = (props) => {
 
                     const data: UserShow = response.response!.result;
 
-                    form.email =  data.email;
+                    form.email =  data.email ? data.email : '';
                     form.name = data.name;
                     form.phoneNumber = data.phoneNumber;
-                    form.telegramuser = data.telegramuser
+                    form.telegramuser = data.telegramuser ? data.telegramuser : '';
                     
                     if (data.roles) {
                         form.roles = data.roles.map((value: Role) => {

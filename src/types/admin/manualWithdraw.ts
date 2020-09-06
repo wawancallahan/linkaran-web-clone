@@ -6,7 +6,7 @@ import { SelectType } from '../select';
 import { Role } from './role';
 import { TokenFCM } from '../tokenFCM';
 import { ClaimIdentifies } from './claimIdentifies';
-import { ManualWithDrawRequest } from './ManualWithdrawRequest';
+import { ManualWithDrawRequest } from './manualWithDrawRequest';
 import { Driver } from './driver';
 
 export const FETCH_MANUAL_WITHDRAW = "FETCH_MANUAL_WITHDRAW";

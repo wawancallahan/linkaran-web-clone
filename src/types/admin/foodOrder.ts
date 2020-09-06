@@ -1,7 +1,6 @@
 export type FoodOrder = {
     id: number,
     quantity: number,
-    note: string,
+    note: string | null,
     price: number,
-    
 }
