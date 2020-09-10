@@ -34,7 +34,7 @@ const Service: React.FC<Props> = (props) => {
                 <CardBody>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Layanan</label></Col>
-                        <Col>{data.transaction ? data.transaction.service.name : ''}</Col>
+                        <Col>{data.transaction && data.transaction.service ? data.transaction.service.name : ''}</Col>
                     </Row>
                     <Row className="mb-2">
                         <Col><label htmlFor="">Lokasi Jemput</label></Col>

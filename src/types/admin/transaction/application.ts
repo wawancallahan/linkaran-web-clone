@@ -8,6 +8,9 @@ import { Partner } from '../partner';
 import { Customer } from '../customer';
 import { LocationPoint } from '../locationPoint';
 import { DriverGetNotifTransaction } from '../driverGetNotifTransaction';
+import { ServicePriceHistory } from '../servicePriceHistory';
+import { Transaction } from '../transaction';
+import { Food } from '../food';
 
 export const FETCH_APPLICATION = "FETCH_APPLICATION";
 export const FETCH_APPLICATION_SUCCESS = "FETCH_APPLICATION_SUCCESS";
@@ -38,7 +41,7 @@ export type Application = {
 
 export type ApplicationList = Application
 
-export type FoodTransactionDetail = {
+export type FoodTransactionDetail = Partial<{
     id: string,
     price: number,
     quantity: number,
@@ -47,16 +50,17 @@ export type FoodTransactionDetail = {
     name: string,
     description: string,
     image: string
-}
+}>
 
-export type RestaurantTransactionDetail = Partial<Restaurant> & {
+export type RestaurantTransactionDetail = Partial<Restaurant & {
     district: string | null,
     province: string | null,
     openTime: string,
     closeTime: string,
     isClosed: boolean,
+    isFullDayClose: boolean,
     distance: string
-}
+}> 
 
 export type ApplicationShowComplete = {
     driverId: number | null,
@@ -102,7 +106,7 @@ export type ApplicationShowComplete = {
             id: number,
             districtId: number
         },
-        driverGetNotif?: DriverGetNotifTransaction[]
+        driverGetNotif?: Partial<DriverGetNotifTransaction & Transaction>[]
     },
     driverFeedback?: null | {
         rating: number,
@@ -147,41 +151,84 @@ export type ApplicationShowInprogress = {
             partner?: Partial<Partner>
         }
     },
+    driverId?: number,
+    performance?: string,
+    rating?: string,
+    driverInformation?: {
+        clientId: string,
+        driverHelpCenter: number,
+        driverId: number,
+        name: string,
+        performance: number,
+        phoneNumber: string,
+        policeNumber: string,
+        profileImage: string | null,
+        rating: number,
+        tokenFCM: string[] | null,
+        userId: number,
+        vehicleMerk: string,
+        vehicleTypeCode: string
+    },
+    driverInitPos?: {
+        location: {
+            "$reql_type$": string,
+            coordinates: number[],
+            type: string
+        }
+    },
+    driverTakeOrderAt?: string,
+    foodTransaction?: {
+        foodCost: number,
+        foods: FoodTransactionDetail[],
+        freightCost: number,
+        restaurant: RestaurantTransactionDetail,
+        restaurantId: number
+    },
     id: string,
-    transaction: {
+    transaction: Partial<{
         addressDestination: string,
         addressOrigin: string,
         code: string,
         cost: number,
         dateTime: number,
-        destination: {
-            $reql_type$: string,
-            coordinates: number[],
-            type: string
-        },
+        destination: LocationPoint,
         distance: string,
         driverPaymentDeductions: number,
         foodFee?: number,
         note: string,
-        origin: {
-            $reql_type$: string,
-            coordinates: number[],
-            type: string
-        },
+        origin: LocationPoint,
         paymentFromVoucher: number,
+        persentServiceDeduction: number,
         priceSplit: number[],
         service: Partial<Service>,
+        serviceFee: number,
+        servicePriceHistory: Partial<ServicePriceHistory>,
         status: string,
         totalCost: number,
         totalCostBeforeCut: number,
         transportationFee: number,
         typePayment: string,
-        vehicleType: Partial<VehicleType>
-    } | null
+        vehicleType: Partial<VehicleType>,
+        driverGetNotif: Partial<DriverGetNotifTransaction & Transaction>[]
+    }> | null,
+    sendTransaction?: null | {
+        isFragile: boolean,
+        stuffSize: string,
+        sender: {
+            name: string,
+            note: string,
+            phoneNumber: string
+        },
+        recipient: {
+            name: string,
+            note: string,
+            phoneNumber: string
+        }
+    },
 }
 
 export type ApplicationShow = {
-    type: "complete" | "inprogress",
+    type: "complete" | "inorder",
     item: ApplicationShowComplete | ApplicationShowInprogress
 }
 

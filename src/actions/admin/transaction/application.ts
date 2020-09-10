@@ -284,12 +284,12 @@ export const findApplicationAction = (type: string, numberTransaction: string): 
                             type: "complete"
                         } as ApplicationShow;
                     break;
-                    case "inprogress":
+                    case "inorder":
                         const responseInprogress: ApiResponseSuccess<ApplicationShowInprogress> = response.data;
                         metaData = responseInprogress.metaData;
                         result = {
                             item: responseInprogress.result,
-                            type: "inprogress"
+                            type: "inorder"
                         } as ApplicationShow;
                     break;
                 }

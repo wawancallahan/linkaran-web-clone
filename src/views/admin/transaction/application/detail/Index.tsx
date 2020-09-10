@@ -58,7 +58,7 @@ const Index: React.FC<Props> = (props) => {
             case "complete":
                 detailTransaction = <Complete data={item} />
             break;
-            case "inprogress":
+            case "inorder":
                 detailTransaction = <Inprogress data={item} />
             break;
         }

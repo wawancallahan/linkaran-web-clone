@@ -6,7 +6,11 @@ export type DriverGetNotifTransaction = {
     getOrder: number,
     takeOrder: number,
     driverProfileView?: {
-        photo: string,
+        photo: string | null,
+        user: Partial<User>
+    },
+    driverProfile?: {
+        photo: string | null,
         user: Partial<User>
     }
 }

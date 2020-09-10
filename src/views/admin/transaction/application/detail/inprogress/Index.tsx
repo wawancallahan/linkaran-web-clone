@@ -14,6 +14,10 @@ import Service from './Service';
 import Transaction from './Transaction';
 import { ApplicationShow, ApplicationShowInprogress } from '../../../../../../types/admin/transaction/application';
 import { colorStatusFormat, icoLinkImage } from '../../../../../../helpers/utils';
+import FoodTransaction from './FoodTransaction'
+import Driver from './Driver'
+import NotificationDriver from './NotificationDriver'
+import SendTransaction from './SendTransaction'
 
 type OwnProps = {
     data: ApplicationShow | null
@@ -62,7 +66,7 @@ const Inprogress: React.FC<Props> = (props) => {
                                         <label htmlFor="">Status</label>
                                     </Col>
                                     <Col>
-                                        {item.transaction ? (
+                                        {item.transaction && item.transaction.status ? (
                                             <Badge color={colorStatusFormat(item.transaction.status)}>{item.transaction.status}</Badge>
                                         ) : null}
                                     </Col>
@@ -86,15 +90,41 @@ const Inprogress: React.FC<Props> = (props) => {
                         </Card>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mb-3">
                     <Col>
                         <Customer className="mb-3" data={item} />
-                        <Service className="mb-3" data={item} />
-                    </Col>
-                    <Col>
                         <Transaction data={item} />
                     </Col>
+                    <Col>
+                        <Driver className="mb-3" data={item} />
+                    </Col>
                 </Row>
+
+                <div className="form-group">
+                    <Service className="mb-3" data={item} />
+                </div>
+
+                {
+                    item.sendTransaction && item.sendTransaction !== null ?
+                        (
+                            <div className="form-group">
+                                <SendTransaction data={item} />
+                            </div>
+                        ) : null
+                }
+
+                {
+                    item.foodTransaction && item.foodTransaction !== null ?
+                        (
+                            <div className="form-group">
+                                <FoodTransaction data={item} />
+                            </div>
+                        ) : null
+                }
+
+                <div className="form-group">
+                    <NotificationDriver item={item} />
+                </div>
             </React.Fragment>
         )
     }
