@@ -82,6 +82,12 @@ const Complete: React.FC<Props> = (props) => {
                                             {item.transaction.service.code ? <img src={icoLinkImage(item.transaction.service.code)} alt=""/> : ''}
                                         </div>
                                     </div>
+                                    {item.driverInformation && item.driverInformation.vehicleMerk && (
+                                        <div className="text-center">
+                                            <div>Merek Kendaraan</div>
+                                            <div>{item.driverInformation && item.driverInformation.vehicleMerk}</div>
+                                        </div>
+                                    )}
                                 </div>
                             </CardBody>
                         </Card>

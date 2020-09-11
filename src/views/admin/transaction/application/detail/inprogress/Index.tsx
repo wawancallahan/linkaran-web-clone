@@ -77,7 +77,7 @@ const Inprogress: React.FC<Props> = (props) => {
                     <Col xs="4">
                         <Card className="m">
                             <CardBody>
-                                <div className="d-flex align-items-stretch justify-content-center">
+                                <div className="d-flex align-items-stretch justify-content-center mb-3">
                                     <div className="align-self-center w-100">
                                         <div className="img-ico-transaction-link">
                                             {item.transaction && item.transaction.service && item.transaction.service.code ? (
@@ -86,6 +86,12 @@ const Inprogress: React.FC<Props> = (props) => {
                                         </div>
                                     </div>
                                 </div>
+                                {item.driverInformation && item.driverInformation.vehicleMerk && (
+                                    <div className="text-center">
+                                        <div>Merek Kendaraan</div>
+                                        <div>{item.driverInformation && item.driverInformation.vehicleMerk}</div>
+                                    </div>
+                                )}
                             </CardBody>
                         </Card>
                     </Col>
