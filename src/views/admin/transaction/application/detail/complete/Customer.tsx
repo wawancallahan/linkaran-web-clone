@@ -41,13 +41,21 @@ const Customer: React.FC<Props> = (props) => {
                     </Row>
                 </CardHeader>
                 <CardBody>
-                    <Row className="mb-2">
-                        <Col><label htmlFor="">ID</label></Col>
-                        <Col>{data.costumer.id}</Col>
-                    </Row>
                     <Row>
                         <Col><label htmlFor="">Nama</label></Col>
                         <Col>{data.costumer.userInfo.name}</Col>
+                    </Row>
+                    <Row>
+                        <Col><label htmlFor="">Telepon</label></Col>
+                        <Col>{data.costumer.userInfo.phoneNumber}</Col>
+                    </Row>
+                    <Row>
+                        <Col><label htmlFor="">Email</label></Col>
+                        <Col>{data.costumer.userInfo.email}</Col>
+                    </Row>
+                    <Row>
+                        <Col><label htmlFor="">Telegram</label></Col>
+                        <Col>{data.costumer.userInfo.telegramuser}</Col>
                     </Row>
                 </CardBody>
             </Card>
