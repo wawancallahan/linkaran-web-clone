@@ -33,33 +33,24 @@ const Transaction: React.FC<Props> = (props) => {
                 </CardHeader>
                 <CardBody>
                     <Row className="mb-2">
-                        <Col><label htmlFor="">Tarif</label></Col>
-                        <Col>Rp. {data.transaction ? data.transaction.cost : ''}</Col>
+                        <Col><label htmlFor="">Tarif Transportasi</label></Col>
+                        <Col>Rp. {data.transaction ? data.transaction.transportationFee : ''}</Col>
                     </Row>
                     <Row className="mb-2">
-                        <Col><label htmlFor="">Pembayaran Lain</label></Col>
-                        <Col></Col>
+                        <Col><label htmlFor="">Tarif Layanan</label></Col>
+                        <Col>Rp. {data.transaction ? data.transaction.serviceFee : ''}</Col>
                     </Row>
                     <Row className="mb-2">
-                        <Col><label htmlFor="">Promo / Potongan</label></Col>
-                        <Col></Col>
+                        <Col><label htmlFor="">Total Tarif</label></Col>
+                        <Col>Rp. {data.transaction ? data.transaction.totalCostBeforeCut : ''}</Col>
                     </Row>
-                    <Row>
-                        <Col><label htmlFor="">Total Transaksi</label></Col>
+                    <Row className="mb-2">
+                        <Col><label htmlFor="">Potongan Voucher</label></Col>
+                        <Col>Rp. {data.transaction ? data.transaction.paymentFromVoucher : ''}</Col>
+                    </Row>
+                    <Row className="mb-2">
+                        <Col><label htmlFor="">Total Akhir</label></Col>
                         <Col>Rp. {data.transaction ? data.transaction.totalCost : ''}</Col>
-                    </Row>
-                    <hr />
-                    <Row className="mb-2">
-                        <Col><label htmlFor="">Potongan Driver</label></Col>
-                        <Col></Col>
-                    </Row>
-                    <Row className="mb-2">
-                        <Col><label htmlFor="">Tip</label></Col>
-                        <Col>Rp.</Col>
-                    </Row>
-                    <Row>
-                        <Col><label htmlFor="">Total Pendapatan Driver</label></Col>
-                        <Col>Rp.</Col>
                     </Row>
                 </CardBody>
             </Card>
