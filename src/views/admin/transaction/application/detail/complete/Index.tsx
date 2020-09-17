@@ -79,16 +79,24 @@ const Complete: React.FC<Props> = (props) => {
                                 <div className="d-flex align-items-stretch justify-content-center">
                                     <div className="align-self-center w-100">
                                         <div className="img-ico-transaction-link">
-                                            {item.transaction.service.code ? <img src={icoLinkImage(item.transaction.service.code)} alt=""/> : ''}
+                                            {item.transaction && item.transaction.service && item.transaction.service.code ? (
+                                                <img src={icoLinkImage(item.transaction.service.code)} alt=""/>
+                                            ) : null}
                                         </div>
                                     </div>
-                                    {item.driverInformation && item.driverInformation.vehicleMerk && (
-                                        <div className="text-center">
-                                            <div>Merek Kendaraan</div>
-                                            <div>{item.driverInformation && item.driverInformation.vehicleMerk}</div>
-                                        </div>
-                                    )}
                                 </div>
+                                
+                                {item.driverInformation && item.driverInformation.vehicleMerk && (
+                                    <div className="text-center mt-3">
+                                        <div>{item.driverInformation && item.driverInformation.vehicleMerk}</div>
+                                    </div>
+                                )}
+
+                                {item.transaction && item.transaction.vehicleType && (
+                                    <div className="text-center mt-1">
+                                        <div>Seat {item.transaction.vehicleType.seat}</div>
+                                    </div>
+                                )}
                             </CardBody>
                         </Card>
                     </Col>

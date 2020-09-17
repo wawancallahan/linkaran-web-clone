@@ -87,9 +87,14 @@ const Inprogress: React.FC<Props> = (props) => {
                                     </div>
                                 </div>
                                 {item.driverInformation && item.driverInformation.vehicleMerk && (
-                                    <div className="text-center">
-                                        <div>Merek Kendaraan</div>
+                                    <div className="text-center mt-3">
                                         <div>{item.driverInformation && item.driverInformation.vehicleMerk}</div>
+                                    </div>
+                                )}
+
+                                {item.transaction && item.transaction.vehicleType && (
+                                    <div className="text-center mt-1">
+                                        <div>Seat {item.transaction.vehicleType.seat}</div>
                                     </div>
                                 )}
                             </CardBody>
