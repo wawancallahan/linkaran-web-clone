@@ -19,6 +19,7 @@ import { colorStatusFormat, icoLinkImage } from '../../../../../../helpers/utils
 import SendTransaction from './SendTransaction';
 import FoodTransaction from './FoodTransaction';
 import NotificationDriver from './NotificationDriver';
+import Cancel from './Cancel';
 
 type OwnProps = {
     data: ApplicationShow | null
@@ -101,6 +102,8 @@ const Complete: React.FC<Props> = (props) => {
                         </Card>
                     </Col>
                 </Row>
+                
+                <Cancel data={item} />
 
                 <Row className="mb-3">
                     <Col>
@@ -138,6 +141,7 @@ const Complete: React.FC<Props> = (props) => {
                 <div className="form-group">
                     <NotificationDriver item={item} />
                 </div>
+                
             </React.Fragment>
         )
     }
