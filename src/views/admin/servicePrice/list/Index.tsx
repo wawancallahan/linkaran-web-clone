@@ -94,5 +94,5 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, any, AppActions>, 
 });
 
 export default WithTitle(
-    connect(null, mapDispatchToProps)(Index)
+    connect(mapStateToProps, mapDispatchToProps)(Index)
 , "Daftar Harga Layanan")
