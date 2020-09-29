@@ -22,4 +22,15 @@ module.exports = function (app) {
       },
     })
   );
+
+  app.use(
+    proxy("/api_linkaran_production", {
+      target: "https://admin.linkaran.co.id/api/v1",
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        "^/api_linkaran_production": "",
+      },
+    })
+  );
 };

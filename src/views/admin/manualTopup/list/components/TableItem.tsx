@@ -9,6 +9,7 @@ import { ApiResponse } from '../../../../../types/api'
 import swal from 'sweetalert'
 import { parseDateTimeFormat } from '../../../../../helpers/utils'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import NumberFormat from 'react-number-format';
 
 type OwnProps = RouteComponentProps & {
     index: number,
@@ -53,7 +54,7 @@ const TableItem: React.FC<Props> = (props) => {
             <td>{(props.item.request && props.item.request.driverProfile && props.item.request.driverProfile.user) ? props.item.request.driverProfile.user.email : ''}</td>
             <td>{props.item.request && props.item.request.bankName}/{props.item.request && props.item.request.accountNumber}</td>
             <td>{props.item.request && props.item.request.accountName}</td>
-            <td>{props.item.request && props.item.request.uniqueCodeWithAmount}</td>
+            <td>{props.item.request && <NumberFormat displayType={'text'} thousandSeparator={true} prefix={'Rp. '} value={props.item.request.uniqueCodeWithAmount} />}</td>
             <td>{props.item.request && props.item.request.bank ? props.item.request.bank.accountName : ''}</td>
             <td>{parseDateTimeFormat(props.item.transactionDate)}</td>
             <td>{props.item.isManual ? "Ya" : "Tidak"}</td>
