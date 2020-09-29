@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
-import { History } from 'history';
-import { ConnectedRouter } from 'connected-react-router';
 import NotFound from './views/NotFound'
 import AdminLayout from './layouts/Admin'
 import { Route as RouteInterface } from './routes'
 import authRoutes from './views/auth/Index'
 import { rolesToArray, accessToken } from './services/auth';
 
-type OwnProps = {
-    history: History;
-};
+type OwnProps = {}
 
 type Props = OwnProps;
 
@@ -26,31 +22,29 @@ const App: React.FC<Props> = (props) => {
     }
 
     return (
-        <ConnectedRouter history={props.history}>
-            <Switch>
-                {getAuthRoutes(authRoutes)}
-                <Route path="/admin" render={() => {
-                    if ( ! accessToken()) {
-                        return <Redirect to="/login" />
-                    } else {
-                        if (rolesToArray().includes('admin') || rolesToArray().includes('super admin') || rolesToArray().includes('financial manager')) {
-                            return <AdminLayout {...props} />
-                        }
-
-                        return '403';
-                    }
-                }} />
-                <Route path="/partner" render={() => {
-                    if (rolesToArray().includes('partner')) {
+        <Switch>
+            {getAuthRoutes(authRoutes)}
+            <Route path="/admin" render={() => {
+                if ( ! accessToken()) {
+                    return <Redirect to="/login" />
+                } else {
+                    if (rolesToArray().includes('admin') || rolesToArray().includes('super admin') || rolesToArray().includes('financial manager')) {
                         return <AdminLayout {...props} />
                     }
 
                     return '403';
-                }} />
-                <Redirect from="/" to="/login" exact />
-                <Route render={() => <Redirect to="/" />} />
-            </Switch>
-        </ConnectedRouter>
+                }
+            }} />
+            <Route path="/partner" render={() => {
+                if (rolesToArray().includes('partner')) {
+                    return <AdminLayout {...props} />
+                }
+
+                return '403';
+            }} />
+            <Redirect from="/" to="/login" exact />
+            <Route render={() => <Redirect to="/" />} />
+        </Switch>
     )
 }
 

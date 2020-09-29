@@ -19,3 +19,13 @@ export const rolesToArray = (): string[] => {
 
     return [];
 }
+
+export const removeStorage = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("name");
+    localStorage.removeItem("phoneNumber");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role_id");
+    localStorage.removeItem("role_name");
+    localStorage.removeItem("roles");
+}

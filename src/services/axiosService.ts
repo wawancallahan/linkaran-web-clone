@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
-import { accessToken } from "./auth";
+import { accessToken, removeStorage } from "./auth";
+import { history } from '../store/configureStore'
+
 
 dotenv.config();
 
@@ -20,5 +22,22 @@ axiosInstance.interceptors.request.use(function(config) {
 
   return config;
 });
+
+axiosInstance.interceptors.response.use(function (response) {
+  
+  return response
+}, function (error) {
+
+  if (error.response.data.metaData && error.response.data.metaData.statusCode == 401) {
+    removeStorage();
+    history.push('/login', {
+      'message': 'Terjadi Kesalahan Autentikasi, Silahkan Login Ulang'
+    });
+
+    return;
+  }
+
+  return Promise.reject(error)
+})
 
 export default axiosInstance;

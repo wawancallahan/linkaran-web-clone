@@ -19,7 +19,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { connect } from 'react-redux';
 import {
     RouteComponentProps,
-    withRouter
+    withRouter,
 } from 'react-router-dom';
 import { AppActions } from '../../types';
 import {
@@ -45,7 +45,9 @@ import Flash from './components/Flash'
 import WithTitle from '../../hoc/WithTitle'
 import { AppState } from '../../reducers';
 
-type OwnProps = RouteComponentProps
+type OwnProps = RouteComponentProps<{}, {}, {
+    message?: any
+}>
 
 type Props = OwnProps & ReturnType<typeof mapDispatchToProps>
 
@@ -88,6 +90,15 @@ const Login: React.FC<Props> = (props) => {
 
         document.body.classList.add("bg-default");
     }, [])
+
+    React.useEffect(() => {
+
+        if (props.history.location.state && props.history.location.state.message !== undefined) {
+            setAlertVisible(true)
+            setAlertMessage(props.history.location.state.message as string)
+        }
+
+    }, []);
 
     const cancelEmailOnSubmit = () => {
         setIsEmailSubmited(false)
