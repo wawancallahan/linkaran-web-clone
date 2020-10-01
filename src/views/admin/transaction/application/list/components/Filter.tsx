@@ -216,10 +216,10 @@ const Filter: React.FC<Props> = (props) => {
 
         if (value !== '') {
             switch (value) {
-                case 'link-send': label = 'Link Send'; break
-                case 'link-food': label = 'Link Food'; break
-                case 'link-ride': label = 'Link Ride'; break
-                case 'link-car': label = 'Link Car'; break
+                case 'linksend': label = 'Link Send'; break
+                case 'linkfood': label = 'Link Food'; break
+                case 'linkride': label = 'Link Ride'; break
+                case 'linkcar': label = 'Link Car'; break
             }
         }
         
