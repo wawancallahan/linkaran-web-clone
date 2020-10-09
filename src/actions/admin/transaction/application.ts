@@ -468,9 +468,11 @@ export const deleteApplicationAction = (id: number): ThunkResult<Promise<ApiResp
     }
 }
 
-export const cancelOrderAction = (numberTransaction: string): ThunkResult<Promise<ApiResponse<Application>>> => {
+export const cancelOrderAction = (numberTransaction: string, description: string): ThunkResult<Promise<ApiResponse<Application>>> => {
     return (dispatch: Dispatch, getState: () => AppState) => {
-        return axiosService.post(process.env.REACT_APP_API_URL + `/web/transaction/${numberTransaction}/cancel`)
+        return axiosService.post(process.env.REACT_APP_API_URL + `/web/transaction/${numberTransaction}/cancel`, {
+                description: description
+            })
             .then( (response: AxiosResponse) => {
                 const data: ApiResponseSuccess<Application> = response.data;
 
