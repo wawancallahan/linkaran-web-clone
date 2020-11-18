@@ -99,7 +99,7 @@ class Index extends React.Component<Props, State> {
         anchor: new google.maps.Point(31, 72),
         size: new google.maps.Size(62, 72),
         origin: new google.maps.Point(0, 0),
-        url: `https://linkaran-api.thortech.asia/api/icon/req/${MinRad}-${MaxRad}/${serviceCode}.svg`,
+        url: `${this.baseUrl}/api/icon/req/${MinRad}-${MaxRad}/${serviceCode}.svg`,
       };
     }
 
@@ -194,7 +194,7 @@ class Index extends React.Component<Props, State> {
                 // anchor: new google.maps.Point(19, 60),
                 // size: new google.maps.Size(39, 60),
                 origin: new google.maps.Point(0, 0),
-                url: `https://linkaran-api.thortech.asia/api/icon/${vt}/${status}.svg`,
+                url: `${this.baseUrl}/api/icon/${vt}/${status}.svg`,
               };
               if (driverMarker.has(id)) {
                 marker = driverMarker.get(id).marker;
