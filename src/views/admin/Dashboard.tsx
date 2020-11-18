@@ -333,11 +333,11 @@ class Index extends React.Component<Props, State> {
         { code: "car/reguler/on-the-way", message: "Car On The Way" },
         { code: "car/reguler/waiting", message: "Car Waiting" },
         { code: "car/reguler/delivery-item", message: "Car Delivery Item" },
-        { code: "motocycle/iddle", message: "Motorcycle Idle" },
-        { code: "motocycle/drop-off", message: "Motorcycle Drop Off" },
-        { code: "motocycle/on-the-way", message: "Motorcycle On The Way" },
-        { code: "motocycle/waiting", message: "Motorcycle Waiting" },
-        { code: "motocycle/delivery-item", message: "Motorcycle Delivery Item" },
+        { code: "motorcycle/iddle", message: "Motorcycle Idle" },
+        { code: "motorcycle/drop-off", message: "Motorcycle Drop Off" },
+        { code: "motorcycle/on-the-way", message: "Motorcycle On The Way" },
+        { code: "motorcycle/waiting", message: "Motorcycle Waiting" },
+        { code: "motorcycle/delivery-item", message: "Motorcycle Delivery Item" },
     ];
 
     return (
