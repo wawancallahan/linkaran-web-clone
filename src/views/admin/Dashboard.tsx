@@ -146,7 +146,8 @@ class Index extends React.Component<Props, State> {
               const {
                 driver: {
                   location,
-                  driverProfile: { vehicleTypeCode },                  lastUpdateLocation,
+                  driverProfile: { vehicleTypeCode },                  
+                  lastUpdateLocation,
                   id,
                 },
                 order,
